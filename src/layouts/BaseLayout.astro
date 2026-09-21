@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+
+const {
+  title = 'VietWireless — Hiểu viễn thông bằng trực quan',
+  description = 'Học tín hiệu, wireless, 4G, 5G NR, NTN và 6G bằng trực giác, đồ thị và interactive labs.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#07111f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="VietWireless home">
+        <span class="brand-mark" aria-hidden="true">≈</span>
+        <span>VietWireless</span>
+      </a>
+      <nav class="site-nav" aria-label="Điều hướng chính">
+        <a href="/#lo-trinh">Lộ trình</a>
+        <a href="/hoc/tin-hieu-la-gi/">Signal Lab</a>
+        <a href="/#nguyen-tac">Cách học</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>VietWireless</strong>
+        <p>Hiểu viễn thông bằng trực quan — từ tín hiệu đến 5G, NTN và 6G.</p>
+      </div>
+      <p class="footer-note">Nội dung kỹ thuật độc lập, xây dựng từ kiến thức và nguồn công khai.</p>
+    </footer>
+  </body>
+</html>

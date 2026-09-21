@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <section class="hero shell">
+    <div class="hero-copy">
+      <p class="eyebrow">WIRELESS ENGINEERING, EXPLAINED VISUALLY</p>
+      <h1>Hiểu <span>tín hiệu</span> trước khi học 5G.</h1>
+      <p class="hero-lead">
+        Đừng bắt đầu bằng một bảng 3GPP. Hãy bắt đầu bằng câu hỏi đơn giản:
+        âm thanh, hình ảnh và dữ liệu trở thành sóng vô tuyến như thế nào?
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/hoc/tin-hieu-la-gi/">Bắt đầu: Signal là gì?</a>
+        <a class="button ghost" href="#lo-trinh">Xem learning path</a>
+      </div>
+      <div class="hero-promises" aria-label="Điểm nổi bật">
+        <span>Interactive labs</span>
+        <span>Giải thích bằng trực giác</span>
+        <span>Đi tới implementation</span>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-label="Minh họa tín hiệu từ time domain sang frequency domain">
+      <div class="visual-label">Cùng một tín hiệu · hai cách nhìn</div>
+      <div class="wave-card">
+        <div class="mini-title"><span class="dot"></span> Time domain</div>
+        <svg viewBox="0 0 520 150" role="img" aria-label="Dạng sóng theo thời gian">
+          <line x1="18" y1="76" x2="502" y2="76" class="axis" />
+          <path
+            class="wave animated-wave"
+            d="M18 76 C32 18,46 18,60 76 S88 134,102 76 S130 18,144 76 S172 134,186 76 S214 18,228 76 S256 134,270 76 S298 18,312 76 S340 134,354 76 S382 18,396 76 S424 134,438 76 S466 18,502 76"
+          />
+        </svg>
+      </div>
+      <div class="transform-pill">
+        <span>FFT</span>
+        <span aria-hidden="true">→</span>
+        <small>“Trong tín hiệu có những tần số nào?”</small>
+      </div>
+      <div class="spectrum-card">
+        <div class="mini-title"><span class="dot violet"></span> Frequency domain</div>
+        <div class="spectrum-bars" aria-hidden="true">
+          <i style="--h: 12%"></i><i style="--h: 20%"></i><i style="--h: 83%"></i>
+          <i style="--h: 31%"></i><i style="--h: 14%"></i><i style="--h: 62%"></i>
+          <i style="--h: 18%"></i><i style="--h: 10%"></i><i style="--h: 25%"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="question-strip">
+    <div class="shell questions">
+      <p>Bạn từng tự hỏi…</p>
+      <div class="question-grid">
+        <a href="/hoc/tin-hieu-la-gi/#fft"><strong>FFT để làm gì?</strong><span>Không chỉ là “đổi miền”.</span></a>
+        <a href="/hoc/tin-hieu-la-gi/#iq"><strong>I/Q sample là gì?</strong><span>Vì sao cần hai con số?</span></a>
+        <a href="/hoc/tin-hieu-la-gi/#sampling"><strong>Sampling làm gì?</strong><span>Sóng liên tục thành dữ liệu số.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell" id="lo-trinh">
+    <div class="section-heading">
+      <p class="eyebrow">LEARNING PATH</p>
+      <h2>Từ thế giới thật tới 5G NR</h2>
+      <p>Mỗi bước trả lời một câu hỏi trước khi mở thêm một lớp abstraction.</p>
+    </div>
+
+    <ol class="learning-path">
+      <li class="active">
+        <span class="step-index">01</span>
+        <div>
+          <p class="step-type">FOUNDATIONS</p>
+          <h3>Signal là gì?</h3>
+          <p>Âm thanh, ảnh, điện áp, samples — chúng liên quan với nhau ra sao?</p>
+        </div>
+        <a href="/hoc/tin-hieu-la-gi/">Học ngay →</a>
+      </li>
+      <li>
+        <span class="step-index">02</span>
+        <div>
+          <p class="step-type">FOUNDATIONS</p>
+          <h3>Sampling & ADC</h3>
+          <p>Từ đại lượng liên tục sang một dãy con số mà máy tính xử lý được.</p>
+        </div>
+        <span class="soon">Sắp có</span>
+      </li>
+      <li>
+        <span class="step-index">03</span>
+        <div>
+          <p class="step-type">SIGNAL PROCESSING</p>
+          <h3>FFT / IFFT</h3>
+          <p>Hai góc nhìn của cùng một tín hiệu và lý do OFDM cần cả hai.</p>
+        </div>
+        <span class="soon">Sắp có</span>
+      </li>
+      <li>
+        <span class="step-index">04</span>
+        <div>
+          <p class="step-type">BASEBAND</p>
+          <h3>I/Q & Modulation</h3>
+          <p>Amplitude + phase, constellation và complex baseband.</p>
+        </div>
+        <span class="soon">Sắp có</span>
+      </li>
+      <li>
+        <span class="step-index">05</span>
+        <div>
+          <p class="step-type">OFDM</p>
+          <h3>Subcarriers & Resource Grid</h3>
+          <p>Từ FFT bins đến các RE, RB, slot mà LTE/5G thực sự sử dụng.</p>
+        </div>
+        <span class="soon">Sắp có</span>
+      </li>
+      <li>
+        <span class="step-index">06</span>
+        <div>
+          <p class="step-type">5G NR</p>
+          <h3>PHY theo cách có thể nhìn thấy</h3>
+          <p>SSB, PDCCH, PDSCH, PUSCH, DMRS, PRACH và receiver chain.</p>
+        </div>
+        <span class="soon">Sau Foundations</span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section shell" id="nguyen-tac">
+    <div class="section-heading">
+      <p class="eyebrow">WHY VIETWIRELESS</p>
+      <h2>Không học thuộc thuật ngữ. Học cách chúng nối với nhau.</h2>
+    </div>
+    <div class="principle-grid">
+      <article>
+        <span>01</span>
+        <h3>Why before what</h3>
+        <p>Biết vấn đề cần giải quyết trước khi nhìn công thức hay parameter.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Visual before algebra</h3>
+        <p>Đồ thị và tương tác tạo trực giác; toán học sau đó làm nó chính xác.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Math to implementation</h3>
+        <p>Mỗi khái niệm cuối cùng phải quay về samples, waveform và receiver/transmitter.</p>
+      </article>
+      <article>
+        <span>04</span>
+        <h3>Vietnamese, not translated jargon</h3>
+        <p>Giải thích bằng tiếng Việt nhưng giữ FFT, DMRS, PUSCH, BWP… như kỹ sư thực sự dùng.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="shell cta-inner">
+      <div>
+        <p class="eyebrow">LESSON 01</p>
+        <h2>Tín hiệu không bắt đầu từ anten.</h2>
+        <p>Nó bắt đầu từ thông tin mà ta muốn truyền đi.</p>
+      </div>
+      <a class="button primary" href="/hoc/tin-hieu-la-gi/">Mở bài học đầu tiên →</a>
+    </div>
+  </section>
+</BaseLayout>

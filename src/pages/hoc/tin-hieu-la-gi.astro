@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SignalExplorer from '../../components/SignalExplorer.jsx';
+---
+
+<BaseLayout
+  title="Signal là gì? Time domain, FFT và I/Q trực quan | VietWireless"
+  description="Hiểu signal, sampling, time domain, frequency domain, FFT/IFFT và I/Q samples bằng hình ảnh và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/">← Foundations</a>
+      <p class="eyebrow">LESSON 01 · SIGNAL FOUNDATIONS</p>
+      <h1>Signal là gì?</h1>
+      <p class="lesson-deck">
+        Trước 4G, 5G hay OFDM, hãy trả lời một câu hỏi tưởng như rất đơn giản:
+        <strong>chúng ta thực sự đang truyền cái gì?</strong>
+      </p>
+      <div class="lesson-meta">
+        <span>Trực giác trước</span>
+        <span>Không cần 3GPP</span>
+        <span>Có interactive lab</span>
+      </div>
+    </header>
+
+    <section class="concept-block">
+      <p class="concept-kicker">01 · BẮT ĐẦU TỪ THẾ GIỚI THẬT</p>
+      <h2>Tín hiệu là một đại lượng thay đổi và mang thông tin.</h2>
+      <p>
+        Khi bạn nói, áp suất không khí thay đổi theo thời gian. Microphone biến sự thay đổi đó thành
+        điện áp thay đổi theo thời gian. Camera làm một việc khác: nó đo ánh sáng tại rất nhiều vị trí
+        rồi tạo thành các giá trị pixel. Hai hệ thống trông khác nhau, nhưng cùng chung một ý tưởng:
+        <strong>đo một đại lượng để biểu diễn thông tin.</strong>
+      </p>
+
+      <div class="journey-grid" aria-label="Hành trình từ giọng nói tới sóng vô tuyến">
+        <div class="journey-node">
+          <span class="journey-icon">◖)))</span>
+          <small>THẾ GIỚI THẬT</small>
+          <strong>Giọng nói</strong>
+          <p>Áp suất không khí biến thiên.</p>
+        </div>
+        <div class="journey-arrow">→</div>
+        <div class="journey-node">
+          <span class="journey-icon">⌁</span>
+          <small>SENSOR</small>
+          <strong>Microphone</strong>
+          <p>Biến áp suất thành điện áp.</p>
+        </div>
+        <div class="journey-arrow">→</div>
+        <div class="journey-node">
+          <span class="journey-icon">••••</span>
+          <small>ADC</small>
+          <strong>Samples</strong>
+          <p>Đo điện áp tại các thời điểm rời rạc.</p>
+        </div>
+        <div class="journey-arrow">→</div>
+        <div class="journey-node">
+          <span class="journey-icon">I + jQ</span>
+          <small>BASEBAND</small>
+          <strong>I/Q</strong>
+          <p>Mã hóa amplitude và phase.</p>
+        </div>
+        <div class="journey-arrow">→</div>
+        <div class="journey-node">
+          <span class="journey-icon">)))</span>
+          <small>RF</small>
+          <strong>Radio wave</strong>
+          <p>Đi qua anten và không gian.</p>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Mental model</strong>
+        <p>
+          “Signal” không đồng nghĩa với “radio wave”. Một dãy samples trong RAM cũng là signal.
+          Một waveform ở đầu ADC cũng là signal. Sóng RF ngoài anten chỉ là một dạng biểu diễn vật lý khác.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="sampling">
+      <p class="concept-kicker">02 · ANALOG → DIGITAL</p>
+      <h2>Máy tính không thấy đường cong. Nó thấy samples.</h2>
+      <p>
+        Một microphone có thể tạo ra điện áp liên tục. ADC lấy giá trị của điện áp đó tại các thời điểm
+        xác định. Kết quả là một dãy số như x[0], x[1], x[2]… Đây là nơi signal processing số bắt đầu.
+      </p>
+      <div class="two-column">
+        <div class="explain-card">
+          <span class="card-label">Continuous-time</span>
+          <h3>x(t)</h3>
+          <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm t.</p>
+        </div>
+        <div class="explain-card">
+          <span class="card-label">Discrete-time</span>
+          <h3>x[n]</h3>
+          <p>Ta chỉ lưu giá trị tại các sample index n = 0, 1, 2…</p>
+        </div>
+      </div>
+      <p>
+        Sampling rate nói cho ta biết mỗi giây lấy bao nhiêu samples. Đây chưa phải câu chuyện đầy đủ của ADC
+        — còn quantization, dynamic range và anti-alias filtering — nhưng trước hết hãy giữ một trực giác:
+        <strong>sampling biến một waveform theo thời gian thành một dãy số theo thời gian.</strong>
+      </p>
+    </section>
+
+    <section class="concept-block">
+      <p class="concept-kicker">03 · HAI CÁCH NHÌN CÙNG MỘT SIGNAL</p>
+      <h2>Time domain trả lời “khi nào”. Frequency domain trả lời “có những nhịp nào”.</h2>
+      <p>
+        Trong time domain, trục ngang là thời gian. Bạn nhìn được waveform đang thay đổi thế nào.
+        Nhưng nếu nhiều tone cộng vào nhau, chỉ nhìn waveform thường rất khó biết chính xác từng thành phần.
+      </p>
+      <p>
+        Frequency domain đổi câu hỏi: thay vì hỏi signal có giá trị bao nhiêu tại từng thời điểm,
+        ta hỏi <strong>những sinusoid ở tần số nào đang đóng góp vào signal, với amplitude và phase bao nhiêu?</strong>
+      </p>
+
+      <div class="perspective">
+        <div>
+          <small>TIME DOMAIN</small>
+          <strong>x(t)</strong>
+          <span>“Signal thay đổi như thế nào theo thời gian?”</span>
+        </div>
+        <div class="perspective-equals">=</div>
+        <div>
+          <small>FREQUENCY DOMAIN</small>
+          <strong>X(f)</strong>
+          <span>“Signal được tạo bởi những thành phần tần số nào?”</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Quan trọng</strong>
+        <p>
+          FFT không “biến signal thành một signal khác”. Nó cho ta một cách biểu diễn khác của cùng dữ liệu,
+          giống như nhìn cùng một thành phố trên ảnh vệ tinh và trên bản đồ đường phố.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="fft">
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Tự tay nhìn FFT tìm ra tần số.</h2>
+      <p>
+        Thay đổi hai tone bên dưới. Time waveform có thể trông khá rối, nhưng frequency view lập tức tách
+        hai thành phần ra thành hai peak. Phần demo dùng DFT trực tiếp để dễ minh họa; FFT là thuật toán
+        tính cùng phép biến đổi đó hiệu quả hơn rất nhiều.
+      </p>
+      <SignalExplorer client:load />
+    </section>
+
+    <section class="concept-block">
+      <p class="concept-kicker">05 · VẬY TẠI SAO KỸ SƯ WIRELESS CỨ FFT RỒI IFFT?</p>
+      <h2>Vì có việc dễ làm trong time domain, và có việc dễ làm trong frequency domain.</h2>
+      <div class="domain-grid">
+        <article>
+          <span class="domain-badge">TIME</span>
+          <h3>Time domain hữu ích khi…</h3>
+          <p>ta quan tâm timing, waveform, impulse response, sample-by-sample processing hoặc transient.</p>
+        </article>
+        <article>
+          <span class="domain-badge violet">FREQUENCY</span>
+          <h3>Frequency domain hữu ích khi…</h3>
+          <p>ta muốn tách subcarriers, nhìn spectrum, xử lý từng frequency bin hoặc equalize theo tần số.</p>
+        </article>
+      </div>
+
+      <div class="ofdm-flow">
+        <div><small>DATA SYMBOLS</small><strong>X[k]</strong><span>Frequency-domain subcarriers</span></div>
+        <span class="flow-op">IFFT →</span>
+        <div><small>TX WAVEFORM</small><strong>x[n]</strong><span>Time-domain samples cho DAC/RF</span></div>
+        <span class="flow-op">CHANNEL →</span>
+        <div><small>RX SAMPLES</small><strong>y[n]</strong><span>Samples sau ADC</span></div>
+        <span class="flow-op">FFT →</span>
+        <div><small>SUBCARRIERS</small><strong>Y[k]</strong><span>Quay lại từng frequency bin</span></div>
+      </div>
+
+      <p>
+        Đây chính là một phần cốt lõi của OFDM. Transmitter đặt data lên các subcarriers trong frequency domain,
+        dùng IFFT tạo time-domain waveform để phát. Receiver lấy time-domain samples và dùng FFT để tách chúng
+        trở lại thành các subcarriers. Khi học LTE/5G Resource Grid sau này, bạn sẽ gặp lại đúng bức tranh này.
+      </p>
+    </section>
+
+    <section class="concept-block" id="iq">
+      <p class="concept-kicker">06 · I/Q SAMPLES</p>
+      <h2>Một complex sample lưu được cả amplitude lẫn phase.</h2>
+      <p>
+        Trong complex baseband, ta biểu diễn một sample là <strong>I + jQ</strong>. I và Q là hai thành phần
+        vuông góc. Điểm (I, Q) có khoảng cách tới gốc là amplitude và góc của nó là phase.
+      </p>
+      <p>
+        Điều này cực kỳ hữu ích vì modulation, channel rotation, frequency offset và nhiều phép xử lý wireless
+        trở nên gọn hơn bằng số phức. Nhưng nhớ rằng tín hiệu RF vật lý ngoài anten vẫn là một tín hiệu thực;
+        complex baseband là cách biểu diễn toán học và implementation rất tiện lợi.
+      </p>
+      <a class="inline-cta" href="#fft">↑ Thử tab I/Q trong Signal Lab phía trên</a>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">07 · RECAP</p>
+      <h2>Nếu chỉ nhớ 6 điều sau bài này</h2>
+      <ol class="recap-list">
+        <li><strong>Signal</strong> là một đại lượng thay đổi dùng để biểu diễn hoặc mang thông tin.</li>
+        <li><strong>Sampling</strong> biến waveform liên tục thành một dãy giá trị rời rạc theo thời gian.</li>
+        <li><strong>Time domain</strong> cho ta thấy signal biến đổi khi nào và như thế nào.</li>
+        <li><strong>Frequency domain</strong> cho ta thấy các thành phần sinusoid cấu tạo nên signal.</li>
+        <li><strong>FFT/IFFT</strong> cho phép chuyển hiệu quả giữa hai cách biểu diễn đó.</li>
+        <li><strong>I/Q</strong> là complex representation giúp ta làm việc trực tiếp với amplitude và phase.</li>
+      </ol>
+    </section>
+
+    <nav class="next-lesson" aria-label="Bài học tiếp theo">
+      <span>TIẾP THEO</span>
+      <div>
+        <h2>Sampling, aliasing và Nyquist</h2>
+        <p>Tại sao lấy samples quá chậm có thể khiến một tần số “biến thành” tần số khác?</p>
+      </div>
+      <span class="soon">Đang xây dựng</span>
+    </nav>
+  </article>
+</BaseLayout>
