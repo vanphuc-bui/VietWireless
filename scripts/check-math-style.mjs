@@ -23,11 +23,9 @@ const legacyClasses = [
   'complex-mini-formula',
   'euler-equation',
   'rotating-equation',
-  'iq-core-equations',
   'iq-formula-line',
   'iq-main-equation',
   'dft-equation',
-  'bin-equations',
   'modulation-mini-equation',
   'rate-equation',
   'rf-main-equation',
@@ -35,7 +33,6 @@ const legacyClasses = [
   'propagation-equation',
   'delay-phase-equation',
   'thermal-equation',
-  'snr-equations',
   'evm-equation',
   'multipath-equation',
   'convolution-equation',
@@ -47,7 +44,6 @@ const legacyClasses = [
   'cp-overhead-equation',
   'rb-definition',
   'numerology-main-equation',
-  'nr-slot-equations',
 ];
 
 let failed = false;
@@ -60,6 +56,16 @@ for (const file of files) {
       failed = true;
       console.error(`${relative('.', file)}: legacy math wrapper "${className}". Use <Math />.`);
     }
+  }
+
+  if (/<\\/?(?:sub|sup)>/i.test(content)) {
+    failed = true;
+    console.error(`${relative('.', file)}: raw <sub>/<sup> math markup found. Use <Math />.`);
+  }
+
+  if (/[Σ√]/u.test(content)) {
+    failed = true;
+    console.error(`${relative('.', file)}: raw Σ/√ formula glyph found. Use TeX inside <Math />.`);
   }
 }
 
