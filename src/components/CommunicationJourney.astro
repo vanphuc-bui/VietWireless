@@ -7,7 +7,7 @@ const { compact = false } = Astro.props;
     <p class="section-kicker">BỨC TRANH LỚN</p>
     <h2 id="communication-journey-title">Một bức ảnh đi từ người gửi tới người nhận như thế nào?</h2>
     <p>
-      Mình dùng một hệ thống OFDM hiện đại làm ví dụ. Nếu nhìn từ xa, cả chuỗi có thể thu gọn thành:{" "}
+      Tôi dùng một hệ thống OFDM hiện đại làm ví dụ. Nếu nhìn từ xa, cả chuỗi có thể thu gọn thành:{" "}
       <strong>information → bits → symbols → IFFT → I/Q → RF → channel → receiver</strong>.
       Những phần sau chỉ đơn giản là lần lượt mở từng khối ra xem bên trong có gì.
     </p>
@@ -274,18 +274,18 @@ const { compact = false } = Astro.props;
       </div>
 
       <aside class="precision-note">
-        <strong>Một chỗ mình từng hay nhầm</strong>
+        <strong>Một chỗ tôi từng hay nhầm</strong>
         <p>
           Trước IFFT, <strong>X[k]</strong> là các <em>complex modulation symbols ở frequency domain</em>.
           Sau IFFT, <strong>x[n]</strong> mới là <em>time-domain complex I/Q samples</em>.
-          Với mình, đây là một trong những chỗ giúp OFDM bớt “mơ hồ” hẳn.
+          Theo kinh nghiệm của tôi, đây là một trong những chỗ giúp OFDM bớt “mơ hồ” hẳn.
         </p>
       </aside>
 
       <aside class="scope-note">
         <strong>Sơ đồ này chỉ là một ví dụ OFDM điển hình.</strong>
         <p>
-          Không phải mọi hệ thống radio đều đi qua đúng chuỗi này. Mình chọn OFDM vì nó nối khá tự nhiên
+          Không phải mọi hệ thống radio đều đi qua đúng chuỗi này. Tôi chọn OFDM vì nó nối khá tự nhiên
           với LTE, 5G NR và Wi-Fi, và vì nhiều khái niệm thú vị sẽ quay lại ở các phần sau.
         </p>
       </aside>
