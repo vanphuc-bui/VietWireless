@@ -279,18 +279,18 @@ import MathExpr from '../../components/Math.astro';
         </p>
       </div>
 
-      <div class="two-column">
-        <article class="explain-card">
+      <div class="math-card-grid">
+        <article class="math-card">
           <span class="card-label">TRƯỚC IFFT · FREQUENCY DOMAIN</span>
-          <h3><MathExpr tex="X[k,m] = I + jQ" /></h3>
+          <div class="math-card-formula"><MathExpr tex="X[k,m] = I + jQ" /></div>
           <p>
             Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier <MathExpr tex="k" /> và OFDM symbol <MathExpr tex="m" />.
             Nó là giá trị ta sẽ đặt vào resource grid.
           </p>
         </article>
-        <article class="explain-card">
+        <article class="math-card">
           <span class="card-label">SAU IFFT · TIME DOMAIN</span>
-          <h3><MathExpr tex="x[n] = I[n] + jQ[n]" /></h3>
+          <div class="math-card-formula"><MathExpr tex="x[n] = I[n] + jQ[n]" /></div>
           <p>
             Đây là một <strong>complex time-domain sample</strong>. Nó cũng dùng biểu diễn I/Q,
             nhưng là một đại lượng ở stage khác của transmitter.
