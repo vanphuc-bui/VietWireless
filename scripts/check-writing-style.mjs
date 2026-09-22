@@ -1,8 +1,8 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 
-const roots = ['src', 'docs'];
-const extraFiles = ['README.md'];
+const roots = ['src'];
+const extraFiles = [];
 const allowedExt = new Set(['.astro', '.jsx', '.tsx', '.js', '.ts', '.md']);
 const files = [];
 
