@@ -24,6 +24,7 @@ export default function ComplexPhasorExplorer() {
   const [rotation, setRotation] = useState(0);
 
   const totalAngle = phase + rotation;
+  const displayAngle = ((totalAngle + 180) % 360 + 360) % 360 - 180;
   const point = useMemo(() => pointFor(magnitude, totalAngle), [magnitude, totalAngle]);
   const real = magnitude * Math.cos(degToRad(totalAngle));
   const imag = magnitude * Math.sin(degToRad(totalAngle));
