@@ -132,7 +132,7 @@ function TimeFrequencyLab() {
       <div className="lab-readout">
         {view === 'time' ? (
           <>
-            <strong>Ở time domain, mình đang nhìn waveform tổng.</strong>
+            <strong>Ở time domain, ta đang nhìn waveform tổng.</strong>
             <span>Hai tone đã cộng vào nhau nên khó đoán bằng mắt rằng bên trong có {f1} Hz và {f2} Hz.</span>
           </>
         ) : (
