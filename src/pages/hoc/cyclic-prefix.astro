@@ -61,12 +61,12 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="copy-tail">
       <p class="concept-kicker">02 · CP LÀ COPY CỦA CUỐI SYMBOL, KHÔNG PHẢI MỘT ĐOẠN ZERO</p>
-      <h2>Với useful block x[0]…x[N-1], ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
+      <h2>Với useful block <MathExpr tex="x[0],\\ldots,x[N-1]" />, ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
 
       <div class="cp-concept-row">
         <div>
           <small>CYCLIC PREFIX</small>
-          <strong>x[N-<MathExpr tex="N_{\\mathrm{CP}}" />] … x[N-1]</strong>
+          <strong><MathExpr tex="x[N-N_{\\mathrm{CP}}],\\ldots,x[N-1]" /></strong>
         </div>
         <b>+</b>
         <div>
@@ -88,7 +88,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Delayed copies rơi vào useful window có thể lấy giá trị từ cyclic extension thay vì từ symbol trước.</h2>
 
       <p>
-        Quay lại ví dụ h[0]=1 và h[2]=0.5.
+        Quay lại ví dụ <MathExpr tex="h[0]=1" /> và <MathExpr tex="h[2]=0.5" />.
         Nếu CP dài ít nhất 2 samples, khi receiver bỏ CP và bắt đầu FFT ở <MathExpr tex="x[0]" />,
         term <MathExpr tex="x[-2]" /> mà channel cần không phải lấy từ previous OFDM symbol.
         Nó đã có sẵn trong CP dưới dạng copy của <MathExpr tex="x[N-2]" />.
@@ -115,13 +115,13 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="condition">
-      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1 ĐẾN TỪ ĐÂU?</p>
-      <h2>Nếu FIR channel có L taps từ delay 0 tới L-1, maximum discrete delay là L-1 samples.</h2>
+      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" /> ĐẾN TỪ ĐÂU?</p>
+      <h2>Nếu FIR channel có <MathExpr tex="L" /> taps từ delay <MathExpr tex="0" /> tới <MathExpr tex="L-1" />, maximum discrete delay là <MathExpr tex="L-1" /> samples.</h2>
 
       <p>
         Để useful block không cần lấy samples từ previous symbol, cyclic extension phải cover maximum relevant channel delay.
         Vì vậy trong textbook discrete-time model thường viết:
-        <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1.
+        <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" />.
       </p>
 
       <aside class="precision-note">
@@ -140,7 +140,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Sau FFT, ideal model là:
         <MathExpr tex="Y[k]=H[k]X[k]+W[k]" />.
-        Nếu H[k] đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
+        Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
         Practical equalizers như MMSE xử lý noise amplification tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo FFT bins.
       </p>
 
