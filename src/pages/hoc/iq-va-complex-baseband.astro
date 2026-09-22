@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import IQBasebandExplorer from '../../components/IQBasebandExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -46,13 +46,13 @@ import Math from '../../components/Math.astro';
       <div class="iq-core-equations">
         <div>
           <span class="card-label">CARTESIAN</span>
-          <strong><Math tex="x = I + jQ" /></strong>
+          <strong><MathExpr tex="x = I + jQ" /></strong>
           <p>Ta lưu hai thành phần vuông góc I và Q.</p>
         </div>
         <b>↔</b>
         <div>
           <span class="card-label">POLAR</span>
-          <strong><Math tex="x = Ae^{j\\phi}" /></strong>
+          <strong><MathExpr tex="x = Ae^{j\\phi}" /></strong>
           <p>Ta đọc cùng điểm đó bằng magnitude A và phase φ.</p>
         </div>
       </div>
@@ -60,15 +60,15 @@ import Math from '../../components/Math.astro';
       <div class="two-column">
         <article class="explain-card">
           <span class="card-label">TỪ I,Q → A,φ</span>
-          <h3><Math tex="A = \\sqrt{I^2+Q^2}" /></h3>
+          <h3><MathExpr tex="A = \\sqrt{I^2+Q^2}" /></h3>
           <p>Magnitude là khoảng cách từ gốc tới điểm I/Q.</p>
-          <p><Math tex="\\phi = \\operatorname{atan2}(Q,I)" /></p>
+          <p><MathExpr tex="\\phi = \\operatorname{atan2}(Q,I)" /></p>
         </article>
         <article class="explain-card">
           <span class="card-label">TỪ A,φ → I,Q</span>
-          <h3><Math tex="I = A\\cos\\phi" /></h3>
+          <h3><MathExpr tex="I = A\\cos\\phi" /></h3>
           <p>Q là projection vuông góc còn lại.</p>
-          <p><Math tex="Q = A\\sin\\phi" /></p>
+          <p><MathExpr tex="Q = A\\sin\\phi" /></p>
         </article>
       </div>
 
@@ -89,17 +89,17 @@ import Math from '../../components/Math.astro';
       <div class="iq-operation-flow">
         <div>
           <small>TX SAMPLE</small>
-          <strong><Math tex="x = I + jQ" /></strong>
+          <strong><MathExpr tex="x = I + jQ" /></strong>
         </div>
         <b>×</b>
         <div>
           <small>CHANNEL</small>
-          <strong><Math tex="h = Ge^{j\\theta}" /></strong>
+          <strong><MathExpr tex="h = Ge^{j\\theta}" /></strong>
         </div>
         <b>=</b>
         <div>
           <small>RX SAMPLE</small>
-          <strong><Math tex="y = hx" /></strong>
+          <strong><MathExpr tex="y = hx" /></strong>
         </div>
       </div>
 
@@ -116,12 +116,12 @@ import Math from '../../components/Math.astro';
       <p>
         Gọi complex baseband là:
       </p>
-      <Math tex="x_{\\mathrm{bb}}(t) = I(t) + jQ(t)" display />
+      <MathExpr tex="x_{\\mathrm{bb}}(t) = I(t) + jQ(t)" display />
 
       <p>
         Một cách tổng hợp waveform real passband thường viết:
       </p>
-      <Math tex="s_{\\mathrm{RF}}(t) = I(t)\\cos(2\\pi f_c t) - Q(t)\\sin(2\\pi f_c t)" display />
+      <MathExpr tex="s_{\\mathrm{RF}}(t) = I(t)\\cos(2\\pi f_c t) - Q(t)\\sin(2\\pi f_c t)" display />
 
       <div class="iq-carrier-flow">
         <div><small>I PATH</small><strong>I(t)</strong><span>× cos(2πfct)</span></div>
@@ -180,7 +180,7 @@ import Math from '../../components/Math.astro';
       <div class="iq-spectrum-shift">
         <div>
           <small>PASSBAND</small>
-          <strong>quanh <Math tex="f_c" /></strong>
+          <strong>quanh <MathExpr tex="f_c" /></strong>
           <span>RF spectrum ở tần số cao</span>
         </div>
         <b>→ downconvert →</b>
@@ -205,8 +205,8 @@ import Math from '../../components/Math.astro';
       <h2>I/Q là nơi hình học số phức bắt đầu trở thành dữ liệu mà DSP thực sự xử lý.</h2>
       <ol class="recap-list">
         <li><strong>x = I + jQ:</strong> một complex sample có hai thành phần trực giao.</li>
-        <li><strong><Math tex="A=\\sqrt{I^2+Q^2}" />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
-        <li><strong><Math tex="\\phi=\\operatorname{atan2}(Q,I)" />:</strong> phase là góc của điểm I/Q.</li>
+        <li><strong><MathExpr tex="A=\\sqrt{I^2+Q^2}" />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
+        <li><strong><MathExpr tex="\\phi=\\operatorname{atan2}(Q,I)" />:</strong> phase là góc của điểm I/Q.</li>
         <li><strong>Complex baseband:</strong> representation quanh 0 Hz, không phải waveform RF vật lý.</li>
         <li><strong>RF reconstruction:</strong> I và Q điều khiển hai carrier trực giao cos và sin.</li>
         <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples x[n].</li>
