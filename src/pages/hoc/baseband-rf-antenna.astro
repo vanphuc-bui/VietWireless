@@ -24,7 +24,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Giả sử trong code tôi đang có một buffer:
         <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài GHz?
+        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex="\\mathrm{GHz}" />?
       </p>
 
       <div class="system-position">
@@ -46,11 +46,11 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="complex-samples">
       <p class="concept-kicker">01 · DIGITAL BASEBAND CHƯA CÓ CARRIER RF</p>
-      <h2>Trong DSP, ta thường xử lý phần modulation quanh 0 Hz thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
+      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex="0\\,\\mathrm{Hz}" /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
 
       <p>
         Một sample complex có dạng <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Nếu tại một thời điểm I = 0.8 và Q = 0.6 thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
+        Nếu tại một thời điểm <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
         Hai con số I và Q đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
       </p>
 
@@ -121,7 +121,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Lấy ví dụ đơn giản I = 0.8 và Q = 0.6 trong một khoảng ngắn. Khi đó A = 1 và φ ≈ 36.9°.
+        Lấy ví dụ đơn giản I = 0.8 và Q = 0.6 trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex="\\phi\\approx36.9^\\circ" />.
         Công thức phía trên trở thành một sinusoid có cùng magnitude A và phase φ quanh carrier <MathExpr tex="f_c" />.
         Nói cách khác, <strong>tọa độ I/Q ở baseband quyết định amplitude và phase của RF carrier</strong>.
       </p>
