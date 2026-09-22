@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SignalExplorer from '../../components/SignalExplorer.jsx';
+---
+
+<BaseLayout
+  title="Miền thời gian và miền tần số | VietWireless"
+  description="Hiểu time domain và frequency domain là hai cách biểu diễn của cùng một signal, với waveform, spectrum, magnitude, phase và FFT lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 06 · SIGNAL FOUNDATIONS</p>
+      <h1>Miền thời gian và miền tần số</h1>
+      <p class="lesson-deck">
+        Cùng một signal có thể trông rất rối khi nhìn theo thời gian nhưng lại rất gọn khi nhìn theo tần số.
+        <strong>Không phải signal biến thành một vật khác; ta chỉ đổi hệ tọa độ để hỏi một câu hỏi khác.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 05 cho ta chuỗi complex samples x[n]. Bây giờ ta có thể nhìn chuỗi đó theo sample index,
+        hoặc phân tích xem những thành phần tần số nào đang tạo nên nó.
+      </p>
+      <div class="system-position">
+        <span>CÙNG MỘT SIGNAL, HAI REPRESENTATION</span>
+        <div class="system-position-flow" aria-label="Time domain và frequency domain là hai cách nhìn cùng signal">
+          <strong>x[n]</strong><b>↔</b>
+          <span>transform</span><b>↔</b>
+          <strong>X[k]</strong>
+        </div>
+        <p>
+          Với signal liên tục thường viết x(t) ↔ X(f). Với một record rời rạc hữu hạn dùng DFT, ta thường viết x[n] ↔ X[k].
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="hai-cau-hoi">
+      <p class="concept-kicker">01 · HAI CÂU HỎI KHÁC NHAU</p>
+      <h2>Time domain hỏi “khi nào và giá trị bao nhiêu”; frequency domain hỏi “thành phần nào và mạnh tới đâu”.</h2>
+
+      <div class="domain-question-grid">
+        <article>
+          <span class="card-label">TIME DOMAIN</span>
+          <strong>x(t) hoặc x[n]</strong>
+          <p>Trục ngang là thời gian hoặc sample index.</p>
+          <ul>
+            <li>Waveform thay đổi ra sao?</li>
+            <li>Peak xảy ra ở đâu?</li>
+            <li>Transient bắt đầu lúc nào?</li>
+            <li>Timing offset nằm ở đâu?</li>
+          </ul>
+        </article>
+        <article>
+          <span class="card-label">FREQUENCY DOMAIN</span>
+          <strong>X(f) hoặc X[k]</strong>
+          <p>Trục ngang là frequency hoặc frequency-bin index.</p>
+          <ul>
+            <li>Có những tone nào?</li>
+            <li>Energy nằm trong dải nào?</li>
+            <li>Blocker nằm ở đâu?</li>
+            <li>Subcarrier nào đang mang signal?</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="mot-tone">
+      <p class="concept-kicker">02 · BẮT ĐẦU TỪ MỘT TONE</p>
+      <h2>Một cosine kéo dài vô hạn rất đơn giản trong frequency domain.</h2>
+
+      <div class="tone-domain-story">
+        <div>
+          <span class="sampling-stage-label">TIME DOMAIN</span>
+          <svg viewBox="0 0 520 180" role="img" aria-label="Một sinusoid trong time domain">
+            <line class="domain-axis" x1="24" y1="90" x2="496" y2="90" />
+            <path class="domain-wave" d="M24 90 C44 35 64 35 84 90 S124 145 144 90 S184 35 204 90 S244 145 264 90 S304 35 324 90 S364 145 384 90 S424 35 444 90 S476 135 496 90" />
+          </svg>
+          <p>Ta nhìn thấy waveform lặp lại, nhưng phải đo period mới suy ra frequency.</p>
+        </div>
+        <b>↔</b>
+        <div>
+          <span class="sampling-stage-label">FREQUENCY DOMAIN</span>
+          <svg viewBox="0 0 520 180" role="img" aria-label="Hai spectral lines đối xứng của cosine real">
+            <line class="domain-axis" x1="24" y1="142" x2="496" y2="142" />
+            <line class="domain-spectrum-line" x1="160" y1="142" x2="160" y2="55" />
+            <line class="domain-spectrum-line" x1="360" y1="142" x2="360" y2="55" />
+            <circle class="domain-spectrum-dot" cx="160" cy="55" r="5" />
+            <circle class="domain-spectrum-dot" cx="360" cy="55" r="5" />
+            <text class="domain-svg-label" x="144" y="163">-f₀</text>
+            <text class="domain-svg-label" x="350" y="163">+f₀</text>
+            <text class="domain-svg-label" x="480" y="163">f</text>
+          </svg>
+          <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở ±f₀.</p>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Tại sao có -f?</strong>
+        <p>
+          Negative frequency xuất hiện tự nhiên từ complex exponential:
+          cos(2πf₀t) = [e<sup>j2πf₀t</sup> + e<sup>-j2πf₀t</sup>]/2.
+          Nó là một phần của representation toán học, không phải một đồng hồ vật lý đang chạy ngược.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="cong-hai-tone">
+      <p class="concept-kicker">03 · KHI NHIỀU THÀNH PHẦN CỘNG LẠI</p>
+      <h2>Waveform tổng có thể khó đọc bằng mắt, nhưng frequency domain tách các thành phần ra.</h2>
+
+      <div class="domain-sum-flow">
+        <div>
+          <small>TONE 1</small>
+          <strong>5 Hz</strong>
+        </div>
+        <b>+</b>
+        <div>
+          <small>TONE 2</small>
+          <strong>12 Hz</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>TIME DOMAIN</small>
+          <strong>waveform tổng</strong>
+        </div>
+        <b>→ transform →</b>
+        <div>
+          <small>FREQUENCY DOMAIN</small>
+          <strong>hai peak</strong>
+        </div>
+      </div>
+
+      <p>
+        Đây là lý do spectrum analyzer, FFT trong receiver và nhiều công cụ debug rất hữu ích:
+        chúng biến những periodic structure đang chồng lên nhau thành các vị trí riêng trên frequency axis.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="domain-lab">
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Đổi hai tone rồi chuyển qua lại giữa time domain và frequency domain.</h2>
+      <p>
+        Lab này dùng một record 1 giây với sampling rate 64 Hz. Hai tone được đặt đúng DFT bins để tập trung vào
+        ý tưởng representation; leakage và windowing sẽ được tách riêng ở Bài 07.
+      </p>
+      <SignalExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="magnitude-phase">
+      <p class="concept-kicker">05 · X[k] KHÔNG CHỈ CÓ “ĐỘ CAO”</p>
+      <h2>Mỗi frequency bin nói chung là một số phức, nên spectrum có cả magnitude lẫn phase.</h2>
+
+      <div class="spectrum-two-parts">
+        <article>
+          <span class="card-label">MAGNITUDE</span>
+          <h3>|X[k]|</h3>
+          <p>Thành phần tại bin đó mạnh tới đâu.</p>
+        </article>
+        <article>
+          <span class="card-label">PHASE</span>
+          <h3>∠X[k]</h3>
+          <p>Thành phần đó có phase nào so với reference của record.</p>
+        </article>
+      </div>
+
+      <p>
+        Nhiều biểu đồ spectrum chỉ vẽ magnitude vì dễ nhìn, nhưng điều đó không có nghĩa phase không tồn tại.
+        Nếu muốn reconstruct chính xác signal bằng inverse transform, nói chung ta cần cả complex coefficients.
+      </p>
+    </section>
+
+    <section class="concept-block" id="khong-phai-spectrogram">
+      <p class="concept-kicker">06 · FREQUENCY DOMAIN KHÔNG TỰ NÓI “TẦN SỐ NÀO XUẤT HIỆN LÚC NÀO”</p>
+      <h2>Một Fourier transform của cả record gom thông tin của toàn bộ khoảng quan sát vào một spectrum.</h2>
+      <p>
+        Nếu một tone chỉ xuất hiện trong nửa đầu record và tone khác xuất hiện trong nửa sau,
+        magnitude spectrum của cả record có thể cho thấy cả hai tone nhưng không chỉ trực tiếp thời điểm từng tone xuất hiện.
+      </p>
+
+      <div class="time-frequency-resolution">
+        <div>
+          <small>FFT CỦA CẢ RECORD</small>
+          <strong>frequency content</strong>
+          <span>“có gì trong toàn khoảng?”</span>
+        </div>
+        <b>≠</b>
+        <div>
+          <small>SPECTROGRAM / STFT</small>
+          <strong>time + frequency</strong>
+          <span>“thành phần đó xuất hiện khi nào?”</span>
+        </div>
+      </div>
+
+      <p>
+        Spectrogram giải bài toán này bằng cách chia signal thành các window ngắn và Fourier-transform từng đoạn.
+        Đổi lại, ta phải cân bằng resolution theo thời gian và frequency.
+      </p>
+    </section>
+
+    <section class="concept-block" id="wireless">
+      <p class="concept-kicker">07 · TRONG WIRELESS, TA ĐỔI DOMAIN LIÊN TỤC</p>
+      <h2>Không có domain nào “đúng hơn”; mỗi domain làm một nhóm phép toán trở nên tự nhiên hơn.</h2>
+
+      <div class="wireless-domain-table">
+        <div><strong>Time domain</strong><span>timing, CP, waveform, correlation, ADC samples</span></div>
+        <div><strong>Frequency domain</strong><span>subcarriers, channel H[k], equalization, spectrum</span></div>
+        <div><strong>I/Q plane</strong><span>magnitude, phase, constellation, EVM</span></div>
+      </div>
+
+      <p>
+        OFDM là ví dụ rất rõ: transmitter đặt complex symbols trong frequency domain, IFFT tạo time-domain samples để phát;
+        receiver FFT các samples trở lại frequency domain để xử lý từng subcarrier.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <h2>Time và frequency là hai representation của cùng dữ liệu, không phải hai signal tách biệt.</h2>
+      <ol class="recap-list">
+        <li><strong>Time domain:</strong> signal thay đổi theo thời gian hoặc sample index như thế nào.</li>
+        <li><strong>Frequency domain:</strong> signal được phân rã theo các thành phần tần số như thế nào.</li>
+        <li><strong>X[k] thường là complex:</strong> mỗi bin có magnitude và phase.</li>
+        <li><strong>Real signal:</strong> spectrum có conjugate symmetry giữa positive và negative frequency.</li>
+        <li><strong>Fourier transform của cả record:</strong> không phải spectrogram và không trực tiếp giữ time localization.</li>
+        <li><strong>Wireless DSP:</strong> thường xuyên đổi domain vì mỗi representation thuận tiện cho một loại xử lý.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/iq-va-complex-baseband/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>I/Q và complex baseband</strong>
+        <small>Từ I+jQ tới complex samples trong DSP.</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/fourier-dft-fft/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Fourier, DFT và FFT</strong>
+        <small>Phép biến đổi giữa hai domain thực sự đang tính gì?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

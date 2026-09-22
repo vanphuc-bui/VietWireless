@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
+---
+
+<BaseLayout
+  title="Fourier, DFT và FFT trực quan | VietWireless"
+  description="Hiểu Fourier transform, DFT, FFT, frequency bins, resolution, leakage và windowing bằng trực giác, công thức và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 07 · SIGNAL FOUNDATIONS</p>
+      <h1>Fourier, DFT và FFT</h1>
+      <p class="lesson-deck">
+        Frequency domain ở Bài 06 không tự xuất hiện. Ta cần một phép biến đổi để hỏi:{" "}
+        <strong>nếu dùng các complex sinusoid làm “trục tọa độ”, signal này có bao nhiêu thành phần ở mỗi tần số?</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 06 nói về hai representation. Bài này zoom vào chính cây cầu giữa chúng và phân biệt ba cụm từ rất hay bị dùng lẫn.
+      </p>
+      <div class="system-position">
+        <span>BA KHÁI NIỆM, BA VAI TRÒ</span>
+        <div class="system-position-flow" aria-label="Fourier transform DFT và FFT">
+          <span>Fourier transform</span><b>→</b>
+          <strong>DFT</strong><b>→</b>
+          <span>FFT algorithm</span>
+        </div>
+        <p>
+          Fourier là ý tưởng/nhóm phép biến đổi. DFT là một phép biến đổi cụ thể cho N samples.
+          FFT là họ thuật toán tính DFT hiệu quả hơn, không phải một transform khác.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="y-tuong-fourier">
+      <p class="concept-kicker">01 · Ý TƯỞNG FOURIER</p>
+      <h2>Thay vì mô tả waveform bằng giá trị tại từng thời điểm, ta mô tả nó bằng các complex sinusoid.</h2>
+
+      <div class="fourier-basis-story">
+        <div>
+          <small>TIME SAMPLES</small>
+          <strong>x[n]</strong>
+          <span>một vector gồm N giá trị</span>
+        </div>
+        <b>đổi basis →</b>
+        <div>
+          <small>COMPLEX SINUSOIDS</small>
+          <strong>e<sup>jωn</sup></strong>
+          <span>các “hướng” dao động khác nhau</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>COEFFICIENTS</small>
+          <strong>X[k]</strong>
+          <span>mỗi frequency basis cần bao nhiêu</span>
+        </div>
+      </div>
+
+      <p>
+        Đây là một cách nhìn hữu ích hơn câu “FFT tìm tần số”. DFT thực chất đang chiếu vector samples lên một tập
+        complex exponential có frequency khác nhau, rồi trả về complex coefficient cho từng basis.
+      </p>
+    </section>
+
+    <section class="concept-block" id="fourier-dft">
+      <p class="concept-kicker">02 · FOURIER TRANSFORM, DTFT VÀ DFT KHÁC NHAU Ở ĐÂU?</p>
+      <h2>Điểm khác nhau chủ yếu nằm ở loại signal đầu vào và cách frequency axis được biểu diễn.</h2>
+
+      <div class="transform-family">
+        <article>
+          <span class="card-label">CONTINUOUS-TIME FOURIER TRANSFORM</span>
+          <h3>x(t) ↔ X(f)</h3>
+          <p>Đầu vào liên tục theo thời gian; frequency cũng là biến liên tục.</p>
+        </article>
+        <article>
+          <span class="card-label">DTFT</span>
+          <h3>x[n] ↔ X(e<sup>jω</sup>)</h3>
+          <p>Đầu vào rời rạc theo thời gian; frequency vẫn liên tục nhưng tuần hoàn theo normalized frequency.</p>
+        </article>
+        <article>
+          <span class="card-label">DFT</span>
+          <h3>N samples ↔ N bins</h3>
+          <p>Ta lấy một record hữu hạn N samples và nhận N complex coefficients rời rạc.</p>
+        </article>
+      </div>
+
+      <p>
+        Trong software receiver, khi nói “chạy FFT trên buffer N samples”, thứ ta đang tính về mặt toán học thường là DFT của buffer đó.
+      </p>
+    </section>
+
+    <section class="concept-block" id="dft-formula">
+      <p class="concept-kicker">03 · DFT ĐANG TÍNH GÌ?</p>
+      <h2>Mỗi bin k hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
+
+      <div class="dft-equation">
+        <span>X[k]</span>
+        <b>=</b>
+        <span>Σ<sub>n=0</sub><sup>N-1</sup> x[n] e<sup>-j2πkn/N</sup></span>
+      </div>
+
+      <div class="dft-symbols">
+        <div><strong>N</strong><span>số samples trong record</span></div>
+        <div><strong>n</strong><span>sample index</span></div>
+        <div><strong>k</strong><span>frequency-bin index</span></div>
+        <div><strong>X[k]</strong><span>complex coefficient tại bin k</span></div>
+      </div>
+
+      <p>
+        Có thể đọc phép nhân với e<sup>-j2πkn/N</sup> như việc “de-rotate” một candidate frequency.
+        Nếu candidate khớp với thành phần trong x[n], các contribution cộng cùng hướng và magnitude của X[k] lớn.
+        Nếu không khớp, các vector có xu hướng triệt tiêu nhau.
+      </p>
+
+      <aside class="mental-model">
+        <strong>DFT gần với correlation hơn là một chiếc máy đo thần kỳ</strong>
+        <p>
+          Mỗi bin đang so record với một complex sinusoid đã biết. Ý tưởng này sẽ rất quen khi sau này ta dùng correlation để tìm PSS, PRACH hoặc sequence tham chiếu.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="bins">
+      <p class="concept-kicker">04 · FREQUENCY BINS TỪ ĐÂU RA?</p>
+      <h2>Sampling rate và số samples quyết định khoảng cách giữa các bins.</h2>
+
+      <div class="bin-equations">
+        <div>
+          <span class="card-label">BIN SPACING</span>
+          <strong>Δf = f<sub>s</sub> / N</strong>
+        </div>
+        <div>
+          <span class="card-label">RECORD DURATION</span>
+          <strong>T<sub>obs</sub> = N / f<sub>s</sub></strong>
+        </div>
+        <div>
+          <span class="card-label">CÙNG MỘT QUAN HỆ</span>
+          <strong>Δf = 1 / T<sub>obs</sub></strong>
+        </div>
+      </div>
+
+      <p>
+        Ví dụ f<sub>s</sub> = 64 Hz và N = 64 cho Δf = 1 Hz.
+        Tăng N lên 128 trong khi giữ f<sub>s</sub> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Bin spacing và khả năng phân giải hai tone không hoàn toàn đồng nghĩa trong mọi tình huống</strong>
+        <p>
+          Window shape, SNR và độ dài quan sát đều ảnh hưởng việc hai spectral components có tách được hay không.
+          Δf = f<sub>s</sub>/N là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="leakage">
+      <p class="concept-kicker">05 · TẠI SAO MỘT TONE CÓ THỂ TRẢI RA NHIỀU BINS?</p>
+      <h2>DFT nhìn một record hữu hạn và ngầm coi record đó lặp lại tuần hoàn.</h2>
+      <p>
+        Nếu đầu và cuối record nối với nhau không khớp, periodic extension tạo ra discontinuity.
+        Trong frequency domain, discontinuity đó làm energy của tone trải sang nhiều bins. Ta gọi hiện tượng này là spectral leakage.
+      </p>
+
+      <div class="leakage-story">
+        <div>
+          <small>BIN-CENTERED TONE</small>
+          <strong>7.0 Hz</strong>
+          <span>record chứa số chu kỳ nguyên</span>
+        </div>
+        <b>→</b>
+        <div class="leakage-bars clean" aria-hidden="true">
+          <i></i><i></i><i class="peak"></i><i></i><i></i>
+        </div>
+        <div>
+          <small>OFF-BIN TONE</small>
+          <strong>7.5 Hz</strong>
+          <span>biên record không nối trơn</span>
+        </div>
+        <b>→</b>
+        <div class="leakage-bars spread" aria-hidden="true">
+          <i></i><i></i><i></i><i class="peak"></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="dft-lab">
+      <p class="concept-kicker">06 · INTERACTIVE LAB</p>
+      <h2>Thử đổi tone, N và window để thấy bin spacing và leakage thay đổi.</h2>
+      <p>
+        Chọn tone nguyên Hz khi Δf = 1 Hz để thấy energy tập trung vào một bin, rồi chọn 7,5 Hz.
+        Sau đó đổi Rectangular sang Hann để quan sát tradeoff giữa sidelobes và main-lobe width.
+      </p>
+      <FourierDFTExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="window">
+      <p class="concept-kicker">07 · WINDOW KHÔNG “SỬA FFT”</p>
+      <h2>Window thay cách ta cắt record, từ đó thay leakage pattern.</h2>
+
+      <div class="window-compare">
+        <article>
+          <span class="card-label">RECTANGULAR</span>
+          <h3>w[n] = 1</h3>
+          <p>Main lobe hẹp hơn, nhưng sidelobes tương đối cao. Khi tone đúng bin, đây có thể là lựa chọn rất sạch.</p>
+        </article>
+        <article>
+          <span class="card-label">HANN</span>
+          <h3>taper về gần 0 ở hai đầu</h3>
+          <p>Giảm discontinuity và sidelobes, đổi lại main lobe rộng hơn và amplitude cần được scale đúng nếu muốn đo chính xác.</p>
+        </article>
+      </div>
+
+      <p>
+        Không có một window tốt nhất cho mọi bài toán. Chọn window phụ thuộc mục tiêu: phát hiện tone nhỏ cạnh tone lớn,
+        đo amplitude, phân giải hai components gần nhau hay xử lý OFDM có cấu trúc riêng.
+      </p>
+    </section>
+
+    <section class="concept-block" id="fft">
+      <p class="concept-kicker">08 · FFT THỰC SỰ LÀ GÌ?</p>
+      <h2>FFT tính cùng X[k] như DFT, nhưng tận dụng cấu trúc để giảm số phép toán.</h2>
+
+      <div class="fft-complexity">
+        <div>
+          <span class="card-label">DFT TRỰC TIẾP</span>
+          <strong>O(N²)</strong>
+          <p>Mỗi trong N bins cộng contribution từ N samples.</p>
+        </div>
+        <b>→ cấu trúc lại →</b>
+        <div>
+          <span class="card-label">FFT</span>
+          <strong>O(N log N)</strong>
+          <p>Reuse các phép tính có cấu trúc thay vì tính mọi thứ độc lập.</p>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>FFT không cho một spectrum “khác” DFT</strong>
+        <p>
+          Với cùng input, normalization và convention, FFT phải cho cùng DFT coefficients, chỉ khác cách tính nhanh hơn.
+          Đây là lý do câu “DFT dùng để phân tích, FFT dùng để thực thi” là một mental model hữu ích.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="zero-padding">
+      <p class="concept-kicker">09 · ZERO-PADDING VÀ MỘT HIỂU NHẦM PHỔ BIẾN</p>
+      <h2>Thêm zeros có thể làm spectrum trông mịn hơn, nhưng không tạo thêm thời gian quan sát.</h2>
+      <p>
+        Nếu record thật chỉ có N samples rồi ta append zeros trước FFT dài hơn, ta lấy thêm samples của DTFT trên frequency axis.
+        Các peak có thể được định vị bằng đồ thị mịn hơn, nhưng thông tin vật lý vẫn đến từ N samples ban đầu.
+      </p>
+      <p>
+        Muốn tăng khả năng phân biệt các components rất gần nhau trong điều kiện giống nhau, thường cần record quan sát dài hơn,
+        SNR tốt hơn hoặc estimator phù hợp, chứ không chỉ tăng FFT size bằng zero-padding.
+      </p>
+    </section>
+
+    <section class="concept-block" id="ofdm">
+      <p class="concept-kicker">10 · TỪ DFT SANG OFDM</p>
+      <h2>Trong OFDM, các DFT bins không chỉ để “quan sát spectrum”; chúng trở thành các subcarriers có chủ đích.</h2>
+
+      <div class="dft-ofdm-bridge">
+        <div><small>DATA SYMBOLS</small><strong>X[k]</strong><span>một complex value trên mỗi bin/subcarrier</span></div>
+        <b>→ IFFT →</b>
+        <div><small>TIME SAMPLES</small><strong>x[n]</strong><span>OFDM waveform ở baseband</span></div>
+        <b>→ channel → FFT →</b>
+        <div><small>RECEIVED BINS</small><strong>Y[k]</strong><span>xử lý từng subcarrier</span></div>
+      </div>
+
+      <p>
+        Bài 15 sau này sẽ đi sâu vào IFFT/FFT trong OFDM. Trước đó, Bài 08 cần trả lời một câu hỏi còn thiếu:
+        các complex values X[k] được tạo ra từ bits như thế nào?
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
+      <h2>DFT là phép biến đổi; FFT là cách tính nó nhanh.</h2>
+      <ol class="recap-list">
+        <li><strong>Fourier:</strong> mô tả signal bằng các thành phần sinusoid/complex exponential.</li>
+        <li><strong>DFT:</strong> biến N samples thành N complex frequency bins.</li>
+        <li><strong>Δf = fₛ/N:</strong> sampling rate và record length xác định bin spacing.</li>
+        <li><strong>Leakage:</strong> xuất hiện khi finite record không khớp tuần hoàn với DFT basis.</li>
+        <li><strong>Window:</strong> thay leakage tradeoff bằng cách taper record.</li>
+        <li><strong>FFT:</strong> thuật toán tính DFT hiệu quả, không phải transform khác.</li>
+        <li><strong>Zero-padding:</strong> nội suy frequency sampling dày hơn nhưng không tạo thêm information.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Miền thời gian và miền tần số</strong>
+        <small>Hai cách nhìn của cùng một signal.</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/modulation-bpsk-qpsk-qam/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Modulation: BPSK → QPSK → QAM</strong>
+        <small>Bits trở thành complex symbols như thế nào?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
