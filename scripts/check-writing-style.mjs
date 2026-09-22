@@ -20,6 +20,11 @@ files.push(...extraFiles);
 
 const rules = [
   {
+    name: 'overly casual first-person',
+    regex: /\bmình\b/giu,
+    message: 'Use “tôi” for the author voice, or rewrite the sentence neutrally.',
+  },
+  {
     name: 'em dash',
     regex: /—/g,
     message: 'Do not use em dash. Use a comma, period, colon, parentheses, or rewrite the sentence.',
