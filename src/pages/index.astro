@@ -18,7 +18,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
       <p class="essay-lead">
         Viễn thông không bắt đầu từ một bảng thông số trong 3GPP. Nó bắt đầu từ mong muốn rất con người:
         nói với một người ở xa, gửi một bức ảnh tới một nơi khác,
-        và đưa information vượt qua khoảng cách.
+        và đưa thông tin vượt qua khoảng cách.
       </p>
 
       <div class="hero-note">
@@ -34,11 +34,58 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
       <div class="section-number">01</div>
       <div class="essay-content wide-content">
         <p class="section-kicker">MỘT VÒNG QUA LỊCH SỬ</p>
-        <h2>Từ điện báo tới giọng nói, hình ảnh và mạng di động.</h2>
+        <h2>Từ sóng điện từ tới một thế giới nơi giọng nói, hình ảnh và dữ liệu đều có thể truyền đi.</h2>
         <p>
-          Tôi thường nhìn lịch sử viễn thông như một chuỗi những câu hỏi: làm sao biến information thành một đại lượng có thể truyền đi?
-          Làm sao bỏ sợi dây? Làm sao gửi không chỉ ký tự mà cả giọng nói, hình ảnh và cuối cùng là dữ liệu số?
+          Tôi thường nhìn lịch sử viễn thông như một chuỗi những câu hỏi nối tiếp nhau:
+          làm sao tạo ra một tín hiệu có thể đi xa, làm sao bỏ sợi dây, làm sao mang giọng nói và hình ảnh,
+          rồi làm sao biểu diễn thông tin theo cách một hệ thống số có thể xử lý và khôi phục lại.
         </p>
+
+        <div class="history-overview" aria-label="Timeline tổng quan lịch sử viễn thông">
+          <div class="history-overview-track" aria-hidden="true"></div>
+          <div class="history-overview-item">
+            <time>1864</time>
+            <i></i>
+            <strong>Lý thuyết</strong>
+            <span>Sóng điện từ</span>
+          </div>
+          <div class="history-overview-item">
+            <time>1901</time>
+            <i></i>
+            <strong>Không dây</strong>
+            <span>Morse qua radio</span>
+          </div>
+          <div class="history-overview-item">
+            <time>1906</time>
+            <i></i>
+            <strong>Giọng nói</strong>
+            <span>Dạng sóng liên tục</span>
+          </div>
+          <div class="history-overview-item">
+            <time>1928</time>
+            <i></i>
+            <strong>Hình ảnh</strong>
+            <span>Quét và dựng lại</span>
+          </div>
+          <div class="history-overview-item">
+            <time>1948</time>
+            <i></i>
+            <strong>Thông tin</strong>
+            <span>Bit · nhiễu · dung lượng</span>
+          </div>
+          <div class="history-overview-item">
+            <time>1979</time>
+            <i></i>
+            <strong>Cellular</strong>
+            <span>Tái sử dụng phổ tần</span>
+          </div>
+          <div class="history-overview-item">
+            <time>Nay</time>
+            <i></i>
+            <strong>5G / NTN</strong>
+            <span>Mạng vô tuyến hiện đại</span>
+          </div>
+        </div>
 
         <div class="history-gallery">
           <article class="history-card">
@@ -61,7 +108,19 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
                 Maxwell xây dựng lý thuyết thống nhất điện và từ, từ đó suy ra khả năng tồn tại của sóng điện từ.
                 Những thí nghiệm của Hertz sau này cho thấy các sóng đó thực sự có thể được tạo ra và phát hiện.
               </p>
-              <p class="history-lesson"><strong>Bài học:</strong> từ đây, chính không gian cũng có thể được nhìn như một “kênh truyền”.</p>
+
+              <div class="history-tech" aria-label="Nguồn dao động tạo sóng điện từ và bộ phát hiện">
+                <div class="history-tech-label">NHÌN DƯỚI GÓC TÍN HIỆU</div>
+                <div class="em-path">
+                  <span class="em-source">dao động điện</span>
+                  <b>)))</b>
+                  <span class="em-space">trường điện từ</span>
+                  <b>)))</b>
+                  <span class="em-detector">bộ phát hiện</span>
+                </div>
+              </div>
+
+              <p class="history-lesson"><strong>Bài học:</strong> từ đây, chính không gian cũng có thể được nhìn như một kênh truyền.</p>
             </div>
           </article>
 
@@ -80,12 +139,29 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
             </figure>
             <div class="history-copy">
               <time>1890s → 1901</time>
-              <h3>Wireless telegraphy: information rời khỏi sợi dây</h3>
+              <h3>Điện báo vô tuyến: thông tin rời khỏi sợi dây</h3>
               <p>
-                Marconi phát triển các hệ thống radiotelegraphy đường dài. Năm 1901, ông báo cáo việc nhận tín hiệu Morse
-                xuyên Đại Tây Dương. Information lúc này vẫn còn rất đơn giản. Các ký hiệu được biến thành những trạng thái hoặc xung có thể phát qua radio.
+                Marconi phát triển các hệ thống điện báo vô tuyến đường dài. Năm 1901, ông báo cáo việc nhận tín hiệu Morse
+                xuyên Đại Tây Dương. Thông tin được truyền lúc này vẫn còn đơn giản, chủ yếu là các ký hiệu được biến thành
+                trạng thái bật và tắt của tín hiệu vô tuyến.
               </p>
-              <p class="history-lesson"><strong>Bài học:</strong> information và signal không phải cùng một thứ; signal là cách ta mang information đi.</p>
+
+              <div class="history-tech">
+                <div class="history-tech-label">MORSE → TÍN HIỆU</div>
+                <div class="morse-line" aria-label="Chuỗi Morse và các xung bật tắt tương ứng">
+                  <div>
+                    <small>ký hiệu</small>
+                    <span>· · · &nbsp; − − − &nbsp; · · ·</span>
+                  </div>
+                  <b>↓</b>
+                  <div>
+                    <small>on / off</small>
+                    <span class="pulse-strip"><i></i><i></i><i></i><i class="long"></i><i class="long"></i><i class="long"></i><i></i><i></i><i></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="history-lesson"><strong>Bài học:</strong> thông tin và tín hiệu không phải cùng một thứ. Tín hiệu là cách ta mang thông tin đi.</p>
             </div>
           </article>
 
@@ -106,11 +182,41 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
               <time>1900s</time>
               <h3>Từ “tít tít” tới giọng nói</h3>
               <p>
-                Fessenden là một trong những người tiên phong trong việc truyền speech bằng radio.
-                Khi một waveform liên tục như giọng nói được đặt lên một carrier, radio không còn chỉ mang ký hiệu Morse:
-                nó có thể mang nội dung âm thanh.
+                Fessenden là một trong những người tiên phong trong truyền giọng nói bằng radio.
+                Khi dạng sóng liên tục của giọng nói được điều chế lên sóng mang, radio không còn chỉ truyền các ký hiệu Morse.
+                Nó có thể mang theo sự biến thiên của âm thanh.
               </p>
-              <p class="history-lesson"><strong>Bài học:</strong> một waveform liên tục có thể mang nhiều cấu trúc hơn rất nhiều so với chỉ on/off.</p>
+
+              <div class="history-tech">
+                <div class="history-tech-label">GIỌNG NÓI → RADIO</div>
+                <div class="voice-modulation" aria-label="Dạng sóng giọng nói được điều chế lên sóng mang">
+                  <div>
+                    <small>giọng nói</small>
+                    <svg viewBox="0 0 150 52" role="img" aria-label="Dạng sóng giọng nói">
+                      <line x1="4" y1="26" x2="146" y2="26"></line>
+                      <path d="M4 27 C14 5 21 45 31 25 S48 12 58 30 S75 42 87 20 S103 9 113 31 S132 37 146 24"></path>
+                    </svg>
+                  </div>
+                  <b>×</b>
+                  <div>
+                    <small>sóng mang</small>
+                    <svg viewBox="0 0 150 52" role="img" aria-label="Sóng mang tần số cao">
+                      <line x1="4" y1="26" x2="146" y2="26"></line>
+                      <path d="M4 26 Q8 6 12 26 T20 26 T28 26 T36 26 T44 26 T52 26 T60 26 T68 26 T76 26 T84 26 T92 26 T100 26 T108 26 T116 26 T124 26 T132 26 T140 26 T146 26"></path>
+                    </svg>
+                  </div>
+                  <b>→</b>
+                  <div>
+                    <small>RF đã điều chế</small>
+                    <svg viewBox="0 0 150 52" role="img" aria-label="Tín hiệu RF đã điều chế">
+                      <line x1="4" y1="26" x2="146" y2="26"></line>
+                      <path d="M4 26 Q8 20 12 26 T20 26 T28 26 Q32 9 36 26 T44 26 T52 26 Q56 15 60 26 T68 26 T76 26 Q80 4 84 26 T92 26 T100 26 Q104 13 108 26 T116 26 T124 26 Q128 18 132 26 T140 26 T146 26"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <p class="history-lesson"><strong>Bài học:</strong> một dạng sóng liên tục có thể mang cấu trúc phong phú hơn rất nhiều so với chỉ bật và tắt.</p>
             </div>
           </article>
 
@@ -129,16 +235,73 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
             </figure>
             <div class="history-copy">
               <time>1925 → 1928</time>
-              <h3>Hình ảnh cũng có thể trở thành signal</h3>
+              <h3>Hình ảnh cũng có thể trở thành tín hiệu</h3>
               <p>
                 Những hệ television sơ khai của John Logie Baird cho thấy hình ảnh chuyển động có thể được quét,
-                biến thành tín hiệu, truyền đi và dựng lại ở đầu nhận. Năm 1928, Baird trình diễn television xuyên Đại Tây Dương.
+                biến thành tín hiệu điện, truyền đi và dựng lại ở đầu nhận. Năm 1928, Baird trình diễn television xuyên Đại Tây Dương.
               </p>
-              <p class="history-lesson"><strong>Bài học:</strong> voice, image hay data khác nhau ở information gốc, nhưng đều cần một representation để truyền đi.</p>
+
+              <div class="history-tech">
+                <div class="history-tech-label">HÌNH ẢNH → TÍN HIỆU → HÌNH ẢNH</div>
+                <div class="image-scan-flow" aria-label="Ảnh được quét thành tín hiệu rồi dựng lại">
+                  <div class="scan-picture source" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                  <b>→</b>
+                  <svg viewBox="0 0 180 58" role="img" aria-label="Tín hiệu điện theo dòng quét">
+                    <line x1="4" y1="30" x2="176" y2="30"></line>
+                    <path d="M4 39 L24 39 L24 18 L46 18 L46 32 L70 32 L70 12 L94 12 L94 43 L119 43 L119 23 L145 23 L145 36 L176 36"></path>
+                  </svg>
+                  <b>→</b>
+                  <div class="scan-picture recovered" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+              </div>
+
+              <p class="history-lesson"><strong>Bài học:</strong> giọng nói, hình ảnh hay dữ liệu khác nhau ở thông tin gốc, nhưng đều cần một cách biểu diễn để truyền đi.</p>
             </div>
           </article>
 
-          <article class="history-card">
+          <article class="history-card shannon-card">
+            <figure class="history-tech-figure">
+              <div class="shannon-visual" role="img" aria-label="Thông tin được biểu diễn thành bits, truyền qua kênh có nhiễu rồi khôi phục">
+                <div>
+                  <small>THÔNG TIN</small>
+                  <strong>A</strong>
+                </div>
+                <b>→</b>
+                <div>
+                  <small>BITS</small>
+                  <strong class="mono">01000001</strong>
+                </div>
+                <b>→</b>
+                <div class="noisy-channel">
+                  <small>KÊNH CÓ NOISE</small>
+                  <span>⌁  ·  ⌁  ·  ⌁</span>
+                </div>
+                <b>→</b>
+                <div>
+                  <small>KHÔI PHỤC</small>
+                  <strong>A</strong>
+                </div>
+              </div>
+              <figcaption>
+                Sơ đồ khái niệm dựa trên mô hình communication system của Claude Shannon · 1948 ·
+                <a href="https://reach.ieee.org/primary-sources/a-mathematical-theory-of-communication/" target="_blank" rel="noreferrer">IEEE REACH ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1948</time>
+              <h3>Thông tin trở thành một đại lượng có thể phân tích bằng toán học</h3>
+              <p>
+                Công trình của Claude Shannon đặt bài toán truyền thông vào một khung toán học rõ hơn:
+                thông tin có thể được biểu diễn, một kênh có nhiễu có giới hạn, và thiết kế truyền thông có thể được bàn bằng các đại lượng định lượng thay vì chỉ bằng thiết bị.
+              </p>
+              <p>
+                Trong khung nhìn này, bit, mã hóa, nhiễu và dung lượng kênh trở thành những ý tưởng nền tảng cho truyền thông số hiện đại.
+              </p>
+              <p class="history-lesson"><strong>Bài học:</strong> câu hỏi không còn chỉ là “phát được bao xa”, mà còn là “một kênh có thể mang được bao nhiêu thông tin và với độ tin cậy nào”.</p>
+            </div>
+          </article>
+
+          <article class="history-card reverse">
             <figure class="history-figure">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Mobile_phone_base_station.jpg"
@@ -153,13 +316,29 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
             </figure>
             <div class="history-copy">
               <time>1979 → nay</time>
-              <h3>Cellular: tái sử dụng spectrum và phục vụ hàng triệu người dùng</h3>
+              <h3>Mạng di động tế bào: tái sử dụng phổ tần và phục vụ số lượng lớn người dùng</h3>
               <p>
-                Mạng cellular thương mại tự động xuất hiện từ cuối thập niên 1970 và đầu 1980, rồi tiến từ 1G analog
-                tới 2G số, packet data, broadband 4G, 5G và NTN. Hệ thống ngày nay lớn hơn rất nhiều,
-                nhưng nền móng vẫn là signal, sampling, time/frequency, modulation, channel và synchronization.
+                Các mạng cellular thương mại tự động xuất hiện từ cuối thập niên 1970 và đầu 1980, rồi tiến từ 1G analog
+                tới 2G số, truyền dữ liệu gói, băng rộng 4G, 5G và NTN. Một ý tưởng quan trọng là chia vùng phủ thành các cell,
+                nhờ đó phổ tần có thể được tái sử dụng theo không gian và người dùng có thể di chuyển giữa các vùng phủ.
               </p>
-              <p class="history-lesson"><strong>Bài học:</strong> dù công nghệ đổi rất nhanh, những khái niệm nền tảng vẫn cứ xuất hiện trở lại.</p>
+
+              <div class="history-tech">
+                <div class="history-tech-label">CELLULAR · KHÔNG GIAN + PHỔ TẦN + DI ĐỘNG</div>
+                <svg class="cellular-mini" viewBox="0 0 360 150" role="img" aria-label="Các cell lân cận tái sử dụng phổ tần và một UE di chuyển giữa các cell">
+                  <circle class="cell c1" cx="92" cy="73" r="48"></circle>
+                  <circle class="cell c2" cx="180" cy="73" r="48"></circle>
+                  <circle class="cell c3" cx="268" cy="73" r="48"></circle>
+                  <text x="74" y="78">f₁</text>
+                  <text x="162" y="78">f₂</text>
+                  <text x="250" y="78">f₁</text>
+                  <path class="mobility-path" d="M45 118 C105 96 139 110 181 91 S255 63 316 48"></path>
+                  <circle class="ue-dot" cx="181" cy="91" r="6"></circle>
+                  <text class="ue-label" x="190" y="108">UE</text>
+                </svg>
+              </div>
+
+              <p class="history-lesson"><strong>Bài học:</strong> công nghệ thay đổi rất nhanh, nhưng tín hiệu, sampling, tần số, modulation, channel và synchronization vẫn liên tục xuất hiện trở lại.</p>
             </div>
           </article>
         </div>
