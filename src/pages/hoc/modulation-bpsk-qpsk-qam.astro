@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ModulationExplorer from '../../components/ModulationExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -54,7 +54,7 @@ import Math from '../../components/Math.astro';
       </div>
 
       <p>
-        Nếu constellation có M điểm, mỗi symbol có thể đại diện tối đa <Math tex="\\log_2(M)" /> bits khi M là lũy thừa của 2.
+        Nếu constellation có M điểm, mỗi symbol có thể đại diện tối đa <MathExpr tex="\\log_2(M)" /> bits khi M là lũy thừa của 2.
       </p>
 
       <div class="bits-per-symbol-grid">
@@ -87,7 +87,7 @@ import Math from '../../components/Math.astro';
             Một mapping đơn giản có thể dùng 0 → -1 và 1 → +1 trên trục I. Q bằng 0.
             Hai điểm cách nhau tối đa trên một vòng tròn magnitude cố định, nên BPSK khá robust với noise.
           </p>
-          <Math tex="b\\in\\{0,1\\} \\;\\longrightarrow\\; x\\in\\{-1,+1\\}" display class="math-compact" />
+          <MathExpr tex="b\\in\\{0,1\\} \\;\\longrightarrow\\; x\\in\\{-1,+1\\}" display class="math-compact" />
         </div>
       </div>
     </section>
@@ -115,7 +115,7 @@ import Math from '../../components/Math.astro';
         </div>
         <div>
           <p>
-            QPSK dùng cả I và Q. Với normalization thường gặp, các tọa độ là <Math tex="\\pm 1/\\sqrt{2}" /> trên mỗi trục,
+            QPSK dùng cả I và Q. Với normalization thường gặp, các tọa độ là <MathExpr tex="\\pm 1/\\sqrt{2}" /> trên mỗi trục,
             nên magnitude của bốn points bằng nhau và phase khác nhau.
           </p>
           <p>
@@ -189,7 +189,7 @@ import Math from '../../components/Math.astro';
           <strong>I,Q ∈ &#123;±1, ±3&#125;</strong>
           <span>average |x|² = 10</span>
         </div>
-        <b><Math tex="\\div\\sqrt{10}" /> →</b>
+        <b><MathExpr tex="\\div\\sqrt{10}" /> →</b>
         <div>
           <small>NORMALIZED</small>
           <strong>E[|x|²] = 1</strong>
@@ -237,7 +237,7 @@ import Math from '../../components/Math.astro';
       <p class="concept-kicker">08 · BIT RATE KHÔNG PHẢI SYMBOL RATE</p>
       <h2>Modulation order quyết định có bao nhiêu bits được đóng vào một symbol.</h2>
 
-      <Math tex="R_b = R_s\\log_2(M)" display />
+      <MathExpr tex="R_b = R_s\\log_2(M)" display />
       <p class="math-caption">Trong mapping uncoded lý tưởng, trước khi tính coding, pilots, CP và overhead khác.</p>
 
       <p>
