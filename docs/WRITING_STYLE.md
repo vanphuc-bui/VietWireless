@@ -161,3 +161,24 @@ một câu hỏi đơn giản: <strong>chúng ta đang truyền gì?</strong>
 Khi JSX/Astro expression làm khoảng trắng không rõ ràng, dùng khoảng trắng tường minh hoặc viết lại câu để hai phần không bị dính.
 
 Trước khi merge, rà cả desktop và mobile. Các lỗi kiểu `là<strong>`, `</strong>và`, `:<em>` hoặc `</em>mà` phải được sửa.
+
+
+### Astro và khoảng trắng qua nhiều dòng
+
+Astro có thể bỏ whitespace ở ranh giới giữa text và inline element khi source được xuống dòng.
+
+Ví dụ source nhìn có vẻ đúng nhưng có thể render thành chữ dính:
+
+```astro
+câu hỏi:
+<strong>nội dung được nhấn mạnh</strong>
+```
+
+Khi text và `strong`, `em` hoặc `a` nằm ở hai dòng khác nhau, dùng khoảng trắng tường minh:
+
+```astro
+câu hỏi:{" "}
+<strong>nội dung được nhấn mạnh</strong>
+```
+
+CI kiểm tra cả trường hợp lỗi nằm qua ranh giới dòng, không chỉ trên cùng một dòng.
