@@ -138,7 +138,7 @@ import MathExpr from '../../components/Math.astro';
 
         <article>
           <span class="card-label">CROSS-CORRELATION</span>
-          <h3>s₁[n] so với s₂[n]</h3>
+          <h3><MathExpr tex="s_1[n]" /> so với <MathExpr tex="s_2[n]" /></h3>
           <p>
             Nếu receiver phải phân biệt nhiều candidate sequences, ta muốn các sequences khác nhau không correlate quá mạnh với nhau.
           </p>
@@ -175,7 +175,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Nếu phase quay dần trong observation window, các contribution không còn cộng cùng hướng.</h2>
 
       <p>
-        Với CFO Δf, received complex samples có thêm factor <MathExpr tex="e^{j2\\pi\\Delta f\\,nT_s}" />.
+        Với CFO <MathExpr tex="\\Delta f" />, received complex samples có thêm factor <MathExpr tex="e^{j2\\pi\\Delta f\\,nT_s}" />.
         Đầu sequence và cuối sequence vì vậy có phase khác nhau.
         Correlator coherent dùng một reference “không quay” sẽ mất gain khi accumulated phase rotation lớn.
       </p>
