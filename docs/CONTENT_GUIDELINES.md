@@ -26,7 +26,6 @@ VietWireless không phải blog tin tức. Đây là knowledge platform giúp ng
 - Mỗi visual phải trả lời một câu hỏi cụ thể.
 - Không dùng ảnh minh họa chỉ để “cho đẹp”.
 - Ưu tiên SVG/Canvas/interactive plot cho signal processing.
-- Màu phải có ý nghĩa nhất quán: cyan cho signal/time path, violet cho frequency/transform/alternate representation.
 - Không phụ thuộc chỉ vào màu; luôn có label.
 - Mobile phải đọc được mà không cần zoom ngang.
 - Animation phải tôn trọng prefers-reduced-motion.
@@ -58,6 +57,18 @@ Ví dụ kỹ thuật phải được dựng độc lập từ kiến thức cô
 - Title và H1 nói thẳng câu hỏi người học đang muốn hiểu.
 - Internal links phải theo learning graph chứ không nhồi keyword.
 - Cornerstone page phải đủ tốt để người đọc không cần quay lại Google để hiểu khái niệm cơ bản.
+
+## Editorial voice: “một người đang dạy”
+
+VietWireless phải có cảm giác như một người có kinh nghiệm đang ngồi cạnh sinh viên và giải thích trên bảng,
+không phải landing page của một startup.
+
+- Tone sáng, sạch, gần với giáo trình/blog học thuật cá nhân.
+- Ưu tiên câu hỏi mà sinh viên thực sự từng mắc: “FFT để làm gì?”, “tại sao phải đổi miền?”, “sample này nằm ở đâu trong hệ thống?”.
+- Có thể dùng trải nghiệm cá nhân của tác giả để mở bài, nhưng không biến bài thành nhật ký.
+- Không coi câu hỏi cơ bản là “ngớ ngẩn”. Nếu nhiều người dùng một công cụ mà chưa có mental model, hãy giải thích lại từ nền tảng.
+- Mỗi chương nên có cảm giác nối tiếp một khóa học: Chương 0 → Bài 01 → Bài 02...
+- Homepage kể câu chuyện ngành học trước, sau đó mới dẫn tới learning path.
 
 ## QA trước khi merge
 
