@@ -100,10 +100,78 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       <p class="concept-kicker">02 · ANALOG → DIGITAL</p>
       <h2>Nếu nhìn từ phía máy tính, waveform cuối cùng lại trở thành các samples.</h2>
       <p>
-        Một microphone có thể tạo ra điện áp liên tục. ADC lấy giá trị của điện áp đó tại các thời điểm
-        xác định. Kết quả là một dãy số như x[0], x[1], x[2]… Đây là nơi signal processing số bắt đầu.
+        Một microphone tạo ra điện áp thay đổi liên tục theo thời gian. ADC không lưu cả đường cong liên tục đó.
+        Nó đo giá trị của waveform tại những thời điểm cách nhau đều đặn. Mỗi lần đo cho ra một sample.
       </p>
-      <div class="two-column">
+
+      <div class="sampling-visual" aria-label="Minh họa quá trình sampling từ waveform liên tục tới các samples rời rạc">
+        <article class="sampling-stage">
+          <span class="sampling-stage-label">1 · CONTINUOUS-TIME</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Waveform liên tục x(t)">
+            <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
+            <line class="sample-axis" x1="28" y1="16" x2="28" y2="134" />
+            <path class="analog-wave" d="M28 75 C48 28 68 28 88 75 S128 122 148 75 S188 28 208 75 S248 122 268 75 S292 42 304 61" />
+            <text class="sample-svg-label" x="286" y="69">t</text>
+            <text class="sample-svg-label" x="34" y="24">x(t)</text>
+          </svg>
+          <strong>Waveform liên tục</strong>
+          <p>Điện áp tồn tại ở mọi thời điểm t.</p>
+        </article>
+
+        <div class="sampling-arrow" aria-hidden="true">→</div>
+
+        <article class="sampling-stage sampling-stage-center">
+          <span class="sampling-stage-label">2 · SAMPLE MỖI Tₛ</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Waveform được đo tại các thời điểm sampling">
+            <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
+            <path class="analog-wave muted-wave" d="M28 75 C48 28 68 28 88 75 S128 122 148 75 S188 28 208 75 S248 122 268 75 S292 42 304 61" />
+            <g class="sample-stems">
+              <line x1="28" y1="75" x2="28" y2="75" /><circle cx="28" cy="75" r="4" />
+              <line x1="68" y1="75" x2="68" y2="40" /><circle cx="68" cy="40" r="4" />
+              <line x1="108" y1="75" x2="108" y2="110" /><circle cx="108" cy="110" r="4" />
+              <line x1="148" y1="75" x2="148" y2="75" /><circle cx="148" cy="75" r="4" />
+              <line x1="188" y1="75" x2="188" y2="40" /><circle cx="188" cy="40" r="4" />
+              <line x1="228" y1="75" x2="228" y2="110" /><circle cx="228" cy="110" r="4" />
+              <line x1="268" y1="75" x2="268" y2="75" /><circle cx="268" cy="75" r="4" />
+            </g>
+            <text class="sample-svg-label" x="54" y="137">Tₛ</text>
+            <path class="sample-bracket" d="M28 126 L28 132 L68 132 L68 126" />
+          </svg>
+          <strong>Đo tại từng thời điểm</strong>
+          <p>Sampling period Tₛ cho biết khoảng thời gian giữa hai lần đo.</p>
+        </article>
+
+        <div class="sampling-arrow" aria-hidden="true">→</div>
+
+        <article class="sampling-stage">
+          <span class="sampling-stage-label">3 · DISCRETE-TIME</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Dãy samples rời rạc x[n]">
+            <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
+            <g class="sample-stems discrete">
+              <line x1="28" y1="75" x2="28" y2="75" /><circle cx="28" cy="75" r="4" />
+              <line x1="68" y1="75" x2="68" y2="40" /><circle cx="68" cy="40" r="4" />
+              <line x1="108" y1="75" x2="108" y2="110" /><circle cx="108" cy="110" r="4" />
+              <line x1="148" y1="75" x2="148" y2="75" /><circle cx="148" cy="75" r="4" />
+              <line x1="188" y1="75" x2="188" y2="40" /><circle cx="188" cy="40" r="4" />
+              <line x1="228" y1="75" x2="228" y2="110" /><circle cx="228" cy="110" r="4" />
+              <line x1="268" y1="75" x2="268" y2="75" /><circle cx="268" cy="75" r="4" />
+            </g>
+            <text class="sample-svg-label" x="286" y="69">n</text>
+            <text class="sample-svg-label" x="34" y="24">x[n]</text>
+          </svg>
+          <strong>Một dãy số</strong>
+          <p>x[0], x[1], x[2]... là thứ phần mềm DSP thực sự xử lý.</p>
+        </article>
+      </div>
+
+      <div class="sampling-equation">
+        <span>x[n]</span>
+        <b>=</b>
+        <span>x(nTₛ)</span>
+        <small>sample thứ n chính là giá trị của waveform tại thời điểm nTₛ</small>
+      </div>
+
+      <div class="two-column sampling-summary">
         <div class="explain-card">
           <span class="card-label">Continuous-time</span>
           <h3>x(t)</h3>
@@ -112,13 +180,15 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         <div class="explain-card">
           <span class="card-label">Discrete-time</span>
           <h3>x[n]</h3>
-          <p>Ta chỉ lưu giá trị tại các sample index n = 0, 1, 2…</p>
+          <p>Ta chỉ giữ giá trị tại các sample index n = 0, 1, 2...</p>
         </div>
       </div>
+
       <p>
-        Sampling rate nói cho ta biết mỗi giây lấy bao nhiêu samples. Đây chưa phải toàn bộ câu chuyện của ADC.
-        Vẫn còn quantization, dynamic range và anti-alias filtering. Ở đoạn này tôi chỉ muốn giữ lại một hình dung:{" "}
-        <strong>sampling biến một waveform theo thời gian thành một dãy số theo thời gian.</strong>
+        Sampling rate là <strong>f<sub>s</sub> = 1/T<sub>s</sub></strong>. Ví dụ f<sub>s</sub> = 48 kHz nghĩa là ADC đo waveform
+        48.000 lần mỗi giây. Đây chưa phải toàn bộ câu chuyện của ADC. Vẫn còn quantization, dynamic range và
+        anti-alias filtering. Ở đây tôi chỉ muốn giữ lại một hình dung:{" "}
+        <strong>sampling biến waveform liên tục theo thời gian thành một dãy giá trị rời rạc theo thời gian.</strong>
       </p>
     </section>
 
@@ -168,36 +238,137 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       <SignalExplorer client:load />
     </section>
 
-    <section class="concept-block">
-      <p class="concept-kicker">05 · VẬY TẠI SAO KỸ SƯ WIRELESS CỨ FFT RỒI IFFT?</p>
-      <h2>Có những việc nhìn ở time domain sẽ tự nhiên hơn, và cũng có những việc sang frequency domain lại dễ thấy hơn.</h2>
-      <div class="domain-grid">
-        <article>
-          <span class="domain-badge">TIME</span>
-          <h3>Time domain hữu ích khi…</h3>
-          <p>ta quan tâm timing, waveform, impulse response, sample-by-sample processing hoặc transient.</p>
-        </article>
-        <article>
-          <span class="domain-badge violet">FREQUENCY</span>
-          <h3>Frequency domain hữu ích khi…</h3>
-          <p>ta muốn tách subcarriers, nhìn spectrum, xử lý từng frequency bin hoặc equalize theo tần số.</p>
-        </article>
+    <section class="concept-block ofdm-explainer" id="ofdm-grid">
+      <p class="concept-kicker">05 · FFT, IFFT VÀ RESOURCE GRID</p>
+      <h2>Trong OFDM, dữ liệu được tổ chức trên các subcarriers trước khi trở thành waveform để phát.</h2>
+
+      <p>
+        Ở phía digital baseband, ta thường làm việc với các complex modulation symbols trong frequency domain.
+        LTE và 5G biểu diễn chúng trên một <strong>resource grid</strong>. Trục dọc là subcarrier, tức frequency.
+        Trục ngang là OFDM symbol, tức time.
+      </p>
+      <p>
+        Mỗi ô nhỏ là một <strong>resource element (RE)</strong>. Một RE tương ứng với một subcarrier trong một
+        OFDM symbol và có thể mang một complex symbol, ví dụ QPSK hoặc 16QAM.
+      </p>
+
+      <div class="resource-grid-explainer">
+        <div class="resource-grid-panel">
+          <div class="visual-caption">
+            <span>SIMPLIFIED RESOURCE GRID</span>
+            <strong>frequency × time</strong>
+          </div>
+
+          <div class="resource-grid-wrap">
+            <div class="frequency-axis">
+              <b aria-hidden="true">↑</b>
+              <span>subcarriers / frequency</span>
+            </div>
+
+            <div class="resource-grid-main">
+              <div class="grid-symbol-labels" aria-hidden="true">
+                <span>m=0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+              </div>
+
+              <div class="resource-grid-cells" role="img" aria-label="Resource grid đơn giản với 12 subcarriers và 7 OFDM symbols. Một resource element được chọn">
+                {Array.from({ length: 84 }).map((_, i) => (
+                  <span class:list={["resource-cell", { selected: i === 38, sameSymbol: i % 7 === 3 && i !== 38 }]}></span>
+                ))}
+              </div>
+
+              <div class="time-axis">
+                <span>OFDM symbols / time</span>
+                <b aria-hidden="true">→</b>
+              </div>
+            </div>
+          </div>
+
+          <p class="visual-note">
+            Grid này chỉ là minh họa. Cột được tô nhẹ là một OFDM symbol m₀. Tất cả các RE trong cột đó tạo thành
+            vector frequency-domain <strong>X[k,m₀]</strong> đưa vào IFFT.
+          </p>
+        </div>
+
+        <div class="re-zoom-panel">
+          <div class="zoom-label">ZOOM VÀO 1 RE</div>
+          <div class="re-zoom-flow">
+            <div class="zoom-step">
+              <small>bits</small>
+              <strong class="mono-value">10</strong>
+            </div>
+            <span class="zoom-arrow" aria-hidden="true">→</span>
+            <div class="zoom-step">
+              <small>QPSK</small>
+              <div class="qpsk-zoom" role="img" aria-label="QPSK constellation với một complex symbol được chọn">
+                <span class="qpsk-axis horizontal"></span>
+                <span class="qpsk-axis vertical"></span>
+                <i class="q1 selected-point"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
+                <b>I</b><em>Q</em>
+              </div>
+            </div>
+            <span class="zoom-arrow" aria-hidden="true">→</span>
+            <div class="zoom-step symbol-step">
+              <small>complex symbol</small>
+              <strong>X[k₀,m₀]</strong>
+              <span>I + jQ</span>
+            </div>
+          </div>
+          <p>
+            Đây là ý nghĩa của việc “đặt data lên resource grid”. Bits được map thành một điểm constellation.
+            Complex value của điểm đó được đặt vào một RE.
+          </p>
+        </div>
       </div>
 
-      <div class="ofdm-flow">
-        <div><small>DATA SYMBOLS</small><strong>X[k]</strong><span>Frequency-domain subcarriers</span></div>
-        <span class="flow-op">IFFT →</span>
-        <div><small>TX WAVEFORM</small><strong>x[n]</strong><span>Time-domain samples cho DAC/RF</span></div>
-        <span class="flow-op">CHANNEL →</span>
-        <div><small>RX SAMPLES</small><strong>y[n]</strong><span>Samples sau ADC</span></div>
-        <span class="flow-op">FFT →</span>
-        <div><small>SUBCARRIERS</small><strong>Y[k]</strong><span>Quay lại từng frequency bin</span></div>
+      <div class="ofdm-column-flow">
+        <div class="ofdm-column-step frequency-step">
+          <small>ONE OFDM SYMBOL</small>
+          <strong>X[k,m₀]</strong>
+          <div class="mini-subcarrier-stack" aria-hidden="true">
+            <i style="--v:35%"></i><i style="--v:65%"></i><i style="--v:46%"></i><i style="--v:82%"></i>
+            <i style="--v:58%"></i><i style="--v:72%"></i><i style="--v:42%"></i><i style="--v:67%"></i>
+          </div>
+          <span>một complex symbol trên mỗi subcarrier k</span>
+        </div>
+
+        <div class="ofdm-transform-card">
+          <strong>IFFT</strong>
+          <span>frequency → time</span>
+          <b aria-hidden="true">→</b>
+        </div>
+
+        <div class="ofdm-column-step time-step">
+          <small>TIME-DOMAIN I/Q</small>
+          <strong>x[n]</strong>
+          <svg viewBox="0 0 240 90" role="img" aria-label="Time-domain OFDM waveform sau IFFT">
+            <line x1="6" y1="46" x2="234" y2="46"></line>
+            <path d="M6 46 C12 13 18 73 25 40 S38 20 46 55 S58 69 67 36 S82 25 91 53 S105 62 114 38 S129 18 138 48 S153 73 163 38 S179 25 188 51 S204 63 214 40 S227 29 234 48"></path>
+          </svg>
+          <span>samples theo thời gian để đi tiếp tới DAC/RF</span>
+        </div>
+      </div>
+
+      <aside class="precision-note ofdm-precision-note">
+        <strong>Frequency domain không phải là sóng đang bay ngoài anten</strong>
+        <p>
+          Trong OFDM, ta tổ chức và xử lý data trên các subcarriers ở frequency domain. IFFT chuyển một cột
+          frequency-domain symbols thành time-domain I/Q samples. Sau DAC và RF upconversion, transmitter mới tạo ra
+          waveform RF vật lý để anten phát đi.
+        </p>
+      </aside>
+
+      <div class="ofdm-rx-return">
+        <div><strong>TX</strong><span>Resource grid / X[k,m]</span></div>
+        <b>→ IFFT →</b>
+        <div><strong>Channel</strong><span>time-domain RF waveform</span></div>
+        <b>→ FFT →</b>
+        <div><strong>RX</strong><span>Y[k,m] trên từng subcarrier</span></div>
       </div>
 
       <p>
-        Đây chính là một phần cốt lõi của OFDM. Transmitter đặt data lên các subcarriers trong frequency domain,
-        dùng IFFT tạo time-domain waveform để phát. Receiver lấy time-domain samples và dùng FFT để tách chúng
-        trở lại thành các subcarriers. Khi học LTE/5G Resource Grid sau này, bạn sẽ gặp lại đúng bức tranh này.
+        Ở receiver, quá trình đi ngược lại. Sau RF front-end và ADC, receiver có time-domain samples y[n].
+        FFT đưa chúng trở lại các frequency bins Y[k]. Từ đó receiver có thể channel estimate, equalize,
+        demodulate và lấy lại bits trên từng RE.
       </p>
     </section>
 
@@ -224,7 +395,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         <li><strong>Sampling</strong> biến waveform liên tục thành một dãy giá trị rời rạc theo thời gian.</li>
         <li><strong>Time domain</strong> cho ta thấy signal biến đổi khi nào và như thế nào.</li>
         <li><strong>Frequency domain</strong> cho ta thấy các thành phần sinusoid cấu tạo nên signal.</li>
-        <li><strong>FFT/IFFT</strong> cho phép chuyển hiệu quả giữa hai cách biểu diễn đó.</li>
+        <li><strong>Trong OFDM</strong>, complex symbols được đặt trên resource grid theo frequency và time; IFFT biến một OFDM symbol thành time-domain I/Q samples để phát.</li>
         <li><strong>I/Q</strong> là complex representation giúp ta làm việc trực tiếp với amplitude và phase.</li>
       </ol>
     </section>
