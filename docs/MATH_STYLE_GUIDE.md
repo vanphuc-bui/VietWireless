@@ -143,3 +143,56 @@ Không dùng Unicode subscript/superscript như `Tₛ`, `x²` trong source khi �
 - kiểm tra desktop + mobile với ít nhất một công thức dài;
 - kiểm tra Windows/Chromium vì đây là nơi typography fallback từng gây lỗi dấu;
 - kiểm tra mọi công thức chính có prose giải thích biến và meaning.
+
+
+## Rule bắt buộc: mọi notation toán trong prose dùng MathExpr
+
+Không chỉ công thức dài. Mọi ký hiệu mang nghĩa toán học hoặc PHY notation xuất hiện trong câu phải render bằng KaTeX.
+
+Ví dụ đúng:
+- `<MathExpr tex="N" /> samples`;
+- `<MathExpr tex="I" />` và `<MathExpr tex="Q" />`;
+- `<MathExpr tex="x[n]" />`;
+- `<MathExpr tex="X[k]" />`;
+- `<MathExpr tex="H[k]" />`;
+- `<MathExpr tex="\\Delta f" />`;
+- `<MathExpr tex="T_u" />`;
+- `<MathExpr tex="N_{\\mathrm{CP}}" />`;
+- `<MathExpr tex="15\\,\\mathrm{kHz}" />`.
+
+Không viết cùng một đại lượng lúc thì plain text, lúc thì KaTeX. Nếu `N` đang là số samples, `N` là notation toán và phải dùng `MathExpr`.
+
+Ngoại lệ chỉ dành cho acronym/tên khối không phải biến toán, ví dụ FFT, ADC, OFDM, SNR khi đang được dùng như tên metric/khái niệm trong prose. Khi SNR nằm trong một biểu thức toán, dùng MathExpr.
+
+## Rule display math: mặc định không có khung
+
+Display equation chỉ render công thức, không có border, background hoặc box mặc định.
+
+Đúng:
+```astro
+<MathExpr tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
+```
+
+Không bọc công thức đơn lẻ trong card chỉ để tạo nền hoặc viền.
+
+Card chỉ dùng khi block đó thực sự là một đơn vị giải thích gồm label + formula + prose.
+
+## Rule math cards: cùng grid phải cùng visual scale
+
+Các math cards trong cùng một cụm phải dùng cùng:
+- min-height;
+- padding;
+- label size;
+- formula size;
+- body size;
+- spacing label → formula → prose.
+
+Không dùng một kiểu card nhỏ cho hàng trên rồi một kiểu card lớn cho hàng dưới nếu chúng đang giải thích các phép biến đổi ngang hàng.
+
+Shared classes ưu tiên:
+- `.math-card-grid` hoặc `.math-grid-2`;
+- `.math-card`;
+- `.math-card-formula`;
+- `.math-card-secondary`.
+
+Nếu một công thức dài hơn, cho nó wrap/scroll hợp lý; không tăng riêng font-size của card đó.

@@ -116,13 +116,13 @@ import MathExpr from '../../components/Math.astro';
             <text class="sample-svg-label" x="34" y="24">x(t)</text>
           </svg>
           <strong>Waveform liên tục</strong>
-          <p>Điện áp tồn tại ở mọi thời điểm t.</p>
+          <p>Điện áp tồn tại ở mọi thời điểm <MathExpr tex="t" />.</p>
         </article>
 
         <div class="sampling-arrow" aria-hidden="true">→</div>
 
         <article class="sampling-stage sampling-stage-center">
-          <span class="sampling-stage-label">2 · SAMPLE MỖI Tₛ</span>
+          <span class="sampling-stage-label">2 · SAMPLE MỖI <MathExpr tex="T_s" /></span>
           <svg viewBox="0 0 320 150" role="img" aria-label="Waveform được đo tại các thời điểm sampling">
             <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
             <path class="analog-wave muted-wave" d="M28 75 C48 28 68 28 88 75 S128 122 148 75 S188 28 208 75 S248 122 268 75 S292 42 304 61" />
@@ -139,7 +139,7 @@ import MathExpr from '../../components/Math.astro';
             <path class="sample-bracket" d="M28 126 L28 132 L68 132 L68 126" />
           </svg>
           <strong>Đo tại từng thời điểm</strong>
-          <p>Sampling period Tₛ cho biết khoảng thời gian giữa hai lần đo.</p>
+          <p>Sampling period <MathExpr tex="T_s" /> cho biết khoảng thời gian giữa hai lần đo.</p>
         </article>
 
         <div class="sampling-arrow" aria-hidden="true">→</div>
@@ -161,7 +161,7 @@ import MathExpr from '../../components/Math.astro';
             <text class="sample-svg-label" x="34" y="24">x[n]</text>
           </svg>
           <strong>Một dãy số</strong>
-          <p>x[0], x[1], x[2]... là thứ phần mềm DSP thực sự xử lý.</p>
+          <p><MathExpr tex="x[0],\\,x[1],\\,x[2],\\ldots" /> là thứ phần mềm DSP thực sự xử lý.</p>
         </article>
       </div>
 
@@ -172,12 +172,12 @@ import MathExpr from '../../components/Math.astro';
         <div class="explain-card">
           <span class="card-label">Continuous-time</span>
           <h3>x(t)</h3>
-          <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm t.</p>
+          <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm <MathExpr tex="t" />.</p>
         </div>
         <div class="explain-card">
           <span class="card-label">Discrete-time</span>
-          <h3>x[n]</h3>
-          <p>Ta chỉ giữ giá trị tại các sample index n = 0, 1, 2...</p>
+          <h3><MathExpr tex="x[n]" /></h3>
+          <p>Ta chỉ giữ giá trị tại các sample index <MathExpr tex="n=0,1,2,\\ldots" /></p>
         </div>
       </div>
 
@@ -205,13 +205,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="perspective">
         <div>
           <small>MIỀN THỜI GIAN</small>
-          <strong>x(t)</strong>
+          <strong><MathExpr tex="x(t)" /></strong>
           <span>“Tín hiệu thay đổi như thế nào theo thời gian?”</span>
         </div>
         <div class="perspective-equals">=</div>
         <div>
           <small>MIỀN TẦN SỐ</small>
-          <strong>X(f)</strong>
+          <strong><MathExpr tex="X(f)" /></strong>
           <span>“Tín hiệu gồm những thành phần tần số nào?”</span>
         </div>
       </div>
@@ -240,8 +240,8 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">05 · COMPLEX NUMBER, I/Q VÀ MODULATION</p>
       <h2>Trước khi nhìn resource grid, cần biết một ô trong grid thực sự đang chứa gì.</h2>
       <p>
-        Trong complex baseband, một giá trị thường được viết dưới dạng <strong>I + jQ</strong>.
-        I và Q là hai thành phần trực giao. Nếu xem chúng như tọa độ trên một mặt phẳng,
+        Trong complex baseband, một giá trị thường được viết dưới dạng <strong><MathExpr tex="I+jQ" /></strong>.
+        <MathExpr tex="I" /> và <MathExpr tex="Q" /> là hai thành phần trực giao. Nếu xem chúng như tọa độ trên một mặt phẳng,
         khoảng cách tới gốc cho ta amplitude còn góc của vector cho ta phase.
       </p>
       <p>
@@ -269,7 +269,7 @@ import MathExpr from '../../components/Math.astro';
           <span class="zoom-arrow" aria-hidden="true">→</span>
           <div class="zoom-step symbol-step">
             <small>complex modulation symbol</small>
-            <strong>X[k,m]</strong>
+            <strong><MathExpr tex="X[k,m]" /></strong>
             <span>I + jQ</span>
           </div>
         </div>
@@ -279,18 +279,18 @@ import MathExpr from '../../components/Math.astro';
         </p>
       </div>
 
-      <div class="two-column">
-        <article class="explain-card">
+      <div class="math-card-grid">
+        <article class="math-card">
           <span class="card-label">TRƯỚC IFFT · FREQUENCY DOMAIN</span>
-          <h3><MathExpr tex="X[k,m] = I + jQ" /></h3>
+          <div class="math-card-formula"><MathExpr tex="X[k,m] = I + jQ" /></div>
           <p>
-            Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier k và OFDM symbol m.
+            Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier <MathExpr tex="k" /> và OFDM symbol <MathExpr tex="m" />.
             Nó là giá trị ta sẽ đặt vào resource grid.
           </p>
         </article>
-        <article class="explain-card">
+        <article class="math-card">
           <span class="card-label">SAU IFFT · TIME DOMAIN</span>
-          <h3><MathExpr tex="x[n] = I[n] + jQ[n]" /></h3>
+          <div class="math-card-formula"><MathExpr tex="x[n] = I[n] + jQ[n]" /></div>
           <p>
             Đây là một <strong>complex time-domain sample</strong>. Nó cũng dùng biểu diễn I/Q,
             nhưng là một đại lượng ở stage khác của transmitter.
@@ -301,8 +301,8 @@ import MathExpr from '../../components/Math.astro';
       <aside class="mental-model">
         <strong>Một chỗ khá dễ lẫn</strong>
         <p>
-          X[k,m] và x[n] đều có thể là số phức, nhưng không phải cùng một thứ.
-          X[k,m] là modulation symbol trong miền tần số. IFFT biến cả một tập X[k,m] thành các time-domain samples x[n].
+          <MathExpr tex="X[k,m]" /> và <MathExpr tex="x[n]" /> đều có thể là số phức, nhưng không phải cùng một thứ.
+          <MathExpr tex="X[k,m]" /> là modulation symbol trong miền tần số. IFFT biến cả một tập <MathExpr tex="X[k,m]" /> thành các time-domain samples <MathExpr tex="x[n]" />.
         </p>
       </aside>
 
@@ -318,7 +318,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Trong OFDM, các complex modulation symbols được đặt lên resource grid trước khi trở thành waveform để phát.</h2>
 
       <p>
-        Tới đây, X[k,m] không còn là một ký hiệu mới. Nó là complex modulation symbol vừa được tạo ra từ modulation.
+        Tới đây, <MathExpr tex="X[k,m]" /> không còn là một ký hiệu mới. Nó là complex modulation symbol vừa được tạo ra từ modulation.
         LTE và 5G tổ chức các symbol này trên một <strong>resource grid</strong>. Trục dọc là subcarrier, tức frequency.
         Trục ngang là OFDM symbol, tức time.
       </p>
@@ -359,8 +359,8 @@ import MathExpr from '../../components/Math.astro';
           </div>
 
           <p class="visual-note">
-            Grid này chỉ là minh họa. Cột được tô nhẹ là một OFDM symbol m₀. Tất cả các RE trong cột đó tạo thành
-            vector frequency-domain <strong>X[k,m₀]</strong> đưa vào IFFT.
+            Grid này chỉ là minh họa. Cột được tô nhẹ là một OFDM symbol <MathExpr tex="m_0" />. Tất cả các RE trong cột đó tạo thành
+            vector frequency-domain <strong><MathExpr tex="X[k,m_0]" /></strong> đưa vào IFFT.
           </p>
         </div>
 
@@ -369,21 +369,21 @@ import MathExpr from '../../components/Math.astro';
           <MathExpr tex="X[k_0,m_0] = I + jQ" display />
           <p class="math-caption">Complex modulation symbol tại subcarrier <MathExpr tex="k_0" /> và OFDM symbol <MathExpr tex="m_0" />.</p>
           <p>
-            Resource element là vị trí trên grid. X[k₀,m₀] là giá trị complex được đặt vào vị trí đó.
+            Resource element là vị trí trên grid. <MathExpr tex="X[k_0,m_0]" /> là giá trị complex được đặt vào vị trí đó.
             Phần modulation ở trên cho ta biết giá trị này đến từ đâu.
           </p>
         </div>
       </div>
 
       <p>
-        Bây giờ lấy một cột của grid, tức một OFDM symbol m₀. Ta có một complex value trên mỗi subcarrier k.
+        Bây giờ lấy một cột của grid, tức một OFDM symbol <MathExpr tex="m_0" />. Ta có một complex value trên mỗi subcarrier <MathExpr tex="k" />.
         IFFT dùng toàn bộ vector đó để tạo ra một chuỗi complex samples theo thời gian.
       </p>
 
       <div class="ofdm-column-flow">
         <div class="ofdm-column-step frequency-step">
           <small>FREQUENCY-DOMAIN SYMBOLS</small>
-          <strong>X[k,m₀]</strong>
+          <strong><MathExpr tex="X[k,m_0]" /></strong>
           <div class="mini-subcarrier-stack" aria-hidden="true">
             <i style="--v:35%"></i><i style="--v:65%"></i><i style="--v:46%"></i><i style="--v:82%"></i>
             <i style="--v:58%"></i><i style="--v:72%"></i><i style="--v:42%"></i><i style="--v:67%"></i>
@@ -411,23 +411,23 @@ import MathExpr from '../../components/Math.astro';
       <aside class="precision-note ofdm-precision-note">
         <strong>Frequency domain không phải là sóng đang bay ngoài anten</strong>
         <p>
-          Trong OFDM, ta tổ chức data thành các frequency-domain modulation symbols X[k,m].
-          IFFT chuyển một cột X[k,m₀] thành time-domain complex samples x[n].
+          Trong OFDM, ta tổ chức data thành các frequency-domain modulation symbols <MathExpr tex="X[k,m]" />.
+          IFFT chuyển một cột <MathExpr tex="X[k,m_0]" /> thành time-domain complex samples <MathExpr tex="x[n]" />.
           Sau DAC và RF upconversion, transmitter mới tạo ra waveform RF vật lý để anten phát đi.
         </p>
       </aside>
 
       <div class="ofdm-rx-return">
-        <div><strong>TX baseband</strong><span>X[k,m] trên resource grid</span></div>
+        <div><strong>TX baseband</strong><span><MathExpr tex="X[k,m]" /> trên resource grid</span></div>
         <b>→ IFFT →</b>
-        <div><strong>Time domain</strong><span>x[n] rồi DAC / RF / channel</span></div>
+        <div><strong>Time domain</strong><span><MathExpr tex="x[n]" /> rồi DAC / RF / channel</span></div>
         <b>→ ADC / FFT →</b>
-        <div><strong>RX baseband</strong><span>Y[k,m] trên từng subcarrier</span></div>
+        <div><strong>RX baseband</strong><span><MathExpr tex="Y[k,m]" /> trên từng subcarrier</span></div>
       </div>
 
       <p>
-        Ở receiver, quá trình đi ngược lại. Sau RF front-end, downconversion và ADC, receiver có time-domain complex samples y[n].
-        FFT đưa chúng trở lại các frequency bins Y[k]. Từ đó receiver có thể channel estimate, equalize,
+        Ở receiver, quá trình đi ngược lại. Sau RF front-end, downconversion và ADC, receiver có time-domain complex samples <MathExpr tex="y[n]" />.
+        FFT đưa chúng trở lại các frequency bins <MathExpr tex="Y[k]" />. Từ đó receiver có thể channel estimate, equalize,
         demodulate và lấy lại bits trên từng RE.
       </p>
     </section>
@@ -441,8 +441,8 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>Time domain</strong> cho ta thấy signal biến đổi khi nào và như thế nào.</li>
         <li><strong>Frequency domain</strong> cho ta thấy các thành phần sinusoid cấu tạo nên signal.</li>
         <li><strong>I/Q</strong> là complex representation giúp ta làm việc trực tiếp với amplitude và phase.</li>
-        <li><strong>Complex modulation symbol X[k,m]</strong> và <strong>time-domain sample x[n]</strong> đều có thể là số phức, nhưng nằm ở hai stage khác nhau.</li>
-        <li><strong>Trong OFDM</strong>, modulation symbols X[k,m] được đặt trên resource grid; IFFT biến một cột của grid thành time-domain complex samples x[n] để đi tiếp tới DAC/RF.</li>
+        <li><strong>Complex modulation symbol <MathExpr tex="X[k,m]" /></strong> và <strong>time-domain sample <MathExpr tex="x[n]" /></strong> đều có thể là số phức, nhưng nằm ở hai stage khác nhau.</li>
+        <li><strong>Trong OFDM</strong>, modulation symbols <MathExpr tex="X[k,m]" /> được đặt trên resource grid; IFFT biến một cột của grid thành time-domain complex samples <MathExpr tex="x[n]" /> để đi tiếp tới DAC/RF.</li>
       </ol>
     </section>
 

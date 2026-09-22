@@ -22,15 +22,15 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 05 cho ta chuỗi complex samples x[n]. Bây giờ ta có thể nhìn chuỗi đó theo sample index,
+        Bài 05 cho ta chuỗi complex samples <MathExpr tex="x[n]" />. Bây giờ ta có thể nhìn chuỗi đó theo sample index,
         hoặc phân tích xem những thành phần tần số nào đang tạo nên nó.
       </p>
       <div class="system-position">
         <span>CÙNG MỘT SIGNAL, HAI REPRESENTATION</span>
         <div class="system-position-flow" aria-label="Time domain và frequency domain là hai cách nhìn cùng signal">
-          <strong>x[n]</strong><b>↔</b>
+          <strong><MathExpr tex="x[n]" /></strong><b>↔</b>
           <span>transform</span><b>↔</b>
-          <strong>X[k]</strong>
+          <strong><MathExpr tex="X[k]" /></strong>
         </div>
         <p>
           Với signal liên tục thường viết <MathExpr tex="x(t) \\leftrightarrow X(f)" />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <MathExpr tex="x[n] \\leftrightarrow X[k]" />.
@@ -45,7 +45,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="domain-question-grid">
         <article>
           <span class="card-label">TIME DOMAIN</span>
-          <strong>x(t) hoặc x[n]</strong>
+          <strong><MathExpr tex="x(t)" /> hoặc <MathExpr tex="x[n]" /></strong>
           <p>Trục ngang là thời gian hoặc sample index.</p>
           <ul>
             <li>Waveform thay đổi ra sao?</li>
@@ -56,7 +56,7 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article>
           <span class="card-label">FREQUENCY DOMAIN</span>
-          <strong>X(f) hoặc X[k]</strong>
+          <strong><MathExpr tex="X(f)" /> hoặc <MathExpr tex="X[k]" /></strong>
           <p>Trục ngang là frequency hoặc frequency-bin index.</p>
           <ul>
             <li>Có những tone nào?</li>
@@ -94,7 +94,7 @@ import MathExpr from '../../components/Math.astro';
             <text class="domain-svg-label" x="350" y="163">+f₀</text>
             <text class="domain-svg-label" x="480" y="163">f</text>
           </svg>
-          <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở ±f₀.</p>
+          <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở <MathExpr tex="\\pm f_0" />.</p>
         </div>
       </div>
 
@@ -115,12 +115,12 @@ import MathExpr from '../../components/Math.astro';
       <div class="domain-sum-flow">
         <div>
           <small>TONE 1</small>
-          <strong>5 Hz</strong>
+          <strong><MathExpr tex="5\\,\\mathrm{Hz}" /></strong>
         </div>
         <b>+</b>
         <div>
           <small>TONE 2</small>
-          <strong>12 Hz</strong>
+          <strong><MathExpr tex="12\\,\\mathrm{Hz}" /></strong>
         </div>
         <b>→</b>
         <div>
@@ -144,14 +144,14 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
       <h2>Đổi hai tone rồi chuyển qua lại giữa time domain và frequency domain.</h2>
       <p>
-        Lab này dùng một record 1 giây với sampling rate 64 Hz. Hai tone được đặt đúng DFT bins để tập trung vào
+        Lab này dùng một record <MathExpr tex="1\\,\\mathrm{s}" /> với sampling rate <MathExpr tex="64\\,\\mathrm{Hz}" />. Hai tone được đặt đúng DFT bins để tập trung vào
         ý tưởng representation; leakage và windowing sẽ được tách riêng ở Bài 07.
       </p>
       <SignalExplorer client:load />
     </section>
 
     <section class="concept-block" id="magnitude-phase">
-      <p class="concept-kicker">05 · X[k] KHÔNG CHỈ CÓ “ĐỘ CAO”</p>
+      <p class="concept-kicker">05 · <MathExpr tex="X[k]" /> KHÔNG CHỈ CÓ “ĐỘ CAO”</p>
       <h2>Mỗi frequency bin nói chung là một số phức, nên spectrum có cả magnitude lẫn phase.</h2>
 
       <div class="spectrum-two-parts">
@@ -207,7 +207,7 @@ import MathExpr from '../../components/Math.astro';
 
       <div class="wireless-domain-table">
         <div><strong>Time domain</strong><span>timing, CP, waveform, correlation, ADC samples</span></div>
-        <div><strong>Frequency domain</strong><span>subcarriers, channel H[k], equalization, spectrum</span></div>
+        <div><strong>Frequency domain</strong><span>subcarriers, channel <MathExpr tex="H[k]" />, equalization, spectrum</span></div>
         <div><strong>I/Q plane</strong><span>magnitude, phase, constellation, EVM</span></div>
       </div>
 
@@ -223,7 +223,7 @@ import MathExpr from '../../components/Math.astro';
       <ol class="recap-list">
         <li><strong>Time domain:</strong> signal thay đổi theo thời gian hoặc sample index như thế nào.</li>
         <li><strong>Frequency domain:</strong> signal được phân rã theo các thành phần tần số như thế nào.</li>
-        <li><strong>X[k] thường là complex:</strong> mỗi bin có magnitude và phase.</li>
+        <li><strong><MathExpr tex="X[k]" /> thường là complex:</strong> mỗi bin có magnitude và phase.</li>
         <li><strong>Real signal:</strong> spectrum có conjugate symmetry giữa positive và negative frequency.</li>
         <li><strong>Fourier transform của cả record:</strong> không phải spectrogram và không trực tiếp giữ time localization.</li>
         <li><strong>Wireless DSP:</strong> thường xuyên đổi domain vì mỗi representation thuận tiện cho một loại xử lý.</li>

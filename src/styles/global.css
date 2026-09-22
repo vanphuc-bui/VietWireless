@@ -7993,3 +7993,96 @@ main,
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Math consistency: inline notation, unboxed display math, equal math cards --- */
+.math-display {
+  margin: 22px 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.math-display .katex {
+  font-size: clamp(1.06rem, 1.45vw, 1.22rem);
+}
+
+.math-card-grid,
+.math-grid-2 {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.math-card {
+  min-width: 0;
+  min-height: 190px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.math-card .card-label {
+  min-height: 1.1rem;
+  margin-bottom: 18px;
+  font-size: .7rem;
+  line-height: 1.2;
+}
+
+.math-card .math-card-formula {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.math-card .math-card-formula .katex {
+  font-size: clamp(1.22rem, 1.9vw, 1.48rem);
+}
+
+.math-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.math-card .math-card-secondary {
+  margin-top: 10px;
+}
+
+.math-card .math-card-secondary .katex {
+  font-size: 1em;
+}
+
+@media (max-width: 720px) {
+  .math-display {
+    margin: 19px 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .math-card-grid,
+  .math-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .math-card {
+    min-height: 0;
+    padding: 19px;
+  }
+
+  .math-card .math-card-formula {
+    min-height: 50px;
+  }
+
+  .math-card .math-card-formula .katex {
+    font-size: 1.18rem;
+  }
+}

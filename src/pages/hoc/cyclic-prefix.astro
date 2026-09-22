@@ -24,7 +24,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Nếu channel có memory, sample đầu của symbol hiện tại chứa contribution từ những samples cũ.
         Khi receiver cắt một N-sample block tùy ý rồi FFT, block đó chưa chắc là circular convolution của current symbol với channel.
-        Khi đó simple per-subcarrier model Y[k]=H[k]X[k] bị phá.
+        Khi đó simple per-subcarrier model <MathExpr tex="Y[k]=H[k]X[k]" /> bị phá.
       </p>
 
       <div class="system-position">
@@ -44,10 +44,10 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="linear-convolution">
       <p class="concept-kicker">01 · MULTIPATH CHANNEL NHỚ CÁC SAMPLE TRƯỚC</p>
-      <h2>Một FIR channel dài L taps làm output y[n] phụ thuộc x[n], x[n-1], …, x[n-L+1].</h2>
+      <h2>Một FIR channel dài <MathExpr tex="L" /> taps làm output <MathExpr tex="y[n]" /> phụ thuộc <MathExpr tex="x[n],x[n-1],\\ldots,x[n-L+1]" />.</h2>
 
       <p>
-        Với channel hai taps, ví dụ h[0]=1 và h[2]=0.5,
+        Với channel hai taps, ví dụ <MathExpr tex="h[0]=1" /> và <MathExpr tex="h[2]=0.5" />,
         received sample có thể viết:
         <MathExpr tex="y[n]=x[n]+0.5x[n-2]" />.
         Hai-sample delay nghĩa là đầu current symbol vẫn chứa echo của samples xảy ra hai sample trước đó.
@@ -61,17 +61,17 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="copy-tail">
       <p class="concept-kicker">02 · CP LÀ COPY CỦA CUỐI SYMBOL, KHÔNG PHẢI MỘT ĐOẠN ZERO</p>
-      <h2>Với useful block x[0]…x[N-1], ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
+      <h2>Với useful block <MathExpr tex="x[0],\\ldots,x[N-1]" />, ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
 
       <div class="cp-concept-row">
         <div>
           <small>CYCLIC PREFIX</small>
-          <strong>x[N-<MathExpr tex="N_{\\mathrm{CP}}" />] … x[N-1]</strong>
+          <strong><MathExpr tex="x[N-N_{\\mathrm{CP}}],\\ldots,x[N-1]" /></strong>
         </div>
         <b>+</b>
         <div>
           <small>USEFUL SYMBOL</small>
-          <strong>x[0] … x[N-1]</strong>
+          <strong><MathExpr tex="x[0],\\ldots,x[N-1]" /></strong>
         </div>
       </div>
 
@@ -88,10 +88,10 @@ import MathExpr from '../../components/Math.astro';
       <h2>Delayed copies rơi vào useful window có thể lấy giá trị từ cyclic extension thay vì từ symbol trước.</h2>
 
       <p>
-        Quay lại ví dụ h[0]=1 và h[2]=0.5.
-        Nếu CP dài ít nhất 2 samples, khi receiver bỏ CP và bắt đầu FFT ở x[0],
-        term “x[-2]” mà channel cần không phải lấy từ previous OFDM symbol.
-        Nó đã có sẵn trong CP dưới dạng copy của x[N-2].
+        Quay lại ví dụ <MathExpr tex="h[0]=1" /> và <MathExpr tex="h[2]=0.5" />.
+        Nếu CP dài ít nhất 2 samples, khi receiver bỏ CP và bắt đầu FFT ở <MathExpr tex="x[0]" />,
+        term <MathExpr tex="x[-2]" /> mà channel cần không phải lấy từ previous OFDM symbol.
+        Nó đã có sẵn trong CP dưới dạng copy của <MathExpr tex="x[N-2]" />.
       </p>
 
       <p>
@@ -115,13 +115,13 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="condition">
-      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1 ĐẾN TỪ ĐÂU?</p>
-      <h2>Nếu FIR channel có L taps từ delay 0 tới L-1, maximum discrete delay là L-1 samples.</h2>
+      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" /> ĐẾN TỪ ĐÂU?</p>
+      <h2>Nếu FIR channel có <MathExpr tex="L" /> taps từ delay <MathExpr tex="0" /> tới <MathExpr tex="L-1" />, maximum discrete delay là <MathExpr tex="L-1" /> samples.</h2>
 
       <p>
         Để useful block không cần lấy samples từ previous symbol, cyclic extension phải cover maximum relevant channel delay.
         Vì vậy trong textbook discrete-time model thường viết:
-        <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1.
+        <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" />.
       </p>
 
       <aside class="precision-note">
@@ -140,7 +140,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Sau FFT, ideal model là:
         <MathExpr tex="Y[k]=H[k]X[k]+W[k]" />.
-        Nếu H[k] đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
+        Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
         Practical equalizers như MMSE xử lý noise amplification tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo FFT bins.
       </p>
 
@@ -166,7 +166,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="what-cp-does-not-do">
       <p class="concept-kicker">08 · CP KHÔNG LÀM MULTIPATH BIẾN MẤT</p>
-      <h2>Channel vẫn có H[k] và vẫn có deep fades; CP chỉ làm structure dễ xử lý hơn.</h2>
+      <h2>Channel vẫn có <MathExpr tex="H[k]" /> và vẫn có deep fades; CP chỉ làm structure dễ xử lý hơn.</h2>
 
       <p>
         Nếu một subcarrier nằm đúng frequency notch của multipath channel, <MathExpr tex="|H[k]|" /> vẫn rất nhỏ.
@@ -199,10 +199,10 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>Cyclic Prefix:</strong> copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối của current OFDM symbol lên đầu.</li>
         <li><strong>Guard effect:</strong> delayed energy có thể rơi vào CP thay vì contaminating useful FFT window.</li>
         <li><strong>Circular convolution:</strong> useful block có wrap-around structure dưới assumptions phù hợp.</li>
-        <li><strong>FFT diagonalization:</strong> biến channel filter thành H[k] trên từng bin.</li>
+        <li><strong>FFT diagonalization:</strong> biến channel filter thành <MathExpr tex="H[k]" /> trên từng bin.</li>
         <li><strong>Simplified condition:</strong> <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ maximum relevant discrete delay.</li>
         <li><strong>Overhead:</strong> CP dài hơn tăng tolerance nhưng giảm useful-time efficiency.</li>
-        <li><strong>Không xóa fading:</strong> H[k] vẫn có thể rất nhỏ trên một số subcarriers.</li>
+        <li><strong>Không xóa fading:</strong> <MathExpr tex="H[k]" /> vẫn có thể rất nhỏ trên một số subcarriers.</li>
       </ol>
     </section>
 

@@ -32,7 +32,7 @@ import MathExpr from '../../components/Math.astro';
           <span>FFT algorithm</span>
         </div>
         <p>
-          Fourier là ý tưởng/nhóm phép biến đổi. DFT là một phép biến đổi cụ thể cho N samples.
+          Fourier là ý tưởng/nhóm phép biến đổi. DFT là một phép biến đổi cụ thể cho <MathExpr tex="N" /> samples.
           FFT là họ thuật toán tính DFT hiệu quả hơn, không phải một transform khác.
         </p>
       </div>
@@ -45,7 +45,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="fourier-basis-story">
         <div>
           <small>TIME SAMPLES</small>
-          <strong>x[n]</strong>
+          <strong><MathExpr tex="x[n]" /></strong>
           <span>một vector gồm N giá trị</span>
         </div>
         <b>đổi basis →</b>
@@ -57,7 +57,7 @@ import MathExpr from '../../components/Math.astro';
         <b>→</b>
         <div>
           <small>COEFFICIENTS</small>
-          <strong>X[k]</strong>
+          <strong><MathExpr tex="X[k]" /></strong>
           <span>mỗi frequency basis cần bao nhiêu</span>
         </div>
       </div>
@@ -85,13 +85,13 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article>
           <span class="card-label">DFT</span>
-          <h3>N samples ↔ N bins</h3>
-          <p>Ta lấy một record hữu hạn N samples và nhận N complex coefficients rời rạc.</p>
+          <h3><MathExpr tex="N" /> samples ↔ <MathExpr tex="N" /> bins</h3>
+          <p>Ta lấy một record hữu hạn <MathExpr tex="N" /> samples và nhận <MathExpr tex="N" /> complex coefficients rời rạc.</p>
         </article>
       </div>
 
       <p>
-        Trong software receiver, khi nói “chạy FFT trên buffer N samples”, thứ ta đang tính về mặt toán học thường là DFT của buffer đó.
+        Trong software receiver, khi nói “chạy FFT trên buffer <MathExpr tex="N" /> samples”, thứ ta đang tính về mặt toán học thường là DFT của buffer đó.
       </p>
     </section>
 
@@ -105,12 +105,12 @@ import MathExpr from '../../components/Math.astro';
         <div><strong>N</strong><span>số samples trong record</span></div>
         <div><strong>n</strong><span>sample index</span></div>
         <div><strong>k</strong><span>frequency-bin index</span></div>
-        <div><strong>X[k]</strong><span>complex coefficient tại bin k</span></div>
+        <div><strong><MathExpr tex="X[k]" /></strong><span>complex coefficient tại bin <MathExpr tex="k" /></span></div>
       </div>
 
       <p>
         Có thể đọc phép nhân với <MathExpr tex="e^{-j2\\pi kn/N}" /> như việc “de-rotate” một candidate frequency.
-        Nếu candidate khớp với thành phần trong x[n], các contribution cộng cùng hướng và magnitude của X[k] lớn.
+        Nếu candidate khớp với thành phần trong <MathExpr tex="x[n]" />, các contribution cộng cùng hướng và magnitude của <MathExpr tex="X[k]" /> lớn.
         Nếu không khớp, các vector có xu hướng triệt tiêu nhau.
       </p>
 
@@ -166,7 +166,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="leakage-story">
         <div>
           <small>BIN-CENTERED TONE</small>
-          <strong>7.0 Hz</strong>
+          <strong><MathExpr tex="7.0\\,\\mathrm{Hz}" /></strong>
           <span>record chứa số chu kỳ nguyên</span>
         </div>
         <b>→</b>
@@ -175,7 +175,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <div>
           <small>OFF-BIN TONE</small>
-          <strong>7.5 Hz</strong>
+          <strong><MathExpr tex="7.5\\,\\mathrm{Hz}" /></strong>
           <span>biên record không nối trơn</span>
         </div>
         <b>→</b>
@@ -189,7 +189,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">06 · INTERACTIVE LAB</p>
       <h2>Thử đổi tone, N và window để thấy bin spacing và leakage thay đổi.</h2>
       <p>
-        Chọn tone nguyên Hz khi Δf = 1 Hz để thấy energy tập trung vào một bin, rồi chọn 7,5 Hz.
+        Chọn tone nguyên Hz khi <MathExpr tex="\\Delta f=1\\,\\mathrm{Hz}" /> để thấy energy tập trung vào một bin, rồi chọn <MathExpr tex="7.5\\,\\mathrm{Hz}" />.
         Sau đó đổi Rectangular sang Hann để quan sát tradeoff giữa sidelobes và main-lobe width.
       </p>
       <FourierDFTExplorer client:load />
@@ -220,13 +220,13 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="fft">
       <p class="concept-kicker">08 · FFT THỰC SỰ LÀ GÌ?</p>
-      <h2>FFT tính cùng X[k] như DFT, nhưng tận dụng cấu trúc để giảm số phép toán.</h2>
+      <h2>FFT tính cùng <MathExpr tex="X[k]" /> như DFT, nhưng tận dụng cấu trúc để giảm số phép toán.</h2>
 
       <div class="fft-complexity">
         <div>
           <span class="card-label">DFT TRỰC TIẾP</span>
           <strong>O(N²)</strong>
-          <p>Mỗi trong N bins cộng contribution từ N samples.</p>
+          <p>Mỗi trong <MathExpr tex="N" /> bins cộng contribution từ <MathExpr tex="N" /> samples.</p>
         </div>
         <b>→ cấu trúc lại →</b>
         <div>
@@ -249,8 +249,8 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">09 · ZERO-PADDING VÀ MỘT HIỂU NHẦM PHỔ BIẾN</p>
       <h2>Thêm zeros có thể làm spectrum trông mịn hơn, nhưng không tạo thêm thời gian quan sát.</h2>
       <p>
-        Nếu record thật chỉ có N samples rồi ta append zeros trước FFT dài hơn, ta lấy thêm samples của DTFT trên frequency axis.
-        Các peak có thể được định vị bằng đồ thị mịn hơn, nhưng thông tin vật lý vẫn đến từ N samples ban đầu.
+        Nếu record thật chỉ có <MathExpr tex="N" /> samples rồi ta append zeros trước FFT dài hơn, ta lấy thêm samples của DTFT trên frequency axis.
+        Các peak có thể được định vị bằng đồ thị mịn hơn, nhưng thông tin vật lý vẫn đến từ <MathExpr tex="N" /> samples ban đầu.
       </p>
       <p>
         Muốn tăng khả năng phân biệt các components rất gần nhau trong điều kiện giống nhau, thường cần record quan sát dài hơn,
@@ -263,16 +263,16 @@ import MathExpr from '../../components/Math.astro';
       <h2>Trong OFDM, các DFT bins không chỉ để “quan sát spectrum”; chúng trở thành các subcarriers có chủ đích.</h2>
 
       <div class="dft-ofdm-bridge">
-        <div><small>DATA SYMBOLS</small><strong>X[k]</strong><span>một complex value trên mỗi bin/subcarrier</span></div>
+        <div><small>DATA SYMBOLS</small><strong><MathExpr tex="X[k]" /></strong><span>một complex value trên mỗi bin/subcarrier</span></div>
         <b>→ IFFT →</b>
-        <div><small>TIME SAMPLES</small><strong>x[n]</strong><span>OFDM waveform ở baseband</span></div>
+        <div><small>TIME SAMPLES</small><strong><MathExpr tex="x[n]" /></strong><span>OFDM waveform ở baseband</span></div>
         <b>→ channel → FFT →</b>
-        <div><small>RECEIVED BINS</small><strong>Y[k]</strong><span>xử lý từng subcarrier</span></div>
+        <div><small>RECEIVED BINS</small><strong><MathExpr tex="Y[k]" /></strong><span>xử lý từng subcarrier</span></div>
       </div>
 
       <p>
         Bài 15 sau này sẽ đi sâu vào IFFT/FFT trong OFDM. Trước đó, Bài 08 cần trả lời một câu hỏi còn thiếu:
-        các complex values X[k] được tạo ra từ bits như thế nào?
+        các complex values <MathExpr tex="X[k]" /> được tạo ra từ bits như thế nào?
       </p>
     </section>
 
@@ -281,8 +281,8 @@ import MathExpr from '../../components/Math.astro';
       <h2>DFT là phép biến đổi; FFT là cách tính nó nhanh.</h2>
       <ol class="recap-list">
         <li><strong>Fourier:</strong> mô tả signal bằng các thành phần sinusoid/complex exponential.</li>
-        <li><strong>DFT:</strong> biến N samples thành N complex frequency bins.</li>
-        <li><strong>Δf = fₛ/N:</strong> sampling rate và record length xác định bin spacing.</li>
+        <li><strong>DFT:</strong> biến <MathExpr tex="N" /> samples thành <MathExpr tex="N" /> complex frequency bins.</li>
+        <li><strong><MathExpr tex="\\Delta f=f_s/N" />:</strong> sampling rate và record length xác định bin spacing.</li>
         <li><strong>Leakage:</strong> xuất hiện khi finite record không khớp tuần hoàn với DFT basis.</li>
         <li><strong>Window:</strong> thay leakage tradeoff bằng cách taper record.</li>
         <li><strong>FFT:</strong> thuật toán tính DFT hiệu quả, không phải transform khác.</li>

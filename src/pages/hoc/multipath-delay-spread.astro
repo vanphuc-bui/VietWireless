@@ -22,7 +22,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">TỪ MỘT PATH TỚI MỘT CHANNEL CÓ MEMORY</p>
       <p class="map-intro">
-        Bài 10 dùng y(t)=h·x(t-τ) để xây trực giác.
+        Bài 10 dùng <MathExpr tex="y(t)=h\\,x(t-\\tau)" /> để xây trực giác.
         Bây giờ thay vì một path, giả sử có direct path và vài reflected paths.
         Mỗi path mang một copy của x(t), nhưng copy đó tới muộn và có complex gain riêng.
       </p>
@@ -78,12 +78,12 @@ import MathExpr from '../../components/Math.astro';
         <article>
           <span class="card-label"><MathExpr tex="\\alpha_{\\ell}" /></span>
           <h3>complex path gain</h3>
-          <p>Magnitude cho attenuation; angle cho phase rotation của path ℓ.</p>
+          <p>Magnitude cho attenuation; angle cho phase rotation của path <MathExpr tex="\\ell" />.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex="\\tau_{\\ell}" /></span>
           <h3>path delay</h3>
-          <p>Copy ℓ xuất hiện muộn bao nhiêu so với reference timing.</p>
+          <p>Copy <MathExpr tex="\\ell" /> xuất hiện muộn bao nhiêu so với reference timing.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex="\\delta(\\tau-\\tau_{\\ell})" /></span>
@@ -93,7 +93,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Trong discrete-time implementation, ta thường xấp xỉ h(τ) bằng taps h[m].
+        Trong discrete-time implementation, ta thường xấp xỉ <MathExpr tex="h(\\tau)" /> bằng taps <MathExpr tex="h[m]" />.
         Sample rate càng cao thì một sample tương ứng khoảng thời gian càng nhỏ, nên delay resolution của simple sampled representation cũng mịn hơn.
       </p>
     </section>
@@ -105,9 +105,9 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="y(t) = (x*h)(t) = \\sum_{\\ell} \\alpha_{\\ell}x(t-\\tau_{\\ell})" display />
 
       <div class="copy-sum-story">
-        <div><small>PATH 0</small><strong>α₀x(t)</strong><span>direct / earliest</span></div>
+        <div><small>PATH 0</small><strong><MathExpr tex="\\alpha_0x(t)" /></strong><span>direct / earliest</span></div>
         <b>+</b>
-        <div><small>PATH 1</small><strong>α₁x(t-τ₁)</strong><span>delayed echo</span></div>
+        <div><small>PATH 1</small><strong><MathExpr tex="\\alpha_1 x(t-\\tau_1)" /></strong><span>delayed echo</span></div>
         <b>+</b>
         <div><small>PATH 2…</small><strong>...</strong><span>more copies</span></div>
         <b>→</b>
@@ -128,7 +128,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Đây là một kết quả rất quan trọng.
-        Một path delay τ tạo phase -2πfτ, tức phase thay đổi theo f.
+        Một path delay <MathExpr tex="\\tau" /> tạo phase <MathExpr tex="-2\\pi f\\tau" />, tức phase thay đổi theo <MathExpr tex="f" />.
         Vì vậy hai paths có thể cộng constructive ở frequency này nhưng destructive ở frequency khác.
         Khi vẽ |H(f)|, ta có thể thấy peaks và notches.
       </p>
@@ -154,7 +154,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>PDP giúp tóm tắt channel energy trải rộng bao xa theo thời gian.</h2>
 
       <div class="pdp-visual">
-        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong>P(τ)</strong></div>
+        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong><MathExpr tex="P(\\tau)" /></strong></div>
         <svg viewBox="0 0 760 270" role="img" aria-label="Power delay profile với nhiều paths">
           <line class="pdp-axis" x1="55" y1="220" x2="720" y2="220" />
           <line class="pdp-axis" x1="55" y1="35" x2="55" y2="220" />
@@ -202,8 +202,8 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="\\sigma_{\\tau} = \\sqrt{\\frac{\\sum_{\\ell} P_{\\ell}(\\tau_{\\ell}-\\bar{\\tau})^2}{\\sum_{\\ell}P_{\\ell}}}" display />
 
       <p>
-        Ví dụ có hai paths tại 0 µs và 2 µs, với power tương ứng 1 và 0.25.
-        Mean delay là 0.4 µs và RMS delay spread là 0.8 µs.
+        Ví dụ có hai paths tại <MathExpr tex="0\\,\\mu\\mathrm{s}" /> và <MathExpr tex="2\\,\\mu\\mathrm{s}" />, với power tương ứng 1 và 0.25.
+        Mean delay là <MathExpr tex="0.4\\,\\mu\\mathrm{s}" /> và RMS delay spread là <MathExpr tex="0.8\\,\\mu\\mathrm{s}" />.
         Điểm quan trọng là path yếu hơn vẫn ảnh hưởng metric, nhưng ảnh hưởng theo power chứ không theo amplitude trực tiếp.
       </p>
     </section>

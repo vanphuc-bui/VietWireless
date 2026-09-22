@@ -20,12 +20,12 @@ import MathExpr from '../../components/Math.astro';
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TỪ X[k] CỦA MỘT SYMBOL TỚI <MathExpr tex="X[k,\\ell]" /> CỦA NHIỀU SYMBOLS</p>
+      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT SYMBOL TỚI <MathExpr tex="X[k,\\ell]" /> CỦA NHIỀU SYMBOLS</p>
       <p class="map-intro">
-        Ở Bài 15, một OFDM symbol được mô tả bằng một vector X[k].
+        Ở Bài 15, một OFDM symbol được mô tả bằng một vector <MathExpr tex="X[k]" />.
         Nhưng một transmission kéo dài nhiều OFDM symbols.
-        Ta thêm một time index l và có X[k,l].
-        Vẽ k theo chiều dọc, l theo chiều ngang, ta có resource grid.
+        Ta thêm một time index <MathExpr tex="l" /> và có <MathExpr tex="X[k,l]" />.
+        Vẽ <MathExpr tex="k" /> theo chiều dọc, <MathExpr tex="l" /> theo chiều ngang, ta có resource grid.
       </p>
 
       <div class="system-position">
@@ -93,9 +93,9 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Bandwidth tương ứng của 12 subcarriers phụ thuộc numerology:
-        với 15 kHz SCS là 180 kHz,
-        30 kHz là 360 kHz,
-        60 kHz là 720 kHz,
+        với <MathExpr tex="15\\,\\mathrm{kHz}" /> SCS là <MathExpr tex="180\\,\\mathrm{kHz}" />,
+        <MathExpr tex="30\\,\\mathrm{kHz}" /> là <MathExpr tex="360\\,\\mathrm{kHz}" />,
+        <MathExpr tex="60\\,\\mathrm{kHz}" /> là <MathExpr tex="720\\,\\mathrm{kHz}" />,
         trước khi nói tới guard bands hoặc occupied-carrier edges.
       </p>
     </section>
@@ -149,11 +149,11 @@ import MathExpr from '../../components/Math.astro';
       <h2>Giữ l cố định, lấy toàn bộ frequency-domain values rồi map chúng vào IFFT bins.</h2>
 
       <div class="grid-column-flow">
-        <div><small>GRID COLUMN</small><strong>X[k,l]</strong><span>occupied subcarriers</span></div>
+        <div><small>GRID COLUMN</small><strong><MathExpr tex="X[k,l]" /></strong><span>occupied subcarriers</span></div>
         <b>→ bin map →</b>
         <div><small>IFFT ARRAY</small><strong><MathExpr tex="X[0],\\ldots,X[N-1]" /></strong><span>includes zeros/guards/DC as configured</span></div>
         <b>→ IFFT →</b>
-        <div><small>TIME</small><strong>x[n]</strong><span>N useful samples</span></div>
+        <div><small>TIME</small><strong><MathExpr tex="x[n]" /></strong><span><MathExpr tex="N" /> useful samples</span></div>
         <b>→ CP →</b>
         <div><small>TX</small><strong>one OFDM symbol</strong><span>sent in time</span></div>
       </div>
@@ -238,7 +238,7 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card next" href="/hoc/numerology-5g-nr/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Numerology trong 5G NR</strong>
-        <small>SCS và time structure của grid thay đổi với μ ra sao?</small>
+        <small>SCS và time structure của grid thay đổi với <MathExpr tex="\\mu" /> ra sao?</small>
       </a>
     </nav>
   </article>

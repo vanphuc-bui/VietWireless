@@ -15,7 +15,7 @@ import MathExpr from '../../components/Math.astro';
       <h1>IFFT/FFT trong OFDM</h1>
       <p class="lesson-deck">
         Ở resource/frequency domain, ta muốn đặt một complex symbol lên từng subcarrier. Antenna lại cần một chuỗi samples theo thời gian.{" "}
-        <strong>IFFT đổi N complex coefficients X[k] thành N complex time samples x[n]; FFT làm phép đổi basis ngược lại.</strong>
+        <strong>IFFT đổi <MathExpr tex="N" /> complex coefficients <MathExpr tex="X[k]" /> thành <MathExpr tex="N" /> complex time samples <MathExpr tex="x[n]" />; FFT làm phép đổi basis ngược lại.</strong>
       </p>
     </header>
 
@@ -24,13 +24,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="system-position">
         <span>ONE OFDM SYMBOL</span>
         <div class="system-position-flow">
-          <strong>X[0…N-1]</strong><b>→ IFFT →</b>
-          <span>x[0…N-1]</span><b>→ channel →</b>
-          <span>y[0…N-1]</span><b>→ FFT →</b>
-          <strong>Y[0…N-1]</strong>
+          <strong><MathExpr tex="X[0],\\ldots,X[N-1]" /></strong><b>→ IFFT →</b>
+          <span><MathExpr tex="x[0],\\ldots,x[N-1]" /></span><b>→ channel →</b>
+          <span><MathExpr tex="y[0],\\ldots,y[N-1]" /></span><b>→ FFT →</b>
+          <strong><MathExpr tex="Y[0],\\ldots,Y[N-1]" /></strong>
         </div>
         <p>
-          X[k] và x[n] không phải hai bộ data khác nhau.
+          <MathExpr tex="X[k]" /> và <MathExpr tex="x[n]" /> không phải hai bộ data khác nhau.
           Chúng là hai cách biểu diễn của cùng một OFDM block trên hai basis khác nhau.
         </p>
       </div>
@@ -38,19 +38,19 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="idft">
       <p class="concept-kicker">01 · IFFT ĐANG CỘNG CÁC SUBCARRIERS NHƯ THẾ NÀO?</p>
-      <h2>Mỗi X[k] là amplitude/phase của một complex exponential có frequency index k.</h2>
+      <h2>Mỗi <MathExpr tex="X[k]" /> là amplitude/phase của một complex exponential có frequency index <MathExpr tex="k" />.</h2>
 
       <MathExpr tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
 
       <p>
         Nhìn từng term:
-        X[k] quyết định complex amplitude của subcarrier k.
+        <MathExpr tex="X[k]" /> quyết định complex amplitude của subcarrier <MathExpr tex="k" />.
         <MathExpr tex="e^{j2\\pi kn/N}" /> là basis waveform của subcarrier đó tại sample n.
-        IFFT lấy tất cả các basis waveforms, scale chúng bằng X[k], rồi cộng lại.
+        IFFT lấy tất cả các basis waveforms, scale chúng bằng <MathExpr tex="X[k]" />, rồi cộng lại.
       </p>
 
       <p>
-        Vì vậy một sample x[n] thường không “thuộc” riêng subcarrier nào.
+        Vì vậy một sample <MathExpr tex="x[n]" /> thường không “thuộc” riêng subcarrier nào.
         Nó là tổng tức thời của tất cả active subcarriers.
         Đây cũng là lý do OFDM time waveform có thể nhìn khá irregular dù frequency-domain grid rất có cấu trúc.
       </p>
@@ -61,7 +61,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Nếu chỉ bật một bin, time-domain samples chính là các điểm của một complex sinusoid.</h2>
 
       <p>
-        Chọn N=4 và chỉ có X[1]=1, các bins khác bằng 0.
+        Chọn <MathExpr tex="N=4" /> và chỉ có <MathExpr tex="X[1]=1" />, các bins khác bằng 0.
         Khi đó:
       </p>
 
@@ -78,18 +78,18 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Nếu bật thêm X[0]=1, ta chỉ cộng thêm một DC complex value 0.25 vào mọi x[n].
+        Nếu bật thêm <MathExpr tex="X[0]=1" />, ta chỉ cộng thêm một DC complex value 0.25 vào mọi <MathExpr tex="x[n]" />.
         Nếu bật hàng trăm bins, IFFT vẫn chỉ làm cùng một việc: cộng rất nhiều complex sinusoids theo coefficients đã chọn.
       </p>
     </section>
 
     <section class="concept-block" id="two-views">
-      <p class="concept-kicker">03 · X[k] VÀ x[n] GIỮ CÙNG SỐ BẬC TỰ DO</p>
+      <p class="concept-kicker">03 · <MathExpr tex="X[k]" /> VÀ <MathExpr tex="x[n]" /> GIỮ CÙNG SỐ BẬC TỰ DO</p>
 
       <div class="ifft-two-domains">
         <article>
           <span class="card-label">FREQUENCY DOMAIN</span>
-          <h3>X[k]</h3>
+          <h3><MathExpr tex="X[k]" /></h3>
           <p>
             Index k chọn basis/subcarrier.
             Complex value tại đó mang amplitude và phase của coefficient trên basis đó.
@@ -98,16 +98,16 @@ import MathExpr from '../../components/Math.astro';
 
         <article>
           <span class="card-label">TIME DOMAIN</span>
-          <h3>x[n]</h3>
+          <h3><MathExpr tex="x[n]" /></h3>
           <p>
             Index n chọn sample position trong useful OFDM symbol.
-            Mỗi x[n] là tổng của toàn bộ active subcarriers tại thời điểm đó.
+            Mỗi <MathExpr tex="x[n]" /> là tổng của toàn bộ active subcarriers tại thời điểm đó.
           </p>
         </article>
       </div>
 
       <p>
-        N bins biến thành N samples.
+        <MathExpr tex="N" /> bins biến thành <MathExpr tex="N" /> samples.
         Transform không tạo thêm information, cũng không làm mất information trong ideal arithmetic.
         Nó chỉ thay coordinate system.
       </p>
@@ -115,7 +115,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="ifft-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Bật/tắt từng bin, thay QPSK value, rồi nhìn IFFT tạo x[n] và FFT khôi phục Y[k].</h2>
+      <h2>Bật/tắt từng bin, thay QPSK value, rồi nhìn IFFT tạo <MathExpr tex="x[n]" /> và FFT khôi phục <MathExpr tex="Y[k]" />.</h2>
       <p>
         Hãy thử chỉ bật một bin trước.
         Sau đó bật hai, ba và nhiều bins để thấy time samples phức tạp dần.
@@ -131,8 +131,8 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="Y[k] = \\sum_{n=0}^{N-1}y[n]e^{-j2\\pi kn/N}" display />
 
       <p>
-        Nếu y[n]=x[n] và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
-        nên Y[k] quay lại đúng X[k], tùy normalization convention.
+        Nếu <MathExpr tex="y[n]=x[n]" /> và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
+        nên <MathExpr tex="Y[k]" /> quay lại đúng <MathExpr tex="X[k]" />, tùy normalization convention.
       </p>
 
       <p>
@@ -182,11 +182,11 @@ import MathExpr from '../../components/Math.astro';
       <h2>Khi useful block thấy circular convolution, DFT biến channel filter thành multiplication từng bin.</h2>
 
       <div class="ifft-channel-flow">
-        <div><small>TX FREQ</small><strong>X[k]</strong></div>
+        <div><small>TX FREQ</small><strong><MathExpr tex="X[k]" /></strong></div>
         <b>→ IFFT →</b>
-        <div><small>TX TIME</small><strong>x[n]</strong></div>
-        <b>→ h[n] →</b>
-        <div><small>RX TIME</small><strong>y[n]</strong></div>
+        <div><small>TX TIME</small><strong><MathExpr tex="x[n]" /></strong></div>
+        <b>→ <MathExpr tex="h[n]" /> →</b>
+        <div><small>RX TIME</small><strong><MathExpr tex="y[n]" /></strong></div>
         <b>→ FFT →</b>
         <div><small>RX FREQ</small><strong><MathExpr tex="Y[k]=H[k]X[k]+W[k]" /></strong></div>
       </div>
@@ -214,9 +214,9 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap">
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>X[k]:</strong> coefficients trên các orthogonal frequency bases.</li>
-        <li><strong>IFFT:</strong> scale và cộng các basis để tạo time samples x[n].</li>
-        <li><strong>x[n]:</strong> mỗi sample là tổng của tất cả active subcarriers.</li>
+        <li><strong><MathExpr tex="X[k]" />:</strong> coefficients trên các orthogonal frequency bases.</li>
+        <li><strong>IFFT:</strong> scale và cộng các basis để tạo time samples <MathExpr tex="x[n]" />.</li>
+        <li><strong><MathExpr tex="x[n]" />:</strong> mỗi sample là tổng của tất cả active subcarriers.</li>
         <li><strong>FFT:</strong> project received samples trở lại từng basis.</li>
         <li><strong>Array order:</strong> phải phân biệt logical frequency view với raw FFT-bin order.</li>
         <li><strong>Normalization:</strong> phụ thuộc library/implementation và ảnh hưởng amplitude scaling.</li>

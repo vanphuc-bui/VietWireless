@@ -61,8 +61,8 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Ở khoảng 290 K, thermal noise density thường được nhớ gần đúng là -174 dBm/Hz.
-        Nếu receiver bandwidth là 20 MHz, integrated thermal noise lý tưởng vào khoảng
+        Ở khoảng <MathExpr tex="290\\,\\mathrm{K}" />, thermal noise density thường được nhớ gần đúng là <MathExpr tex="-174\\,\\mathrm{dBm/Hz}" />.
+        Nếu receiver bandwidth là <MathExpr tex="20\\,\\mathrm{MHz}" />, integrated thermal noise lý tưởng vào khoảng
         <MathExpr tex="-174 + 10\\log_{10}(20\\times10^6) \\approx -101\\,\\mathrm{dBm}" />, trước khi cộng noise figure của receiver.
       </p>
 
@@ -70,7 +70,7 @@ import MathExpr from '../../components/Math.astro';
         <strong>Bandwidth phải đi cùng con số noise</strong>
         <p>
           Noise density có đơn vị trên Hz. Khi bandwidth rộng hơn, receiver tích lũy nhiều noise power hơn.
-          Vì vậy nói “noise là -100 dBm” mà không biết measurement bandwidth thường chưa đủ context.
+          Vì vậy nói “noise là <MathExpr tex="-100\\,\\mathrm{dBm}" />” mà không biết measurement bandwidth thường chưa đủ context.
         </p>
       </aside>
     </section>
@@ -91,14 +91,14 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        10 dB nghĩa là signal power gấp 10 lần noise power.
-        20 dB nghĩa là gấp 100 lần.
+        <MathExpr tex="10\\,\\mathrm{dB}" /> nghĩa là signal power gấp 10 lần noise power.
+        <MathExpr tex="20\\,\\mathrm{dB}" /> nghĩa là gấp 100 lần.
         Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là <MathExpr tex="20\\log_{10}" />, vì power tỉ lệ với amplitude bình phương.
       </p>
 
       <p>
-        Ví dụ receiver đo wanted power -80 dBm và noise power -100 dBm trong cùng bandwidth.
-        Hiệu hai giá trị là 20 dB, nên SNR = 20 dB.
+        Ví dụ receiver đo wanted power <MathExpr tex="-80\\,\\mathrm{dBm}" /> và noise power <MathExpr tex="-100\\,\\mathrm{dBm}" /> trong cùng bandwidth.
+        Hiệu hai giá trị là <MathExpr tex="20\\,\\mathrm{dB}" />, nên <MathExpr tex="\\mathrm{SNR}=20\\,\\mathrm{dB}" />.
         Đây là lợi ích của dB: phép chia power ratio trở thành phép trừ.
       </p>
     </section>
@@ -182,7 +182,7 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="\\mathrm{EVM}_{\\mathrm{linear}} \\approx \\frac{1}{\\sqrt{\\mathrm{SNR}_{\\mathrm{linear}}}}" display />
 
       <p>
-        Ví dụ SNR = 20 dB nghĩa là linear SNR = 100.
+        Ví dụ <MathExpr tex="\\mathrm{SNR}=20\\,\\mathrm{dB}" /> nghĩa là <MathExpr tex="\\mathrm{SNR}_{\\mathrm{linear}}=100" />.
         Khi assumptions phù hợp, EVM xấp xỉ <MathExpr tex="1/\\sqrt{100}=0.1" />, tức khoảng 10%.
         Nhưng nếu error đến từ phase rotation hoặc nonlinear distortion, gọi toàn bộ error đó là “noise SNR” sẽ che mất nguyên nhân thật.
       </p>
@@ -195,7 +195,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="measurement-chain">
         <div><small>ADC</small><strong>raw I/Q</strong><span>channel + noise + sync error</span></div>
         <b>→ sync / FFT →</b>
-        <div><small>SUBCARRIER</small><strong>Y[k]</strong><span>channel vẫn còn</span></div>
+        <div><small>SUBCARRIER</small><strong><MathExpr tex="Y[k]" /></strong><span>channel vẫn còn</span></div>
         <b>→ equalize →</b>
         <div><small>SYMBOL</small><strong>X̂[k]</strong><span>residual error</span></div>
       </div>

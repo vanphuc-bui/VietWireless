@@ -22,8 +22,8 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 05 cho ta complex baseband I+jQ. Bài 07 cho ta các frequency-domain bins X[k].
-        Modulation trả lời câu hỏi còn thiếu: giá trị complex X[k] đó đến từ bits như thế nào?
+        Bài 05 cho ta complex baseband <MathExpr tex="I+jQ" />. Bài 07 cho ta các frequency-domain bins <MathExpr tex="X[k]" />.
+        Modulation trả lời câu hỏi còn thiếu: giá trị complex <MathExpr tex="X[k]" /> đó đến từ bits như thế nào?
       </p>
       <div class="system-position">
         <span>BIT → SYMBOL → WAVEFORM</span>
@@ -256,9 +256,9 @@ import MathExpr from '../../components/Math.astro';
         <b>→</b>
         <div><small>QAM MAPPER</small><strong>I + jQ</strong></div>
         <b>→</b>
-        <div><small>RESOURCE GRID</small><strong>X[k,m]</strong></div>
+        <div><small>RESOURCE GRID</small><strong><MathExpr tex="X[k,m]" /></strong></div>
         <b>→ IFFT →</b>
-        <div><small>TIME DOMAIN</small><strong>x[n]</strong></div>
+        <div><small>TIME DOMAIN</small><strong><MathExpr tex="x[n]" /></strong></div>
       </div>
 
       <p>
@@ -277,7 +277,7 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>Constellation:</strong> hình học của tập complex symbols hợp lệ.</li>
         <li><strong>Gray mapping:</strong> thường giúp nearest-neighbor symbol errors gây ít bit errors hơn.</li>
         <li><strong>Higher-order modulation:</strong> tăng bits/symbol nhưng cần chất lượng link tốt hơn.</li>
-        <li><strong>Trong OFDM:</strong> mapped symbols trở thành X[k,m] trên resource grid trước IFFT.</li>
+        <li><strong>Trong OFDM:</strong> mapped symbols trở thành <MathExpr tex="X[k,m]" /> trên resource grid trước IFFT.</li>
       </ol>
     </section>
 
