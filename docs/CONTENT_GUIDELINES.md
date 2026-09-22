@@ -66,9 +66,9 @@ Không viết theo giọng ra lệnh, phán xét hoặc đứng trên người �
 - Dùng “mình” khi chia sẻ góc nhìn, trải nghiệm hoặc cách hình dung cá nhân.
 - Có thể dùng “ta” khi cùng người đọc quan sát một hiện tượng, nhưng không lạm dụng.
 - Ưu tiên câu hỏi tự nhiên: “FFT để làm gì?”, “vì sao lúc thì nhìn time domain, lúc lại nhìn frequency domain?”.
-- Tránh các câu kiểu “bạn phải nhớ”, “đừng làm”, “điều quan trọng nhất”, “bài học là”, trừ khi thật sự cần cảnh báo kỹ thuật.
+- Tránh các câu kiểu “bạn phải nhớ”, “đừng làm”, “điều quan trọng nhất”. Với timeline hoặc ví dụ, có thể dùng nhãn ngắn “Bài học:” để chốt một ý kỹ thuật.
 - Không tạo cảm giác người đọc bị kiểm tra. Recap nên giống một đoạn nối ý hơn là danh sách điều phải thuộc.
-- Khi có trải nghiệm cá nhân phù hợp, có thể kể ngắn gọn để người đọc thấy câu hỏi đó là bình thường.
+- Khi có trải nghiệm cá nhân phù hợp, có thể kể ngắn gọn. Không thêm các nhãn kiểu “Điều mình thấy thú vị”, “Một ý khá hay ở đây” hoặc “Điểm thú vị” chỉ để tạo giọng.
 - Câu nên có độ dài tự nhiên, xen kẽ ngắn và vừa. Tránh viết đều đều theo một template.
 - Giữ thuật ngữ kỹ thuật chuẩn, nhưng phần giải thích xung quanh nên là tiếng Việt đời thường, rõ và gọn.
 - Xem thêm `docs/WRITING_STYLE.md` để giữ giọng văn thống nhất.
