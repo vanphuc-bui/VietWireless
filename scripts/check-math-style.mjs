@@ -54,13 +54,18 @@ for (const file of files) {
     const regex = new RegExp('class=["\\\'][^"\\\']*\\b' + className + '\\b');
     if (regex.test(content)) {
       failed = true;
-      console.error(`${relative('.', file)}: legacy math wrapper "${className}". Use <Math />.`);
+      console.error(`${relative('.', file)}: legacy math wrapper "${className}". Use <MathExpr />.`);
     }
+  }
+
+  if (/import\\s+Math\\s+from\\s+['"][^'"]*components\\/Math\\.astro['"]/.test(content)) {
+    failed = true;
+    console.error(`${relative('.', file)}: do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.`);
   }
 
   if (/<\\/?(?:sub|sup)>/i.test(content)) {
     failed = true;
-    console.error(`${relative('.', file)}: raw <sub>/<sup> math markup found. Use <Math />.`);
+    console.error(`${relative('.', file)}: raw <sub>/<sup> math markup found. Use <MathExpr />.`);
   }
 
   if (/[Σ√]/u.test(content)) {
