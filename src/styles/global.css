@@ -7884,3 +7884,112 @@ main,
     padding: 14px 15px;
   }
 }
+
+
+/* --- Site-wide KaTeX math system --- */
+.math-inline {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: -0.08em;
+  white-space: nowrap;
+}
+
+.math-inline .katex {
+  font-size: 1em;
+}
+
+.math-display {
+  max-width: 100%;
+  margin: 22px 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+  text-align: center;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.math-display .katex-display {
+  margin: 0;
+}
+
+.math-display .katex {
+  font-size: clamp(1.04rem, 1.45vw, 1.2rem);
+}
+
+.math-display.math-compact {
+  max-width: 760px;
+}
+
+.math-caption {
+  max-width: 760px;
+  margin: -10px 0 24px;
+  color: var(--muted);
+  font-size: .79rem;
+  line-height: 1.55;
+}
+
+.math-pair,
+.math-grid {
+  margin: 24px 0;
+  display: grid;
+  gap: 12px;
+}
+
+.math-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.math-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.math-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.math-card .card-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.math-card .math-display,
+.math-card .math-inline {
+  margin-block: 0;
+}
+
+.math-card .math-display {
+  padding: 10px 8px;
+  border: 0;
+  background: transparent;
+}
+
+.math-card .math-display .katex {
+  font-size: 1.04rem;
+}
+
+@media (max-width: 720px) {
+  .math-display {
+    margin: 19px 0;
+    padding: 14px 12px;
+    text-align: left;
+  }
+
+  .math-display .katex {
+    font-size: 1rem;
+  }
+
+  .math-caption {
+    margin-top: -8px;
+  }
+
+  .math-pair,
+  .math-grid.three {
+    grid-template-columns: 1fr;
+  }
+}

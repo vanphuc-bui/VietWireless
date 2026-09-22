@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -52,11 +53,7 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
         Nếu r có pattern khác, một số tích dương và âm sẽ cancel nhau.
       </p>
 
-      <div class="corr-equation">
-        <span>C</span>
-        <b>=</b>
-        <span>Σ r[n]s[n]</span>
-      </div>
+      <MathExpr tex="C = \\sum_n r[n]s[n]" display />
 
       <p>
         Đó là intuition cốt lõi:
@@ -77,11 +74,7 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <p class="concept-kicker">02 · KHÔNG BIẾT TIMING THÌ TRƯỢT REFERENCE QUA BUFFER</p>
       <h2>Mỗi candidate offset ℓ cho một correlation value C[ℓ].</h2>
 
-      <div class="corr-equation">
-        <span>C[ℓ]</span>
-        <b>=</b>
-        <span>Σ r[n+ℓ]s[n]</span>
-      </div>
+      <MathExpr tex="C[\\ell] = \\sum_n r[n+\\ell]s[n]" display />
 
       <p>
         Nếu sequence bắt đầu thật ở sample 37, khi ℓ=37 reference và received segment align đúng nhất.
@@ -115,16 +108,12 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <p class="concept-kicker">04 · VỚI I/Q, CORRELATION DÙNG COMPLEX CONJUGATE</p>
       <h2>Complex inner product cần conjugate reference để giữ đúng geometry amplitude/phase.</h2>
 
-      <div class="corr-equation">
-        <span>C[ℓ]</span>
-        <b>=</b>
-        <span>Σ r[n+ℓ]s<sup>*</sup>[n]</span>
-      </div>
+      <MathExpr tex="C[\\ell] = \\sum_n r[n+\\ell]s^*[n]" display />
 
       <p>
         Giả sử received sequence chỉ là một rotated/scaled copy:
         r[n] = h·s[n].
-        Khi align đúng, correlation trở thành gần h·Σ|s[n]|².
+        Khi align đúng, correlation trở thành gần <MathExpr tex="h\\sum_n |s[n]|^2" />.
         Magnitude của C lớn cho biết match mạnh; angle của C còn chứa phase của complex gain h.
       </p>
 
@@ -167,7 +156,7 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <h2>Time-reverse và conjugate reference rồi convolution với received signal sẽ tạo output tương ứng correlation theo lag.</h2>
 
       <p>
-        Nếu known waveform là s[n], matched-filter impulse response thường liên hệ với s<sup>*</sup>[-n].
+        Nếu known waveform là s[n], matched-filter impulse response thường liên hệ với <MathExpr tex="s^*[-n]" />.
         Khi received waveform đi qua filter, output đạt peak khi waveform align với template.
         Vì thế “correlator” và “matched filter” thường là hai cách mô tả gần nhau của cùng operation.
       </p>
@@ -186,7 +175,7 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <h2>Nếu phase quay dần trong observation window, các contribution không còn cộng cùng hướng.</h2>
 
       <p>
-        Với CFO Δf, received complex samples có thêm factor e<sup>j2πΔfnT<sub>s</sub></sup>.
+        Với CFO Δf, received complex samples có thêm factor <MathExpr tex="e^{j2\\pi\\Delta f\\,nT_s}" />.
         Đầu sequence và cuối sequence vì vậy có phase khác nhau.
         Correlator coherent dùng một reference “không quay” sẽ mất gain khi accumulated phase rotation lớn.
       </p>

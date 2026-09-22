@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -19,7 +20,7 @@ import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TỪ X[k] CỦA MỘT SYMBOL TỚI X[k,l] CỦA NHIỀU SYMBOLS</p>
+      <p class="concept-kicker">TỪ X[k] CỦA MỘT SYMBOL TỚI <MathExpr tex="X[k,\\ell]" /> CỦA NHIỀU SYMBOLS</p>
       <p class="map-intro">
         Ở Bài 15, một OFDM symbol được mô tả bằng một vector X[k].
         Nhưng một transmission kéo dài nhiều OFDM symbols.
@@ -33,7 +34,7 @@ import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
           <span>subcarrier k</span><b>×</b>
           <span>OFDM-symbol position l</span><b>→</b>
           <strong>resource element (k,l)</strong><b>→</b>
-          <span>complex value a<sub>k,l</sub></span>
+          <span>complex value <MathExpr tex="a_{k,\\ell}" /></span>
         </div>
         <p>
           Grid không phải waveform.
@@ -80,11 +81,8 @@ import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
       <p class="concept-kicker">03 · RESOURCE BLOCK CHỈ ĐƯỢC ĐỊNH NGHĨA THEO FREQUENCY</p>
       <h2>Trong NR, một resource block là 12 consecutive subcarriers.</h2>
 
-      <div class="rb-definition">
-        <span>N<sub>sc</sub><sup>RB</sup></span>
-        <b>=</b>
-        <span>12 subcarriers</span>
-      </div>
+      <MathExpr tex="N_{\\mathrm{sc}}^{\\mathrm{RB}} = 12" display />
+      <p class="math-caption">Một resource block gồm 12 consecutive subcarriers trong frequency domain.</p>
 
       <p>
         Đây là chỗ rất dễ học sai.
@@ -153,7 +151,7 @@ import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
       <div class="grid-column-flow">
         <div><small>GRID COLUMN</small><strong>X[k,l]</strong><span>occupied subcarriers</span></div>
         <b>→ bin map →</b>
-        <div><small>IFFT ARRAY</small><strong>X[0…N-1]</strong><span>includes zeros/guards/DC as configured</span></div>
+        <div><small>IFFT ARRAY</small><strong><MathExpr tex="X[0],\\ldots,X[N-1]" /></strong><span>includes zeros/guards/DC as configured</span></div>
         <b>→ IFFT →</b>
         <div><small>TIME</small><strong>x[n]</strong><span>N useful samples</span></div>
         <b>→ CP →</b>

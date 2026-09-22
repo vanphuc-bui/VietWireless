@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -50,7 +51,7 @@ import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
         <b>đổi basis →</b>
         <div>
           <small>COMPLEX SINUSOIDS</small>
-          <strong>e<sup>jωn</sup></strong>
+          <strong><MathExpr tex="e^{j\\omega n}" /></strong>
           <span>các “hướng” dao động khác nhau</span>
         </div>
         <b>→</b>
@@ -79,7 +80,7 @@ import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
         </article>
         <article>
           <span class="card-label">DTFT</span>
-          <h3>x[n] ↔ X(e<sup>jω</sup>)</h3>
+          <h3><MathExpr tex="x[n] \\leftrightarrow X(e^{j\\omega})" /></h3>
           <p>Đầu vào rời rạc theo thời gian; frequency vẫn liên tục nhưng tuần hoàn theo normalized frequency.</p>
         </article>
         <article>
@@ -98,11 +99,7 @@ import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
       <p class="concept-kicker">03 · DFT ĐANG TÍNH GÌ?</p>
       <h2>Mỗi bin k hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
 
-      <div class="dft-equation">
-        <span>X[k]</span>
-        <b>=</b>
-        <span>Σ<sub>n=0</sub><sup>N-1</sup> x[n] e<sup>-j2πkn/N</sup></span>
-      </div>
+      <MathExpr tex="X[k] = \\sum_{n=0}^{N-1} x[n]e^{-j2\\pi kn/N}" display />
 
       <div class="dft-symbols">
         <div><strong>N</strong><span>số samples trong record</span></div>
@@ -112,7 +109,7 @@ import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
       </div>
 
       <p>
-        Có thể đọc phép nhân với e<sup>-j2πkn/N</sup> như việc “de-rotate” một candidate frequency.
+        Có thể đọc phép nhân với <MathExpr tex="e^{-j2\\pi kn/N}" /> như việc “de-rotate” một candidate frequency.
         Nếu candidate khớp với thành phần trong x[n], các contribution cộng cùng hướng và magnitude của X[k] lớn.
         Nếu không khớp, các vector có xu hướng triệt tiêu nhau.
       </p>
@@ -132,28 +129,28 @@ import FourierDFTExplorer from '../../components/FourierDFTExplorer.jsx';
       <div class="bin-equations">
         <div>
           <span class="card-label">BIN SPACING</span>
-          <strong>Δf = f<sub>s</sub> / N</strong>
+          <strong><MathExpr tex="\\Delta f = f_s/N" /></strong>
         </div>
         <div>
           <span class="card-label">RECORD DURATION</span>
-          <strong>T<sub>obs</sub> = N / f<sub>s</sub></strong>
+          <strong><MathExpr tex="T_{\\mathrm{obs}} = N/f_s" /></strong>
         </div>
         <div>
           <span class="card-label">CÙNG MỘT QUAN HỆ</span>
-          <strong>Δf = 1 / T<sub>obs</sub></strong>
+          <strong><MathExpr tex="\\Delta f = 1/T_{\\mathrm{obs}}" /></strong>
         </div>
       </div>
 
       <p>
-        Ví dụ f<sub>s</sub> = 64 Hz và N = 64 cho Δf = 1 Hz.
-        Tăng N lên 128 trong khi giữ f<sub>s</sub> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
+        Ví dụ <MathExpr tex="f_s=64\\,\\mathrm{Hz}" /> và <MathExpr tex="N=64" /> cho <MathExpr tex="\\Delta f=1\\,\\mathrm{Hz}" />.
+        Tăng <MathExpr tex="N" /> lên 128 trong khi giữ <MathExpr tex="f_s" /> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
       </p>
 
       <aside class="precision-note">
         <strong>Bin spacing và khả năng phân giải hai tone không hoàn toàn đồng nghĩa trong mọi tình huống</strong>
         <p>
           Window shape, SNR và độ dài quan sát đều ảnh hưởng việc hai spectral components có tách được hay không.
-          Δf = f<sub>s</sub>/N là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
+          <MathExpr tex="\\Delta f=f_s/N" /> là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
         </p>
       </aside>
     </section>

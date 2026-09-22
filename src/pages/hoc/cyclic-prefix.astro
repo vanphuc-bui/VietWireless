@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -48,7 +49,7 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
       <p>
         Với channel hai taps, ví dụ h[0]=1 và h[2]=0.5,
         received sample có thể viết:
-        y[n] = x[n] + 0.5x[n-2].
+        <MathExpr tex="y[n]=x[n]+0.5x[n-2]" />.
         Hai-sample delay nghĩa là đầu current symbol vẫn chứa echo của samples xảy ra hai sample trước đó.
       </p>
 
@@ -60,12 +61,12 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
 
     <section class="concept-block" id="copy-tail">
       <p class="concept-kicker">02 · CP LÀ COPY CỦA CUỐI SYMBOL, KHÔNG PHẢI MỘT ĐOẠN ZERO</p>
-      <h2>Với useful block x[0]…x[N-1], ta copy N<sub>CP</sub> samples cuối lên trước.</h2>
+      <h2>Với useful block x[0]…x[N-1], ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
 
       <div class="cp-concept-row">
         <div>
           <small>CYCLIC PREFIX</small>
-          <strong>x[N-N<sub>CP</sub>] … x[N-1]</strong>
+          <strong>x[N-<MathExpr tex="N_{\\mathrm{CP}}" />] … x[N-1]</strong>
         </div>
         <b>+</b>
         <div>
@@ -99,11 +100,7 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
         DFT được sinh ra để diagonalize đúng loại convolution này.
       </p>
 
-      <div class="cp-frequency-equation">
-        <span>y[n] = x[n] ⊛ h[n]</span>
-        <b>FFT →</b>
-        <span>Y[k] = X[k]H[k]</span>
-      </div>
+      <MathExpr tex="y[n] = x[n] \\circledast h[n] \\quad \\xrightarrow{\\mathrm{FFT}} \\quad Y[k]=X[k]H[k]" display />
     </section>
 
     <section class="concept-block lab-section" id="cp-lab">
@@ -118,13 +115,13 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
     </section>
 
     <section class="concept-block" id="condition">
-      <p class="concept-kicker">05 · ĐIỀU KIỆN N<sub>CP</sub> ≥ L-1 ĐẾN TỪ ĐÂU?</p>
+      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1 ĐẾN TỪ ĐÂU?</p>
       <h2>Nếu FIR channel có L taps từ delay 0 tới L-1, maximum discrete delay là L-1 samples.</h2>
 
       <p>
         Để useful block không cần lấy samples từ previous symbol, cyclic extension phải cover maximum relevant channel delay.
         Vì vậy trong textbook discrete-time model thường viết:
-        N<sub>CP</sub> ≥ L-1.
+        <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ L-1.
       </p>
 
       <aside class="precision-note">
@@ -142,8 +139,8 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
 
       <p>
         Sau FFT, ideal model là:
-        Y[k] = H[k]X[k] + W[k].
-        Nếu H[k] đã được estimate, zero-forcing intuition là X̂[k] = Y[k]/H[k].
+        <MathExpr tex="Y[k]=H[k]X[k]+W[k]" />.
+        Nếu H[k] đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
         Practical equalizers như MMSE xử lý noise amplification tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo FFT bins.
       </p>
 
@@ -157,14 +154,11 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
       <p class="concept-kicker">07 · CP DÀI HƠN KHÔNG PHẢI LÚC NÀO CŨNG TỐT HƠN</p>
       <h2>Mỗi sample CP tiêu tốn time và transmit energy nhưng không thêm một frequency-domain data coefficient mới.</h2>
 
-      <div class="cp-overhead-equation">
-        <span>useful-time fraction</span>
-        <b>=</b>
-        <span>N / (N + N<sub>CP</sub>)</span>
-      </div>
+      <MathExpr tex="\\eta_{\\mathrm{useful}} = \\frac{N}{N+N_{\\mathrm{CP}}}" display />
+      <p class="math-caption">Useful-time fraction của một CP-OFDM symbol trong simplified sample-count view.</p>
 
       <p>
-        Nếu N=1024 và N<sub>CP</sub>=72, useful fraction xấp xỉ 93.4%.
+        Nếu N=1024 và <MathExpr tex="N_{\\mathrm{CP}}" />=72, useful fraction xấp xỉ 93.4%.
         Nếu tăng CP lên 256 samples, useful fraction chỉ còn 80%.
         CP lớn hơn chịu được channel memory dài hơn nhưng giảm time efficiency.
       </p>
@@ -175,7 +169,7 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
       <h2>Channel vẫn có H[k] và vẫn có deep fades; CP chỉ làm structure dễ xử lý hơn.</h2>
 
       <p>
-        Nếu một subcarrier nằm đúng frequency notch của multipath channel, |H[k]| vẫn rất nhỏ.
+        Nếu một subcarrier nằm đúng frequency notch của multipath channel, <MathExpr tex="|H[k]|" /> vẫn rất nhỏ.
         Equalizer vẫn phải đối mặt với noise amplification hoặc lost information.
         CP cũng không sửa CFO, phase noise hay oscillator mismatch.
       </p>
@@ -202,11 +196,11 @@ import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Linear convolution:</strong> multipath làm current output phụ thuộc samples trước.</li>
-        <li><strong>Cyclic Prefix:</strong> copy N<sub>CP</sub> samples cuối của current OFDM symbol lên đầu.</li>
+        <li><strong>Cyclic Prefix:</strong> copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối của current OFDM symbol lên đầu.</li>
         <li><strong>Guard effect:</strong> delayed energy có thể rơi vào CP thay vì contaminating useful FFT window.</li>
         <li><strong>Circular convolution:</strong> useful block có wrap-around structure dưới assumptions phù hợp.</li>
         <li><strong>FFT diagonalization:</strong> biến channel filter thành H[k] trên từng bin.</li>
-        <li><strong>Simplified condition:</strong> N<sub>CP</sub> ≥ maximum relevant discrete delay.</li>
+        <li><strong>Simplified condition:</strong> <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ maximum relevant discrete delay.</li>
         <li><strong>Overhead:</strong> CP dài hơn tăng tolerance nhưng giảm useful-time efficiency.</li>
         <li><strong>Không xóa fading:</strong> H[k] vẫn có thể rất nhỏ trên một số subcarriers.</li>
       </ol>

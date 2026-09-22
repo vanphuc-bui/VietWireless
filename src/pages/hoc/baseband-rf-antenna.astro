@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RFChainExplorer from '../../components/RFChainExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -22,7 +23,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
       <p class="concept-kicker">BÀI TOÁN CẦN GIẢI</p>
       <p class="map-intro">
         Giả sử trong code tôi đang có một buffer:
-        x[n] = I[n] + jQ[n].
+        <MathExpr tex="x[n] = I[n] + jQ[n]" />.
         Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài GHz?
       </p>
 
@@ -48,7 +49,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
       <h2>Trong DSP, ta thường xử lý phần modulation quanh 0 Hz thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
 
       <p>
-        Một sample complex có dạng x[n] = I[n] + jQ[n].
+        Một sample complex có dạng <MathExpr tex="x[n] = I[n] + jQ[n]" />.
         Nếu tại một thời điểm I = 0.8 và Q = 0.6 thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
         Hai con số I và Q đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
       </p>
@@ -63,7 +64,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
         <b>→</b>
         <div><small>DAC</small><strong>I(t), Q(t)</strong><span>hai waveform analog</span></div>
         <b>→</b>
-        <div><small>UPCONVERSION</small><strong>f<sub>c</sub></strong><span>dịch spectrum lên RF</span></div>
+        <div><small>UPCONVERSION</small><strong><MathExpr tex="f_c" /></strong><span>dịch spectrum lên RF</span></div>
         <b>→</b>
         <div><small>RF PORT</small><strong>s(t)</strong><span>một waveform thực</span></div>
       </div>
@@ -75,7 +76,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
 
       <p>
         Với mỗi nhánh I và Q, DAC nhận một chuỗi số theo thời gian.
-        Nếu sample rate là f<sub>s</sub>, mỗi T<sub>s</sub> = 1/f<sub>s</sub> giây DAC nhận một giá trị mới.
+        Nếu sample rate là <MathExpr tex="f_s" />, mỗi <MathExpr tex="T_s = 1/f_s" /> giây DAC nhận một giá trị mới.
         Output analog thô vì vậy liên quan trực tiếp tới các mức sample và cơ chế hold/update của DAC.
       </p>
 
@@ -112,11 +113,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
 
       <p>Với một convention thường gặp:</p>
 
-      <div class="rf-main-equation">
-        <span>s(t)</span>
-        <b>=</b>
-        <span>I(t) cos(2πf<sub>c</sub>t) - Q(t) sin(2πf<sub>c</sub>t)</span>
-      </div>
+      <MathExpr tex="s(t) = I(t)\\cos(2\\pi f_c t) - Q(t)\\sin(2\\pi f_c t)" display />
 
       <p>
         Nhánh I nhân với cosine. Nhánh Q nhân với sine lệch 90°. Sau đó hai nhánh được cộng lại.
@@ -125,7 +122,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
 
       <p>
         Lấy ví dụ đơn giản I = 0.8 và Q = 0.6 trong một khoảng ngắn. Khi đó A = 1 và φ ≈ 36.9°.
-        Công thức phía trên trở thành một sinusoid có cùng magnitude A và phase φ quanh carrier f<sub>c</sub>.
+        Công thức phía trên trở thành một sinusoid có cùng magnitude A và phase φ quanh carrier <MathExpr tex="f_c" />.
         Nói cách khác, <strong>tọa độ I/Q ở baseband quyết định amplitude và phase của RF carrier</strong>.
       </p>
 
@@ -151,10 +148,10 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
 
     <section class="concept-block" id="frequency-translation">
       <p class="concept-kicker">05 · UPCONVERSION LÀ DỊCH SPECTRUM LÊN QUANH CARRIER</p>
-      <h2>Baseband mô tả nội dung quanh 0 Hz; mixer đặt cùng nội dung đó quanh f<sub>c</sub>.</h2>
+      <h2>Baseband mô tả nội dung quanh 0 Hz; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
 
       <p>
-        Nếu complex baseband chiếm một bandwidth B quanh 0 Hz, sau upconversion wanted RF signal nằm quanh carrier f<sub>c</sub>.
+        Nếu complex baseband chiếm một bandwidth B quanh 0 Hz, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
         Carrier không tạo thêm information. Nó chuyển vị trí của spectrum tới band mà antenna và wireless channel sử dụng.
       </p>
 
@@ -164,10 +161,10 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
           <strong>quanh 0 Hz</strong>
           <p>DSP xử lý modulation và filtering ở frequency thấp tương đối.</p>
         </div>
-        <b>dịch lên f<sub>c</sub> →</b>
+        <b>dịch lên <MathExpr tex="f_c" /> →</b>
         <div>
           <span class="card-label">RF PASSBAND</span>
-          <strong>quanh f<sub>c</sub></strong>
+          <strong>quanh <MathExpr tex="f_c" /></strong>
           <p>Cùng information structure, nay nằm trong RF band.</p>
         </div>
       </div>

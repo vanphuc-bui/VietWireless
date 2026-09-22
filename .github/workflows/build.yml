@@ -23,5 +23,8 @@ jobs:
       - name: Check writing style
         run: npm run check:writing
 
+      - name: Check math style
+        run: npm run check:math
+
       - name: Build
         run: npm run build

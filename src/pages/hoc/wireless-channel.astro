@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.jsx';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -47,15 +48,11 @@ import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.js
       <p class="concept-kicker">01 · MÔ HÌNH MỘT PATH</p>
       <h2>Với một path trội và signal đủ hẹp băng, channel có thể được tóm tắt bằng delay và một complex gain.</h2>
 
-      <div class="channel-main-equation">
-        <span>y(t)</span>
-        <b>=</b>
-        <span>h · x(t - τ) + n(t)</span>
-      </div>
+      <MathExpr tex="y(t) = h\\,x(t-\\tau) + n(t)" display />
 
       <p>
         τ nói signal tới muộn bao nhiêu.
-        h là một complex number, thường viết h = G e<sup>jθ</sup>, mô tả amplitude scaling G và phase rotation θ.
+        h là một complex number, thường viết <MathExpr tex="h = Ge^{j\\theta}" />, mô tả amplitude scaling G và phase rotation θ.
         n(t) đại diện cho noise, sẽ được tách riêng ở Bài 11.
       </p>
 
@@ -87,11 +84,7 @@ import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.js
         Friis equation cho một link lý tưởng có thể viết dưới dạng:
       </p>
 
-      <div class="propagation-equation">
-        <span>P<sub>r</sub> / P<sub>t</sub></span>
-        <b>=</b>
-        <span>G<sub>t</sub>G<sub>r</sub>(λ / 4πd)²</span>
-      </div>
+      <MathExpr tex="\\frac{P_r}{P_t} = G_tG_r\\left(\\frac{\\lambda}{4\\pi d}\\right)^2" display />
 
       <p>
         Nếu giữ antenna gains và wavelength cố định, received power có xu hướng giảm theo 1/d².
@@ -115,23 +108,15 @@ import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.js
       <p class="concept-kicker">03 · CÙNG MỘT PATH LENGTH TẠO RA CẢ DELAY LẪN PHASE</p>
       <h2>Delay là hiện tượng theo thời gian; phase là cách một sinusoid ở frequency cụ thể nhìn delay đó.</h2>
 
-      <div class="propagation-equation">
-        <span>τ</span>
-        <b>≈</b>
-        <span>d / c</span>
-        <small>trong free space</small>
-      </div>
+      <MathExpr tex="\\tau \\approx \\frac{d}{c}" display />
+      <p class="math-caption">Trong free space.</p>
 
       <p>
         Một mét propagation tương ứng khoảng 3.33 ns.
-        Với một pure sinusoid ở frequency f, delay τ tạo phase shift -2πfτ:
+        Với một pure sinusoid ở frequency f, delay τ tạo phase shift <MathExpr tex="-2\\pi f\\tau" />:
       </p>
 
-      <div class="delay-phase-equation">
-        <span>cos[2πf(t-τ)]</span>
-        <b>=</b>
-        <span>cos(2πft - 2πfτ)</span>
-      </div>
+      <MathExpr tex="\\cos\\!\\left[2\\pi f(t-\\tau)\\right] = \\cos(2\\pi f t - 2\\pi f\\tau)" display />
 
       <p>
         Vì carrier frequency cao, phase có thể đổi rất mạnh chỉ với thay đổi position nhỏ.
@@ -142,9 +127,9 @@ import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.js
       <div class="phase-distance-story">
         <div><small>DISTANCE</small><strong>d</strong><span>path length</span></div>
         <b>→</b>
-        <div><small>DELAY</small><strong>τ=d/c</strong><span>arrival time</span></div>
+        <div><small>DELAY</small><strong><MathExpr tex="\\tau=d/c" /></strong><span>arrival time</span></div>
         <b>→</b>
-        <div><small>PHASE AT f</small><strong>-2πfτ</strong><span>frequency dependent</span></div>
+        <div><small>PHASE AT f</small><strong><MathExpr tex="-2\\pi f\\tau" /></strong><span>frequency dependent</span></div>
       </div>
     </section>
 
@@ -246,7 +231,7 @@ import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.js
         <li><strong>Single-path model:</strong> delay τ và complex gain h là điểm bắt đầu hữu ích.</li>
         <li><strong>Path loss:</strong> mô tả xu hướng attenuation lớn theo distance/environment.</li>
         <li><strong>Delay:</strong> xuất phát từ propagation time hữu hạn.</li>
-        <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift -2πfτ.</li>
+        <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift <MathExpr tex="-2\\pi f\\tau" />.</li>
         <li><strong>Shadowing:</strong> variation do blockage và vật cản lớn.</li>
         <li><strong>Small-scale fading:</strong> multipath phases thay đổi khi geometry thay đổi.</li>
         <li><strong>Flat vs selective:</strong> phụ thuộc relation giữa channel variation theo frequency và signal bandwidth.</li>
