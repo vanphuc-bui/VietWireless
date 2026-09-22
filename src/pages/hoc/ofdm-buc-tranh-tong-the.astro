@@ -105,7 +105,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="orthogonality-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Giữ spacing đúng 1/Tᵤ rồi kéo lệch nó để thấy inner product từ gần 0 tăng lên.</h2>
+      <h2>Giữ spacing đúng <MathExpr tex="1/T_u" /> rồi kéo lệch nó để thấy inner product từ gần 0 tăng lên.</h2>
       <p>
         Lab không mô phỏng toàn bộ OFDM modem.
         Nó chỉ cô lập một ý:
@@ -170,11 +170,11 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="numbers">
-      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN Δf VỚI <MathExpr tex="T_u" /></p>
+      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN <MathExpr tex="\\Delta f" /> VỚI <MathExpr tex="T_u" /></p>
       <h2><MathExpr tex="15\\,\\mathrm{kHz}" /> spacing cho useful symbol khoảng <MathExpr tex="66.67\\,\\mu\\mathrm{s}" />; <MathExpr tex="120\\,\\mathrm{kHz}" /> spacing chỉ còn khoảng <MathExpr tex="8.33\\,\\mu\\mathrm{s}" />.</h2>
 
       <p>
-        Vì <MathExpr tex="T_u" /> = 1/Δf, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
+        Vì <MathExpr tex="T_u=1/\\Delta f" />, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
         Đây chính là nền tảng của 5G NR numerology ở Bài 18.
         Nó cũng cho thấy tradeoff:
         symbol ngắn hơn có lợi cho một số timing/latency và relative-CFO conditions,
