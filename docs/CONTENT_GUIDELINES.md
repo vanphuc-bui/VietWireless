@@ -103,3 +103,22 @@ Khi vẽ chuỗi OFDM hiện đại:
 - DAC/upconversion/RF chain tạo tín hiệu RF vật lý; không gọi complex baseband trực tiếp là “sóng ngoài anten”.
 - Receiver: RF/downconversion/ADC → time-domain I/Q y[n] → FFT → Y[k] → channel estimation/equalization → demapping/decoding.
 - Luôn ghi rõ IFFT/FFT chain là ví dụ OFDM điển hình; không ngụ ý mọi hệ thống wireless đều dùng OFDM.
+
+
+## Depth gate trước khi publish bài học
+
+Không publish một bài chỉ mới ở mức outline.
+
+Một bài nền tảng nên có đủ các lớp sau nếu khái niệm cho phép:
+- mở bằng bài toán hoặc câu hỏi thực tế mà khái niệm đó giải quyết;
+- một ví dụ số hoặc ví dụ signal cụ thể để người đọc bám theo;
+- visual hoặc interactive giải thích đúng hiện tượng vừa nói;
+- giải thích công thức sau khi các biến đã có ý nghĩa;
+- chỉ ra ít nhất một hiểu nhầm phổ biến hoặc boundary của mental model;
+- nối xuống implementation: samples, buffers, FFT bins, grid, estimator hoặc receiver stage tương ứng;
+- nối lên system view: khái niệm đó nằm ở đâu trong transmitter/receiver;
+- recap phải nối lại logic, không chỉ lặp lại heading.
+
+Không dùng word count làm mục tiêu cứng. Tuy nhiên nếu một bài phức tạp như OFDM, Cyclic Prefix, resource grid hoặc channel chỉ gồm vài đoạn ngắn và nhiều card, cần xem lại liệu nó đã giải thích đủ "vì sao" và "như thế nào" hay mới chỉ liệt kê khái niệm.
+
+Trước khi merge một cụm nhiều bài, so độ sâu giữa các bài. Không để các bài sau trở thành bản tóm tắt ngắn dần chỉ vì đang viết theo batch.
