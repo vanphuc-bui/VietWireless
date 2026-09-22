@@ -58,19 +58,19 @@ for (const file of files) {
     }
   }
 
-  if (/import\\s+Math\\s+from\\s+['"][^'"]*components\\/Math\\.astro['"]/.test(content)) {
+  if (/import\s+Math\s+from\s+['"][^'"]*components\/Math\.astro['"]/.test(content)) {
     failed = true;
     console.error(`${relative('.', file)}: do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.`);
   }
 
-  if (/<\\/?(?:sub|sup)>/i.test(content)) {
+  if (/<\/?(?:sub|sup)>/i.test(content)) {
     failed = true;
     console.error(`${relative('.', file)}: raw <sub>/<sup> math markup found. Use <MathExpr />.`);
   }
 
   if (/[Σ√]/u.test(content)) {
     failed = true;
-    console.error(`${relative('.', file)}: raw Σ/√ formula glyph found. Use TeX inside <Math />.`);
+    console.error(`${relative('.', file)}: raw Σ/√ formula glyph found. Use TeX inside <MathExpr />.`);
   }
 }
 
