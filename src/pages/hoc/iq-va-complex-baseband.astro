@@ -1,0 +1,236 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import IQBasebandExplorer from '../../components/IQBasebandExplorer.jsx';
+---
+
+<BaseLayout
+  title="I/Q và complex baseband trực quan | VietWireless"
+  description="Hiểu I, Q, complex baseband, magnitude, phase và cách I/Q được biến thành waveform RF thực bằng hình ảnh và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 05 · SIGNAL FOUNDATIONS</p>
+      <h1>I/Q và complex baseband</h1>
+      <p class="lesson-deck">
+        Số phức ở Bài 04 chưa chỉ là một mẹo toán học. Trong transmitter và receiver số,
+        <strong>I và Q chính là hai tọa độ ta dùng để lưu một signal có amplitude và phase.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 04 đã có một điểm z = a + jb trên mặt phẳng phức. Trong baseband, ta đổi tên hai tọa độ đó thành I và Q.
+      </p>
+      <div class="system-position">
+        <span>TỪ SỐ PHỨC TỚI SIGNAL PROCESSING</span>
+        <div class="system-position-flow" aria-label="Số phức nối sang I Q và RF">
+          <span>a + jb</span><b>→</b>
+          <strong>I + jQ</strong><b>→</b>
+          <span>complex baseband</span><b>→</b>
+          <span>DAC / RF</span><b>→</b>
+          <span>anten</span>
+        </div>
+        <p>
+          Complex baseband là representation rất tiện trong DSP. Nó không có nghĩa rằng ngoài anten tồn tại một điện áp “phức”.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="iq-la-gi">
+      <p class="concept-kicker">01 · I VÀ Q LÀ HAI TỌA ĐỘ</p>
+      <h2>Một complex sample có thể được đọc theo Cartesian hoặc theo magnitude và phase.</h2>
+
+      <div class="iq-core-equations">
+        <div>
+          <span class="card-label">CARTESIAN</span>
+          <strong>x = I + jQ</strong>
+          <p>Ta lưu hai thành phần vuông góc I và Q.</p>
+        </div>
+        <b>↔</b>
+        <div>
+          <span class="card-label">POLAR</span>
+          <strong>x = A e<sup>jφ</sup></strong>
+          <p>Ta đọc cùng điểm đó bằng magnitude A và phase φ.</p>
+        </div>
+      </div>
+
+      <div class="two-column">
+        <article class="explain-card">
+          <span class="card-label">TỪ I,Q → A,φ</span>
+          <h3>A = √(I² + Q²)</h3>
+          <p>Magnitude là khoảng cách từ gốc tới điểm I/Q.</p>
+          <p class="iq-formula-line">φ = atan2(Q, I)</p>
+        </article>
+        <article class="explain-card">
+          <span class="card-label">TỪ A,φ → I,Q</span>
+          <h3>I = A cos φ</h3>
+          <p>Q là projection vuông góc còn lại.</p>
+          <p class="iq-formula-line">Q = A sin φ</p>
+        </article>
+      </div>
+
+      <p>
+        Vì vậy I và Q không phải hai signal độc lập mang hai message khác nhau trong cách nhìn cơ bản này.
+        Chúng là hai thành phần trực giao của cùng một complex representation.
+      </p>
+    </section>
+
+    <section class="concept-block" id="tai-sao-can-iq">
+      <p class="concept-kicker">02 · TẠI SAO KHÔNG CHỈ LƯU AMPLITUDE VÀ PHASE?</p>
+      <h2>I/Q làm nhiều phép xử lý trở thành các phép toán rất gọn trên số phức.</h2>
+      <p>
+        Phase có điểm bất tiện là nó wrap tại ±π hoặc 0/360°. I và Q thì biến thiên liên tục trên hai trục.
+        Khi channel gây scale và rotation, hoặc khi receiver cần bù phase, phép nhân complex xử lý hai hiệu ứng này cùng lúc.
+      </p>
+
+      <div class="iq-operation-flow">
+        <div>
+          <small>TX SAMPLE</small>
+          <strong>x = I + jQ</strong>
+        </div>
+        <b>×</b>
+        <div>
+          <small>CHANNEL</small>
+          <strong>h = Ge<sup>jθ</sup></strong>
+        </div>
+        <b>=</b>
+        <div>
+          <small>RX SAMPLE</small>
+          <strong>y = hx</strong>
+        </div>
+      </div>
+
+      <p>
+        Nếu bỏ noise để nhìn trực giác, magnitude của x bị nhân với G và phase bị cộng thêm θ.
+        Đây là mental model sẽ quay lại khi học channel estimation và equalization.
+      </p>
+    </section>
+
+    <section class="concept-block" id="baseband-rf">
+      <p class="concept-kicker">03 · COMPLEX BASEBAND KHÔNG PHẢI RF WAVEFORM</p>
+      <h2>I+jQ là representation chậm hơn quanh carrier; RF waveform vật lý vẫn là tín hiệu thực.</h2>
+
+      <p>
+        Gọi complex baseband là:
+      </p>
+      <div class="iq-main-equation">
+        <span>x<sub>bb</sub>(t)</span>
+        <b>=</b>
+        <span>I(t) + jQ(t)</span>
+      </div>
+
+      <p>
+        Một cách tổng hợp waveform real passband thường viết:
+      </p>
+      <div class="iq-main-equation">
+        <span>s<sub>RF</sub>(t)</span>
+        <b>=</b>
+        <span>I(t) cos(2πf<sub>c</sub>t) - Q(t) sin(2πf<sub>c</sub>t)</span>
+      </div>
+
+      <div class="iq-carrier-flow">
+        <div><small>I PATH</small><strong>I(t)</strong><span>× cos(2πfct)</span></div>
+        <b>+</b>
+        <div><small>Q PATH</small><strong>Q(t)</strong><span>× -sin(2πfct)</span></div>
+        <b>→</b>
+        <div><small>RF</small><strong>s(t)</strong><span>real waveform</span></div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Dấu của nhánh Q phụ thuộc convention</strong>
+        <p>
+          Một số tài liệu hoặc implementation dùng convention dấu khác cho complex exponential, mixer hoặc Fourier transform.
+          Điều quan trọng là toàn bộ transmitter và receiver phải dùng convention nhất quán.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="iq-lab">
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Thay amplitude và phase để nhìn I/Q đổi ra sao và waveform RF tương ứng dịch như thế nào.</h2>
+      <p>
+        Lab giữ một carrier minh họa cố định. Điểm trên complex plane là baseband representation;
+        waveform bên phải là tín hiệu real thu được từ hai nhánh I và Q.
+      </p>
+      <IQBasebandExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="samples">
+      <p class="concept-kicker">05 · TRONG CODE, I/Q THƯỜNG LÀ SAMPLES</p>
+      <h2>ADC/DSP không nhất thiết lưu một “waveform đẹp”; chúng làm việc với các cặp số theo sample index.</h2>
+
+      <div class="iq-buffer">
+        <div class="iq-buffer-head"><span>n</span><span>I[n]</span><span>Q[n]</span><span>x[n]</span></div>
+        <div><span>0</span><span>0.71</span><span>0.71</span><span>0.71 + j0.71</span></div>
+        <div><span>1</span><span>0.38</span><span>0.92</span><span>0.38 + j0.92</span></div>
+        <div><span>2</span><span>-0.20</span><span>0.98</span><span>-0.20 + j0.98</span></div>
+        <div><span>3</span><span>-0.82</span><span>0.57</span><span>-0.82 + j0.57</span></div>
+      </div>
+
+      <p>
+        Một implementation có thể lưu I và Q xen kẽ, tách thành hai buffer, dùng integer fixed-point hoặc floating-point.
+        Representation trong memory thay đổi, nhưng ý nghĩa toán học vẫn là một chuỗi complex samples.
+      </p>
+    </section>
+
+    <section class="concept-block" id="positive-negative-frequency">
+      <p class="concept-kicker">06 · MỘT LỢI THẾ KHÁC CỦA COMPLEX BASEBAND</p>
+      <h2>Complex signal cho phép phân biệt rotation dương và âm, tức hai phía của frequency axis.</h2>
+      <p>
+        Với signal real, spectrum có conjugate symmetry: thành phần ở +f đi kèm một mirror ở -f.
+        Complex baseband không bị bắt buộc bởi symmetry đó. Vì vậy nó rất tự nhiên khi ta muốn biểu diễn bandwidth quanh carrier
+        sau khi đã dịch carrier về 0 Hz.
+      </p>
+
+      <div class="iq-spectrum-shift">
+        <div>
+          <small>PASSBAND</small>
+          <strong>quanh f<sub>c</sub></strong>
+          <span>RF spectrum ở tần số cao</span>
+        </div>
+        <b>→ downconvert →</b>
+        <div>
+          <small>COMPLEX BASEBAND</small>
+          <strong>quanh 0 Hz</strong>
+          <span>negative frequency ← 0 → positive frequency</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Baseband ở đây không có nghĩa “chỉ còn DC”</strong>
+        <p>
+          Carrier được chuyển về quanh 0 Hz, nhưng information vẫn nằm trong một dải frequency quanh 0.
+          Bandwidth của signal không tự biến mất.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
+      <h2>I/Q là nơi hình học số phức bắt đầu trở thành dữ liệu mà DSP thực sự xử lý.</h2>
+      <ol class="recap-list">
+        <li><strong>x = I + jQ:</strong> một complex sample có hai thành phần trực giao.</li>
+        <li><strong>A = √(I²+Q²):</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
+        <li><strong>φ = atan2(Q,I):</strong> phase là góc của điểm I/Q.</li>
+        <li><strong>Complex baseband:</strong> representation quanh 0 Hz, không phải waveform RF vật lý.</li>
+        <li><strong>RF reconstruction:</strong> I và Q điều khiển hai carrier trực giao cos và sin.</li>
+        <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples x[n].</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/so-phuc-va-phasor/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Số phức và phasor</strong>
+        <small>Từ mặt phẳng phức tới magnitude và phase.</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Miền thời gian và miền tần số</strong>
+        <small>Hai cách nhìn khác nhau của cùng một signal.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
