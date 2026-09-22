@@ -72,7 +72,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <h2>Sampling không biến amplitude thành các mức rời rạc. Nó chọn những thời điểm để đo waveform.</h2>
       <p>
         Giả sử một điện áp analog x(t) tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
-        0, T<sub>s</sub>, 2T<sub>s</sub>, 3T<sub>s</sub>... Khi đó:
+        <Math tex="0,\\,T_s,\\,2T_s,\\,3T_s,\\ldots" /> Khi đó:
       </p>
 
       <Math tex="x[n] = x(nT_s)" display />
@@ -359,8 +359,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <h2>Tới đây ta có thể nhìn sampling như một bài toán giữ đủ thông tin, không chỉ là “đo thật nhiều điểm”.</h2>
       <ol class="recap-list">
-        <li><strong>Sampling</strong> làm rời rạc thời gian: x[n] = x(nT<sub>s</sub>).</li>
-        <li><strong>Sampling rate</strong> là <Math tex="f_s" /> = 1/T<sub>s</sub>.</li>
+        <li><strong>Sampling</strong> làm rời rạc thời gian: <Math tex="x[n]=x(nT_s)" />.</li>
+        <li><strong>Sampling rate</strong> là <Math tex="f_s=1/T_s" />.</li>
         <li><strong>Aliasing</strong> xảy ra khi những thành phần khác nhau trở nên không phân biệt được sau sampling.</li>
         <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: <Math tex="f_s" /> &gt; 2B.</li>
         <li><strong>Nyquist frequency</strong> là <Math tex="f_s/2" />, còn <strong>Nyquist rate</strong> của signal band-limited tới B là 2B.</li>
