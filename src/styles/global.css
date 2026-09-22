@@ -2754,3 +2754,505 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     min-height: 82px;
   }
 }
+
+
+/* --- Lesson 03: Amplitude, frequency and phase --- */
+.sinusoid-three-grid {
+  margin: 30px 0 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.sinusoid-three-grid article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sinusoid-three-grid svg {
+  width: 100%;
+  display: block;
+  margin: 8px 0 5px;
+}
+
+.sinusoid-three-grid article > strong {
+  display: block;
+  margin-top: 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+}
+
+.sinusoid-three-grid article > p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+
+.parameter-wave {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.parameter-wave.primary {
+  stroke: var(--blue);
+}
+
+.parameter-wave.secondary {
+  stroke: var(--violet);
+  stroke-dasharray: 7 6;
+  opacity: .68;
+}
+
+.sinusoid-formula {
+  max-width: 640px;
+  margin: 28px 0;
+  padding: 23px 24px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.sinusoid-formula span,
+.sinusoid-formula b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.sinusoid-formula b {
+  color: var(--accent);
+}
+
+.sinusoid-parameter-list {
+  max-width: 790px;
+  margin: 26px 0;
+  border-top: 1px solid var(--line);
+}
+
+.sinusoid-parameter-list article {
+  min-height: 104px;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sinusoid-parameter-list article > strong {
+  color: var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.sinusoid-parameter-list h3 {
+  margin: 0 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+}
+
+.sinusoid-parameter-list p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.amplitude-visual {
+  margin: 30px 0 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.amplitude-visual svg {
+  width: 100%;
+  display: block;
+}
+
+.amplitude-guide {
+  stroke: #ddd7cf;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.amplitude-bracket {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.amplitude-label {
+  fill: var(--accent);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.frequency-period-visual {
+  max-width: 760px;
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.frequency-period-visual > div {
+  min-height: 155px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.frequency-period-visual > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-size: 1.35rem;
+}
+
+.frequency-period-visual strong {
+  margin: 8px 0 5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.frequency-period-visual p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.phase-comparison {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.phase-comparison article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.phase-comparison article > strong {
+  display: block;
+  margin: 13px 0 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+}
+
+.phase-comparison p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.sinusoid-shift-equation {
+  max-width: 760px;
+  margin: 26px 0;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: baseline;
+  gap: 11px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.sinusoid-shift-equation span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.16rem;
+  font-weight: 650;
+}
+
+.sinusoid-shift-equation b {
+  color: var(--accent);
+}
+
+.sinusoid-shift-equation small {
+  color: var(--muted);
+}
+
+.sinusoid-lab {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+}
+
+.sinusoid-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.sinusoid-controls label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.sinusoid-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.sinusoid-controls strong {
+  color: var(--ink);
+}
+
+.sinusoid-presets {
+  padding: 11px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sinusoid-presets button {
+  padding: 8px 10px;
+  color: var(--ink-soft);
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  font-size: .76rem;
+}
+
+.sinusoid-presets button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.sinusoid-readout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.sinusoid-readout > div {
+  min-height: 105px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.sinusoid-readout > div:last-child {
+  border-right: 0;
+}
+
+.sinusoid-readout small {
+  color: var(--muted);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.sinusoid-readout strong {
+  margin: 5px 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+}
+
+.sinusoid-readout span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.sinusoid-plot-wrap {
+  padding: 18px;
+}
+
+.sinusoid-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.sinusoid-legend i {
+  width: 18px;
+  height: 3px;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+
+.sinusoid-current-key {
+  background: var(--blue);
+}
+
+.sinusoid-reference-key {
+  background: var(--violet);
+  opacity: .7;
+}
+
+.sinusoid-plot-wrap svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: linear-gradient(rgba(90,90,90,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(90,90,90,.035) 1px, transparent 1px), #fcfcfb;
+  background-size: 30px 30px;
+}
+
+.sinusoid-axis {
+  stroke: #cfc9c0;
+  stroke-width: 1;
+}
+
+.sinusoid-current {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.3;
+}
+
+.sinusoid-reference {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.8;
+  stroke-dasharray: 7 6;
+  opacity: .58;
+}
+
+.sinusoid-phase-marker {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: .72;
+}
+
+.sinusoid-svg-label,
+.sinusoid-phase-label {
+  fill: #827c74;
+  font-size: 11px;
+}
+
+.sinusoid-phase-label {
+  fill: var(--accent);
+  font-weight: 700;
+}
+
+.sinusoid-caption {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.concept-bridge {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: 9px;
+}
+
+.concept-bridge > div {
+  min-width: 0;
+  min-height: 135px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.concept-bridge small {
+  color: var(--accent);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.concept-bridge strong {
+  margin: 6px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+}
+
+.concept-bridge span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.concept-bridge > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+}
+
+@media (max-width: 900px) {
+  .sinusoid-three-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sinusoid-three-grid svg {
+    max-height: 170px;
+  }
+
+  .concept-bridge {
+    grid-template-columns: 1fr;
+  }
+
+  .concept-bridge > b {
+    transform: rotate(90deg);
+    min-height: 22px;
+  }
+}
+
+@media (max-width: 720px) {
+  .sinusoid-controls,
+  .sinusoid-readout,
+  .phase-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .sinusoid-readout > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sinusoid-readout > div:last-child {
+    border-bottom: 0;
+  }
+
+  .frequency-period-visual {
+    grid-template-columns: 1fr;
+  }
+
+  .frequency-period-visual > b {
+    transform: rotate(90deg);
+    min-height: 24px;
+  }
+
+  .sinusoid-shift-equation {
+    grid-template-columns: 1fr;
+  }
+
+  .sinusoid-shift-equation b {
+    transform: rotate(90deg);
+    justify-self: start;
+  }
+
+  .sinusoid-parameter-list article {
+    grid-template-columns: 54px 1fr;
+  }
+}
