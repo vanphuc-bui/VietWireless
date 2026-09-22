@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SignalExplorer from '../../components/SignalExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -33,7 +33,7 @@ import Math from '../../components/Math.astro';
           <strong>X[k]</strong>
         </div>
         <p>
-          Với signal liên tục thường viết <Math tex="x(t) \\leftrightarrow X(f)" />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <Math tex="x[n] \\leftrightarrow X[k]" />.
+          Với signal liên tục thường viết <MathExpr tex="x(t) \\leftrightarrow X(f)" />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <MathExpr tex="x[n] \\leftrightarrow X[k]" />.
         </p>
       </div>
     </section>
@@ -102,7 +102,7 @@ import Math from '../../components/Math.astro';
         <strong>Tại sao có -f?</strong>
         <p>
           Negative frequency xuất hiện tự nhiên từ complex exponential:
-          <Math tex="\\cos(2\\pi f_0 t) = \\frac{e^{j2\\pi f_0 t}+e^{-j2\\pi f_0 t}}{2}" />.
+          <MathExpr tex="\\cos(2\\pi f_0 t) = \\frac{e^{j2\\pi f_0 t}+e^{-j2\\pi f_0 t}}{2}" />.
           Nó là một phần của representation toán học, không phải một đồng hồ vật lý đang chạy ngược.
         </p>
       </aside>
@@ -157,12 +157,12 @@ import Math from '../../components/Math.astro';
       <div class="spectrum-two-parts">
         <article>
           <span class="card-label">MAGNITUDE</span>
-          <h3><Math tex="|X[k]|" /></h3>
+          <h3><MathExpr tex="|X[k]|" /></h3>
           <p>Thành phần tại bin đó mạnh tới đâu.</p>
         </article>
         <article>
           <span class="card-label">PHASE</span>
-          <h3><Math tex="\\angle X[k]" /></h3>
+          <h3><MathExpr tex="\\angle X[k]" /></h3>
           <p>Thành phần đó có phase nào so với reference của record.</p>
         </article>
       </div>
