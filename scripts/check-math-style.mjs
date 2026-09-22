@@ -74,6 +74,7 @@ for (const file of files) {
   }
 
   const visibleSource = content
+    .replace(/<svg\\b[\\s\\S]*?<\\/svg>/gi, '')
     .replace(/<MathExpr\\b[^>]*\\/>/gs, '')
     .replace(/tex=(?:\"[^\"]*\"|'[^']*')/gs, '');
 
