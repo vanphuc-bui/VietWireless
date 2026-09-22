@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SignalExplorer from '../../components/SignalExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -165,8 +165,8 @@ import Math from '../../components/Math.astro';
         </article>
       </div>
 
-      <Math tex="x[n] = x(nT_s)" display />
-      <p class="math-caption">Sample thứ n chính là giá trị của waveform tại thời điểm <Math tex="nT_s" />.</p>
+      <MathExpr tex="x[n] = x(nT_s)" display />
+      <p class="math-caption">Sample thứ n chính là giá trị của waveform tại thời điểm <MathExpr tex="nT_s" />.</p>
 
       <div class="two-column sampling-summary">
         <div class="explain-card">
@@ -182,7 +182,7 @@ import Math from '../../components/Math.astro';
       </div>
 
       <p>
-        Sampling rate là <Math tex="f_s = 1/T_s" />. Ví dụ <Math tex="f_s = 48\\,\\mathrm{kHz}" /> nghĩa là ADC đo waveform
+        Sampling rate là <MathExpr tex="f_s = 1/T_s" />. Ví dụ <MathExpr tex="f_s = 48\\,\\mathrm{kHz}" /> nghĩa là ADC đo waveform
         48.000 lần mỗi giây. Đây chưa phải toàn bộ câu chuyện của ADC. Vẫn còn quantization, dynamic range và
         anti-alias filtering. Ở đây tôi chỉ muốn giữ lại một hình dung:{" "}
         <strong>sampling biến waveform liên tục theo thời gian thành một dãy giá trị rời rạc theo thời gian.</strong>
@@ -282,7 +282,7 @@ import Math from '../../components/Math.astro';
       <div class="two-column">
         <article class="explain-card">
           <span class="card-label">TRƯỚC IFFT · FREQUENCY DOMAIN</span>
-          <h3><Math tex="X[k,m] = I + jQ" /></h3>
+          <h3><MathExpr tex="X[k,m] = I + jQ" /></h3>
           <p>
             Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier k và OFDM symbol m.
             Nó là giá trị ta sẽ đặt vào resource grid.
@@ -290,7 +290,7 @@ import Math from '../../components/Math.astro';
         </article>
         <article class="explain-card">
           <span class="card-label">SAU IFFT · TIME DOMAIN</span>
-          <h3><Math tex="x[n] = I[n] + jQ[n]" /></h3>
+          <h3><MathExpr tex="x[n] = I[n] + jQ[n]" /></h3>
           <p>
             Đây là một <strong>complex time-domain sample</strong>. Nó cũng dùng biểu diễn I/Q,
             nhưng là một đại lượng ở stage khác của transmitter.
@@ -366,8 +366,8 @@ import Math from '../../components/Math.astro';
 
         <div class="re-zoom-panel">
           <div class="zoom-label">ZOOM VÀO 1 RE</div>
-          <Math tex="X[k_0,m_0] = I + jQ" display />
-          <p class="math-caption">Complex modulation symbol tại subcarrier <Math tex="k_0" /> và OFDM symbol <Math tex="m_0" />.</p>
+          <MathExpr tex="X[k_0,m_0] = I + jQ" display />
+          <p class="math-caption">Complex modulation symbol tại subcarrier <MathExpr tex="k_0" /> và OFDM symbol <MathExpr tex="m_0" />.</p>
           <p>
             Resource element là vị trí trên grid. X[k₀,m₀] là giá trị complex được đặt vào vị trí đó.
             Phần modulation ở trên cho ta biết giá trị này đến từ đâu.
@@ -399,7 +399,7 @@ import Math from '../../components/Math.astro';
 
         <div class="ofdm-column-step time-step">
           <small>TIME-DOMAIN COMPLEX SAMPLES</small>
-          <strong><Math tex="x[n] = I[n] + jQ[n]" /></strong>
+          <strong><MathExpr tex="x[n] = I[n] + jQ[n]" /></strong>
           <svg viewBox="0 0 240 90" role="img" aria-label="Time-domain OFDM waveform sau IFFT">
             <line x1="6" y1="46" x2="234" y2="46"></line>
             <path d="M6 46 C12 13 18 73 25 40 S38 20 46 55 S58 69 67 36 S82 25 91 53 S105 62 114 38 S129 18 138 48 S153 73 163 38 S179 25 188 51 S204 63 214 40 S227 29 234 48"></path>
