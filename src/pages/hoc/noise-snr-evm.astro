@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
+import Math from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -51,11 +52,7 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
         Một model cơ bản cho available thermal-noise power là:
       </p>
 
-      <div class="thermal-equation">
-        <span>P<sub>n</sub></span>
-        <b>=</b>
-        <span>kTB</span>
-      </div>
+      <Math tex="P_n = kTB" display />
 
       <div class="thermal-symbols">
         <div><strong>k</strong><span>Boltzmann constant</span></div>
@@ -66,7 +63,7 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       <p>
         Ở khoảng 290 K, thermal noise density thường được nhớ gần đúng là -174 dBm/Hz.
         Nếu receiver bandwidth là 20 MHz, integrated thermal noise lý tưởng vào khoảng
-        -174 + 10log<sub>10</sub>(20×10<sup>6</sup>) ≈ -101 dBm, trước khi cộng noise figure của receiver.
+        <Math tex="-174 + 10\\log_{10}(20\\times10^6) \\approx -101\\,\\mathrm{dBm}" />, trước khi cộng noise figure của receiver.
       </p>
 
       <aside class="precision-note">
@@ -85,18 +82,18 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       <div class="snr-equations">
         <div>
           <span class="card-label">LINEAR</span>
-          <strong>SNR = P<sub>s</sub> / P<sub>n</sub></strong>
+          <strong><Math tex="\\mathrm{SNR}=P_s/P_n" /></strong>
         </div>
         <div>
           <span class="card-label">dB</span>
-          <strong>SNR<sub>dB</sub> = 10log<sub>10</sub>(P<sub>s</sub>/P<sub>n</sub>)</strong>
+          <strong><Math tex="\\mathrm{SNR}_{\\mathrm{dB}}=10\\log_{10}(P_s/P_n)" /></strong>
         </div>
       </div>
 
       <p>
         10 dB nghĩa là signal power gấp 10 lần noise power.
         20 dB nghĩa là gấp 100 lần.
-        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là 20log<sub>10</sub>, vì power tỉ lệ với amplitude bình phương.
+        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là <Math tex="20\\log_{10}" />, vì power tỉ lệ với amplitude bình phương.
       </p>
 
       <p>
@@ -159,11 +156,7 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
         Với nhiều symbols, một RMS definition phổ biến là:
       </p>
 
-      <div class="evm-equation">
-        <span>EVM<sub>RMS</sub></span>
-        <b>=</b>
-        <span>√(Σ|Y<sub>k</sub>-X<sub>k</sub>|² / Σ|X<sub>k</sub>|²)</span>
-      </div>
+      <Math tex="\\mathrm{EVM}_{\\mathrm{RMS}} = \\sqrt{\\frac{\\sum_k |Y_k-X_k|^2}{\\sum_k |X_k|^2}}" display />
 
       <p>
         Nếu EVM = 0.05, ta thường viết 5%.
@@ -184,17 +177,13 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
 
     <section class="concept-block" id="snr-evm">
       <p class="concept-kicker">06 · KHI NÀO CÓ THỂ NỐI EVM VỚI SNR?</p>
-      <h2>Trong model chỉ có additive error và normalization nhất quán, EVM² gần bằng error power / signal power.</h2>
+      <h2>Trong model chỉ có additive error và normalization nhất quán, <Math tex="\\mathrm{EVM}^2" /> gần bằng error power / signal power.</h2>
 
-      <div class="snr-evm-relation">
-        <span>EVM<sub>linear</sub></span>
-        <b>≈</b>
-        <span>1 / √SNR<sub>linear</sub></span>
-      </div>
+      <Math tex="\\mathrm{EVM}_{\\mathrm{linear}} \\approx \\frac{1}{\\sqrt{\\mathrm{SNR}_{\\mathrm{linear}}}}" display />
 
       <p>
         Ví dụ SNR = 20 dB nghĩa là linear SNR = 100.
-        Khi assumptions phù hợp, EVM xấp xỉ 1/√100 = 0.1, tức khoảng 10%.
+        Khi assumptions phù hợp, EVM xấp xỉ <Math tex="1/\\sqrt{100}=0.1" />, tức khoảng 10%.
         Nhưng nếu error đến từ phase rotation hoặc nonlinear distortion, gọi toàn bộ error đó là “noise SNR” sẽ che mất nguyên nhân thật.
       </p>
     </section>
@@ -223,8 +212,8 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       <h2>Sau khi đã có reference symbols và measured symbols tương ứng, phép tính rất thẳng.</h2>
 
       <p>
-        Với mỗi k, tạo e[k] = Y[k] - X[k].
-        Cộng |e[k]|² để lấy error energy, rồi normalize bằng Σ|X[k]|² theo definition đang dùng.
+        Với mỗi k, tạo <Math tex="e[k]=Y[k]-X[k]" />.
+        Cộng <Math tex="|e[k]|^2" /> để lấy error energy, rồi normalize bằng <Math tex="\\sum_k |X[k]|^2" /> theo definition đang dùng.
         Phần khó trong receiver thực tế thường không phải phép trừ này, mà là đảm bảo timing, CFO, channel estimate và reference mapping đều đúng trước khi tính.
       </p>
 
