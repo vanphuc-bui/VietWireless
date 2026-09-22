@@ -221,3 +221,20 @@ Ví dụ phù hợp:
 Không dùng:
 
 `Vì vậy mình muốn đi chậm hơn một chút ở những chỗ từng làm mình bối rối.`
+
+
+## 13. Phân cấp tiêu đề
+
+Không thêm một heading lớn chỉ để diễn đạt lại section label ngay phía trên.
+
+Nếu section kicker đã đủ rõ, bắt đầu thẳng bằng nội dung hoặc một câu dẫn ngắn.
+
+Ví dụ, sau:
+
+`VÌ SAO TÔI VIẾT VIETWIRELESS`
+
+không cần thêm một H2 lớn chỉ để lặp lại lý do. Có thể đi thẳng vào đoạn văn.
+
+Khi một section có visual chính, title phụ không được lấn át visual đó. Dùng paragraph ngắn hoặc heading nhỏ hơn, để mắt người đọc tập trung vào diagram, map hoặc interactive element.
+
+Mỗi section nên có một điểm nhấn chính, không phải nhiều tầng title cạnh tranh với nhau.
