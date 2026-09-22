@@ -5,7 +5,7 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
 
 <BaseLayout
   title="Correlation trực quan trong receiver | VietWireless"
-  description="Hiểu correlation, sliding correlation, autocorrelation, matched filtering và cách receiver tìm một sequence đã biết trong noise."
+  description="Hiểu correlation từ dot product tới sliding correlation, complex correlation, matched filter và cách receiver tìm known sequence trong noise."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
@@ -13,137 +13,229 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <p class="eyebrow">GHI CHÉP 13 · WIRELESS LINK</p>
       <h1>Correlation</h1>
       <p class="lesson-deck">
-        Receiver thường biết trước một sequence nhưng không biết nó bắt đầu ở sample nào.
-        <strong>Correlation trả lời câu hỏi: “nếu tôi trượt local sequence qua buffer này, ở vị trí nào hai pattern giống nhau nhất?”</strong>
+        Receiver nhiều khi biết trước shape của một sequence nhưng không biết nó bắt đầu ở sample nào.{" "}
+        <strong>Correlation biến bài toán “pattern này nằm ở đâu trong buffer?” thành một curve theo candidate delay.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="concept-kicker">VÌ SAO CORRELATION XUẤT HIỆN KHẮP RECEIVER?</p>
       <p class="map-intro">
-        Sau channel và noise, receiver có một buffer samples lẫn signal mong muốn với nhiều thứ khác.
-        Nếu transmitter đã chèn một pattern mà receiver biết trước, correlation là một cách tự nhiên để tìm nó.
+        Synchronization, preamble detection, channel sounding và nhiều reference-signal procedures đều có chung một lợi thế:
+        transmitter và receiver cùng biết trước một pattern.
+        Khi đó receiver không cần đoán toàn bộ signal; nó chỉ cần hỏi pattern local của nó khớp received samples tới mức nào.
       </p>
+
       <div class="system-position">
         <span>KNOWN PATTERN DETECTION</span>
         <div class="system-position-flow">
           <span>received buffer r[n]</span><b>+</b>
-          <strong>known sequence s[n]</strong><b>→</b>
-          <span>slide + multiply + sum</span><b>→</b>
-          <span>correlation peak</span>
+          <strong>reference s[n]</strong><b>→</b>
+          <span>multiply + sum</span><b>→</b>
+          <span>metric theo lag</span><b>→</b>
+          <span>peak</span>
         </div>
         <p>
-          Ý tưởng này sẽ quay lại khi học synchronization, PSS và PRACH. Mỗi signal cụ thể có cấu trúc và detector riêng, nhưng trực giác correlation là nền tảng.
+          Bài này xây intuition chung. Khi sang PSS và PRACH, ta sẽ áp dụng cùng ý tưởng với sequence và search space cụ thể của 5G NR.
         </p>
       </div>
     </section>
 
     <section class="concept-block" id="dot-product">
-      <p class="concept-kicker">01 · BẮT ĐẦU TỪ DOT PRODUCT</p>
-      <h2>Hai vector cùng hướng cho tổng tích lớn; pattern không giống nhau có xu hướng triệt tiêu.</h2>
+      <p class="concept-kicker">01 · CORRELATION BẮT ĐẦU TỪ DOT PRODUCT</p>
+      <h2>Nếu hai vectors có cùng pattern, các tích từng phần tử có xu hướng cộng cùng dấu.</h2>
+
       <p>
-        Với hai sequence thực cùng độ dài, một similarity score đơn giản là:
+        Lấy một ví dụ rất nhỏ:
+        s = [1, -1, 1, 1].
+        Nếu received segment r cũng gần [1, -1, 1, 1], tích từng phần tử là [1, 1, 1, 1] và tổng lớn.
+        Nếu r có pattern khác, một số tích dương và âm sẽ cancel nhau.
       </p>
+
       <div class="corr-equation">
-        <span>C</span><b>=</b><span>Σ r[n]s[n]</span>
+        <span>C</span>
+        <b>=</b>
+        <span>Σ r[n]s[n]</span>
       </div>
+
       <p>
-        Nếu dấu và cấu trúc của r[n] giống s[n], nhiều tích r[n]s[n] cùng dương và cộng lại.
-        Nếu không giống, contribution dương và âm thường cancel nhiều hơn.
+        Đó là intuition cốt lõi:
+        correlation không cần “hiểu” meaning của sequence.
+        Nó chỉ đo mức alignment giữa hai vectors.
       </p>
+
+      <aside class="precision-note">
+        <strong>Magnitude của raw correlation còn phụ thuộc amplitude</strong>
+        <p>
+          Nếu cùng một pattern được nhân lớn lên 10 lần, raw dot product cũng lớn lên.
+          Detector thực tế có thể normalize metric theo signal/reference energy hoặc dùng threshold phù hợp để tránh nhầm “mạnh hơn” với “giống hơn”.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="sliding">
-      <p class="concept-kicker">02 · KHI KHÔNG BIẾT TIMING, TA TRƯỢT SEQUENCE</p>
-      <h2>Mỗi candidate delay tạo một correlation value.</h2>
+      <p class="concept-kicker">02 · KHÔNG BIẾT TIMING THÌ TRƯỢT REFERENCE QUA BUFFER</p>
+      <h2>Mỗi candidate offset ℓ cho một correlation value C[ℓ].</h2>
+
       <div class="corr-equation">
-        <span>C[ℓ]</span><b>=</b><span>Σ r[n+ℓ] s[n]</span>
+        <span>C[ℓ]</span>
+        <b>=</b>
+        <span>Σ r[n+ℓ]s[n]</span>
       </div>
+
+      <p>
+        Nếu sequence bắt đầu thật ở sample 37, khi ℓ=37 reference và received segment align đúng nhất.
+        Correlation curve thường có một peak quanh đó.
+        Vì vậy timing search đơn giản có thể được hiểu như:
+        thử ℓ=0,1,2,... rồi tìm nơi metric lớn.
+      </p>
+
       <div class="correlation-story">
-        <div><small>ℓ = 0</small><strong>không align</strong><span>score nhỏ</span></div>
+        <div><small>ℓ NHỎ</small><strong>reference chưa align</strong><span>tích dương/âm cancel nhiều</span></div>
         <b>→ slide →</b>
-        <div><small>ℓ = 1,2,...</small><strong>thử mọi candidate</strong><span>mỗi vị trí một score</span></div>
+        <div><small>ℓ GẦN ĐÚNG</small><strong>pattern bắt đầu khớp</strong><span>metric tăng</span></div>
         <b>→</b>
-        <div><small>ℓ = τ̂</small><strong>peak</strong><span>candidate timing mạnh nhất</span></div>
+        <div><small>ℓ = τ̂</small><strong>correlation peak</strong><span>candidate timing</span></div>
       </div>
     </section>
 
     <section class="concept-block lab-section" id="correlation-lab">
       <p class="concept-kicker">03 · INTERACTIVE LAB</p>
-      <h2>Giấu một known sequence trong noise rồi xem correlation có tìm lại đúng sample index không.</h2>
+      <h2>Giấu một known sequence trong noise rồi tăng noise cho tới khi false peak bắt đầu cạnh tranh với true peak.</h2>
       <p>
-        Tăng noise dần. Khi SNR đủ thấp, một false peak có thể vượt true peak. Đây là lý do detector thực tế cần threshold,
-        averaging hoặc thêm structure chứ không chỉ lấy max một cách mù quáng.
+        Lab cố ý đơn giản để nhìn cơ chế.
+        Khi noise thấp, peak đúng rất rõ.
+        Khi noise cao, các candidate lags khác cũng có thể cho metric lớn ngẫu nhiên.
+        Vì thế real detector thường cần threshold, averaging hoặc thêm cấu trúc khác thay vì chỉ gọi argmax một lần.
       </p>
       <CorrelationExplorer client:load />
     </section>
 
-    <section class="concept-block" id="complex-correlation">
-      <p class="concept-kicker">04 · VỚI COMPLEX I/Q, CÓ THÊM CONJUGATE</p>
-      <h2>Complex correlation thường nhân received samples với complex conjugate của reference.</h2>
+    <section class="concept-block" id="complex">
+      <p class="concept-kicker">04 · VỚI I/Q, CORRELATION DÙNG COMPLEX CONJUGATE</p>
+      <h2>Complex inner product cần conjugate reference để giữ đúng geometry amplitude/phase.</h2>
+
       <div class="corr-equation">
-        <span>C[ℓ]</span><b>=</b><span>Σ r[n+ℓ] s<sup>*</sup>[n]</span>
+        <span>C[ℓ]</span>
+        <b>=</b>
+        <span>Σ r[n+ℓ]s<sup>*</sup>[n]</span>
       </div>
+
       <p>
-        Conjugate làm inner product trên complex plane có đúng geometry mong muốn.
-        Nếu r[n] là một scaled/rotated copy của s[n], correlation vẫn có magnitude lớn và phase của C chứa information về complex rotation đó.
+        Giả sử received sequence chỉ là một rotated/scaled copy:
+        r[n] = h·s[n].
+        Khi align đúng, correlation trở thành gần h·Σ|s[n]|².
+        Magnitude của C lớn cho biết match mạnh; angle của C còn chứa phase của complex gain h.
+      </p>
+
+      <p>
+        Đây là một lý do known reference rất mạnh:
+        cùng một phép matching có thể giúp timing acquisition và đồng thời để lộ information về complex channel/phase.
       </p>
     </section>
 
     <section class="concept-block" id="auto-cross">
-      <p class="concept-kicker">05 · AUTOCORRELATION VÀ CROSS-CORRELATION</p>
-      <h2>Ta có thể so sequence với chính nó hoặc với một sequence khác.</h2>
+      <p class="concept-kicker">05 · AUTOCORRELATION VÀ CROSS-CORRELATION NÓI HAI ĐIỀU KHÁC NHAU</p>
+
       <div class="corr-two-cards">
         <article>
           <span class="card-label">AUTOCORRELATION</span>
-          <h3>s với shifted s</h3>
-          <p>Cho biết sequence giống chính nó tới mức nào khi bị dịch. Một sharp main peak và small sidelobes thường có lợi cho timing detection.</p>
+          <h3>s[n] so với shifted s[n]</h3>
+          <p>
+            Ta muốn một main peak rõ ở đúng alignment và sidelobes nhỏ ở các shifts khác.
+            Điều này giúp timing detector không tạo quá nhiều ambiguous peaks.
+          </p>
         </article>
+
         <article>
           <span class="card-label">CROSS-CORRELATION</span>
-          <h3>s₁ với s₂</h3>
-          <p>Cho biết hai sequence khác nhau giống nhau tới mức nào. Low cross-correlation giúp phân biệt các candidates tốt hơn.</p>
+          <h3>s₁[n] so với s₂[n]</h3>
+          <p>
+            Nếu receiver phải phân biệt nhiều candidate sequences, ta muốn các sequences khác nhau không correlate quá mạnh với nhau.
+          </p>
         </article>
       </div>
+
+      <p>
+        Sequence design vì vậy thường quan tâm cả hai mặt:
+        tự nhận ra chính mình tốt và ít giống các sequences khác.
+      </p>
     </section>
 
     <section class="concept-block" id="matched-filter">
-      <p class="concept-kicker">06 · CORRELATOR VÀ MATCHED FILTER LÀ HAI CÁCH NHÌN GẦN NHAU</p>
-      <h2>Matched filter có impulse response là phiên bản time-reversed/conjugated của waveform cần phát hiện.</h2>
+      <p class="concept-kicker">06 · MATCHED FILTER LÀ CÙNG Ý TƯỞNG NHÌN THEO FILTERING</p>
+      <h2>Time-reverse và conjugate reference rồi convolution với received signal sẽ tạo output tương ứng correlation theo lag.</h2>
+
       <p>
-        Chạy received signal qua matched filter rồi nhìn output theo thời gian tương đương với việc tính correlation theo lag,
-        tùy convention indexing. Trong AWGN và assumptions phù hợp, matched filter tối đa hóa output SNR tại sampling instant cho waveform đã biết.
+        Nếu known waveform là s[n], matched-filter impulse response thường liên hệ với s<sup>*</sup>[-n].
+        Khi received waveform đi qua filter, output đạt peak khi waveform align với template.
+        Vì thế “correlator” và “matched filter” thường là hai cách mô tả gần nhau của cùng operation.
       </p>
-      <aside class="precision-note">
-        <strong>Matched filter không tự giải quyết mọi impairment</strong>
+
+      <aside class="mental-model">
+        <strong>Matched filter không có nghĩa receiver đã đồng bộ hoàn hảo</strong>
         <p>
-          Frequency offset, time scaling, multipath và phase rotation có thể làm reference không còn khớp hoàn hảo.
-          Detector thực tế thường phải search thêm frequency/timing hypotheses hoặc dùng structure riêng của signal.
+          CFO, time scaling, multipath hoặc phase rotation có thể làm received waveform không còn giống reference template.
+          Practical detector có thể phải search thêm frequency hypotheses hoặc dùng noncoherent/segmented metrics.
         </p>
       </aside>
     </section>
 
+    <section class="concept-block" id="cfo">
+      <p class="concept-kicker">07 · FREQUENCY OFFSET LÀM CORRELATION PEAK GIẢM</p>
+      <h2>Nếu phase quay dần trong observation window, các contribution không còn cộng cùng hướng.</h2>
+
+      <p>
+        Với CFO Δf, received complex samples có thêm factor e<sup>j2πΔfnT<sub>s</sub></sup>.
+        Đầu sequence và cuối sequence vì vậy có phase khác nhau.
+        Correlator coherent dùng một reference “không quay” sẽ mất gain khi accumulated phase rotation lớn.
+      </p>
+
+      <p>
+        Đây là lý do acquisition algorithms thường phối hợp timing search và frequency search.
+        Đến Bài 22 PSS, ta sẽ thấy cùng câu chuyện này trong 5G initial synchronization.
+      </p>
+    </section>
+
     <section class="concept-block" id="receiver-use">
-      <p class="concept-kicker">07 · RECEIVER DÙNG CORRELATION Ở ĐÂU?</p>
-      <h2>Bất cứ khi nào transmitter và receiver cùng biết trước một structure, correlation đều có thể trở thành detector.</h2>
+      <p class="concept-kicker">08 · TRONG RECEIVER, CORRELATION KHÔNG CHỈ DÙNG MỘT LẦN</p>
       <div class="correlation-use-grid">
-        <article><strong>Timing</strong><p>Tìm nơi một preamble hoặc sync sequence bắt đầu.</p></article>
-        <article><strong>Sequence ID</strong><p>So nhiều references để xem candidate nào khớp nhất.</p></article>
-        <article><strong>Channel probing</strong><p>Known reference giúp suy ra channel response sau khi align.</p></article>
-        <article><strong>Random access</strong><p>Preamble detection là một application quan trọng sẽ xuất hiện ở PRACH.</p></article>
+        <article>
+          <strong>Synchronization</strong>
+          <p>Tìm preamble hoặc sync sequence để có timing candidate.</p>
+        </article>
+        <article>
+          <strong>Identity detection</strong>
+          <p>So nhiều known references và chọn sequence hypothesis khớp nhất.</p>
+        </article>
+        <article>
+          <strong>Channel estimation</strong>
+          <p>Known symbols cho phép tách effect của channel khỏi transmitted value.</p>
+        </article>
+        <article>
+          <strong>Random access</strong>
+          <p>Preamble detection là một use case quan trọng khi học PRACH.</p>
+        </article>
       </div>
+
+      <p>
+        Trong code, sliding correlation trực tiếp có complexity khá lớn nếu sequence/buffer dài.
+        Có thể dùng convolution/FFT-based methods, SIMD hoặc search hierarchy để giảm cost.
+        Nhưng optimization không thay đổi mental model: local pattern được so với received data theo nhiều hypotheses.
+      </p>
     </section>
 
     <section class="concept-block recap">
-      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
-      <h2>Correlation biến pattern matching thành một curve theo candidate delay.</h2>
+      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Dot product:</strong> đo mức similarity giữa hai vectors.</li>
-        <li><strong>Sliding correlation:</strong> thử reference ở nhiều candidate timing offsets.</li>
-        <li><strong>Peak:</strong> vị trí alignment có score lớn nhất, nhưng cần detection logic phù hợp.</li>
-        <li><strong>Complex correlation:</strong> dùng conjugate của reference.</li>
-        <li><strong>Autocorrelation:</strong> sequence so với chính nó theo shift.</li>
-        <li><strong>Matched filter:</strong> cách implement/nhìn tương đương với correlation theo assumptions phù hợp.</li>
+        <li><strong>Dot product:</strong> là hạt nhân của similarity metric.</li>
+        <li><strong>Sliding correlation:</strong> tạo một metric cho mỗi candidate timing lag.</li>
+        <li><strong>Normalization:</strong> giúp tách “giống nhau” khỏi đơn thuần “amplitude lớn”.</li>
+        <li><strong>Complex correlation:</strong> dùng conjugate reference.</li>
+        <li><strong>Autocorrelation:</strong> cho biết sequence phản ứng thế nào với chính nó khi bị shift.</li>
+        <li><strong>Cross-correlation:</strong> cho biết hai sequence candidates giống nhau tới mức nào.</li>
+        <li><strong>Matched filter:</strong> cách nhìn filtering của cùng bài toán pattern matching.</li>
+        <li><strong>CFO:</strong> làm coherent accumulation suy giảm nếu không được search/bù phù hợp.</li>
       </ol>
     </section>
 
@@ -151,12 +243,12 @@ import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
       <a class="lesson-nav-card previous" href="/hoc/multipath-delay-spread/">
         <span>← BÀI TRƯỚC</span>
         <strong>Multipath và delay spread</strong>
-        <small>Channel biến signal thành nhiều delayed copies như thế nào?</small>
+        <small>Channel trở thành filter có memory như thế nào?</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/ofdm-buc-tranh-tong-the/">
         <span>BÀI TIẾP THEO →</span>
         <strong>OFDM: bức tranh tổng thể</strong>
-        <small>Vì sao chia bandwidth thành nhiều subcarriers lại hữu ích?</small>
+        <small>Vì sao chia wideband signal thành nhiều subcarriers?</small>
       </a>
     </nav>
   </article>
