@@ -4930,3 +4930,1028 @@ g.active .mod-point {
     grid-column: 1 / -1;
   }
 }
+
+
+/* --- Lessons 09-12: RF chain, wireless channel, noise/EVM, multipath --- */
+.rf-chain-overview,
+.dac-story,
+.frequency-translation,
+.antenna-story,
+.receiver-chain,
+.phase-distance-story,
+.fading-story,
+.measurement-chain,
+.copy-sum-story,
+.isi-story,
+.delay-frequency-duality {
+  margin: 30px 0;
+  display: grid;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.rf-chain-overview,
+.dac-story,
+.antenna-story,
+.phase-distance-story,
+.fading-story,
+.measurement-chain,
+.copy-sum-story {
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+}
+
+.frequency-translation,
+.isi-story,
+.delay-frequency-duality {
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.receiver-chain {
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+}
+
+.rf-chain-overview > div,
+.dac-story > div,
+.frequency-translation > div,
+.antenna-story > div,
+.receiver-chain > div,
+.phase-distance-story > div,
+.fading-story > div,
+.measurement-chain > div,
+.copy-sum-story > div,
+.isi-story > div,
+.delay-frequency-duality > div {
+  min-width: 0;
+  min-height: 122px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-chain-overview > b,
+.dac-story > b,
+.frequency-translation > b,
+.antenna-story > b,
+.receiver-chain > b,
+.phase-distance-story > b,
+.fading-story > b,
+.measurement-chain > b,
+.copy-sum-story > b,
+.isi-story > b,
+.delay-frequency-duality > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-size: .8rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.rf-chain-overview small,
+.antenna-story small,
+.phase-distance-story small,
+.fading-story small,
+.measurement-chain small,
+.copy-sum-story small,
+.delay-frequency-duality small {
+  color: var(--accent);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.rf-chain-overview strong,
+.dac-story strong,
+.frequency-translation strong,
+.antenna-story strong,
+.receiver-chain strong,
+.phase-distance-story strong,
+.fading-story strong,
+.measurement-chain strong,
+.copy-sum-story strong,
+.isi-story strong,
+.delay-frequency-duality strong {
+  margin: 6px 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+}
+
+.rf-chain-overview span,
+.dac-story p,
+.frequency-translation p,
+.antenna-story span,
+.receiver-chain span,
+.phase-distance-story span,
+.fading-story span,
+.measurement-chain span,
+.copy-sum-story span,
+.isi-story p,
+.delay-frequency-duality span {
+  margin: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.rf-main-equation,
+.channel-main-equation,
+.propagation-equation,
+.delay-phase-equation,
+.thermal-equation,
+.evm-equation,
+.snr-evm-relation,
+.multipath-equation,
+.rms-delay-equation {
+  max-width: 820px;
+  margin: 26px 0;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.rf-main-equation span,
+.rf-main-equation b,
+.channel-main-equation span,
+.channel-main-equation b,
+.propagation-equation span,
+.propagation-equation b,
+.delay-phase-equation span,
+.delay-phase-equation b,
+.thermal-equation span,
+.thermal-equation b,
+.evm-equation span,
+.evm-equation b,
+.snr-evm-relation span,
+.snr-evm-relation b,
+.multipath-equation span,
+.multipath-equation b,
+.rms-delay-equation span,
+.rms-delay-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+}
+
+.rf-main-equation b,
+.channel-main-equation b,
+.propagation-equation b,
+.delay-phase-equation b,
+.thermal-equation b,
+.evm-equation b,
+.snr-evm-relation b,
+.multipath-equation b,
+.rms-delay-equation b {
+  color: var(--accent);
+}
+
+.propagation-equation small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.rf-front-end-grid,
+.channel-parameter-grid,
+.impairment-grid,
+.multipath-tap-grid,
+.delay-metric-grid {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.rf-front-end-grid article,
+.channel-parameter-grid article,
+.impairment-grid article,
+.multipath-tap-grid article,
+.delay-metric-grid article {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-front-end-grid h3,
+.channel-parameter-grid h3,
+.impairment-grid h3,
+.multipath-tap-grid h3,
+.delay-metric-grid h3 {
+  margin: 13px 0 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+}
+
+.rf-front-end-grid p,
+.channel-parameter-grid p,
+.impairment-grid p,
+.multipath-tap-grid p,
+.delay-metric-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.rf-chain-lab,
+.wireless-channel-lab,
+.noise-evm-lab,
+.multipath-lab {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+}
+
+.rf-chain-controls,
+.channel-controls,
+.noise-controls,
+.multipath-controls {
+  padding: 18px;
+  display: grid;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.rf-chain-controls,
+.channel-controls,
+.multipath-controls {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.noise-controls {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.rf-chain-controls label,
+.channel-controls label,
+.noise-controls label,
+.multipath-controls label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.rf-chain-controls label > span,
+.channel-controls label > span,
+.noise-controls label > span,
+.multipath-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.rf-chain-controls strong,
+.channel-controls strong,
+.noise-controls strong,
+.multipath-controls strong {
+  color: var(--ink);
+}
+
+.rf-chain-readout,
+.channel-readout,
+.noise-readout,
+.multipath-readout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.rf-chain-readout > div,
+.channel-readout > div,
+.noise-readout > div,
+.multipath-readout > div {
+  min-height: 100px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.rf-chain-readout > div:last-child,
+.channel-readout > div:last-child,
+.noise-readout > div:last-child,
+.multipath-readout > div:last-child {
+  border-right: 0;
+}
+
+.rf-chain-readout small,
+.channel-readout small,
+.noise-readout small,
+.multipath-readout small {
+  color: var(--muted);
+  font-size: .6rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.rf-chain-readout strong,
+.channel-readout strong,
+.noise-readout strong,
+.multipath-readout strong {
+  margin: 5px 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.16rem;
+}
+
+.rf-chain-readout span,
+.channel-readout span,
+.noise-readout span,
+.multipath-readout span {
+  color: var(--muted);
+  font-size: .74rem;
+}
+
+.rf-chain-grid,
+.channel-lab-grid,
+.multipath-grid {
+  display: grid;
+  align-items: stretch;
+}
+
+.rf-chain-grid {
+  grid-template-columns: .72fr 1.28fr;
+}
+
+.channel-lab-grid,
+.multipath-grid {
+  grid-template-columns: 1fr 1.25fr;
+}
+
+.rf-symbol-plane,
+.rf-mixer-panel,
+.channel-wave-panel,
+.channel-plane-panel,
+.impulse-response-panel,
+.multipath-wave-panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.rf-symbol-plane,
+.channel-wave-panel,
+.impulse-response-panel {
+  border-right: 1px solid var(--line);
+}
+
+.rf-symbol-plane svg,
+.rf-wave-stack svg,
+.channel-wave-panel svg,
+.channel-plane-panel svg,
+.impulse-response-panel svg,
+.multipath-wave-panel svg {
+  width: 100%;
+  display: block;
+}
+
+.rfc-axis,
+.channel-axis,
+.noise-axis,
+.mp-axis,
+.evm-axis,
+.pdp-axis {
+  stroke: #cfc9c0;
+  stroke-width: 1;
+}
+
+.rfc-guide {
+  fill: none;
+  stroke: #ddd7cf;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.rfc-proj {
+  stroke: var(--violet);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 5;
+}
+
+.rfc-vector {
+  stroke: var(--blue);
+  stroke-width: 3;
+}
+
+.rfc-dot {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.rfc-label,
+.channel-label,
+.noise-label,
+.mp-label,
+.evm-label,
+.pdp-label {
+  fill: #827c74;
+  font-size: 11px;
+}
+
+.rf-wave-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.rf-wave-stack article {
+  padding: 10px 12px 6px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.rf-wave-stack article > small {
+  color: var(--muted);
+  font-size: .65rem;
+  font-weight: 800;
+}
+
+.rfc-wave,
+.channel-input-wave,
+.channel-output-wave,
+.mp-direct-wave,
+.mp-echo-wave,
+.mp-sum-wave {
+  fill: none;
+  stroke-width: 2.1;
+}
+
+.i-wave,
+.channel-input-wave,
+.mp-direct-wave {
+  stroke: var(--blue);
+}
+
+.q-wave,
+.channel-output-wave,
+.mp-echo-wave {
+  stroke: var(--violet);
+}
+
+.rf-wave,
+.mp-sum-wave {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.rf-sum {
+  background: var(--accent-soft) !important;
+}
+
+.path-loss-story {
+  position: relative;
+  min-height: 270px;
+  margin: 30px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.path-loss-source {
+  position: absolute;
+  left: 9%;
+  top: 105px;
+  z-index: 3;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--accent);
+  text-align: center;
+}
+
+.path-loss-source strong,
+.path-loss-source span {
+  display: block;
+}
+
+.path-loss-source span {
+  font-size: .58rem;
+  opacity: .8;
+}
+
+.path-loss-rings {
+  position: absolute;
+  left: 7%;
+  top: 25px;
+  width: 700px;
+  height: 220px;
+}
+
+.path-loss-rings i {
+  position: absolute;
+  left: 35px;
+  top: 110px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(36,95,133,.28);
+  border-radius: 50%;
+}
+
+.path-loss-rings i:nth-child(1) { width: 150px; height: 150px; }
+.path-loss-rings i:nth-child(2) { width: 270px; height: 210px; }
+.path-loss-rings i:nth-child(3) { width: 420px; height: 260px; }
+.path-loss-rings i:nth-child(4) { width: 590px; height: 320px; }
+
+.path-loss-receivers span {
+  position: absolute;
+  z-index: 3;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: .76rem;
+}
+
+.near-rx { left: 42%; top: 92px; }
+.far-rx { right: 8%; top: 155px; }
+
+.shadowing-cases,
+.channel-model-compare,
+.snr-equations,
+.constellation-noise-story,
+.interference-cases {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.shadowing-cases article,
+.channel-model-compare article,
+.snr-equations > div,
+.constellation-noise-story > div,
+.interference-cases article {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.shadowing-cases h3,
+.channel-model-compare h3,
+.interference-cases h3 {
+  margin: 13px 0 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+}
+
+.shadowing-cases p,
+.channel-model-compare p,
+.interference-cases p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.channel-tx-vector {
+  stroke: var(--blue);
+  stroke-width: 2.5;
+}
+
+.channel-rx-vector {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.channel-tx-dot {
+  fill: var(--blue);
+}
+
+.channel-rx-dot {
+  fill: var(--accent);
+}
+
+.channel-legend,
+.mp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.channel-legend i,
+.mp-legend i {
+  width: 18px;
+  height: 3px;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.channel-input-key,
+.channel-tx-key,
+.mp-direct-key { background: var(--blue); }
+.channel-output-key,
+.mp-echo-key { background: var(--violet); }
+.channel-rx-key,
+.mp-sum-key { background: var(--accent); }
+
+.thermal-symbols {
+  max-width: 700px;
+  margin: 22px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+}
+
+.thermal-symbols > div {
+  min-height: 90px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.thermal-symbols > div:last-child {
+  border-right: 0;
+}
+
+.thermal-symbols strong {
+  color: var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.28rem;
+}
+
+.thermal-symbols span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.constellation-noise-story {
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.constellation-noise-story > b {
+  color: var(--violet);
+  font-size: .8rem;
+}
+
+.mini-cloud {
+  position: relative;
+  height: 135px;
+  margin: 12px 0 8px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(90,90,90,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90,90,90,.04) 1px, transparent 1px),
+    #fcfcfb;
+  background-size: 28px 28px;
+}
+
+.mini-cloud b,
+.mini-cloud i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mini-cloud b {
+  width: 13px;
+  height: 13px;
+  background: var(--blue);
+}
+
+.mini-cloud i {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  opacity: .72;
+}
+
+.mini-cloud.tight i:nth-child(1) { transform: translate(-12px,-8px); }
+.mini-cloud.tight i:nth-child(2) { transform: translate(5px,-10px); }
+.mini-cloud.tight i:nth-child(3) { transform: translate(8px,4px); }
+.mini-cloud.tight i:nth-child(4) { transform: translate(-9px,7px); }
+.mini-cloud.tight i:nth-child(5) { transform: translate(1px,1px); }
+.mini-cloud.wide i:nth-child(1) { transform: translate(-39px,-28px); }
+.mini-cloud.wide i:nth-child(2) { transform: translate(31px,-22px); }
+.mini-cloud.wide i:nth-child(3) { transform: translate(42px,19px); }
+.mini-cloud.wide i:nth-child(4) { transform: translate(-33px,34px); }
+.mini-cloud.wide i:nth-child(5) { transform: translate(5px,42px); }
+
+.evm-geometry,
+.pdp-visual {
+  margin: 30px 0 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.evm-geometry svg,
+.pdp-visual svg,
+.noise-constellation-wrap svg {
+  width: 100%;
+  display: block;
+}
+
+.evm-reference-vector {
+  stroke: var(--blue);
+  stroke-width: 2.5;
+}
+
+.evm-measured-vector {
+  stroke: var(--violet);
+  stroke-width: 2.5;
+}
+
+.evm-error-vector {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.evm-ref-dot { fill: var(--blue); }
+.evm-meas-dot { fill: var(--violet); }
+.evm-label.accent { fill: var(--accent); font-weight: 700; }
+
+.noise-constellation-wrap {
+  padding: 18px;
+}
+
+.noise-constellation-wrap svg {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.noise-ideal-point {
+  fill: var(--blue);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.noise-rx-point {
+  fill: var(--accent);
+  opacity: .55;
+}
+
+.noise-lab-note {
+  margin: 0;
+  padding: 0 20px 20px;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.55;
+}
+
+.multipath-scene {
+  position: relative;
+  min-height: 320px;
+  margin: 30px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.multipath-scene svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mp-scene-tx,
+.mp-scene-rx {
+  position: absolute;
+  z-index: 3;
+  top: 175px;
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 800;
+}
+
+.mp-scene-tx { left: 6%; background: var(--accent); }
+.mp-scene-rx { right: 6%; background: var(--blue); }
+
+.mp-scene-wall {
+  position: absolute;
+  z-index: 2;
+  left: 43%;
+  top: 42px;
+  width: 130px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+.mp-scene-path {
+  fill: none;
+  stroke-width: 2;
+}
+
+.mp-scene-path.direct { stroke: var(--blue); }
+.mp-scene-path.reflected { stroke: var(--violet); stroke-dasharray: 7 5; }
+.mp-scene-path.scattered { stroke: var(--accent); stroke-dasharray: 3 5; }
+
+.mp-scene-label {
+  position: absolute;
+  z-index: 4;
+  padding: 4px 7px;
+  background: rgba(255,255,255,.9);
+  color: var(--muted);
+  font-size: .7rem;
+}
+
+.direct-label { left: 44%; top: 180px; }
+.reflect-label { left: 38%; top: 76px; }
+.scatter-label { left: 39%; bottom: 24px; }
+
+.convolution-equation {
+  max-width: 920px;
+  margin: 26px 0;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto auto auto auto 1fr;
+  align-items: baseline;
+  gap: 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.convolution-equation span,
+.convolution-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 2.2vw, 1.48rem);
+}
+
+.convolution-equation b {
+  color: var(--accent);
+}
+
+.interference-cases {
+  align-items: stretch;
+}
+
+.phasor-pair {
+  position: relative;
+  height: 100px;
+  margin: 10px 0;
+}
+
+.phasor-pair::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+}
+
+.phasor-pair i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 75px;
+  height: 2px;
+  transform-origin: left center;
+}
+
+.phasor-pair.same i:first-child { background: var(--blue); transform: rotate(-18deg); }
+.phasor-pair.same i:last-child { background: var(--violet); transform: rotate(12deg); }
+.phasor-pair.opposite i:first-child { background: var(--blue); transform: rotate(-15deg); }
+.phasor-pair.opposite i:last-child { background: var(--violet); transform: rotate(165deg); }
+
+.pdp-stem,
+.mp-tap {
+  stroke-width: 2.5;
+}
+
+.pdp-stem { stroke: var(--violet); }
+.pdp-stem.strongest { stroke: var(--blue); }
+.pdp-dot { fill: var(--violet); }
+.pdp-dot.strongest { fill: var(--blue); }
+
+.mp-tap.direct-tap { stroke: var(--blue); }
+.mp-tap.echo-tap { stroke: var(--violet); }
+.mp-dot.direct-dot { fill: var(--blue); }
+.mp-dot.echo-dot { fill: var(--violet); }
+
+@media (max-width: 900px) {
+  .rf-chain-grid,
+  .channel-lab-grid,
+  .multipath-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-symbol-plane,
+  .channel-wave-panel,
+  .impulse-response-panel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .receiver-chain {
+    grid-template-columns: 1fr;
+  }
+
+  .receiver-chain > b {
+    min-height: 20px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .rf-chain-overview,
+  .dac-story,
+  .frequency-translation,
+  .antenna-story,
+  .phase-distance-story,
+  .fading-story,
+  .measurement-chain,
+  .copy-sum-story,
+  .isi-story,
+  .delay-frequency-duality,
+  .constellation-noise-story {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-chain-overview > b,
+  .dac-story > b,
+  .frequency-translation > b,
+  .antenna-story > b,
+  .phase-distance-story > b,
+  .fading-story > b,
+  .measurement-chain > b,
+  .copy-sum-story > b,
+  .isi-story > b,
+  .delay-frequency-duality > b,
+  .constellation-noise-story > b {
+    min-height: 20px;
+    transform: rotate(90deg);
+  }
+
+  .rf-front-end-grid,
+  .channel-parameter-grid,
+  .impairment-grid,
+  .multipath-tap-grid,
+  .delay-metric-grid,
+  .shadowing-cases,
+  .channel-model-compare,
+  .snr-equations,
+  .interference-cases,
+  .rf-chain-controls,
+  .channel-controls,
+  .noise-controls,
+  .multipath-controls,
+  .rf-chain-readout,
+  .channel-readout,
+  .noise-readout,
+  .multipath-readout,
+  .thermal-symbols {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-chain-readout > div,
+  .channel-readout > div,
+  .noise-readout > div,
+  .multipath-readout > div,
+  .thermal-symbols > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rf-chain-readout > div:last-child,
+  .channel-readout > div:last-child,
+  .noise-readout > div:last-child,
+  .multipath-readout > div:last-child,
+  .thermal-symbols > div:last-child {
+    border-bottom: 0;
+  }
+
+  .convolution-equation {
+    grid-template-columns: 1fr;
+  }
+
+  .convolution-equation b {
+    justify-self: start;
+  }
+
+  .path-loss-rings {
+    left: -28%;
+  }
+
+  .near-rx { left: 48%; }
+  .far-rx { right: 3%; }
+}
