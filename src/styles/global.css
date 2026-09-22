@@ -3256,3 +3256,510 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     grid-template-columns: 54px 1fr;
   }
 }
+
+
+/* --- Lesson 04: Complex numbers and phasors --- */
+.complex-plane-intro {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: 14px;
+}
+
+.complex-plane-intro article {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.complex-plane-intro article > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.complex-plane-intro svg {
+  width: 100%;
+  display: block;
+  margin-top: 8px;
+}
+
+.real-number-line {
+  position: relative;
+  min-height: 170px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.real-number-line::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 50%;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.real-number-line span,
+.real-number-line b {
+  position: relative;
+  z-index: 1;
+  padding-top: 32px;
+  font-size: .78rem;
+}
+
+.real-number-line span::before,
+.real-number-line b::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  width: 1px;
+  height: 10px;
+  background: var(--line-strong);
+}
+
+.real-number-line i {
+  position: absolute;
+  z-index: 2;
+  left: 68%;
+  top: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.complex-axis {
+  stroke: #cfc9c0;
+  stroke-width: 1;
+}
+
+.complex-vector {
+  stroke: var(--blue);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.complex-projection {
+  stroke: var(--violet);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 5;
+  opacity: .72;
+}
+
+.complex-tip {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.complex-label {
+  fill: #827c74;
+  font-size: 12px;
+}
+
+.complex-label.strong {
+  fill: var(--accent);
+  font-weight: 800;
+}
+
+.complex-equation {
+  max-width: 420px;
+  margin: 24px 0;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: baseline;
+  gap: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.complex-equation span,
+.complex-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.complex-equation b {
+  color: var(--accent);
+}
+
+.complex-two-views {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.complex-two-views article {
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.complex-two-views h3 {
+  margin: 14px 0 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.75rem;
+}
+
+.complex-two-views p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.complex-mini-formula {
+  margin-top: 17px;
+  padding-top: 13px;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: .8rem;
+}
+
+.euler-equation,
+.rotating-equation {
+  max-width: 670px;
+  margin: 28px 0;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.euler-equation.secondary {
+  margin-top: -14px;
+  background: #fff;
+}
+
+.euler-equation span,
+.euler-equation b,
+.rotating-equation span,
+.rotating-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+}
+
+.euler-equation b,
+.rotating-equation b {
+  color: var(--accent);
+}
+
+.euler-geometry {
+  margin: 30px 0 8px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.euler-geometry svg {
+  width: 100%;
+  display: block;
+}
+
+.complex-guide-circle {
+  fill: none;
+  stroke: #ded8d0;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.complex-angle {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.projection-story {
+  max-width: 760px;
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.projection-story > div {
+  min-height: 145px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.projection-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-size: .8rem;
+  white-space: nowrap;
+}
+
+.projection-story small,
+.phasor-definition small,
+.complex-multiply small,
+.iq-preview small {
+  color: var(--accent);
+  font-size: .62rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.projection-story strong {
+  margin: 7px 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+}
+
+.projection-story span {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.phasor-lab {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+}
+
+.phasor-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.phasor-controls label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.phasor-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.phasor-controls strong {
+  color: var(--ink);
+}
+
+.phasor-readout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.phasor-readout > div {
+  min-height: 102px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.phasor-readout > div:last-child {
+  border-right: 0;
+}
+
+.phasor-readout small {
+  color: var(--muted);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.phasor-readout strong {
+  margin: 5px 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.22rem;
+}
+
+.phasor-readout span {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.phasor-plot {
+  padding: 18px;
+}
+
+.phasor-plot svg {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--line);
+  background: linear-gradient(rgba(90,90,90,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(90,90,90,.035) 1px, transparent 1px), #fcfcfb;
+  background-size: 30px 30px;
+}
+
+.phasor-axis {
+  stroke: #cfc9c0;
+  stroke-width: 1;
+}
+
+.phasor-guide-circle {
+  fill: none;
+  stroke: #ddd7cf;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.phasor-projection {
+  stroke: var(--violet);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 5;
+  opacity: .75;
+}
+
+.phasor-vector {
+  stroke: var(--blue);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.phasor-tip {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.phasor-angle {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.phasor-label,
+.phasor-value-label,
+.phasor-angle-label,
+.phasor-side-note {
+  fill: #827c74;
+  font-size: 11px;
+}
+
+.phasor-angle-label {
+  fill: var(--accent);
+  font-weight: 700;
+}
+
+.phasor-formula-label {
+  fill: var(--ink-soft);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+}
+
+.phasor-side-note {
+  font-size: 12px;
+}
+
+.phasor-definition,
+.complex-multiply,
+.iq-preview {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.phasor-definition > div,
+.complex-multiply > div,
+.iq-preview > div {
+  min-width: 0;
+  min-height: 135px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.phasor-definition > b,
+.complex-multiply > b,
+.iq-preview > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+}
+
+.phasor-definition strong,
+.complex-multiply strong,
+.iq-preview strong {
+  margin: 7px 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.16rem;
+}
+
+.iq-preview span {
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+@media (max-width: 900px) {
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .phasor-definition > b,
+  .complex-multiply > b,
+  .iq-preview > b {
+    min-height: 22px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .complex-plane-intro,
+  .complex-two-views,
+  .phasor-controls,
+  .phasor-readout {
+    grid-template-columns: 1fr;
+  }
+
+  .phasor-readout > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .phasor-readout > div:last-child {
+    border-bottom: 0;
+  }
+
+  .projection-story {
+    grid-template-columns: 1fr;
+  }
+
+  .projection-story > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .euler-equation,
+  .rotating-equation {
+    grid-template-columns: auto auto 1fr;
+  }
+}
