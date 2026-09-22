@@ -5,7 +5,7 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
 
 <BaseLayout
   title="IFFT và FFT trong OFDM | VietWireless"
-  description="Hiểu X[k] được IFFT/IDFT biến thành time-domain samples x[n], rồi FFT/DFT khôi phục từng subcarrier như thế nào."
+  description="Hiểu X[k] là các subcarrier coefficients, IFFT tổng hợp chúng thành time-domain samples x[n], rồi FFT project received samples trở lại từng bin."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
@@ -13,100 +13,240 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
       <p class="eyebrow">GHI CHÉP 15 · WIRELESS LINK</p>
       <h1>IFFT/FFT trong OFDM</h1>
       <p class="lesson-deck">
-        Trong resource grid ta đặt symbols theo frequency. Antenna lại cần samples theo thời gian.
-        <strong>IFFT là cầu từ các subcarrier coefficients X[k] sang một block time-domain samples x[n]; FFT làm chiều ngược lại.</strong>
+        Ở resource/frequency domain, ta muốn đặt một complex symbol lên từng subcarrier. Antenna lại cần một chuỗi samples theo thời gian.{" "}
+        <strong>IFFT đổi N complex coefficients X[k] thành N complex time samples x[n]; FFT làm phép đổi basis ngược lại.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BÀI NÀY ZOOM VÀO ĐÂU?</p>
+      <p class="concept-kicker">ĐÂY LÀ CÂY CẦU GIỮA HAI DOMAIN</p>
       <div class="system-position">
-        <span>OFDM CORE TRANSFORM</span>
-        <div class="system-position-flow"><span>X[k]</span><b>→</b><strong>IFFT</strong><b>→</b><span>x[n]</span><b>→ channel →</b><span>y[n]</span><b>→</b><strong>FFT</strong><b>→</b><span>Y[k]</span></div>
-        <p>Không có “một waveform cho từng subcarrier” chạy riêng trong code. IFFT cộng tất cả complex exponentials một lần cho cả block.</p>
+        <span>ONE OFDM SYMBOL</span>
+        <div class="system-position-flow">
+          <strong>X[0…N-1]</strong><b>→ IFFT →</b>
+          <span>x[0…N-1]</span><b>→ channel →</b>
+          <span>y[0…N-1]</span><b>→ FFT →</b>
+          <strong>Y[0…N-1]</strong>
+        </div>
+        <p>
+          X[k] và x[n] không phải hai bộ data khác nhau.
+          Chúng là hai cách biểu diễn của cùng một OFDM block trên hai basis khác nhau.
+        </p>
       </div>
     </section>
 
     <section class="concept-block" id="idft">
-      <p class="concept-kicker">01 · IDFT LÀ PHÉP TỔNG CÁC SUBCARRIERS</p>
-      <h2>Mỗi X[k] scale và rotate một complex exponential; x[n] là tổng của tất cả chúng.</h2>
+      <p class="concept-kicker">01 · IFFT ĐANG CỘNG CÁC SUBCARRIERS NHƯ THẾ NÀO?</p>
+      <h2>Mỗi X[k] là amplitude/phase của một complex exponential có frequency index k.</h2>
+
       <div class="ifft-main-equation">
-        <span>x[n]</span><b>=</b><span>(1/N) Σ<sub>k=0</sub><sup>N-1</sup> X[k]e<sup>j2πkn/N</sup></span>
+        <span>x[n]</span>
+        <b>=</b>
+        <span>(1/N) Σ<sub>k=0</sub><sup>N-1</sup> X[k]e<sup>j2πkn/N</sup></span>
       </div>
+
       <p>
-        Đây là một normalization convention phổ biến cho IDFT. Library FFT có thể đặt factor 1/N ở forward, inverse hoặc chia giữa hai phía.
-        Geometry không đổi miễn transmitter/receiver nhất quán.
+        Nhìn từng term:
+        X[k] quyết định complex amplitude của subcarrier k.
+        e<sup>j2πkn/N</sup> là basis waveform của subcarrier đó tại sample n.
+        IFFT lấy tất cả các basis waveforms, scale chúng bằng X[k], rồi cộng lại.
+      </p>
+
+      <p>
+        Vì vậy một sample x[n] thường không “thuộc” riêng subcarrier nào.
+        Nó là tổng tức thời của tất cả active subcarriers.
+        Đây cũng là lý do OFDM time waveform có thể nhìn khá irregular dù frequency-domain grid rất có cấu trúc.
       </p>
     </section>
 
-    <section class="concept-block" id="meaning">
-      <p class="concept-kicker">02 · X[k] VÀ x[n] LÀ CÙNG MỘT BLOCK DỮ LIỆU Ở HAI BASIS</p>
-      <div class="ifft-two-domains">
-        <article><span class="card-label">FREQUENCY DOMAIN</span><h3>X[k]</h3><p>Mỗi index k gắn với một orthogonal subcarrier basis.</p></article>
-        <article><span class="card-label">TIME DOMAIN</span><h3>x[n]</h3><p>Mỗi index n là một complex sample của summed OFDM waveform.</p></article>
+    <section class="concept-block" id="simple-example">
+      <p class="concept-kicker">02 · MỘT VÍ DỤ N=4 ĐỂ THẤY IFFT KHÔNG HỀ BÍ ẨN</p>
+      <h2>Nếu chỉ bật một bin, time-domain samples chính là các điểm của một complex sinusoid.</h2>
+
+      <p>
+        Chọn N=4 và chỉ có X[1]=1, các bins khác bằng 0.
+        Khi đó:
+      </p>
+
+      <div class="ifft-main-equation">
+        <span>x[n]</span>
+        <b>=</b>
+        <span>(1/4)e<sup>j2πn/4</sup></span>
       </div>
-      <p>N complex bins ↔ N complex samples. Transform không tạo thêm symbols; nó đổi representation.</p>
+
+      <p>
+        Bốn samples lần lượt là:
+        0.25,
+        j0.25,
+        -0.25,
+        -j0.25.
+        Trên complex plane, vector quay 90° sau mỗi sample.
+        Đó chính là subcarrier k=1.
+      </p>
+
+      <p>
+        Nếu bật thêm X[0]=1, ta chỉ cộng thêm một DC complex value 0.25 vào mọi x[n].
+        Nếu bật hàng trăm bins, IFFT vẫn chỉ làm cùng một việc: cộng rất nhiều complex sinusoids theo coefficients đã chọn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="two-views">
+      <p class="concept-kicker">03 · X[k] VÀ x[n] GIỮ CÙNG SỐ BẬC TỰ DO</p>
+
+      <div class="ifft-two-domains">
+        <article>
+          <span class="card-label">FREQUENCY DOMAIN</span>
+          <h3>X[k]</h3>
+          <p>
+            Index k chọn basis/subcarrier.
+            Complex value tại đó mang amplitude và phase của coefficient trên basis đó.
+          </p>
+        </article>
+
+        <article>
+          <span class="card-label">TIME DOMAIN</span>
+          <h3>x[n]</h3>
+          <p>
+            Index n chọn sample position trong useful OFDM symbol.
+            Mỗi x[n] là tổng của toàn bộ active subcarriers tại thời điểm đó.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        N bins biến thành N samples.
+        Transform không tạo thêm information, cũng không làm mất information trong ideal arithmetic.
+        Nó chỉ thay coordinate system.
+      </p>
     </section>
 
     <section class="concept-block lab-section" id="ifft-lab">
-      <p class="concept-kicker">03 · INTERACTIVE LAB</p>
-      <h2>Bật/tắt các bins, đổi QPSK symbols rồi xem IFFT tạo samples và FFT khôi phục chúng.</h2>
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Bật/tắt từng bin, thay QPSK value, rồi nhìn IFFT tạo x[n] và FFT khôi phục Y[k].</h2>
+      <p>
+        Hãy thử chỉ bật một bin trước.
+        Sau đó bật hai, ba và nhiều bins để thấy time samples phức tạp dần.
+        Dù waveform nhìn “rối”, FFT vẫn trả đúng các coefficients ban đầu trong ideal numerical model.
+      </p>
       <IFFTFFTExplorer client:load />
     </section>
 
-    <section class="concept-block" id="orthogonal-basis">
-      <p class="concept-kicker">04 · VÌ SAO FFT TÁCH LẠI ĐƯỢC?</p>
-      <h2>DFT basis vectors trực giao trên N sample positions.</h2>
-      <p>
-        Mỗi FFT bin thực hiện một complex inner product với basis e<sup>-j2πkn/N</sup>.
-        Components thuộc bin khác cancel trong ideal block; component đúng bin cộng coherent.
-      </p>
+    <section class="concept-block" id="fft">
+      <p class="concept-kicker">05 · FFT Ở RECEIVER LÀ PHÉP PROJECT NGƯỢC</p>
+      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis e<sup>j2πkn/N</sup>.</h2>
+
       <div class="ifft-main-equation">
-        <span>Y[k]</span><b>=</b><span>Σ<sub>n=0</sub><sup>N-1</sup> y[n]e<sup>-j2πkn/N</sup></span>
+        <span>Y[k]</span>
+        <b>=</b>
+        <span>Σ<sub>n=0</sub><sup>N-1</sup> y[n]e<sup>-j2πkn/N</sup></span>
       </div>
+
+      <p>
+        Nếu y[n]=x[n] và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
+        nên Y[k] quay lại đúng X[k], tùy normalization convention.
+      </p>
+
+      <p>
+        Đây chính là DFT đã học ở Bài 07.
+        Trong OFDM, DFT không còn chỉ là một tool “xem spectrum”; các DFT bins được dùng có chủ đích như communication subcarriers.
+      </p>
     </section>
 
-    <section class="concept-block" id="bin-mapping">
-      <p class="concept-kicker">05 · FFT INDEX KHÔNG TỰ ĐỘNG ĐỒNG NGHĨA “TẦN SỐ TỪ THẤP TỚI CAO”</p>
-      <h2>Array indexing và centered spectrum view là hai conventions khác nhau.</h2>
+    <section class="concept-block" id="bin-order">
+      <p class="concept-kicker">06 · LOGICAL SUBCARRIER INDEX VÀ FFT ARRAY INDEX KHÔNG LUÔN GIỐNG CÁCH TA VẼ</p>
+      <h2>DC thường ở raw index 0; negative-frequency bins nằm ở cuối array trong convention phổ biến.</h2>
+
       <p>
-        Với complex DFT, bins 0…N-1 thường được lưu theo library order: DC ở k=0, positive-frequency bins tiếp theo,
-        rồi negative-frequency bins nằm ở phần cuối array. Hàm kiểu fftshift chỉ đổi cách sắp xếp để dễ nhìn quanh 0 Hz; nó không thay transform.
+        Khi vẽ spectrum, ta hay dùng fftshift để đưa negative frequencies sang trái, DC vào giữa và positive frequencies sang phải.
+        Nhưng FFT library thường trả array theo raw order:
+        k=0 trước, rồi positive bins, rồi negative bins wrap ở cuối.
       </p>
+
       <aside class="precision-note">
-        <strong>OFDM implementation phải map logical subcarriers vào IFFT bins đúng convention</strong>
-        <p>DC/null carriers, guard carriers và occupied subcarriers phụ thuộc waveform/configuration. Không nên lấy “grid index” rồi giả sử nó luôn bằng raw FFT-array index.</p>
+        <strong>fftshift chỉ đổi thứ tự hiển thị</strong>
+        <p>
+          Nó không biến đổi signal lần nữa.
+          Trong OFDM implementation, logical subcarriers, DC null, guard carriers và raw IFFT-bin indexes phải được map đúng theo convention của codebase.
+        </p>
       </aside>
     </section>
 
+    <section class="concept-block" id="normalization">
+      <p class="concept-kicker">07 · NORMALIZATION KHÁC NHAU GIỮA CÁC FFT LIBRARY</p>
+      <h2>Có library chia 1/N ở IFFT, có library không chia tự động.</h2>
+
+      <p>
+        Mathematical DFT/IDFT cần một total scale factor để round trip quay lại đúng amplitude.
+        Nhưng scale factor có thể được đặt ở forward transform, inverse transform hoặc chia đều.
+        Vì vậy khi so MATLAB, NumPy, C library, FPGA IP hoặc fixed-point implementation,
+        cần kiểm tra normalization thay vì chỉ nhìn waveform amplitude rồi kết luận có bug.
+      </p>
+
+      <p>
+        Với fixed-point PHY, scaling còn liên quan overflow/headroom.
+        Nhiều subcarriers có thể cộng thành peak lớn, nên implementation có thể stage-scale hoặc block-scale FFT để giữ dynamic range.
+      </p>
+    </section>
+
     <section class="concept-block" id="channel">
-      <p class="concept-kicker">06 · CHANNEL NẰM GIỮA IFFT VÀ FFT</p>
-      <h2>Nếu time-domain channel convolution trở thành circular convolution trên useful block, FFT diagonalizes nó.</h2>
+      <p class="concept-kicker">08 · TẠI SAO FFT LẠI LÀM CHANNEL EQUALIZATION GỌN?</p>
+      <h2>Khi useful block thấy circular convolution, DFT biến channel filter thành multiplication từng bin.</h2>
+
       <div class="ifft-channel-flow">
-        <div><small>TX</small><strong>X[k]</strong></div><b>→ IFFT →</b>
-        <div><small>TIME</small><strong>x[n]</strong></div><b>→ h[n] →</b>
-        <div><small>RX TIME</small><strong>y[n]</strong></div><b>→ FFT →</b>
-        <div><small>RX FREQ</small><strong>Y[k]=H[k]X[k]</strong></div>
+        <div><small>TX FREQ</small><strong>X[k]</strong></div>
+        <b>→ IFFT →</b>
+        <div><small>TX TIME</small><strong>x[n]</strong></div>
+        <b>→ h[n] →</b>
+        <div><small>RX TIME</small><strong>y[n]</strong></div>
+        <b>→ FFT →</b>
+        <div><small>RX FREQ</small><strong>Y[k]=H[k]X[k]+W[k]</strong></div>
       </div>
-      <p>Cyclic Prefix ở Bài 16 là mảnh còn thiếu để linear convolution qua multipath channel có thể được xử lý như circular convolution trên FFT window.</p>
+
+      <p>
+        Nhưng physical multipath channel thực hiện linear convolution, không tự nhiên là circular convolution.
+        Cyclic Prefix ở Bài 16 chính là thủ thuật làm useful FFT window có cấu trúc cần thiết dưới điều kiện channel memory phù hợp.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cp-not-inside">
+      <p class="concept-kicker">09 · CP KHÔNG PHẢI MỘT PHẦN CỦA N-POINT IFFT DATA</p>
+      <h2>IFFT tạo N useful samples trước; CP được copy từ tail và prepend sau đó.</h2>
+
+      <p>
+        Receiver cũng làm chiều ngược lại:
+        xác định symbol timing,
+        bỏ N<sub>CP</sub> samples,
+        lấy đúng N useful samples,
+        rồi mới chạy N-point FFT.
+        Nếu đưa CP vào FFT window như data thông thường, orthogonal basis assumption không còn đúng như thiết kế.
+      </p>
     </section>
 
     <section class="concept-block recap">
-      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
-      <h2>IFFT và FFT không “modulate rồi demodulate” theo nghĩa bí ẩn; chúng đổi basis giữa bins và samples.</h2>
+      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>X[k]:</strong> complex coefficients trên orthogonal frequency basis.</li>
-        <li><strong>IDFT/IFFT:</strong> cộng các subcarriers thành x[n].</li>
-        <li><strong>DFT/FFT:</strong> project received samples trở lại từng basis.</li>
-        <li><strong>Normalization:</strong> phụ thuộc convention/library.</li>
-        <li><strong>Bin mapping:</strong> logical subcarrier mapping phải phân biệt với raw array order.</li>
-        <li><strong>Channel diagonalization:</strong> cần circular-convolution condition, dẫn tới Cyclic Prefix.</li>
+        <li><strong>X[k]:</strong> coefficients trên các orthogonal frequency bases.</li>
+        <li><strong>IFFT:</strong> scale và cộng các basis để tạo time samples x[n].</li>
+        <li><strong>x[n]:</strong> mỗi sample là tổng của tất cả active subcarriers.</li>
+        <li><strong>FFT:</strong> project received samples trở lại từng basis.</li>
+        <li><strong>Array order:</strong> phải phân biệt logical frequency view với raw FFT-bin order.</li>
+        <li><strong>Normalization:</strong> phụ thuộc library/implementation và ảnh hưởng amplitude scaling.</li>
+        <li><strong>Fixed point:</strong> cần quản lý dynamic range vì OFDM peaks có thể lớn.</li>
+        <li><strong>Channel:</strong> FFT cho per-bin model khi circular-convolution condition được thỏa.</li>
       </ol>
     </section>
 
-    <nav class="lesson-navigation">
-      <a class="lesson-nav-card previous" href="/hoc/ofdm-buc-tranh-tong-the/"><span>← BÀI TRƯỚC</span><strong>OFDM: bức tranh tổng thể</strong><small>Vì sao dùng nhiều orthogonal subcarriers?</small></a>
-      <a class="lesson-nav-card next" href="/hoc/cyclic-prefix/"><span>BÀI TIẾP THEO →</span><strong>Cyclic Prefix</strong><small>CP bảo vệ FFT block khỏi multipath như thế nào?</small></a>
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/ofdm-buc-tranh-tong-the/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>OFDM: bức tranh tổng thể</strong>
+        <small>Vì sao cần nhiều orthogonal subcarriers?</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/cyclic-prefix/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Cyclic Prefix</strong>
+        <small>Vì sao copy tail lên đầu lại giúp xử lý multipath?</small>
+      </a>
     </nav>
   </article>
 </BaseLayout>

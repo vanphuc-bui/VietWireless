@@ -5,7 +5,7 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
 
 <BaseLayout
   title="Noise, SNR và EVM trực quan | VietWireless"
-  description="Hiểu noise, signal power, noise power, SNR, constellation scatter và EVM bằng công thức, trực giác và interactive lab."
+  description="Hiểu thermal noise, noise floor, SNR, constellation scatter và EVM bằng công thức, ví dụ số và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
@@ -13,90 +13,43 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       <p class="eyebrow">GHI CHÉP 11 · WIRELESS LINK</p>
       <h1>Noise, SNR và EVM</h1>
       <p class="lesson-deck">
-        Channel có thể làm signal yếu đi; receiver còn phải sống chung với noise và nhiều loại error khác.
-        <strong>SNR nhìn theo power, còn EVM nhìn khoảng cách giữa symbol lý tưởng và symbol thực tế trên complex plane.</strong>
+        Sau channel, receiver không chỉ nhận một bản sao bị suy hao của signal. Nó còn nhận noise và nhiều residual errors khác.{" "}
+        <strong>SNR nhìn chất lượng theo power; EVM nhìn trực tiếp sai số của complex symbols trên constellation.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="concept-kicker">TẠI SAO CẦN HAI CÁCH NHÌN?</p>
       <p class="map-intro">
-        Bài 10 tạm bỏ noise để nhìn riêng attenuation, delay và phase. Bài này thêm uncertainty/error vào receiver.
+        Giả sử receiver thấy constellation points không còn nằm đúng chỗ.
+        Một câu hỏi là: wanted signal mạnh bao nhiêu so với noise?
+        Câu hỏi khác là: measured symbol lệch reference symbol bao xa?
+        Hai câu đó dẫn tới SNR và EVM.
       </p>
+
       <div class="system-position">
-        <span>IDEAL → IMPAIRED</span>
-        <div class="system-position-flow" aria-label="Signal lý tưởng qua noise và impairment tạo received symbol">
-          <span>ideal signal</span><b>+</b>
-          <strong>noise / errors</strong><b>→</b>
-          <span>received signal</span><b>→</b>
-          <span>SNR</span><b>·</b>
-          <span>EVM</span>
+        <span>IDEAL SYMBOL → RECEIVED SYMBOL</span>
+        <div class="system-position-flow">
+          <span>X</span><b>→</b>
+          <span>channel</span><b>+</b>
+          <strong>noise / impairment</strong><b>→</b>
+          <span>Y</span><b>→</b>
+          <span>SNR + EVM</span>
         </div>
         <p>
-          SNR và EVM liên quan nhưng không đồng nghĩa. Chúng nhìn chất lượng signal từ hai góc khác nhau.
+          SNR và EVM liên quan trong một model lý tưởng chỉ có additive noise,
+          nhưng ngoài đời EVM còn có thể chứa CFO, phase noise, IQ imbalance, nonlinearity và channel-estimation error.
         </p>
       </div>
     </section>
 
     <section class="concept-block" id="noise">
-      <p class="concept-kicker">01 · NOISE LÀ GÌ?</p>
-      <h2>Noise là thành phần ngẫu nhiên không mang information mong muốn nhưng đi vào cùng receiver bandwidth.</h2>
-      <p>
-        Một nguồn nền tảng là thermal noise trong các phần tử điện tử. Receiver front-end còn có noise figure riêng,
-        và môi trường thực tế có thể thêm interference hoặc distortion không nên gộp tất cả dưới cùng một từ “noise”.
-      </p>
-
-      <div class="impairment-grid">
-        <article>
-          <span class="card-label">THERMAL / RECEIVER NOISE</span>
-          <h3>ngẫu nhiên</h3>
-          <p>Tạo một noise floor ngay cả khi không có wanted signal.</p>
-        </article>
-        <article>
-          <span class="card-label">INTERFERENCE</span>
-          <h3>signal khác</h3>
-          <p>Có structure và nguồn phát riêng; không nhất thiết là Gaussian noise.</p>
-        </article>
-        <article>
-          <span class="card-label">DISTORTION</span>
-          <h3>hardware / processing</h3>
-          <p>PA nonlinearity, IQ imbalance, phase noise hoặc residual sync error có thể làm constellation méo.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="concept-block" id="snr">
-      <p class="concept-kicker">02 · SNR LÀ TỈ SỐ POWER</p>
-      <h2>SNR hỏi wanted signal mạnh bao nhiêu so với noise trong cùng reference point và bandwidth.</h2>
-
-      <div class="snr-equations">
-        <div>
-          <span class="card-label">LINEAR</span>
-          <strong>SNR = P<sub>s</sub> / P<sub>n</sub></strong>
-        </div>
-        <div>
-          <span class="card-label">DECIBEL</span>
-          <strong>SNR<sub>dB</sub> = 10 log<sub>10</sub>(P<sub>s</sub>/P<sub>n</sub>)</strong>
-        </div>
-      </div>
+      <p class="concept-kicker">01 · NOISE FLOOR KHÔNG BIẾN MẤT KHI TA KHÔNG PHÁT DATA</p>
+      <h2>Ngay cả receiver lý tưởng cũng có thermal noise; hardware thực tế còn làm noise tăng thêm.</h2>
 
       <p>
-        10 dB nghĩa là signal power gấp 10 lần noise power. 20 dB nghĩa là gấp 100 lần.
-        Nhưng một con số SNR chỉ có ý nghĩa khi biết nó được đo ở đâu và trong bandwidth nào.
+        Một model cơ bản cho available thermal-noise power là:
       </p>
-
-      <aside class="precision-note">
-        <strong>Bandwidth thay đổi thì integrated noise power cũng thay đổi</strong>
-        <p>
-          Với noise spectral density gần phẳng, thu bandwidth rộng hơn tích lũy nhiều noise power hơn.
-          Vì vậy so SNR giữa hai hệ thống mà bỏ qua bandwidth/reference point có thể gây hiểu nhầm.
-        </p>
-      </aside>
-    </section>
-
-    <section class="concept-block" id="thermal">
-      <p class="concept-kicker">03 · THERMAL NOISE FLOOR</p>
-      <h2>Một mô hình cơ bản cho available thermal noise power là kTB.</h2>
 
       <div class="thermal-equation">
         <span>P<sub>n</sub></span>
@@ -111,37 +64,79 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       </div>
 
       <p>
-        Receiver thực tế còn làm noise tăng thêm so với ideal thermal source. Noise figure là một cách mô tả degradation đó,
-        nhưng bài này chưa cần đi sâu vào cascaded RF noise analysis.
+        Ở khoảng 290 K, thermal noise density thường được nhớ gần đúng là -174 dBm/Hz.
+        Nếu receiver bandwidth là 20 MHz, integrated thermal noise lý tưởng vào khoảng
+        -174 + 10log<sub>10</sub>(20×10<sup>6</sup>) ≈ -101 dBm, trước khi cộng noise figure của receiver.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Bandwidth phải đi cùng con số noise</strong>
+        <p>
+          Noise density có đơn vị trên Hz. Khi bandwidth rộng hơn, receiver tích lũy nhiều noise power hơn.
+          Vì vậy nói “noise là -100 dBm” mà không biết measurement bandwidth thường chưa đủ context.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="snr">
+      <p class="concept-kicker">02 · SNR LÀ TỈ SỐ POWER</p>
+      <h2>SNR so wanted-signal power với noise power tại cùng measurement point và cùng bandwidth.</h2>
+
+      <div class="snr-equations">
+        <div>
+          <span class="card-label">LINEAR</span>
+          <strong>SNR = P<sub>s</sub> / P<sub>n</sub></strong>
+        </div>
+        <div>
+          <span class="card-label">dB</span>
+          <strong>SNR<sub>dB</sub> = 10log<sub>10</sub>(P<sub>s</sub>/P<sub>n</sub>)</strong>
+        </div>
+      </div>
+
+      <p>
+        10 dB nghĩa là signal power gấp 10 lần noise power.
+        20 dB nghĩa là gấp 100 lần.
+        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là 20log<sub>10</sub>, vì power tỉ lệ với amplitude bình phương.
+      </p>
+
+      <p>
+        Ví dụ receiver đo wanted power -80 dBm và noise power -100 dBm trong cùng bandwidth.
+        Hiệu hai giá trị là 20 dB, nên SNR = 20 dB.
+        Đây là lợi ích của dB: phép chia power ratio trở thành phép trừ.
       </p>
     </section>
 
-    <section class="concept-block" id="constellation">
-      <p class="concept-kicker">04 · NOISE TRÊN CONSTELLATION TRÔNG NHƯ THẾ NÀO?</p>
-      <h2>Ideal symbol là một điểm; received samples tạo thành một đám mây quanh điểm đó.</h2>
+    <section class="concept-block" id="not-all-noise">
+      <p class="concept-kicker">03 · KHÔNG PHẢI MỌI ERROR ĐỀU LÀ THERMAL NOISE</p>
+      <h2>Một constellation xấu có thể đến từ random noise hoặc từ lỗi có cấu trúc.</h2>
 
-      <div class="constellation-noise-story">
-        <div>
-          <span class="card-label">HIGH SNR</span>
-          <div class="mini-cloud tight" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><b></b>
-          </div>
-          <p>Samples tập trung sát ideal point.</p>
-        </div>
-        <b>→ noise tăng →</b>
-        <div>
-          <span class="card-label">LOWER SNR</span>
-          <div class="mini-cloud wide" aria-hidden="true">
-            <i></i><i></i><i></i><i></i><i></i><b></b>
-          </div>
-          <p>Cloud rộng hơn và decision errors dễ xảy ra hơn.</p>
-        </div>
+      <div class="impairment-grid">
+        <article>
+          <span class="card-label">ADDITIVE NOISE</span>
+          <h3>cloud rộng ra</h3>
+          <p>Random I/Q perturbations làm samples rải quanh ideal point.</p>
+        </article>
+        <article>
+          <span class="card-label">COMMON PHASE ERROR</span>
+          <h3>cả cloud bị quay</h3>
+          <p>Residual phase/CFO có thể xoay toàn constellation theo cùng hướng trong một khoảng thời gian.</p>
+        </article>
+        <article>
+          <span class="card-label">NONLINEARITY / IQ ERROR</span>
+          <h3>shape bị méo</h3>
+          <p>Hardware distortion có thể làm outer points và inner points sai theo pattern khác nhau.</p>
+        </article>
       </div>
+
+      <p>
+        Vì vậy khi một EVM measurement xấu, câu hỏi tiếp theo không nên tự động là “noise cao bao nhiêu?”.
+        Ta cần nhìn error pattern để đoán impairment nào đang chi phối.
+      </p>
     </section>
 
     <section class="concept-block" id="evm">
-      <p class="concept-kicker">05 · EVM ĐO ERROR VECTOR</p>
-      <h2>EVM nhìn trực tiếp khoảng cách complex giữa measured symbol và reference symbol.</h2>
+      <p class="concept-kicker">04 · EVM ĐO KHOẢNG CÁCH TRÊN COMPLEX PLANE</p>
+      <h2>Reference symbol là điểm ta muốn có; measured symbol là điểm receiver hoặc instrument thực sự thấy.</h2>
 
       <div class="evm-geometry">
         <svg viewBox="0 0 620 320" role="img" aria-label="Error vector giữa reference symbol và measured symbol">
@@ -160,6 +155,10 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
         </svg>
       </div>
 
+      <p>
+        Với nhiều symbols, một RMS definition phổ biến là:
+      </p>
+
       <div class="evm-equation">
         <span>EVM<sub>RMS</sub></span>
         <b>=</b>
@@ -167,24 +166,25 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       </div>
 
       <p>
-        Nhân với 100 để viết dưới dạng %. Một số measurement standards/conventions có thể chọn normalization,
-        reference reconstruction hoặc averaging khác, nên khi so EVM phải biết measurement definition đang dùng.
+        Nếu EVM = 0.05, ta thường viết 5%.
+        Numerator là tổng error energy; denominator là reference-symbol energy dùng để normalize.
+        Exact standard measurement có thể quy định thêm reference reconstruction, averaging và normalization cụ thể.
       </p>
     </section>
 
     <section class="concept-block lab-section" id="noise-lab">
-      <p class="concept-kicker">06 · INTERACTIVE LAB</p>
-      <h2>Tăng noise hoặc common phase error để nhìn constellation cloud và EVM thay đổi.</h2>
+      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
+      <h2>Tăng random noise rồi thêm common phase error để thấy hai impairment tạo constellation khác nhau.</h2>
       <p>
-        Demo dùng normalized QPSK references. Noise làm cloud rộng; common phase error quay cả constellation.
-        Cả hai đều làm EVM tăng, nhưng chỉ trường hợp additive random error đơn giản mới nên diễn giải trực tiếp như noise SNR.
+        Khi chỉ tăng noise, point cloud rộng dần quanh bốn QPSK references.
+        Khi tăng phase error, cả cloud cùng quay. EVM tăng trong cả hai trường hợp, dù physical cause không giống nhau.
       </p>
       <NoiseEVMExplorer client:load />
     </section>
 
-    <section class="concept-block" id="snr-evm-relation">
-      <p class="concept-kicker">07 · SNR VÀ EVM LIÊN HỆ THẾ NÀO?</p>
-      <h2>Trong model lý tưởng chỉ có additive noise, EVM và SNR gần như là hai cách viết của cùng error power.</h2>
+    <section class="concept-block" id="snr-evm">
+      <p class="concept-kicker">06 · KHI NÀO CÓ THỂ NỐI EVM VỚI SNR?</p>
+      <h2>Trong model chỉ có additive error và normalization nhất quán, EVM² gần bằng error power / signal power.</h2>
 
       <div class="snr-evm-relation">
         <span>EVM<sub>linear</sub></span>
@@ -193,40 +193,60 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       </div>
 
       <p>
-        Nhưng ngoài đời EVM còn nhận contribution từ frequency offset, phase noise, IQ imbalance,
-        nonlinear distortion, channel-estimation error và residual equalization error.
-        Vì vậy một EVM xấu không tự động chứng minh thermal noise là nguyên nhân.
+        Ví dụ SNR = 20 dB nghĩa là linear SNR = 100.
+        Khi assumptions phù hợp, EVM xấp xỉ 1/√100 = 0.1, tức khoảng 10%.
+        Nhưng nếu error đến từ phase rotation hoặc nonlinear distortion, gọi toàn bộ error đó là “noise SNR” sẽ che mất nguyên nhân thật.
       </p>
     </section>
 
-    <section class="concept-block" id="where-measured">
-      <p class="concept-kicker">08 · ĐO Ở ĐÂU QUAN TRỌNG KHÔNG KÉM ĐO CÁI GÌ</p>
-      <h2>Raw ADC samples, equalized symbols và demodulated constellation không có cùng impairment content.</h2>
+    <section class="concept-block" id="measurement-point">
+      <p class="concept-kicker">07 · ĐO Ở STAGE NÀO THÌ THẤY IMPAIRMENT KHÁC NHAU</p>
+      <h2>Raw ADC samples và equalized constellation không phải cùng một measurement point.</h2>
 
       <div class="measurement-chain">
-        <div><small>ADC</small><strong>raw I/Q</strong><span>channel + noise + sync errors</span></div>
-        <b>→ sync →</b>
-        <div><small>FFT / CHANNEL EST.</small><strong>frequency-domain samples</strong><span>channel vẫn còn</span></div>
+        <div><small>ADC</small><strong>raw I/Q</strong><span>channel + noise + sync error</span></div>
+        <b>→ sync / FFT →</b>
+        <div><small>SUBCARRIER</small><strong>Y[k]</strong><span>channel vẫn còn</span></div>
         <b>→ equalize →</b>
-        <div><small>CONSTELLATION</small><strong>equalized symbols</strong><span>residual error dùng cho EVM</span></div>
+        <div><small>SYMBOL</small><strong>X̂[k]</strong><span>residual error</span></div>
       </div>
 
       <p>
-        Vì vậy khi debug receiver, luôn cần ghi rõ EVM/SNR đang được estimate ở stage nào.
+        Nếu EVM được đo sau equalization, một phần deterministic channel đã được loại bỏ.
+        Nếu đo trước equalization, channel rotation/attenuation sẽ chi phối error.
+        Khi debug, luôn ghi rõ metric được tính ở stage nào.
       </p>
+    </section>
+
+    <section class="concept-block" id="implementation">
+      <p class="concept-kicker">08 · TRONG CODE, EVM CHỈ LÀ COMPLEX ERROR</p>
+      <h2>Sau khi đã có reference symbols và measured symbols tương ứng, phép tính rất thẳng.</h2>
+
+      <p>
+        Với mỗi k, tạo e[k] = Y[k] - X[k].
+        Cộng |e[k]|² để lấy error energy, rồi normalize bằng Σ|X[k]|² theo definition đang dùng.
+        Phần khó trong receiver thực tế thường không phải phép trừ này, mà là đảm bảo timing, CFO, channel estimate và reference mapping đều đúng trước khi tính.
+      </p>
+
+      <aside class="mental-model">
+        <strong>EVM là symptom metric rất mạnh</strong>
+        <p>
+          Nó cho biết received constellation khác reference bao nhiêu, nhưng không tự nói nguyên nhân.
+          Muốn chẩn đoán, cần nhìn thêm pattern theo symbol, subcarrier, time, amplitude và phase.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block recap">
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
-      <h2>SNR đo power ratio; EVM đo vector error trên complex plane.</h2>
       <ol class="recap-list">
-        <li><strong>Noise:</strong> random unwanted component trong receiver bandwidth.</li>
-        <li><strong>SNR:</strong> P<sub>s</sub>/P<sub>n</sub>, thường viết bằng dB.</li>
-        <li><strong>kTB:</strong> mô hình thermal noise power cơ bản.</li>
-        <li><strong>Constellation cloud:</strong> noise làm received points phân tán quanh ideal points.</li>
-        <li><strong>EVM:</strong> RMS normalized complex error giữa measured và reference symbols.</li>
-        <li><strong>SNR ↔ EVM:</strong> liên hệ đơn giản chỉ đúng dưới assumptions phù hợp.</li>
-        <li><strong>Measurement stage:</strong> quyết định những impairment nào còn nằm trong metric.</li>
+        <li><strong>Thermal noise:</strong> có noise floor cơ bản và tăng theo bandwidth qua kTB.</li>
+        <li><strong>SNR:</strong> ratio giữa wanted-signal power và noise power tại cùng reference point.</li>
+        <li><strong>dB:</strong> biến power ratio thành phép cộng/trừ thuận tiện.</li>
+        <li><strong>EVM:</strong> normalized RMS complex error giữa measured và reference symbols.</li>
+        <li><strong>AWGN relation:</strong> EVM ≈ 1/√SNR chỉ dưới assumptions phù hợp.</li>
+        <li><strong>Structured errors:</strong> CFO, phase noise, IQ imbalance và nonlinearity cũng làm EVM tăng.</li>
+        <li><strong>Measurement point:</strong> quyết định những impairment nào còn xuất hiện trong metric.</li>
       </ol>
     </section>
 
@@ -234,12 +254,12 @@ import NoiseEVMExplorer from '../../components/NoiseEVMExplorer.jsx';
       <a class="lesson-nav-card previous" href="/hoc/wireless-channel/">
         <span>← BÀI TRƯỚC</span>
         <strong>Wireless channel</strong>
-        <small>Attenuation, delay và phase rotation xuất hiện như thế nào?</small>
+        <small>Channel làm waveform suy hao, trễ và quay phase thế nào?</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/multipath-delay-spread/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Multipath và delay spread</strong>
-        <small>Nhiều bản sao trễ của cùng signal chồng lên nhau ra sao?</small>
+        <small>Nhiều delayed copies của cùng signal chồng lên nhau ra sao?</small>
       </a>
     </nav>
   </article>
