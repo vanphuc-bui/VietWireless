@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SinusoidExplorer from '../../components/SinusoidExplorer.jsx';
+import Math from '../../components/Math.astro';
 
 const comparePlot = {
   width: 760,
@@ -113,11 +114,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <p class="concept-kicker">02 · CÔNG THỨC XUẤT HIỆN SAU HÌNH</p>
       <h2>Ba thay đổi vừa nhìn thấy nằm gọn trong một công thức.</h2>
 
-      <div class="sinusoid-formula">
-        <span>x(t)</span>
-        <b>=</b>
-        <span>A cos(2πft + φ)</span>
-      </div>
+      <Math tex="x(t) = A\\cos(2\\pi f t + \\phi)" display />
 
       <div class="sinusoid-parameter-list">
         <article>
@@ -144,8 +141,8 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       </div>
 
       <p>
-        Cùng công thức này cũng thường được viết là <strong>x(t) = A cos(ωt + φ)</strong>,
-        với <strong>ω = 2πf</strong>. Khi đó ω là angular frequency và có đơn vị rad/s.
+        Cùng công thức này cũng thường được viết là <Math tex="x(t) = A\\cos(\\omega t + \\phi)" />,
+        với <Math tex="\\omega = 2\\pi f" />. Khi đó ω là angular frequency và có đơn vị rad/s.
       </p>
     </section>
 
@@ -153,7 +150,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <p class="concept-kicker">03 · AMPLITUDE</p>
       <h2>Amplitude nói signal lớn tới đâu, không nói nó dao động nhanh tới đâu.</h2>
       <p>
-        Với x(t) = A cos(2πft + φ), giá trị lớn nhất là +A và nhỏ nhất là -A.
+        Với <Math tex="x(t) = A\\cos(2\\pi f t + \\phi)" />, giá trị lớn nhất là +A và nhỏ nhất là -A.
         Vì vậy khoảng từ đáy tới đỉnh là 2A, thường gọi là peak-to-peak.
       </p>
 
@@ -243,12 +240,8 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
         Có một cách khác để đọc phase. Với cùng frequency, phase shift có thể được viết thành một time shift:
       </p>
 
-      <div class="sinusoid-shift-equation">
-        <span>A cos(2πft + φ)</span>
-        <b>=</b>
-        <span>A cos[2πf(t - τ)]</span>
-        <small>với τ = -φ/(2πf)</small>
-      </div>
+      <Math tex="A\\cos(2\\pi f t + \\phi) = A\\cos\\!\\left[2\\pi f(t-\\tau)\\right]" display />
+      <p class="math-caption">Với <Math tex="\\tau = -\\phi/(2\\pi f)" />.</p>
 
       <p>
         Vì vậy một phase +90° tương ứng với waveform dịch sang trái một phần tư chu kỳ.
@@ -324,7 +317,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
         <li><strong>Period T = 1/f:</strong> một chu kỳ kéo dài bao lâu?</li>
         <li><strong>Phase φ:</strong> waveform đang nằm ở đâu trong chu kỳ so với reference đã chọn?</li>
         <li><strong>Angular frequency ω = 2πf:</strong> cùng tốc độ dao động nhưng biểu diễn bằng radian trên mỗi giây.</li>
-        <li><strong>x(t) = A cos(2πft + φ):</strong> ba tham số trên được gói lại trong một biểu thức duy nhất.</li>
+        <li><strong><Math tex="x(t) = A\\cos(2\\pi f t + \\phi)" />:</strong> ba tham số trên được gói lại trong một biểu thức duy nhất.</li>
       </ol>
     </section>
 
