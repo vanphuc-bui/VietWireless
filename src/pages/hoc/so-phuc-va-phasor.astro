@@ -1,0 +1,339 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
+---
+
+<BaseLayout
+  title="Số phức và phasor trực quan | VietWireless"
+  description="Hiểu số phức, magnitude, phase, công thức Euler, complex exponential và phasor bằng hình học và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 04 · SIGNAL FOUNDATIONS</p>
+      <h1>Số phức và phasor</h1>
+      <p class="lesson-deck">
+        Ở Bài 03, phase vẫn nằm trong một công thức cosine. Bài này đổi cách nhìn:
+        <strong>thay vì theo dõi một waveform bằng một con số trên trục thực, ta đặt nó lên một mặt phẳng và theo dõi cả độ lớn lẫn góc.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Một sinusoid có amplitude A và phase φ. Số phức cho ta một cách biểu diễn hai đại lượng đó rất gọn,
+        còn complex exponential cho ta một hình ảnh đặc biệt hữu ích: một vector quay.
+      </p>
+      <div class="system-position">
+        <span>TỪ SINUSOID TỚI MẶT PHẲNG PHỨC</span>
+        <div class="system-position-flow" aria-label="Sinusoid được nối sang số phức, complex exponential và phasor">
+          <span>A cos(ωt + φ)</span><b>→</b>
+          <strong>A e<sup>j(ωt+φ)</sup></strong><b>→</b>
+          <span>vector quay</span><b>→</b>
+          <span>phasor</span>
+        </div>
+        <p>
+          Mục tiêu không phải học số phức như một chương toán tách biệt. Ta chỉ lấy đúng những gì cần
+          để hiểu signal processing, I/Q, modulation và channel ở các bài sau.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="vi-sao-so-phuc">
+      <p class="concept-kicker">01 · VÌ SAO CẦN THÊM MỘT TRỤC?</p>
+      <h2>Một số thực cho ta một vị trí trên một đường. Số phức cho ta một vị trí trên một mặt phẳng.</h2>
+      <p>
+        Trên trục thực, một giá trị chỉ có thể đi sang trái hoặc sang phải. Nhưng khi ta muốn biểu diễn cả
+        độ lớn và một góc, một chiều không còn đủ tiện lợi.
+      </p>
+
+      <div class="complex-plane-intro">
+        <article>
+          <span class="card-label">SỐ THỰC</span>
+          <div class="real-number-line" aria-label="Một số thực nằm trên trục một chiều">
+            <span>-2</span><span>-1</span><b>0</b><span>1</span><span>2</span>
+            <i></i>
+          </div>
+          <p>Một tọa độ trên một trục.</p>
+        </article>
+
+        <article>
+          <span class="card-label">SỐ PHỨC</span>
+          <svg viewBox="0 0 320 210" role="img" aria-label="Một số phức nằm trên mặt phẳng với trục thực và trục ảo">
+            <line class="complex-axis" x1="34" y1="130" x2="292" y2="130" />
+            <line class="complex-axis" x1="150" y1="28" x2="150" y2="190" />
+            <line class="complex-vector" x1="150" y1="130" x2="238" y2="72" />
+            <line class="complex-projection" x1="238" y1="72" x2="238" y2="130" />
+            <line class="complex-projection" x1="238" y1="72" x2="150" y2="72" />
+            <circle class="complex-tip" cx="238" cy="72" r="5" />
+            <text class="complex-label" x="276" y="119">Re</text>
+            <text class="complex-label" x="160" y="42">Im</text>
+            <text class="complex-label" x="202" y="151">a</text>
+            <text class="complex-label" x="160" y="77">b</text>
+            <text class="complex-label strong" x="244" y="66">z</text>
+          </svg>
+          <p>Hai tọa độ, nhưng cũng có thể đọc thành magnitude và phase.</p>
+        </article>
+      </div>
+
+      <div class="complex-equation">
+        <span>z</span>
+        <b>=</b>
+        <span>a + jb</span>
+      </div>
+
+      <p>
+        Trong kỹ thuật điện, ta thường dùng <strong>j</strong> thay cho i vì i thường đã được dùng cho dòng điện.
+        Ta có <strong>j² = -1</strong>. Phần a gọi là phần thực, còn b là hệ số của phần ảo.
+      </p>
+    </section>
+
+    <section class="concept-block" id="hai-cach-viet">
+      <p class="concept-kicker">02 · CÙNG MỘT ĐIỂM, HAI CÁCH ĐỌC</p>
+      <h2>Cartesian tiện để nhìn thành phần. Polar tiện để nhìn magnitude và phase.</h2>
+
+      <div class="complex-two-views">
+        <article>
+          <span class="card-label">CARTESIAN</span>
+          <h3>z = a + jb</h3>
+          <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
+          <div class="complex-mini-formula">
+            <span>Re&#123;z&#125; = a</span>
+            <span>Im&#123;z&#125; = b</span>
+          </div>
+        </article>
+        <article>
+          <span class="card-label">POLAR</span>
+          <h3>z = A∠φ</h3>
+          <p>Ta hỏi: vector dài bao nhiêu và tạo góc bao nhiêu so với trục thực?</p>
+          <div class="complex-mini-formula">
+            <span>A = √(a² + b²)</span>
+            <span>φ = atan2(b, a)</span>
+          </div>
+        </article>
+      </div>
+
+      <p>
+        Hai cách viết này không mô tả hai signal khác nhau. Chúng chỉ là hai hệ tọa độ để mô tả cùng một điểm.
+        Trong wireless, ta sẽ liên tục đổi qua lại giữa hai góc nhìn này.
+      </p>
+    </section>
+
+    <section class="concept-block" id="euler">
+      <p class="concept-kicker">03 · CÔNG THỨC EULER</p>
+      <h2>Euler nối một góc quay trên mặt phẳng phức với cosine và sine.</h2>
+
+      <div class="euler-equation">
+        <span>e<sup>jθ</sup></span>
+        <b>=</b>
+        <span>cos θ + j sin θ</span>
+      </div>
+
+      <p>
+        Nếu nhân thêm amplitude A:
+      </p>
+
+      <div class="euler-equation secondary">
+        <span>Ae<sup>jθ</sup></span>
+        <b>=</b>
+        <span>A cos θ + jA sin θ</span>
+      </div>
+
+      <p>
+        Đây là chiếc cầu quan trọng. Một vector có magnitude A và góc θ có phần thực bằng A cos θ,
+        còn phần ảo bằng A sin θ.
+      </p>
+
+      <div class="euler-geometry">
+        <svg viewBox="0 0 700 310" role="img" aria-label="Vector phức với projection cosine và sine">
+          <line class="complex-axis" x1="70" y1="220" x2="620" y2="220" />
+          <line class="complex-axis" x1="270" y1="45" x2="270" y2="275" />
+          <circle class="complex-guide-circle" cx="270" cy="220" r="125" />
+          <line class="complex-vector" x1="270" y1="220" x2="375" y2="152" />
+          <line class="complex-projection" x1="375" y1="152" x2="375" y2="220" />
+          <line class="complex-projection" x1="375" y1="152" x2="270" y2="152" />
+          <circle class="complex-tip" cx="375" cy="152" r="5" />
+          <text class="complex-label" x="575" y="207">Re</text>
+          <text class="complex-label" x="282" y="62">Im</text>
+          <text class="complex-label strong" x="390" y="147">Aeʲθ</text>
+          <text class="complex-label" x="322" y="240">A cos θ</text>
+          <text class="complex-label" x="282" y="146">A sin θ</text>
+          <path class="complex-angle" d="M315 220 A45 45 0 0 0 307 195" />
+          <text class="complex-label" x="315" y="196">θ</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="concept-block" id="vector-quay">
+      <p class="concept-kicker">04 · TỪ MỘT ĐIỂM TỚI MỘT VECTOR QUAY</p>
+      <h2>Nếu góc tăng tuyến tính theo thời gian, điểm trên mặt phẳng phức sẽ quay đều.</h2>
+
+      <div class="rotating-equation">
+        <span>z(t)</span>
+        <b>=</b>
+        <span>Ae<sup>j(ωt+φ)</sup></span>
+      </div>
+
+      <p>
+        Magnitude A giữ nguyên. Góc của vector là ωt + φ. Khi thời gian tăng, góc tăng và vector quay quanh gốc.
+        Tốc độ quay chính là angular frequency ω.
+      </p>
+
+      <div class="projection-story">
+        <div>
+          <small>VECTOR PHỨC</small>
+          <strong>Ae<sup>j(ωt+φ)</sup></strong>
+          <span>quay trên mặt phẳng</span>
+        </div>
+        <b>→ lấy phần thực →</b>
+        <div>
+          <small>PROJECTION</small>
+          <strong>A cos(ωt+φ)</strong>
+          <span>sinusoid trên trục thực</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Một hình dung đáng giữ lại</strong>
+        <p>
+          Cosine có thể được xem như chiếc bóng của một vector quay lên trục thực.
+          Sine là projection của cùng vector đó lên trục ảo.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="phasor-lab">
+      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
+      <h2>Thay magnitude, phase và góc quay để nhìn số phức thay đổi trực tiếp trên mặt phẳng.</h2>
+      <p>
+        Lab dưới đây tách phase ban đầu φ khỏi phần quay do thời gian ωt.
+        Tổng góc của complex exponential tại một thời điểm là ωt + φ.
+      </p>
+      <ComplexPhasorExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="phasor">
+      <p class="concept-kicker">06 · PHASOR THỰC SỰ LÀ GÌ?</p>
+      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor e<sup>jωt</sup>.</h2>
+      <p>
+        Giả sử:
+      </p>
+
+      <div class="phasor-definition">
+        <div>
+          <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
+          <strong>z(t) = Ae<sup>j(ωt+φ)</sup></strong>
+        </div>
+        <b>=</b>
+        <div>
+          <small>PHASOR</small>
+          <strong>Ae<sup>jφ</sup></strong>
+        </div>
+        <b>×</b>
+        <div>
+          <small>COMMON ROTATION</small>
+          <strong>e<sup>jωt</sup></strong>
+        </div>
+      </div>
+
+      <p>
+        Khi nhiều sinusoid cùng frequency ω được xử lý trong một bài toán steady-state,
+        factor e<sup>jωt</sup> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với
+        <strong>Ae<sup>jφ</sup></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Đừng đồng nhất phasor với complex exponential theo thời gian</strong>
+        <p>
+          Hình vector quay rất hữu ích để xây trực giác, nhưng về mặt notation,
+          Ae<sup>j(ωt+φ)</sup> vẫn còn phụ thuộc thời gian. Phasor Ae<sup>jφ</sup> là complex amplitude sau khi common time factor được tách ra.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="phep-nhan">
+      <p class="concept-kicker">07 · VÌ SAO BIỂU DIỄN NÀY MẠNH?</p>
+      <h2>Nhân hai số phức tương ứng với nhân magnitude và cộng phase.</h2>
+
+      <div class="complex-multiply">
+        <div>
+          <small>SIGNAL</small>
+          <strong>Ae<sup>jφ</sup></strong>
+        </div>
+        <b>×</b>
+        <div>
+          <small>HỆ SỐ</small>
+          <strong>Ge<sup>jθ</sup></strong>
+        </div>
+        <b>=</b>
+        <div>
+          <small>KẾT QUẢ</small>
+          <strong>AGe<sup>j(φ+θ)</sup></strong>
+        </div>
+      </div>
+
+      <p>
+        Đây là một lý do số phức xuất hiện tự nhiên trong signal processing.
+        Một phép nhân có thể đồng thời scale amplitude và rotate phase.
+        Sau này, một channel coefficient hay một frequency-domain response thường được hiểu theo đúng kiểu này.
+      </p>
+    </section>
+
+    <section class="concept-block" id="noi-sang-iq">
+      <p class="concept-kicker">08 · NỐI SANG I/Q</p>
+      <h2>Ở bài tiếp theo, hai tọa độ trên mặt phẳng phức sẽ có tên cụ thể: I và Q.</h2>
+
+      <div class="iq-preview">
+        <div>
+          <small>PHẦN THỰC</small>
+          <strong>a</strong>
+          <span>sẽ trở thành I</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>PHẦN ẢO</small>
+          <strong>jb</strong>
+          <span>b sẽ trở thành Q</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>COMPLEX BASEBAND</small>
+          <strong>I + jQ</strong>
+          <span>magnitude + phase trong một sample</span>
+        </div>
+      </div>
+
+      <p>
+        Bài này mới chỉ xây nền toán và hình học. Bài 05 sẽ trả lời câu hỏi thực tế hơn:
+        I và Q xuất hiện ở transmitter/receiver như thế nào, và tại sao một sample trong code thường có hai thành phần này.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
+      <h2>Tới đây, số phức có thể được nhìn như hình học chứ không chỉ là ký hiệu j.</h2>
+      <ol class="recap-list">
+        <li><strong>z = a + jb:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
+        <li><strong>Magnitude:</strong> A = √(a² + b²) là độ dài vector từ gốc tới điểm z.</li>
+        <li><strong>Phase:</strong> φ là góc của vector so với trục thực.</li>
+        <li><strong>Euler:</strong> e<sup>jθ</sup> = cos θ + j sin θ nối số phức với sinusoid.</li>
+        <li><strong>Complex exponential:</strong> Ae<sup>j(ωt+φ)</sup> có thể được hình dung như một vector quay.</li>
+        <li><strong>Phasor:</strong> Ae<sup>jφ</sup> là complex amplitude khi common factor e<sup>jωt</sup> được tách ra.</li>
+        <li><strong>Complex multiplication:</strong> magnitude nhân nhau, phase cộng nhau.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/amplitude-frequency-phase/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Amplitude, frequency và phase</strong>
+        <small>Một sinusoid được mô tả bởi A, f và φ như thế nào?</small>
+      </a>
+      <div class="lesson-nav-card next pending">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>I/Q và complex baseband</strong>
+        <small>Từ mặt phẳng phức tới samples mà transmitter và receiver thực sự xử lý.</small>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
