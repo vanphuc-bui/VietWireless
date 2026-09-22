@@ -1205,3 +1205,25 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     font-size: 1rem;
   }
 }
+
+
+/* --- Lesson typography: keep the article title dominant --- */
+.lesson .concept-block > h2 {
+  max-width: 800px;
+  margin: 0 0 18px;
+  font-size: clamp(1.45rem, 2.35vw, 2rem);
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  font-weight: 500;
+}
+
+.lesson .concept-block > .concept-kicker + h2 {
+  margin-top: 2px;
+}
+
+@media (max-width: 720px) {
+  .lesson .concept-block > h2 {
+    font-size: clamp(1.3rem, 6vw, 1.65rem);
+    line-height: 1.3;
+  }
+}
