@@ -32,7 +32,7 @@ import MathExpr from '../../components/Math.astro';
         <div class="system-position-flow">
           <strong><MathExpr tex="\\mu" /></strong><b>→</b>
           <span><MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" /></span><b>→</b>
-          <span><MathExpr tex="T_u" />=1/Δf</span><b>→</b>
+          <span><MathExpr tex="T_u=1/\\Delta f" /></span><b>→</b>
           <span>OFDM symbol scale</span><b>→</b>
           <span>slots / <MathExpr tex="1\\,\\mathrm{ms}" /></span>
         </div>
@@ -64,7 +64,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="tu">
       <p class="concept-kicker">02 · SCS TĂNG THÌ USEFUL SYMBOL NGẮN LẠI</p>
-      <h2>OFDM orthogonality relation vẫn là <MathExpr tex="T_u" /> = 1/Δf.</h2>
+      <h2>OFDM orthogonality relation vẫn là <MathExpr tex="T_u=1/\\Delta f" />.</h2>
 
       <MathExpr tex="T_u = \\frac{1}{\\Delta f}" display />
 
@@ -117,7 +117,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Ví dụ <MathExpr tex="\\mu=1" />:
         SCS = <MathExpr tex="30\\,\\mathrm{kHz}" />,
-        <MathExpr tex="T_u" />≈33.33 µs,
+        <MathExpr tex="T_u\\approx33.33\\,\\mu\\mathrm{s}" />,
         slot dài <MathExpr tex="0.5\\,\\mathrm{ms}" /> và chứa 14 symbols với normal CP.
         Average symbol interval bao gồm CP vì vậy khoảng <MathExpr tex="0.5\\,\\mathrm{ms}/14 \\approx 35.7\\,\\mu\\mathrm{s}" />.
       </p>
@@ -181,8 +181,8 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Ngược lại, một channel path trễ 5 µs chiếm 7.5% của <MathExpr tex="T_u" /> ở 15 kHz,
-        nhưng chiếm 60% của <MathExpr tex="T_u" /> ở 120 kHz.
+        Ngược lại, một channel path trễ <MathExpr tex="5\\,\\mu\\mathrm{s}" /> chiếm <MathExpr tex="7.5\\%" /> của <MathExpr tex="T_u" /> ở <MathExpr tex="15\\,\\mathrm{kHz}" />,
+        nhưng chiếm <MathExpr tex="60\\%" /> của <MathExpr tex="T_u" /> ở <MathExpr tex="120\\,\\mathrm{kHz}" />.
         Đây là một ví dụ rõ về việc không có numerology “tốt hơn tuyệt đối”.
       </p>
     </section>
@@ -231,8 +231,8 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Numerology:</strong> scale OFDM lattice bằng <MathExpr tex="\\mu" />.</li>
-        <li><strong>SCS:</strong> Δf = 15·<MathExpr tex="2^{\\mu}" /> kHz.</li>
-        <li><strong>Useful duration:</strong> <MathExpr tex="T_u" /> = 1/Δf, chưa gồm CP.</li>
+        <li><strong>SCS:</strong> <MathExpr tex="\\Delta f=15\\cdot2^{\\mu}\\,\\mathrm{kHz}" />.</li>
+        <li><strong>Useful duration:</strong> <MathExpr tex="T_u=1/\\Delta f" />, chưa gồm CP.</li>
         <li><strong>Frame:</strong> <MathExpr tex="10\\,\\mathrm{ms}" /> và gồm 10 subframes <MathExpr tex="1\\,\\mathrm{ms}" />.</li>
         <li><strong>Normal CP:</strong> 14 OFDM symbols/slot và <MathExpr tex="2^{\\mu}" /> slots/subframe.</li>
         <li><strong>Tradeoff:</strong> larger SCS giảm relative CFO nhưng rút ngắn useful symbol so với absolute delay spread.</li>
