@@ -128,8 +128,8 @@ Trước khi merge một cụm nhiều bài, so độ sâu giữa các bài. Kh�
 
 Nguồn chuẩn chi tiết: `docs/MATH_STYLE_GUIDE.md`.
 
-- Mọi notation toán trong prose dùng shared component `Math` thay vì tự ghép `<sub>`, `<sup>`, ký tự Unicode như `√`, `Σ` hoặc text giả-LaTeX.
-- Công thức đứng riêng dùng `<Math tex="..." display />`. Công thức ngắn nằm trong câu dùng `<Math tex="..." />`.
+- Mọi notation toán trong prose dùng shared component `MathExpr` thay vì tự ghép `<sub>`, `<sup>`, ký tự Unicode như `√`, `Σ` hoặc text giả-LaTeX.
+- Công thức đứng riêng dùng `<MathExpr tex="..." display />`. Công thức ngắn nằm trong câu dùng `<MathExpr tex="..." />`.
 - Công thức phải được viết bằng TeX/LaTeX notation và render bằng KaTeX ở build time.
 - Không dùng ảnh chứa công thức.
 - Không tự dựng dấu căn, phân số, tổng, tích phân, matrix hoặc superscript/subscript bằng HTML/CSS.
