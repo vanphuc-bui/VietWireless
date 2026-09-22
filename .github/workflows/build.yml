@@ -20,5 +20,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Check writing style
+        run: npm run check:writing
+
       - name: Build
         run: npm run build
