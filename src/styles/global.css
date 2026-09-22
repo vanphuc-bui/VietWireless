@@ -2624,6 +2624,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   line-height: 1.45;
 }
 
+.history-tech-figure figcaption a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .cellular-mini {
   width: 100%;
   max-height: 155px;
