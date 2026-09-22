@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MultipathExplorer from '../../components/MultipathExplorer.jsx';
+---
+
+<BaseLayout
+  title="Multipath và delay spread trực quan | VietWireless"
+  description="Hiểu multipath, channel impulse response, power delay profile, excess delay, RMS delay spread, ISI và frequency selectivity bằng visual và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 12 · WIRELESS LINK</p>
+      <h1>Multipath và delay spread</h1>
+      <p class="lesson-deck">
+        Receiver hiếm khi chỉ nhận một bản sao duy nhất của signal.
+        <strong>Reflection, diffraction và scattering tạo nhiều copies có gain, phase và delay khác nhau, rồi tất cả cộng lại tại antenna.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 10 dùng một complex gain h và một delay τ. Bài này mở rộng h thành nhiều paths, mỗi path có coefficient và delay riêng.
+      </p>
+      <div class="system-position">
+        <span>SINGLE PATH → MULTIPATH</span>
+        <div class="system-position-flow" aria-label="Channel có nhiều đường truyền">
+          <span>TX</span><b>→</b>
+          <span>path 0</span><b>+</b>
+          <span>path 1</span><b>+</b>
+          <span>path 2...</span><b>→</b>
+          <strong>RX sum</strong>
+        </div>
+        <p>
+          Channel không còn chỉ scale/rotate toàn signal giống nhau; copies trễ có thể chồng lên các phần khác nhau của waveform.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="multipath-origin">
+      <p class="concept-kicker">01 · NHIỀU PATH ĐẾN TỪ ĐÂU?</p>
+      <h2>Wireless wave có thể tới receiver theo đường trực tiếp và nhiều đường phản xạ/tán xạ khác nhau.</h2>
+
+      <div class="multipath-scene" role="img" aria-label="Transmitter receiver và nhiều đường multipath">
+        <div class="mp-scene-tx">TX</div>
+        <div class="mp-scene-rx">RX</div>
+        <div class="mp-scene-wall">building</div>
+        <svg viewBox="0 0 900 300" aria-hidden="true">
+          <path class="mp-scene-path direct" d="M105 205 C315 190 560 190 795 205" />
+          <path class="mp-scene-path reflected" d="M105 205 C260 70 500 65 795 205" />
+          <path class="mp-scene-path scattered" d="M105 205 C285 255 545 260 795 205" />
+        </svg>
+        <span class="mp-scene-label direct-label">direct path</span>
+        <span class="mp-scene-label reflect-label">reflection</span>
+        <span class="mp-scene-label scatter-label">scattering / diffraction</span>
+      </div>
+
+      <p>
+        Vì path lengths khác nhau, copies tới receiver ở các thời điểm khác nhau.
+        Vì propagation phases khác nhau, chúng cũng có thể cộng constructive hoặc destructive.
+      </p>
+    </section>
+
+    <section class="concept-block" id="impulse-response">
+      <p class="concept-kicker">02 · CHANNEL TRỞ THÀNH MỘT TẬP TAPS</p>
+      <h2>Mỗi path có thể được biểu diễn bằng một tap có complex coefficient và delay.</h2>
+
+      <div class="multipath-equation">
+        <span>h(τ)</span>
+        <b>=</b>
+        <span>Σ<sub>ℓ</sub> α<sub>ℓ</sub> δ(τ - τ<sub>ℓ</sub>)</span>
+      </div>
+
+      <div class="multipath-tap-grid">
+        <article>
+          <span class="card-label">α<sub>ℓ</sub></span>
+          <h3>complex path gain</h3>
+          <p>Magnitude mô tả attenuation; angle mô tả phase của path.</p>
+        </article>
+        <article>
+          <span class="card-label">τ<sub>ℓ</sub></span>
+          <h3>path delay</h3>
+          <p>Mỗi copy tới muộn hơn một lượng khác nhau.</p>
+        </article>
+        <article>
+          <span class="card-label">δ(τ-τ<sub>ℓ</sub>)</span>
+          <h3>tap location</h3>
+          <p>Đánh dấu vị trí của path trên delay axis.</p>
+        </article>
+      </div>
+
+      <p>
+        Với discrete-time implementation, channel thường được xấp xỉ bằng một finite set of taps h[m].
+        Resolution theo delay phụ thuộc sample rate và channel-estimation method.
+      </p>
+    </section>
+
+    <section class="concept-block" id="convolution">
+      <p class="concept-kicker">03 · RECEIVED SIGNAL LÀ TỔNG CÁC BẢN SAO BỊ DELAY</p>
+      <h2>Multipath channel thực hiện convolution giữa transmitted waveform và channel impulse response.</h2>
+
+      <div class="convolution-equation">
+        <span>y(t)</span>
+        <b>=</b>
+        <span>x(t) * h(t)</span>
+        <b>=</b>
+        <span>Σ<sub>ℓ</sub> α<sub>ℓ</sub>x(t-τ<sub>ℓ</sub>)</span>
+      </div>
+
+      <div class="copy-sum-story">
+        <div><small>DIRECT</small><strong>α₀x(t)</strong><span>arrives first</span></div>
+        <b>+</b>
+        <div><small>ECHO</small><strong>α₁x(t-τ₁)</strong><span>arrives later</span></div>
+        <b>+</b>
+        <div><small>MORE PATHS</small><strong>...</strong><span>all add at receiver</span></div>
+        <b>→</b>
+        <div><small>RECEIVED</small><strong>y(t)</strong><span>superposition</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="constructive-destructive">
+      <p class="concept-kicker">04 · CÙNG MỘT ECHO CÓ THỂ LÀM SIGNAL MẠNH HƠN HOẶC YẾU ĐI</p>
+      <h2>Relative phase quyết định các copies cộng hay triệt tiêu tại một frequency.</h2>
+
+      <div class="interference-cases">
+        <article>
+          <span class="card-label">CONSTRUCTIVE</span>
+          <div class="phasor-pair same">
+            <i></i><i></i>
+          </div>
+          <h3>phases gần cùng hướng</h3>
+          <p>Vector sum lớn hơn.</p>
+        </article>
+        <article>
+          <span class="card-label">DESTRUCTIVE</span>
+          <div class="phasor-pair opposite">
+            <i></i><i></i>
+          </div>
+          <h3>phases gần đối nhau</h3>
+          <p>Vector sum nhỏ đi, thậm chí gần null.</p>
+        </article>
+      </div>
+
+      <p>
+        Vì phase shift của một delay phụ thuộc frequency, cùng multipath geometry có thể làm frequency này được tăng
+        trong khi frequency khác bị notch. Đây là nguồn gốc trực giác của frequency-selective fading.
+      </p>
+    </section>
+
+    <section class="concept-block" id="pdp">
+      <p class="concept-kicker">05 · POWER DELAY PROFILE</p>
+      <h2>Nếu chỉ quan tâm power theo delay, ta nhìn các taps bằng Power Delay Profile.</h2>
+
+      <div class="pdp-visual">
+        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong>P(τ)</strong></div>
+        <svg viewBox="0 0 760 270" role="img" aria-label="Power delay profile với nhiều paths">
+          <line class="pdp-axis" x1="55" y1="220" x2="720" y2="220" />
+          <line class="pdp-axis" x1="55" y1="35" x2="55" y2="220" />
+          <line class="pdp-stem strongest" x1="105" y1="220" x2="105" y2="68" />
+          <circle class="pdp-dot strongest" cx="105" cy="68" r="6" />
+          <line class="pdp-stem" x1="225" y1="220" x2="225" y2="125" />
+          <circle class="pdp-dot" cx="225" cy="125" r="5" />
+          <line class="pdp-stem" x1="370" y1="220" x2="370" y2="155" />
+          <circle class="pdp-dot" cx="370" cy="155" r="5" />
+          <line class="pdp-stem" x1="575" y1="220" x2="575" y2="188" />
+          <circle class="pdp-dot" cx="575" cy="188" r="5" />
+          <text class="pdp-label" x="650" y="245">delay τ</text>
+          <text class="pdp-label" x="62" y="52">power</text>
+        </svg>
+      </div>
+
+      <p>
+        PDP bỏ phase và chỉ giữ path power theo delay. Nó rất hữu ích để định nghĩa excess delay, mean delay và RMS delay spread.
+      </p>
+    </section>
+
+    <section class="concept-block" id="delay-spread">
+      <p class="concept-kicker">06 · DELAY SPREAD ĐO MỨC “TRẢI” CỦA CHANNEL THEO THỜI GIAN</p>
+      <h2>Không chỉ latest path quan trọng; distribution của power theo delay cũng quan trọng.</h2>
+
+      <div class="delay-metric-grid">
+        <article>
+          <span class="card-label">MAXIMUM EXCESS DELAY</span>
+          <h3>τ<sub>last</sub> - τ<sub>first</sub></h3>
+          <p>Khoảng giữa path đầu và path muộn nhất theo threshold/definition đang dùng.</p>
+        </article>
+        <article>
+          <span class="card-label">MEAN DELAY</span>
+          <h3>τ̄ = ΣP<sub>ℓ</sub>τ<sub>ℓ</sub> / ΣP<sub>ℓ</sub></h3>
+          <p>Trung bình delay có trọng số theo path power.</p>
+        </article>
+        <article>
+          <span class="card-label">RMS DELAY SPREAD</span>
+          <h3>σ<sub>τ</sub></h3>
+          <p>Độ lệch chuẩn power-weighted của path delays quanh mean delay.</p>
+        </article>
+      </div>
+
+      <div class="rms-delay-equation">
+        <span>σ<sub>τ</sub></span>
+        <b>=</b>
+        <span>√[ΣP<sub>ℓ</sub>(τ<sub>ℓ</sub>-τ̄)² / ΣP<sub>ℓ</sub>]</span>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="multipath-lab">
+      <p class="concept-kicker">07 · INTERACTIVE LAB</p>
+      <h2>Điều chỉnh echo gain, excess delay và phase rồi nhìn impulse response và waveform nhận được.</h2>
+      <p>
+        Demo dùng channel hai taps: direct path tại 0 và một echo trễ.
+        Mean delay và RMS delay spread được tính bằng power |α|² của hai taps.
+      </p>
+      <MultipathExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="isi">
+      <p class="concept-kicker">08 · KHI DELAY SPREAD LỚN SO VỚI SYMBOL DURATION</p>
+      <h2>Energy của symbol trước có thể chồng vào symbol sau và tạo inter-symbol interference.</h2>
+
+      <div class="isi-story">
+        <div>
+          <span class="card-label">SHORT DELAY SPREAD</span>
+          <strong>echo nằm trong “khoảng an toàn”</strong>
+          <p>Copies vẫn chủ yếu thuộc cùng symbol interval.</p>
+        </div>
+        <b>→ delay tăng →</b>
+        <div>
+          <span class="card-label">LONG DELAY SPREAD</span>
+          <strong>echo tràn sang symbol kế tiếp</strong>
+          <p>Receiver thấy interference giữa symbols.</p>
+        </div>
+      </div>
+
+      <p>
+        Đây là một trong những lý do waveform design phải quan tâm channel delay spread.
+        OFDM dùng cyclic prefix để biến một bài toán multipath khó thành xử lý thuận tiện hơn khi CP đủ dài so với channel memory.
+      </p>
+    </section>
+
+    <section class="concept-block" id="frequency-selectivity">
+      <p class="concept-kicker">09 · DELAY SPREAD VÀ COHERENCE BANDWIDTH LÀ HAI GÓC NHÌN LIÊN QUAN</p>
+      <h2>Channel càng trải theo delay, H(f) thường càng thay đổi nhanh theo frequency.</h2>
+      <p>
+        Coherence bandwidth là một cách mô tả khoảng frequency mà channel response còn tương quan cao theo một criterion cụ thể.
+        Nó thường có quan hệ nghịch với delay spread, nhưng hệ số chính xác phụ thuộc định nghĩa correlation threshold và channel model.
+      </p>
+
+      <div class="delay-frequency-duality">
+        <div><small>TIME / DELAY DOMAIN</small><strong>nhiều taps trải rộng</strong><span>large delay spread</span></div>
+        <b>↔ Fourier ↔</b>
+        <div><small>FREQUENCY DOMAIN</small><strong>H(f) gợn nhanh</strong><span>narrower coherence bandwidth</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
+      <h2>Multipath biến channel từ một complex gain thành một filter có memory.</h2>
+      <ol class="recap-list">
+        <li><strong>Multipath:</strong> nhiều copies của cùng signal đi theo paths khác nhau.</li>
+        <li><strong>Channel taps:</strong> mỗi path có complex coefficient α<sub>ℓ</sub> và delay τ<sub>ℓ</sub>.</li>
+        <li><strong>Convolution:</strong> received waveform là tổng các delayed/scaled copies.</li>
+        <li><strong>PDP:</strong> mô tả path power theo delay.</li>
+        <li><strong>RMS delay spread:</strong> power-weighted spread của path delays.</li>
+        <li><strong>ISI:</strong> xuất hiện khi channel memory đáng kể so với symbol duration.</li>
+        <li><strong>Frequency selectivity:</strong> multipath delay structure làm H(f) thay đổi theo frequency.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/noise-snr-evm/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Noise, SNR và EVM</strong>
+        <small>Chất lượng signal được nhìn bằng power và constellation error.</small>
+      </a>
+      <div class="lesson-nav-card next pending">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Correlation</strong>
+        <small>Làm sao receiver tìm một sequence đã biết trong noise?</small>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
