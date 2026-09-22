@@ -105,7 +105,7 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="y(t) = (x*h)(t) = \\sum_{\\ell} \\alpha_{\\ell}x(t-\\tau_{\\ell})" display />
 
       <div class="copy-sum-story">
-        <div><small>PATH 0</small><strong>α₀x(t)</strong><span>direct / earliest</span></div>
+        <div><small>PATH 0</small><strong><MathExpr tex="\\alpha_0x(t)" /></strong><span>direct / earliest</span></div>
         <b>+</b>
         <div><small>PATH 1</small><strong><MathExpr tex="\\alpha_1 x(t-\\tau_1)" /></strong><span>delayed echo</span></div>
         <b>+</b>
