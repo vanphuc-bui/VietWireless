@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -290,8 +291,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <li><span class="course-no">Bài 44</span><div><h3>PUSCH</h3><p>UE truyền uplink data theo grant như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
         <li><span class="course-no">Bài 45</span><div><h3>PUCCH</h3><p>ACK/NACK, Scheduling Request và CSI được gửi ở đâu?</p></div><span class="course-status">Sắp tới</span></li>
         <li><span class="course-no">Bài 46</span><div><h3>DMRS</h3><p>Receiver lấy reference nào để estimate channel cho một transmission?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 47</span><div><h3>Channel estimation</h3><p>Từ reference symbols tới estimate của channel H[k].</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 48</span><div><h3>Equalization</h3><p>Từ Y[k] và H[k] quay về estimate của transmitted symbols như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 47</span><div><h3>Channel estimation</h3><p>Từ reference symbols tới estimate của channel <MathExpr tex="H[k]" />.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 48</span><div><h3>Equalization</h3><p>Từ <MathExpr tex="Y[k]" /> và <MathExpr tex="H[k]" /> quay về estimate của transmitted symbols như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
         <li><span class="course-no">Bài 49</span><div><h3>HARQ</h3><p>Khi decoding thất bại, retransmission và combining hoạt động ra sao?</p></div><span class="course-status">Sắp tới</span></li>
         <li><span class="course-no">Bài 50</span><div><h3>MCS và link adaptation</h3><p>Network cân bằng throughput và reliability bằng modulation/coding như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
         <li><span class="course-no">Bài 51</span><div><h3>MIMO và beamforming</h3><p>Nhiều antenna mở thêm những khả năng gì cho link?</p></div><span class="course-status">Sắp tới</span></li>
