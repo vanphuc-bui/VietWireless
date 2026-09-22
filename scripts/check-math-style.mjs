@@ -50,6 +50,7 @@ let failed = false;
 
 for (const file of files) {
   const content = readFileSync(file, 'utf8');
+
   for (const className of legacyClasses) {
     const regex = new RegExp('class=["\\\'][^"\\\']*\\b' + className + '\\b');
     if (regex.test(content)) {
@@ -74,18 +75,25 @@ for (const file of files) {
   }
 
   const visibleSource = content
-    .replace(/<svg\\b[\\s\\S]*?<\\/svg>/gi, '')
-    .replace(/<MathExpr\\b[^>]*\\/>/gs, '')
-    .replace(/tex=(?:\"[^\"]*\"|'[^']*')/gs, '');
+    .replace(/^---[\s\S]*?---/m, '')
+    .replace(/\b(?:title|description)="[^"]*"/g, '')
+    .replace(/<svg\b[\s\S]*?<\/svg>/gi, '')
+    .replace(/<MathExpr\b[^>]*\/>/gs, '')
+    .replace(/tex=(?:"[^"]*"|'[^']*')/gs, '');
 
-  if (/\\bN\\s+samples?\\b/u.test(visibleSource)) {
+  if (/\bN\s+samples?\b/u.test(visibleSource)) {
     failed = true;
     console.error(`${relative('.', file)}: bare "N sample(s)" found. Render N with <MathExpr />.`);
   }
 
-  if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C)\\[[^\\]<>]+\\]/u.test(visibleSource)) {
+  if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C|r|s)\[[^\]<>]+\]/u.test(visibleSource)) {
     failed = true;
     console.error(`${relative('.', file)}: bare indexed math notation found. Use <MathExpr />.`);
+  }
+
+  if (/[Δτθφμσωλπℓ]|[₀₁₂₃₄₅₆₇₈₉ᵤₛ]/u.test(visibleSource)) {
+    failed = true;
+    console.error(`${relative('.', file)}: bare mathematical Unicode notation found. Use <MathExpr />.`);
   }
 }
 
