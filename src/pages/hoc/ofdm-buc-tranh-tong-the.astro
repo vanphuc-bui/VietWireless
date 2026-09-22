@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OFDMOrthogonalityExplorer from '../../components/OFDMOrthogonalityExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -86,12 +86,12 @@ import Math from '../../components/Math.astro';
 
     <section class="concept-block" id="orthogonality">
       <p class="concept-kicker">03 · “NHIỀU SUBCARRIERS” CHƯA ĐỦ, CHÚNG PHẢI ĐƯỢC ĐẶT ĐÚNG SPACING</p>
-      <h2>Trong basic CP-OFDM construction, subcarrier spacing và useful symbol duration liên hệ bởi <Math tex="\\Delta f = 1/T_u" />.</h2>
+      <h2>Trong basic CP-OFDM construction, subcarrier spacing và useful symbol duration liên hệ bởi <MathExpr tex="\\Delta f = 1/T_u" />.</h2>
 
-      <Math tex="\\Delta f = \\frac{1}{T_u}" display />
+      <MathExpr tex="\\Delta f = \\frac{1}{T_u}" display />
 
       <p>
-        Trong useful interval <Math tex="T_u" />, subcarrier k hoàn thành một số nguyên chu kỳ tương đối với basis.
+        Trong useful interval <MathExpr tex="T_u" />, subcarrier k hoàn thành một số nguyên chu kỳ tương đối với basis.
         Hai complex exponentials khác integer index có inner product bằng zero trên interval đó.
         Đây là orthogonality.
       </p>
@@ -138,12 +138,12 @@ import Math from '../../components/Math.astro';
       <p class="concept-kicker">06 · SAU FFT, WIDEBAND CHANNEL TRỞ THÀNH NHIỀU COMPLEX GAINS H[k]</p>
       <h2>Đây là payoff lớn nhất về equalization.</h2>
 
-      <Math tex="Y[k] = <Math tex="H[k]X[k]" /> + W[k]" display />
+      <MathExpr tex="Y[k] = <MathExpr tex="H[k]X[k]" /> + W[k]" display />
 
       <p>
         Nếu mỗi subcarrier đủ hẹp để channel gần như flat trong bandwidth của nó,
         H[k] chỉ là một complex scalar tại subcarrier k.
-        Equalization có thể gần như <Math tex="Y[k]/H[k]" /> trong zero-forcing intuition.
+        Equalization có thể gần như <MathExpr tex="Y[k]/H[k]" /> trong zero-forcing intuition.
       </p>
 
       <p>
@@ -170,11 +170,11 @@ import Math from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="numbers">
-      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN Δf VỚI <Math tex="T_u" /></p>
+      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN Δf VỚI <MathExpr tex="T_u" /></p>
       <h2>15 kHz spacing cho useful symbol khoảng 66.67 µs; 120 kHz spacing chỉ còn khoảng 8.33 µs.</h2>
 
       <p>
-        Vì <Math tex="T_u" /> = 1/Δf, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
+        Vì <MathExpr tex="T_u" /> = 1/Δf, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
         Đây chính là nền tảng của 5G NR numerology ở Bài 18.
         Nó cũng cho thấy tradeoff:
         symbol ngắn hơn có lợi cho một số timing/latency và relative-CFO conditions,
@@ -215,7 +215,7 @@ import Math from '../../components/Math.astro';
       <ol class="recap-list">
         <li><strong>Parallelization:</strong> chia data qua nhiều narrowband subcarriers.</li>
         <li><strong>Longer symbol duration:</strong> làm channel memory nhỏ hơn tương đối so với useful interval.</li>
-        <li><strong>Orthogonality:</strong> <Math tex="\\Delta f = 1/T_u" /> trong ideal basis construction.</li>
+        <li><strong>Orthogonality:</strong> <MathExpr tex="\\Delta f = 1/T_u" /> trong ideal basis construction.</li>
         <li><strong>IFFT:</strong> tổng hợp all subcarrier coefficients thành one time-domain block.</li>
         <li><strong>FFT:</strong> project received block trở lại từng frequency basis.</li>
         <li><strong>H[k]:</strong> wideband selective channel trở thành per-subcarrier complex gains.</li>
