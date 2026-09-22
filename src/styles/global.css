@@ -5955,3 +5955,658 @@ g.active .mod-point {
   .near-rx { left: 48%; }
   .far-rx { right: 3%; }
 }
+
+
+/* --- Site-wide mobile hardening --- */
+img,
+svg {
+  max-width: 100%;
+}
+
+main,
+.shell,
+.lesson,
+.essay-content,
+.wide-content {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    gap: 18px;
+  }
+
+  .site-nav {
+    gap: 16px;
+  }
+
+  .lesson,
+  .essay-content,
+  .wide-content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell,
+  .site-header,
+  .site-footer {
+    width: min(calc(100% - 28px), var(--max));
+  }
+
+  .site-header {
+    min-height: 0;
+    padding: 12px 0 14px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+  }
+
+  .brand strong {
+    font-size: 1.02rem;
+  }
+
+  .site-nav {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    padding: 2px 0 3px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-nav a,
+  .site-nav a:nth-child(-n+2) {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-height: 34px;
+    font-size: .8rem;
+  }
+
+  .home-essay {
+    padding-bottom: 72px;
+  }
+
+  .essay-hero {
+    padding: 50px 0 48px;
+  }
+
+  .essay-hero h1 {
+    font-size: clamp(2.25rem, 10vw, 3.15rem);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    overflow-wrap: break-word;
+  }
+
+  .essay-lead {
+    margin-top: 22px;
+    font-size: 1.05rem;
+    line-height: 1.58;
+  }
+
+  .hero-note {
+    margin-top: 28px;
+    padding: 15px 16px;
+  }
+
+  .essay-section {
+    padding: 50px 0;
+  }
+
+  .essay-content h2,
+  .start-card h2 {
+    margin-bottom: 20px;
+    font-size: clamp(1.65rem, 7.2vw, 2.2rem);
+    line-height: 1.16;
+  }
+
+  .essay-content > p {
+    font-size: .98rem;
+    line-height: 1.68;
+  }
+
+  .teaching-quote {
+    margin: 26px 0;
+    padding-left: 18px;
+  }
+
+  .teaching-quote p {
+    font-size: 1.18rem;
+  }
+
+  .author-strip {
+    grid-template-columns: 44px 1fr;
+    gap: 13px;
+  }
+
+  .author-monogram {
+    width: 42px;
+    height: 42px;
+  }
+
+  .course-list li {
+    min-height: 0;
+    gap: 6px;
+    padding: 18px 4px;
+  }
+
+  .course-list a,
+  .course-status {
+    justify-self: start;
+    margin-top: 4px;
+  }
+
+  .start-card {
+    padding: 22px 18px;
+  }
+
+  .lesson {
+    padding-block: 26px 72px;
+  }
+
+  .lesson-hero {
+    padding: 16px 0 42px;
+  }
+
+  .back-link {
+    margin-bottom: 30px;
+    font-size: .82rem;
+  }
+
+  .lesson-hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.15rem, 8.4vw, 2.8rem);
+    line-height: 1.02;
+    letter-spacing: -0.024em;
+    overflow-wrap: break-word;
+  }
+
+  .lesson-deck {
+    margin-top: 20px;
+    font-size: 1.04rem;
+    line-height: 1.58;
+  }
+
+  .concept-block {
+    padding-block: 48px;
+  }
+
+  .concept-block > h2 {
+    margin-bottom: 18px;
+    font-size: clamp(1.45rem, 6.3vw, 1.95rem);
+    line-height: 1.2;
+    overflow-wrap: break-word;
+  }
+
+  .concept-block > p {
+    font-size: .98rem;
+    line-height: 1.68;
+  }
+
+  .chapter-label,
+  .section-kicker,
+  .concept-kicker,
+  .eyebrow {
+    margin-bottom: 12px;
+    font-size: .66rem;
+    letter-spacing: .1em;
+  }
+
+  .mental-model,
+  .precision-note,
+  .scope-note,
+  .system-position {
+    padding: 15px 16px;
+  }
+
+  .explain-card,
+  .domain-grid article,
+  .sinusoid-three-grid article,
+  .phase-comparison article,
+  .complex-plane-intro article,
+  .complex-two-views article,
+  .domain-question-grid article,
+  .tone-domain-story > div,
+  .spectrum-two-parts article,
+  .transform-family article,
+  .window-compare article,
+  .modulation-explainer-grid > div,
+  .bits-per-symbol-grid article,
+  .rf-front-end-grid article,
+  .channel-parameter-grid article,
+  .impairment-grid article,
+  .multipath-tap-grid article,
+  .delay-metric-grid article,
+  .shadowing-cases article,
+  .channel-model-compare article,
+  .interference-cases article {
+    padding: 16px;
+  }
+
+  .two-column,
+  .domain-grid,
+  .sinusoid-three-grid,
+  .phase-comparison,
+  .complex-plane-intro,
+  .complex-two-views,
+  .domain-question-grid,
+  .tone-domain-story,
+  .spectrum-two-parts,
+  .transform-family,
+  .window-compare,
+  .modulation-explainer-grid,
+  .bits-per-symbol-grid,
+  .rf-front-end-grid,
+  .channel-parameter-grid,
+  .impairment-grid,
+  .multipath-tap-grid,
+  .delay-metric-grid,
+  .shadowing-cases,
+  .channel-model-compare,
+  .interference-cases {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-tabs {
+    gap: 6px;
+    padding: 8px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lab-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lab-tabs button,
+  .segmented button,
+  .play-button,
+  .sampling-presets button,
+  .sinusoid-presets button,
+  .modulation-tabs button,
+  .modulation-bit-grid button {
+    min-height: 40px;
+    flex: 0 0 auto;
+  }
+
+  .interactive-panel,
+  .sampling-lab-plot,
+  .sinusoid-plot-wrap,
+  .phasor-plot,
+  .iq-baseband-plane,
+  .iq-baseband-rf,
+  .fourier-panels > div,
+  .modulation-constellation,
+  .modulation-symbol-picker,
+  .rf-symbol-plane,
+  .rf-mixer-panel,
+  .channel-wave-panel,
+  .channel-plane-panel,
+  .noise-constellation-wrap,
+  .impulse-response-panel,
+  .multipath-wave-panel {
+    padding: 12px;
+  }
+
+  .lab-toolbar {
+    width: 100%;
+    gap: 14px;
+  }
+
+  .tone-controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tone-controls label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  input[type="range"] {
+    min-height: 34px;
+  }
+
+  .sampling-lab-controls,
+  .sinusoid-controls,
+  .phasor-controls,
+  .iq-baseband-controls,
+  .fourier-controls,
+  .rf-chain-controls,
+  .channel-controls,
+  .noise-controls,
+  .multipath-controls {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .sampling-lab-readout,
+  .sinusoid-readout,
+  .phasor-readout,
+  .iq-baseband-readout,
+  .fourier-readout,
+  .modulation-readout,
+  .rf-chain-readout,
+  .channel-readout,
+  .noise-readout,
+  .multipath-readout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sampling-lab-readout > div,
+  .sinusoid-readout > div,
+  .phasor-readout > div,
+  .iq-baseband-readout > div,
+  .fourier-readout > div,
+  .modulation-readout > div,
+  .rf-chain-readout > div,
+  .channel-readout > div,
+  .noise-readout > div,
+  .multipath-readout > div {
+    min-width: 0;
+    min-height: 88px;
+    padding: 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sampling-lab-readout > div:nth-child(odd),
+  .sinusoid-readout > div:nth-child(odd),
+  .phasor-readout > div:nth-child(odd),
+  .iq-baseband-readout > div:nth-child(odd),
+  .fourier-readout > div:nth-child(odd),
+  .modulation-readout > div:nth-child(odd),
+  .rf-chain-readout > div:nth-child(odd),
+  .channel-readout > div:nth-child(odd),
+  .noise-readout > div:nth-child(odd),
+  .multipath-readout > div:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .sampling-lab-readout > div:nth-last-child(-n+2),
+  .sinusoid-readout > div:nth-last-child(-n+2),
+  .phasor-readout > div:nth-last-child(-n+2),
+  .iq-baseband-readout > div:nth-last-child(-n+2),
+  .fourier-readout > div:nth-last-child(-n+2),
+  .modulation-readout > div:nth-last-child(-n+2),
+  .rf-chain-readout > div:nth-last-child(-n+2),
+  .channel-readout > div:nth-last-child(-n+2),
+  .noise-readout > div:nth-last-child(-n+2),
+  .multipath-readout > div:nth-last-child(-n+2) {
+    border-bottom: 0;
+  }
+
+  .sampling-lab-readout strong,
+  .sinusoid-readout strong,
+  .phasor-readout strong,
+  .iq-baseband-readout strong,
+  .fourier-readout strong,
+  .modulation-readout strong,
+  .rf-chain-readout strong,
+  .channel-readout strong,
+  .noise-readout strong,
+  .multipath-readout strong {
+    overflow-wrap: anywhere;
+  }
+
+  .lesson-navigation {
+    margin-top: 46px;
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-nav-card {
+    min-height: 0;
+    padding: 18px;
+  }
+
+  .lesson-nav-card strong {
+    margin-top: 9px;
+    font-size: 1.08rem;
+  }
+
+  .site-footer {
+    min-height: 0;
+    padding: 34px 0 42px;
+    gap: 18px;
+  }
+
+  .footer-note {
+    text-align: left;
+  }
+
+  .iq-buffer {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .iq-buffer > div {
+    min-width: 520px;
+  }
+
+  .resource-grid-panel {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .resource-grid-wrap {
+    min-width: 520px;
+  }
+
+  :is(
+    .sampling-equation,
+    .sinusoid-formula,
+    .sinusoid-shift-equation,
+    .complex-equation,
+    .euler-equation,
+    .rotating-equation,
+    .iq-main-equation,
+    .dft-equation,
+    .rate-equation,
+    .rf-main-equation,
+    .channel-main-equation,
+    .propagation-equation,
+    .delay-phase-equation,
+    .thermal-equation,
+    .evm-equation,
+    .snr-evm-relation,
+    .multipath-equation,
+    .convolution-equation,
+    .rms-delay-equation
+  ) {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :is(
+    .sampling-equation,
+    .sinusoid-formula,
+    .sinusoid-shift-equation,
+    .complex-equation,
+    .euler-equation,
+    .rotating-equation,
+    .iq-main-equation,
+    .dft-equation,
+    .rate-equation,
+    .rf-main-equation,
+    .channel-main-equation,
+    .propagation-equation,
+    .delay-phase-equation,
+    .thermal-equation,
+    .evm-equation,
+    .snr-evm-relation,
+    .multipath-equation,
+    .convolution-equation,
+    .rms-delay-equation
+  ) > span,
+  :is(
+    .sampling-equation,
+    .sinusoid-formula,
+    .sinusoid-shift-equation,
+    .complex-equation,
+    .euler-equation,
+    .rotating-equation,
+    .iq-main-equation,
+    .dft-equation,
+    .rate-equation,
+    .rf-main-equation,
+    .channel-main-equation,
+    .propagation-equation,
+    .delay-phase-equation,
+    .thermal-equation,
+    .evm-equation,
+    .snr-evm-relation,
+    .multipath-equation,
+    .convolution-equation,
+    .rms-delay-equation
+  ) > b {
+    white-space: nowrap;
+  }
+
+  .system-position-flow {
+    gap: 6px;
+    font-size: .76rem;
+  }
+
+  .flow-op,
+  .ofdm-rx-return > b,
+  .projection-story > b,
+  .rf-chain-overview > b,
+  .dac-story > b,
+  .frequency-translation > b,
+  .antenna-story > b,
+  .receiver-chain > b,
+  .phase-distance-story > b,
+  .fading-story > b,
+  .measurement-chain > b,
+  .copy-sum-story > b,
+  .isi-story > b,
+  .delay-frequency-duality > b {
+    white-space: normal;
+  }
+
+  .history-tech,
+  .history-tech-figure,
+  .signal-explorer,
+  .sampling-alias-lab,
+  .sinusoid-lab,
+  .phasor-lab,
+  .iq-baseband-lab,
+  .fourier-dft-lab,
+  .modulation-lab,
+  .rf-chain-lab,
+  .wireless-channel-lab,
+  .noise-evm-lab,
+  .multipath-lab {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 430px) {
+  .shell,
+  .site-header,
+  .site-footer {
+    width: min(calc(100% - 22px), var(--max));
+  }
+
+  .site-nav {
+    gap: 13px;
+  }
+
+  .lesson-hero h1 {
+    font-size: clamp(2rem, 9.4vw, 2.45rem);
+  }
+
+  .essay-hero h1 {
+    font-size: clamp(2.1rem, 10.5vw, 2.8rem);
+  }
+
+  .concept-block {
+    padding-block: 42px;
+  }
+
+  .sampling-lab-readout,
+  .sinusoid-readout,
+  .phasor-readout,
+  .iq-baseband-readout,
+  .fourier-readout,
+  .modulation-readout,
+  .rf-chain-readout,
+  .channel-readout,
+  .noise-readout,
+  .multipath-readout {
+    grid-template-columns: 1fr;
+  }
+
+  .sampling-lab-readout > div:nth-child(odd),
+  .sinusoid-readout > div:nth-child(odd),
+  .phasor-readout > div:nth-child(odd),
+  .iq-baseband-readout > div:nth-child(odd),
+  .fourier-readout > div:nth-child(odd),
+  .modulation-readout > div:nth-child(odd),
+  .rf-chain-readout > div:nth-child(odd),
+  .channel-readout > div:nth-child(odd),
+  .noise-readout > div:nth-child(odd),
+  .multipath-readout > div:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .sampling-lab-readout > div,
+  .sinusoid-readout > div,
+  .phasor-readout > div,
+  .iq-baseband-readout > div,
+  .fourier-readout > div,
+  .modulation-readout > div,
+  .rf-chain-readout > div,
+  .channel-readout > div,
+  .noise-readout > div,
+  .multipath-readout > div {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sampling-lab-readout > div:last-child,
+  .sinusoid-readout > div:last-child,
+  .phasor-readout > div:last-child,
+  .iq-baseband-readout > div:last-child,
+  .fourier-readout > div:last-child,
+  .modulation-readout > div:last-child,
+  .rf-chain-readout > div:last-child,
+  .channel-readout > div:last-child,
+  .noise-readout > div:last-child,
+  .multipath-readout > div:last-child {
+    border-bottom: 0;
+  }
+
+  .course-list h3 {
+    font-size: 1.08rem;
+  }
+
+  .lesson-nav-card {
+    padding: 16px;
+  }
+}
