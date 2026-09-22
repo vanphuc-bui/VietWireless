@@ -7761,3 +7761,126 @@ main,
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Site-wide lesson typography scale: keep section titles and equations quieter --- */
+:root {
+  --lesson-section-title-size: clamp(1.3rem, 2vw, 1.72rem);
+  --lesson-equation-size: clamp(1.08rem, 1.85vw, 1.48rem);
+}
+
+.lesson .concept-block > h2 {
+  max-width: 760px;
+  margin-bottom: 17px;
+  font-size: var(--lesson-section-title-size);
+  line-height: 1.3;
+  letter-spacing: -0.008em;
+}
+
+:is(
+  .sampling-equation,
+  .sinusoid-formula,
+  .sinusoid-shift-equation,
+  .complex-equation,
+  .euler-equation,
+  .rotating-equation,
+  .iq-main-equation,
+  .dft-equation,
+  .rate-equation,
+  .rf-main-equation,
+  .channel-main-equation,
+  .propagation-equation,
+  .delay-phase-equation,
+  .thermal-equation,
+  .evm-equation,
+  .snr-evm-relation,
+  .multipath-equation,
+  .convolution-equation,
+  .rms-delay-equation,
+  .corr-equation,
+  .ofdm-main-equation,
+  .ifft-main-equation,
+  .rb-definition,
+  .numerology-main-equation,
+  .cp-overhead-equation,
+  .cp-frequency-equation
+) {
+  margin-block: 22px;
+  padding: 16px 18px;
+}
+
+:is(
+  .sampling-equation,
+  .sinusoid-formula,
+  .sinusoid-shift-equation,
+  .complex-equation,
+  .euler-equation,
+  .rotating-equation,
+  .iq-main-equation,
+  .dft-equation,
+  .rate-equation,
+  .rf-main-equation,
+  .channel-main-equation,
+  .propagation-equation,
+  .delay-phase-equation,
+  .thermal-equation,
+  .evm-equation,
+  .snr-evm-relation,
+  .multipath-equation,
+  .convolution-equation,
+  .rms-delay-equation,
+  .corr-equation,
+  .ofdm-main-equation,
+  .ifft-main-equation,
+  .rb-definition,
+  .numerology-main-equation,
+  .cp-overhead-equation,
+  .cp-frequency-equation
+) :is(span, b) {
+  font-size: var(--lesson-equation-size);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --lesson-section-title-size: clamp(1.2rem, 5.3vw, 1.48rem);
+    --lesson-equation-size: clamp(1.02rem, 4.7vw, 1.28rem);
+  }
+
+  .lesson .concept-block > h2 {
+    max-width: 100%;
+    margin-bottom: 15px;
+    line-height: 1.32;
+  }
+
+  :is(
+    .sampling-equation,
+    .sinusoid-formula,
+    .sinusoid-shift-equation,
+    .complex-equation,
+    .euler-equation,
+    .rotating-equation,
+    .iq-main-equation,
+    .dft-equation,
+    .rate-equation,
+    .rf-main-equation,
+    .channel-main-equation,
+    .propagation-equation,
+    .delay-phase-equation,
+    .thermal-equation,
+    .evm-equation,
+    .snr-evm-relation,
+    .multipath-equation,
+    .convolution-equation,
+    .rms-delay-equation,
+    .corr-equation,
+    .ofdm-main-equation,
+    .ifft-main-equation,
+    .rb-definition,
+    .numerology-main-equation,
+    .cp-overhead-equation,
+    .cp-frequency-equation
+  ) {
+    margin-block: 19px;
+    padding: 14px 15px;
+  }
+}
