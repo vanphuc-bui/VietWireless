@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MultipathExplorer from '../../components/MultipathExplorer.jsx';
+import Math from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -71,25 +72,21 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       <p class="concept-kicker">02 · MỖI PATH TRỞ THÀNH MỘT CHANNEL TAP</p>
       <h2>Impulse response ghi lại “copy mạnh bao nhiêu” và “copy tới lúc nào”.</h2>
 
-      <div class="multipath-equation">
-        <span>h(τ)</span>
-        <b>=</b>
-        <span>Σ<sub>ℓ</sub> α<sub>ℓ</sub>δ(τ-τ<sub>ℓ</sub>)</span>
-      </div>
+      <Math tex="h(\\tau) = \\sum_{\\ell} \\alpha_{\\ell}\\,\\delta(\\tau-\\tau_{\\ell})" display />
 
       <div class="multipath-tap-grid">
         <article>
-          <span class="card-label">α<sub>ℓ</sub></span>
+          <span class="card-label"><Math tex="\\alpha_{\\ell}" /></span>
           <h3>complex path gain</h3>
           <p>Magnitude cho attenuation; angle cho phase rotation của path ℓ.</p>
         </article>
         <article>
-          <span class="card-label">τ<sub>ℓ</sub></span>
+          <span class="card-label"><Math tex="\\tau_{\\ell}" /></span>
           <h3>path delay</h3>
           <p>Copy ℓ xuất hiện muộn bao nhiêu so với reference timing.</p>
         </article>
         <article>
-          <span class="card-label">δ(τ-τ<sub>ℓ</sub>)</span>
+          <span class="card-label"><Math tex="\\delta(\\tau-\\tau_{\\ell})" /></span>
           <h3>tap location</h3>
           <p>Đặt complex coefficient đúng vị trí trên delay axis.</p>
         </article>
@@ -105,13 +102,7 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       <p class="concept-kicker">03 · CHANNEL ÁP DỤNG CÙNG MỘT FILTER LÊN TOÀN WAVEFORM</p>
       <h2>Received signal là tổng các copies bị scale và delay, tức convolution.</h2>
 
-      <div class="convolution-equation">
-        <span>y(t)</span>
-        <b>=</b>
-        <span>x(t) * h(t)</span>
-        <b>=</b>
-        <span>Σ<sub>ℓ</sub> α<sub>ℓ</sub>x(t-τ<sub>ℓ</sub>)</span>
-      </div>
+      <Math tex="y(t) = (x*h)(t) = \\sum_{\\ell} \\alpha_{\\ell}x(t-\\tau_{\\ell})" display />
 
       <div class="copy-sum-story">
         <div><small>PATH 0</small><strong>α₀x(t)</strong><span>direct / earliest</span></div>
@@ -133,11 +124,7 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH H(f)</p>
       <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi f.</h2>
 
-      <div class="multipath-equation">
-        <span>H(f)</span>
-        <b>=</b>
-        <span>Σ<sub>ℓ</sub> α<sub>ℓ</sub>e<sup>-j2πfτ<sub>ℓ</sub></sup></span>
-      </div>
+      <Math tex="H(f) = \\sum_{\\ell} \\alpha_{\\ell}e^{-j2\\pi f\\tau_{\\ell}}" display />
 
       <p>
         Đây là một kết quả rất quan trọng.
@@ -185,7 +172,7 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       </div>
 
       <p>
-        Nếu path coefficient là α<sub>ℓ</sub>, power weight thường tỉ lệ với |α<sub>ℓ</sub>|².
+        Nếu path coefficient là <Math tex="\\alpha_{\\ell}" />, power weight thường tỉ lệ với <Math tex="|\\alpha_{\\ell}|^2" />.
         PDP không giữ phase của path, nhưng rất hữu ích để định nghĩa mean delay và RMS delay spread.
       </p>
     </section>
@@ -197,12 +184,12 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       <div class="delay-metric-grid">
         <article>
           <span class="card-label">MEAN DELAY</span>
-          <h3>τ̄ = ΣP<sub>ℓ</sub>τ<sub>ℓ</sub> / ΣP<sub>ℓ</sub></h3>
+          <h3><Math tex="\\bar{\\tau} = \\frac{\\sum_{\\ell}P_{\\ell}\\tau_{\\ell}}{\\sum_{\\ell}P_{\\ell}}" /></h3>
           <p>Center of mass của PDP trên delay axis.</p>
         </article>
         <article>
           <span class="card-label">RMS DELAY SPREAD</span>
-          <h3>σ<sub>τ</sub></h3>
+          <h3><Math tex="\\sigma_{\\tau}" /></h3>
           <p>Power-weighted spread của delays quanh mean delay.</p>
         </article>
         <article>
@@ -212,11 +199,7 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
         </article>
       </div>
 
-      <div class="rms-delay-equation">
-        <span>σ<sub>τ</sub></span>
-        <b>=</b>
-        <span>√[ΣP<sub>ℓ</sub>(τ<sub>ℓ</sub>-τ̄)² / ΣP<sub>ℓ</sub>]</span>
-      </div>
+      <Math tex="\\sigma_{\\tau} = \\sqrt{\\frac{\\sum_{\\ell} P_{\\ell}(\\tau_{\\ell}-\\bar{\\tau})^2}{\\sum_{\\ell}P_{\\ell}}}" display />
 
       <p>
         Ví dụ có hai paths tại 0 µs và 2 µs, với power tương ứng 1 và 0.25.
@@ -281,7 +264,7 @@ import MultipathExplorer from '../../components/MultipathExplorer.jsx';
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Multipath:</strong> nhiều delayed/scaled/rotated copies của cùng signal.</li>
-        <li><strong>Impulse response:</strong> mô tả channel bằng complex taps α<sub>ℓ</sub> tại delays τ<sub>ℓ</sub>.</li>
+        <li><strong>Impulse response:</strong> mô tả channel bằng complex taps <Math tex="\\alpha_{\\ell}" /> tại delays <Math tex="\\tau_{\\ell}" />.</li>
         <li><strong>Convolution:</strong> received waveform là tổng các delayed copies.</li>
         <li><strong>H(f):</strong> các path delays tạo phase khác nhau theo frequency, dẫn tới peaks/notches.</li>
         <li><strong>PDP:</strong> giữ path power theo delay và bỏ phase.</li>
