@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NumerologyExplorer from '../../components/NumerologyExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -31,8 +31,8 @@ import Math from '../../components/Math.astro';
         <span>NUMEROLOGY μ</span>
         <div class="system-position-flow">
           <strong>μ</strong><b>→</b>
-          <span><Math tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" /></span><b>→</b>
-          <span><Math tex="T_u" />=1/Δf</span><b>→</b>
+          <span><MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" /></span><b>→</b>
+          <span><MathExpr tex="T_u" />=1/Δf</span><b>→</b>
           <span>OFDM symbol scale</span><b>→</b>
           <span>slots / 1 ms</span>
         </div>
@@ -44,10 +44,10 @@ import Math from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="scs">
-      <p class="concept-kicker">01 · SUBCARRIER SPACING SCALE THEO <Math tex="2^{\\mu}" /></p>
+      <p class="concept-kicker">01 · SUBCARRIER SPACING SCALE THEO <MathExpr tex="2^{\\mu}" /></p>
       <h2>Reference 15 kHz được nhân đôi mỗi khi μ tăng một đơn vị.</h2>
 
-      <Math tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" display />
+      <MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" display />
 
       <div class="numerology-simple-table">
         <div><strong>μ=0</strong><span>15 kHz</span></div>
@@ -64,9 +64,9 @@ import Math from '../../components/Math.astro';
 
     <section class="concept-block" id="tu">
       <p class="concept-kicker">02 · SCS TĂNG THÌ USEFUL SYMBOL NGẮN LẠI</p>
-      <h2>OFDM orthogonality relation vẫn là <Math tex="T_u" /> = 1/Δf.</h2>
+      <h2>OFDM orthogonality relation vẫn là <MathExpr tex="T_u" /> = 1/Δf.</h2>
 
-      <Math tex="T_u = \\frac{1}{\\Delta f}" display />
+      <MathExpr tex="T_u = \\frac{1}{\\Delta f}" display />
 
       <div class="numerology-simple-table">
         <div><strong>15 kHz</strong><span>66.67 µs</span></div>
@@ -77,7 +77,7 @@ import Math from '../../components/Math.astro';
 
       <p>
         Đây là useful interval, chưa cộng CP.
-        Total OFDM-symbol interval dài hơn <Math tex="T_u" />.
+        Total OFDM-symbol interval dài hơn <MathExpr tex="T_u" />.
         Khi μ tăng, cả useful duration và CP time scale đều ngắn lại theo numerology structure.
       </p>
     </section>
@@ -91,7 +91,7 @@ import Math from '../../components/Math.astro';
         <b>→</b>
         <div><small>SUBFRAME</small><strong>1 ms</strong><span>fixed time unit</span></div>
         <b>→</b>
-        <div><small>SLOTS</small><strong><Math tex="2^{\\mu}" /></strong><span>normal CP, per subframe</span></div>
+        <div><small>SLOTS</small><strong><MathExpr tex="2^{\\mu}" /></strong><span>normal CP, per subframe</span></div>
       </div>
 
       <p>
@@ -109,15 +109,15 @@ import Math from '../../components/Math.astro';
       <h2>Tăng μ không làm slot giữ nguyên thời gian; slot co lại theo đúng OFDM time scale.</h2>
 
       <div class="nr-slot-equations">
-        <div><span>slots / subframe</span><strong><Math tex="2^{\\mu}" /></strong></div>
-        <div><span>slot duration</span><strong><Math tex="1\\,\\mathrm{ms}/2^{\\mu}" /></strong></div>
+        <div><span>slots / subframe</span><strong><MathExpr tex="2^{\\mu}" /></strong></div>
+        <div><span>slot duration</span><strong><MathExpr tex="1\\,\\mathrm{ms}/2^{\\mu}" /></strong></div>
         <div><span>OFDM symbols / slot</span><strong>14</strong></div>
       </div>
 
       <p>
         Ví dụ μ=1:
         SCS = 30 kHz,
-        <Math tex="T_u" />≈33.33 µs,
+        <MathExpr tex="T_u" />≈33.33 µs,
         slot dài 0.5 ms và chứa 14 symbols với normal CP.
         Average symbol interval bao gồm CP vì vậy khoảng 0.5 ms / 14 ≈ 35.7 µs.
       </p>
@@ -149,7 +149,7 @@ import Math from '../../components/Math.astro';
           <span class="card-label">SMALLER SCS</span>
           <h3>longer useful symbol</h3>
           <p>
-            Fixed delay spread chiếm tỷ lệ nhỏ hơn so với <Math tex="T_u" />,
+            Fixed delay spread chiếm tỷ lệ nhỏ hơn so với <MathExpr tex="T_u" />,
             nhưng một fixed CFO/Doppler chiếm tỷ lệ lớn hơn so với subcarrier spacing.
           </p>
         </article>
@@ -181,8 +181,8 @@ import Math from '../../components/Math.astro';
       </p>
 
       <p>
-        Ngược lại, một channel path trễ 5 µs chiếm 7.5% của <Math tex="T_u" /> ở 15 kHz,
-        nhưng chiếm 60% của <Math tex="T_u" /> ở 120 kHz.
+        Ngược lại, một channel path trễ 5 µs chiếm 7.5% của <MathExpr tex="T_u" /> ở 15 kHz,
+        nhưng chiếm 60% của <MathExpr tex="T_u" /> ở 120 kHz.
         Đây là một ví dụ rõ về việc không có numerology “tốt hơn tuyệt đối”.
       </p>
     </section>
@@ -231,10 +231,10 @@ import Math from '../../components/Math.astro';
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Numerology:</strong> scale OFDM lattice bằng μ.</li>
-        <li><strong>SCS:</strong> Δf = 15·<Math tex="2^{\\mu}" /> kHz.</li>
-        <li><strong>Useful duration:</strong> <Math tex="T_u" /> = 1/Δf, chưa gồm CP.</li>
+        <li><strong>SCS:</strong> Δf = 15·<MathExpr tex="2^{\\mu}" /> kHz.</li>
+        <li><strong>Useful duration:</strong> <MathExpr tex="T_u" /> = 1/Δf, chưa gồm CP.</li>
         <li><strong>Frame:</strong> 10 ms và gồm 10 subframes 1 ms.</li>
-        <li><strong>Normal CP:</strong> 14 OFDM symbols/slot và <Math tex="2^{\\mu}" /> slots/subframe.</li>
+        <li><strong>Normal CP:</strong> 14 OFDM symbols/slot và <MathExpr tex="2^{\\mu}" /> slots/subframe.</li>
         <li><strong>Tradeoff:</strong> larger SCS giảm relative CFO nhưng rút ngắn useful symbol so với absolute delay spread.</li>
         <li><strong>Extended CP:</strong> current Release 18 table liệt kê cho μ=2 với 12 symbols/slot.</li>
         <li><strong>Slot:</strong> là time structure, không phải bắt buộc mọi allocation phải dùng đủ cả slot.</li>
