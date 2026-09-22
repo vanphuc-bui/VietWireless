@@ -122,3 +122,21 @@ Một bài nền tảng nên có đủ các lớp sau nếu khái niệm cho ph�
 Không dùng word count làm mục tiêu cứng. Tuy nhiên nếu một bài phức tạp như OFDM, Cyclic Prefix, resource grid hoặc channel chỉ gồm vài đoạn ngắn và nhiều card, cần xem lại liệu nó đã giải thích đủ "vì sao" và "như thế nào" hay mới chỉ liệt kê khái niệm.
 
 Trước khi merge một cụm nhiều bài, so độ sâu giữa các bài. Không để các bài sau trở thành bản tóm tắt ngắn dần chỉ vì đang viết theo batch.
+
+
+## Chuẩn viết công thức toán
+
+Nguồn chuẩn chi tiết: `docs/MATH_STYLE_GUIDE.md`.
+
+- Mọi notation toán trong prose dùng shared component `Math` thay vì tự ghép `<sub>`, `<sup>`, ký tự Unicode như `√`, `Σ` hoặc text giả-LaTeX.
+- Công thức đứng riêng dùng `<Math tex="..." display />`. Công thức ngắn nằm trong câu dùng `<Math tex="..." />`.
+- Công thức phải được viết bằng TeX/LaTeX notation và render bằng KaTeX ở build time.
+- Không dùng ảnh chứa công thức.
+- Không tự dựng dấu căn, phân số, tổng, tích phân, matrix hoặc superscript/subscript bằng HTML/CSS.
+- Chỉ dùng display math khi công thức là một bước lập luận đáng dừng mắt. Biến ngắn trong prose nên để inline.
+- Mỗi ký hiệu phải được giải thích trước hoặc ngay sau lần xuất hiện đầu tiên.
+- Giữ notation nhất quán trong cả bài: không đổi giữa `f_s`, `fₛ`, `fs` nếu đang chỉ cùng một đại lượng.
+- Với vectors/matrices, dùng `\mathbf{x}`, `\mathbf{H}` khi thật sự là vector/matrix; scalar để italic mặc định.
+- Với text trong công thức, dùng `\text{...}` hoặc `\mathrm{...}` đúng mục đích; không viết cả câu tiếng Việt bên trong math.
+- Đơn vị để upright và có khoảng cách hợp lý, ví dụ `15\,\mathrm{kHz}`, `66.7\,\mu\mathrm{s}`.
+- QA phải chạy `npm run check:math` để chặn legacy equation wrappers và raw formula markup quay trở lại.
