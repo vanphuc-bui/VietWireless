@@ -132,12 +132,12 @@ function TimeFrequencyLab() {
       <div className="lab-readout">
         {view === 'time' ? (
           <>
-            <strong>Nhìn thấy waveform tổng.</strong>
+            <strong>Ở time domain, mình đang nhìn waveform tổng.</strong>
             <span>Hai tone đã cộng vào nhau nên khó đoán bằng mắt rằng bên trong có {f1} Hz và {f2} Hz.</span>
           </>
         ) : (
           <>
-            <strong>FFT/DFT làm cấu trúc trở nên rõ.</strong>
+            <strong>Sang frequency domain, hai thành phần tách ra rõ hơn.</strong>
             <span>Hai peak chính xuất hiện quanh {f1} Hz và {f2} Hz.</span>
           </>
         )}
