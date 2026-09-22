@@ -4,7 +4,7 @@ File này là source of truth cho giọng văn của VietWireless.
 
 ## 1. Cảm giác khi đọc
 
-VietWireless nên giống một người làm trong ngành đang ngồi chia sẻ lại cách mình hiểu một vấn đề với một người mới hơn.
+VietWireless nên giống một người làm trong ngành đang chia sẻ lại cách họ hiểu một vấn đề với người mới, thân thiện nhưng vẫn có khoảng cách chuyên nghiệp.
 
 Không viết như giáo trình ra lệnh.
 Không viết như bài marketing.
@@ -19,19 +19,23 @@ Giọng văn nên:
 
 ## 2. Cách xưng hô
 
-Ưu tiên “mình” khi:
-- kể lại một chỗ từng khó hiểu;
-- chia sẻ cách hình dung;
-- giải thích vì sao mình chọn một ví dụ.
+Dùng “tôi” khi tác giả nói về trải nghiệm, lựa chọn hoặc cách giải thích của bản thân.
 
-Có thể dùng “ta” khi hai bên đang cùng nhìn một hình, waveform hoặc phép biến đổi.
+Ví dụ:
+- “Tôi từng thấy phần này khá khó hình dung.”
+- “Tôi chọn OFDM làm ví dụ vì nó nối trực tiếp với LTE và 5G NR.”
+- “Tôi sẽ đi chậm hơn một chút ở phần này.”
+
+Không dùng “mình” trong prose của website. Từ này tạo cảm giác thân mật quá mức so với giọng VietWireless mong muốn.
+
+Có thể dùng “ta” khi tác giả và người đọc đang cùng quan sát một hình, waveform hoặc phép biến đổi.
 
 Hạn chế dùng “bạn phải”, “bạn cần”, “hãy nhớ”, “đừng”.
-Nếu muốn hướng người đọc, dùng cách nhẹ hơn:
-- “mình thử nhìn theo cách này”;
+Nếu cần hướng người đọc, dùng cách nhẹ và trực tiếp hơn:
+- “ta có thể nhìn theo cách này”;
 - “ở đây có một chỗ khá dễ lẫn”;
 - “nếu nối hai ý này lại”;
-- “một cách mình hay hình dung là”.
+- “một cách dễ hình dung là”.
 
 ## 3. Không dùng giọng dạy đời
 
@@ -46,9 +50,9 @@ Tránh các mẫu câu:
 
 Có thể thay bằng cách nói trực tiếp hơn:
 - “Bài học:” khi cần chốt một ý ngắn dưới timeline hoặc ví dụ;
-- “Chỗ này từng làm mình khá bối rối...” khi thật sự đang kể trải nghiệm cá nhân;
+- “Chỗ này từng làm tôi khá bối rối...” khi thật sự đang kể trải nghiệm cá nhân;
 - “Nếu nhìn theo góc này...” khi đổi cách biểu diễn;
-- “Tới đây mình có thể nối các ý lại như sau...” ở phần recap;
+- “Tới đây ta có thể nối các ý lại như sau...” ở phần recap;
 - “Có một chi tiết khá dễ lẫn...” khi cần cảnh báo kỹ thuật.
 
 ## 4. Human writing
@@ -127,7 +131,7 @@ Thay vì:
 “Bạn cần nhớ 5 điều sau”
 
 ưu tiên:
-“Tới đây mình có thể nối các ý lại như sau.”
+“Tới đây ta có thể nối các ý lại như sau.”
 
 ## 9. Review trước khi merge
 
@@ -187,7 +191,7 @@ CI kiểm tra cả trường hợp lỗi nằm qua ranh giới dòng, không ch�
 ## 11. Tránh các nhãn mang giọng AI
 
 Không dùng các nhãn kiểu:
-- “Điều mình thấy thú vị:”
+- “Điều tôi thấy thú vị:”
 - “Một ý khá hay ở đây:”
 - “Điểm thú vị:”
 - “Điều đáng chú ý là:”
@@ -200,3 +204,20 @@ Nếu một đoạn timeline cần chốt ý, dùng đơn giản:
 `Bài học:`
 
 Sau đó viết thẳng nội dung kỹ thuật. Không cần thêm cảm xúc hoặc nhận xét dẫn đường nếu chúng không mang thêm thông tin.
+
+
+## 12. Mức độ thân thiện
+
+Giọng VietWireless thân thiện nhưng không quá gần gũi.
+
+Tác giả dùng `tôi`, không dùng `mình`.
+
+Ưu tiên câu trực tiếp và bình tĩnh. Không cố tạo cảm giác trò chuyện bằng các cụm quá thân mật.
+
+Ví dụ phù hợp:
+
+`Vì vậy tôi sẽ cố gắng đi chậm hơn một chút ở những chỗ từng làm tôi bối rối.`
+
+Không dùng:
+
+`Vì vậy mình muốn đi chậm hơn một chút ở những chỗ từng làm mình bối rối.`
