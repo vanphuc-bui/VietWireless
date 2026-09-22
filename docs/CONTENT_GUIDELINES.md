@@ -6,13 +6,13 @@ VietWireless không phải blog tin tức. Đây là knowledge platform giúp ng
 
 ## Anatomy bắt buộc của một bài kỹ thuật
 
-1. **Problem first** : bắt đầu bằng câu hỏi hoặc vấn đề thực tế.
-2. **Visual intuition** : sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
-3. **Plain-language explanation** : giải thích bằng tiếng Việt, giữ thuật ngữ kỹ thuật chuẩn bằng tiếng Anh.
-4. **Math layer** : công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
-5. **Implementation layer** : nối khái niệm với samples, buffers, resource grid, transmitter/receiver hoặc code.
-6. **Specification layer** : khi liên quan 3GPP, dẫn đúng TS/section và phân biệt rõ điều spec nói với cách diễn giải của VietWireless.
-7. **Recap + next concept** : cuối bài phải cho người học biết họ vừa xây được mental model gì và nên học gì tiếp.
+1. **Problem first:** bắt đầu bằng câu hỏi hoặc vấn đề thực tế.
+2. **Visual intuition:** sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
+3. **Plain-language explanation:** giải thích bằng tiếng Việt, giữ thuật ngữ kỹ thuật chuẩn bằng tiếng Anh.
+4. **Math layer:** công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
+5. **Implementation layer:** nối khái niệm với samples, buffers, resource grid, transmitter/receiver hoặc code.
+6. **Specification layer:** khi liên quan 3GPP, dẫn đúng TS/section và phân biệt rõ điều spec nói với cách diễn giải của VietWireless.
+7. **Recap + next concept:** cuối bài phải cho người học biết họ vừa xây được mental model gì và nên học gì tiếp.
 
 ## Quy tắc thuật ngữ
 
