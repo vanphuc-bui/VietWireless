@@ -2,167 +2,245 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout>
-  <section class="hero shell">
-    <div class="hero-copy">
-      <p class="eyebrow">WIRELESS ENGINEERING, EXPLAINED VISUALLY</p>
-      <h1>Hiểu <span>tín hiệu</span> trước khi học 5G.</h1>
-      <p class="hero-lead">
-        Đừng bắt đầu bằng một bảng 3GPP. Hãy bắt đầu bằng câu hỏi đơn giản:
-        âm thanh, hình ảnh và dữ liệu trở thành sóng vô tuyến như thế nào?
+<BaseLayout
+  title="VietWireless — Học viễn thông từ trực giác"
+  description="Một website tiếng Việt về tín hiệu, wireless, 4G, 5G, NTN và 6G dành cho sinh viên và kỹ sư muốn hiểu bản chất trước khi học công thức."
+>
+  <article class="home-essay shell">
+    <header class="essay-hero">
+      <p class="chapter-label">VIETWIRELESS · CHƯƠNG 0</p>
+      <h1>Trước 5G, hãy bắt đầu từ một câu hỏi đơn giản: <em>làm sao gửi thông tin đi xa?</em></h1>
+      <p class="essay-lead">
+        Viễn thông không bắt đầu từ 5G, anten hay một bảng thông số trong 3GPP.
+        Nó bắt đầu từ mong muốn rất con người: nói với một người không đứng cạnh mình,
+        gửi một bức ảnh tới nơi mình chưa từng đến, và truyền thông tin nhanh hơn khoảng cách.
       </p>
-      <div class="hero-actions">
-        <a class="button primary" href="/hoc/tin-hieu-la-gi/">Bắt đầu: Signal là gì?</a>
-        <a class="button ghost" href="#lo-trinh">Xem learning path</a>
-      </div>
-      <div class="hero-promises" aria-label="Điểm nổi bật">
-        <span>Interactive labs</span>
-        <span>Giải thích bằng trực giác</span>
-        <span>Đi tới implementation</span>
-      </div>
-    </div>
 
-    <div class="hero-visual" aria-label="Minh họa tín hiệu từ time domain sang frequency domain">
-      <div class="visual-label">Cùng một tín hiệu · hai cách nhìn</div>
-      <div class="wave-card">
-        <div class="mini-title"><span class="dot"></span> Time domain</div>
-        <svg viewBox="0 0 520 150" role="img" aria-label="Dạng sóng theo thời gian">
-          <line x1="18" y1="76" x2="502" y2="76" class="axis" />
-          <path
-            class="wave animated-wave"
-            d="M18 76 C32 18,46 18,60 76 S88 134,102 76 S130 18,144 76 S172 134,186 76 S214 18,228 76 S256 134,270 76 S298 18,312 76 S340 134,354 76 S382 18,396 76 S424 134,438 76 S466 18,502 76"
-          />
-        </svg>
+      <div class="hero-note">
+        <span class="note-mark">Ghi chú mở đầu</span>
+        <p>
+          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, I/Q, OFDM hay resource grid
+          như một tập hợp công thức rời rạc, VietWireless được viết cho đúng cảm giác đó.
+        </p>
       </div>
-      <div class="transform-pill">
-        <span>FFT</span>
-        <span aria-hidden="true">→</span>
-        <small>“Trong tín hiệu có những tần số nào?”</small>
+    </header>
+
+    <section class="essay-section" id="lich-su">
+      <div class="section-number">01</div>
+      <div class="essay-content">
+        <p class="section-kicker">MỘT LƯỢC SỬ RẤT NGẮN</p>
+        <h2>Từ một dấu chấm Morse tới giọng nói và hình ảnh bay qua không trung.</h2>
+        <p>
+          Trước khi có wireless, con người đã biết truyền thông tin bằng dây. Telegraph thế kỷ XIX
+          biến ký tự thành các xung điện. Telephone sau đó biến giọng nói thành tín hiệu điện để truyền
+          qua đường dây. Nhưng câu hỏi lớn tiếp theo là: <strong>có thể bỏ sợi dây đi không?</strong>
+        </p>
+
+        <div class="history-timeline">
+          <article>
+            <time>1860s–1880s</time>
+            <h3>Từ lý thuyết tới sóng điện từ</h3>
+            <p>
+              Maxwell dự đoán sự tồn tại của sóng điện từ; Hertz sau đó chứng minh chúng trong phòng thí nghiệm.
+              Từ đây, “gửi tín hiệu qua không gian” trở thành một khả năng vật lý có thật.
+            </p>
+          </article>
+
+          <article>
+            <time>1890s–1901</time>
+            <h3>Wireless telegraphy</h3>
+            <p>
+              Marconi phát triển hệ thống truyền điện báo vô tuyến trên khoảng cách ngày càng xa.
+              Năm 1901, một tín hiệu Morse vượt Đại Tây Dương — một cột mốc cho liên lạc không dây đường dài.
+            </p>
+          </article>
+
+          <article>
+            <time>1900–1906</time>
+            <h3>Không chỉ gửi “tít tít”: bắt đầu truyền âm thanh</h3>
+            <p>
+              Reginald Fessenden là một trong những người tiên phong đưa voice và music lên sóng radio.
+              Khi âm thanh có thể được modulation lên carrier, wireless bắt đầu giống radio mà chúng ta quen thuộc hơn.
+            </p>
+          </article>
+
+          <article>
+            <time>1920s</time>
+            <h3>Hình ảnh cũng có thể được truyền đi</h3>
+            <p>
+              Những thử nghiệm television đầu tiên cho thấy hình ảnh chuyển động có thể được biến thành tín hiệu,
+              truyền đi rồi dựng lại ở đầu nhận. Năm 1928, John Logie Baird đã truyền hình ảnh television qua Đại Tây Dương.
+            </p>
+          </article>
+
+          <article>
+            <time>1980s → nay</time>
+            <h3>Cellular: từ thoại tới Internet di động</h3>
+            <p>
+              Các thế hệ mạng di động dần chuyển từ thoại analog sang số hóa, dữ liệu packet, broadband,
+              rồi tới 4G, 5G và NTN. Công nghệ thay đổi rất nhanh, nhưng nền tảng vẫn quay về signal,
+              time, frequency, sampling, modulation và propagation.
+            </p>
+          </article>
+        </div>
+
+        <aside class="source-note">
+          <strong>Đọc thêm về các mốc lịch sử</strong>
+          <p>
+            Timeline trên chỉ giữ những mốc cần thiết để tạo bức tranh lớn. Các bài chuyên sâu sau này sẽ
+            dẫn nguồn đầy đủ và tách rõ lịch sử, lý thuyết và implementation.
+          </p>
+          <div class="source-links">
+            <a href="https://technav.ieee.org/topic/radio/" target="_blank" rel="noreferrer">IEEE · History of radio ↗</a>
+            <a href="https://engage.ieee.org/AESNewsletter_HistoryColumn_q1_2020.html" target="_blank" rel="noreferrer">IEEE · Marconi 1901 ↗</a>
+            <a href="https://blog.scienceandmediamuseum.org.uk/history-of-british-television-timeline/" target="_blank" rel="noreferrer">Science + Media Museum · Television timeline ↗</a>
+          </div>
+        </aside>
       </div>
-      <div class="spectrum-card">
-        <div class="mini-title"><span class="dot violet"></span> Frequency domain</div>
-        <div class="spectrum-bars" aria-hidden="true">
-          <i style="--h: 12%"></i><i style="--h: 20%"></i><i style="--h: 83%"></i>
-          <i style="--h: 31%"></i><i style="--h: 14%"></i><i style="--h: 62%"></i>
-          <i style="--h: 18%"></i><i style="--h: 10%"></i><i style="--h: 25%"></i>
+    </section>
+
+    <section class="essay-section" id="tai-sao">
+      <div class="section-number">02</div>
+      <div class="essay-content">
+        <p class="section-kicker">VÌ SAO TÔI VIẾT VIETWIRELESS</p>
+        <h2>Học rất nhiều công thức không có nghĩa là đã có một mental model rõ ràng.</h2>
+
+        <p>
+          Khi học viễn thông, tôi từng gặp chính những câu hỏi rất cơ bản mà giáo trình thường đi qua quá nhanh:
+          <strong>FFT thực sự để làm gì? Tại sao lúc thì nhìn tín hiệu theo thời gian, lúc lại nhìn theo tần số?
+          I và Q có ý nghĩa vật lý thế nào? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
+        </p>
+
+        <p>
+          Sau này, khi học và làm việc sâu hơn trong wireless, tôi nhận ra đây không chỉ là câu hỏi của sinh viên năm nhất.
+          Có những người đã ra trường nhiều năm, học cao học hoặc làm nghiên cứu nhưng vẫn có thể dùng FFT, OFDM hay I/Q
+          như một “công cụ quen tay” mà chưa xây được một bức tranh trực giác thật sự nối mọi thứ lại với nhau.
+        </p>
+
+        <blockquote class="teaching-quote">
+          <p>
+            Mục tiêu của VietWireless không phải làm công thức biến mất.
+            Mục tiêu là để trước khi nhìn công thức, bạn biết nó đang mô tả điều gì.
+          </p>
+        </blockquote>
+
+        <p>
+          Vì vậy website này sẽ đi chậm ở những chỗ đáng đi chậm. Ta sẽ nhìn waveform trước khi viết Fourier Transform,
+          xoay một phasor trước khi nói complex baseband, và tự tay thay đổi subcarrier trước khi mở 3GPP TS 38.211.
+        </p>
+
+        <div class="author-strip">
+          <div class="author-monogram" aria-hidden="true">VP</div>
+          <div>
+            <strong>Van-Phuc Bui</strong>
+            <p>
+              Tôi viết VietWireless từ góc nhìn của một người học, nghiên cứu và làm việc với wireless communications,
+              với mong muốn tạo thêm một cách học trực quan bằng tiếng Việt.
+            </p>
+            <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">vanphucbui.com ↗</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="question-strip">
-    <div class="shell questions">
-      <p>Bạn từng tự hỏi…</p>
-      <div class="question-grid">
-        <a href="/hoc/tin-hieu-la-gi/#fft"><strong>FFT để làm gì?</strong><span>Không chỉ là “đổi miền”.</span></a>
-        <a href="/hoc/tin-hieu-la-gi/#iq"><strong>I/Q sample là gì?</strong><span>Vì sao cần hai con số?</span></a>
-        <a href="/hoc/tin-hieu-la-gi/#sampling"><strong>Sampling làm gì?</strong><span>Sóng liên tục thành dữ liệu số.</span></a>
+    <section class="essay-section" id="cach-hoc">
+      <div class="section-number">03</div>
+      <div class="essay-content">
+        <p class="section-kicker">CÁCH CHÚNG TA SẼ HỌC</p>
+        <h2>Đi từ câu hỏi thật → hình dung → toán học → implementation.</h2>
+
+        <div class="teaching-steps">
+          <article>
+            <span>1</span>
+            <h3>Đầu tiên: tại sao?</h3>
+            <p>Mỗi khái niệm phải bắt đầu từ một vấn đề mà hệ thống communication cần giải quyết.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Sau đó: nhìn thấy nó</h3>
+            <p>Dùng waveform, spectrum, animation và interactive lab để tạo trực giác trước.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Rồi mới tới toán</h3>
+            <p>Công thức xuất hiện khi từng biến đã có ý nghĩa, không phải để người học thuộc lòng.</p>
+          </article>
+          <article>
+            <span>4</span>
+            <h3>Cuối cùng: code & hệ thống thật</h3>
+            <p>Nối khái niệm về samples, buffers, FFT bins, resource grid và receiver/transmitter chain.</p>
+          </article>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section shell" id="lo-trinh">
-    <div class="section-heading">
-      <p class="eyebrow">LEARNING PATH</p>
-      <h2>Từ thế giới thật tới 5G NR</h2>
-      <p>Mỗi bước trả lời một câu hỏi trước khi mở thêm một lớp abstraction.</p>
-    </div>
+    <section class="essay-section" id="lo-trinh">
+      <div class="section-number">04</div>
+      <div class="essay-content">
+        <p class="section-kicker">LỘ TRÌNH CHO NGƯỜI MỚI</p>
+        <h2>Đừng bắt đầu bằng 5G. Hãy bắt đầu bằng signal.</h2>
 
-    <ol class="learning-path">
-      <li class="active">
-        <span class="step-index">01</span>
-        <div>
-          <p class="step-type">FOUNDATIONS</p>
-          <h3>Signal là gì?</h3>
-          <p>Âm thanh, ảnh, điện áp, samples — chúng liên quan với nhau ra sao?</p>
-        </div>
-        <a href="/hoc/tin-hieu-la-gi/">Học ngay →</a>
-      </li>
-      <li>
-        <span class="step-index">02</span>
-        <div>
-          <p class="step-type">FOUNDATIONS</p>
-          <h3>Sampling & ADC</h3>
-          <p>Từ đại lượng liên tục sang một dãy con số mà máy tính xử lý được.</p>
-        </div>
-        <span class="soon">Sắp có</span>
-      </li>
-      <li>
-        <span class="step-index">03</span>
-        <div>
-          <p class="step-type">SIGNAL PROCESSING</p>
-          <h3>FFT / IFFT</h3>
-          <p>Hai góc nhìn của cùng một tín hiệu và lý do OFDM cần cả hai.</p>
-        </div>
-        <span class="soon">Sắp có</span>
-      </li>
-      <li>
-        <span class="step-index">04</span>
-        <div>
-          <p class="step-type">BASEBAND</p>
-          <h3>I/Q & Modulation</h3>
-          <p>Amplitude + phase, constellation và complex baseband.</p>
-        </div>
-        <span class="soon">Sắp có</span>
-      </li>
-      <li>
-        <span class="step-index">05</span>
-        <div>
-          <p class="step-type">OFDM</p>
-          <h3>Subcarriers & Resource Grid</h3>
-          <p>Từ FFT bins đến các RE, RB, slot mà LTE/5G thực sự sử dụng.</p>
-        </div>
-        <span class="soon">Sắp có</span>
-      </li>
-      <li>
-        <span class="step-index">06</span>
-        <div>
-          <p class="step-type">5G NR</p>
-          <h3>PHY theo cách có thể nhìn thấy</h3>
-          <p>SSB, PDCCH, PDSCH, PUSCH, DMRS, PRACH và receiver chain.</p>
-        </div>
-        <span class="soon">Sau Foundations</span>
-      </li>
-    </ol>
-  </section>
-
-  <section class="section shell" id="nguyen-tac">
-    <div class="section-heading">
-      <p class="eyebrow">WHY VIETWIRELESS</p>
-      <h2>Không học thuộc thuật ngữ. Học cách chúng nối với nhau.</h2>
-    </div>
-    <div class="principle-grid">
-      <article>
-        <span>01</span>
-        <h3>Why before what</h3>
-        <p>Biết vấn đề cần giải quyết trước khi nhìn công thức hay parameter.</p>
-      </article>
-      <article>
-        <span>02</span>
-        <h3>Visual before algebra</h3>
-        <p>Đồ thị và tương tác tạo trực giác; toán học sau đó làm nó chính xác.</p>
-      </article>
-      <article>
-        <span>03</span>
-        <h3>Math to implementation</h3>
-        <p>Mỗi khái niệm cuối cùng phải quay về samples, waveform và receiver/transmitter.</p>
-      </article>
-      <article>
-        <span>04</span>
-        <h3>Vietnamese, not translated jargon</h3>
-        <p>Giải thích bằng tiếng Việt nhưng giữ FFT, DMRS, PUSCH, BWP… như kỹ sư thực sự dùng.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="cta-band">
-    <div class="shell cta-inner">
-      <div>
-        <p class="eyebrow">LESSON 01</p>
-        <h2>Tín hiệu không bắt đầu từ anten.</h2>
-        <p>Nó bắt đầu từ thông tin mà ta muốn truyền đi.</p>
+        <ol class="course-list">
+          <li class="available">
+            <span class="course-no">Bài 01</span>
+            <div>
+              <h3>Signal là gì?</h3>
+              <p>Âm thanh → microphone → samples → time/frequency domain → FFT → I/Q.</p>
+            </div>
+            <a href="/hoc/tin-hieu-la-gi/">Đọc bài →</a>
+          </li>
+          <li>
+            <span class="course-no">Bài 02</span>
+            <div>
+              <h3>Sampling, aliasing và Nyquist</h3>
+              <p>Tại sao lấy mẫu quá chậm có thể làm ta “nhìn thấy” một tần số không tồn tại?</p>
+            </div>
+            <span class="course-status">Đang viết</span>
+          </li>
+          <li>
+            <span class="course-no">Bài 03</span>
+            <div>
+              <h3>Sin, cos, phase và complex number</h3>
+              <p>Tại sao số phức lại xuất hiện ở gần như mọi receiver hiện đại?</p>
+            </div>
+            <span class="course-status">Sắp tới</span>
+          </li>
+          <li>
+            <span class="course-no">Bài 04</span>
+            <div>
+              <h3>I/Q, constellation và modulation</h3>
+              <p>Từ một complex sample tới QPSK, 16QAM và symbol.</p>
+            </div>
+            <span class="course-status">Sắp tới</span>
+          </li>
+          <li>
+            <span class="course-no">Bài 05</span>
+            <div>
+              <h3>FFT/IFFT và OFDM</h3>
+              <p>Tại sao transmitter dùng IFFT còn receiver dùng FFT?</p>
+            </div>
+            <span class="course-status">Sắp tới</span>
+          </li>
+          <li>
+            <span class="course-no">Sau nền tảng</span>
+            <div>
+              <h3>LTE → 5G NR → NTN</h3>
+              <p>Resource grid, synchronization, SSB, PDCCH, PDSCH, PUSCH, DMRS, PRACH và satellite.</p>
+            </div>
+            <span class="course-status">Roadmap</span>
+          </li>
+        </ol>
       </div>
-      <a class="button primary" href="/hoc/tin-hieu-la-gi/">Mở bài học đầu tiên →</a>
-    </div>
-  </section>
+    </section>
+
+    <section class="start-card">
+      <p class="chapter-label">BÀI 01 · SIGNAL FOUNDATIONS</p>
+      <h2>Mọi hệ thống wireless cuối cùng đều phải xử lý tín hiệu.</h2>
+      <p>
+        Bắt đầu bằng giọng nói, một microphone và một câu hỏi:
+        máy tính nhìn thấy tín hiệu như thế nào?
+      </p>
+      <a class="text-button" href="/hoc/tin-hieu-la-gi/">Bắt đầu bài Signal là gì? →</a>
+    </section>
+  </article>
 </BaseLayout>
