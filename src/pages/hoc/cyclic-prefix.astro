@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CyclicPrefixExplorer from '../../components/CyclicPrefixExplorer.jsx';
+---
+
+<BaseLayout
+  title="Cyclic Prefix trong OFDM | VietWireless"
+  description="Hiểu Cyclic Prefix là bản copy cuối OFDM symbol, vì sao CP giúp biến linear convolution thành circular convolution và đơn giản hóa equalization."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 16 · WIRELESS LINK</p>
+      <h1>Cyclic Prefix</h1>
+      <p class="lesson-deck">
+        IFFT/FFT chỉ thật sự đẹp với multipath khi receiver lấy được một block có circular-convolution structure.
+        <strong>Cyclic Prefix tạo guard interval bằng cách copy phần cuối OFDM symbol lên phía trước.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <div class="system-position">
+        <span>OFDM SYMBOL STRUCTURE</span>
+        <div class="system-position-flow"><span>last N<sub>CP</sub> samples</span><b>→ copy →</b><strong>CP</strong><b>+</b><span>N useful samples</span><b>→ channel →</b><span>remove CP</span><b>→ FFT</b></div>
+        <p>CP không mang information mới. Nó hy sinh efficiency để bảo vệ useful FFT interval trước channel memory.</p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="why">
+      <p class="concept-kicker">01 · VẤN ĐỀ: CHANNEL CONVOLUTION KHÔNG TỰ NHIÊN LÀ CIRCULAR</p>
+      <h2>Multipath làm tail của previous OFDM symbol chồng lên đầu symbol hiện tại.</h2>
+      <p>
+        Physical channel thực hiện linear convolution. Nếu receiver FFT trực tiếp một block bị contaminated bởi previous symbol,
+        subcarrier orthogonality và simple Y[k]=H[k]X[k] model không còn giữ nguyên.
+      </p>
+    </section>
+
+    <section class="concept-block" id="what">
+      <p class="concept-kicker">02 · CP LÀ COPY, KHÔNG PHẢI ZEROS</p>
+      <h2>Ta lấy N<sub>CP</sub> samples cuối của useful symbol và đặt chúng lên trước.</h2>
+      <div class="cp-concept-row">
+        <div><small>TAIL COPY</small><strong>x[N-N<sub>CP</sub>] … x[N-1]</strong></div>
+        <b>+</b>
+        <div><small>USEFUL BLOCK</small><strong>x[0] … x[N-1]</strong></div>
+      </div>
+      <p>
+        Vì prefix là cyclic extension, delayed copies khi đi vào useful interval có thể wrap theo đúng circular structure,
+        miễn channel memory không vượt quá guard mà CP cung cấp và timing được chọn phù hợp.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="cp-lab">
+      <p class="concept-kicker">03 · INTERACTIVE LAB</p>
+      <h2>Thay CP length và channel memory để xem khi nào FFT window còn được bảo vệ.</h2>
+      <CyclicPrefixExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="condition">
+      <p class="concept-kicker">04 · ĐIỀU KIỆN ĐƠN GIẢN TRONG DISCRETE-TIME MODEL</p>
+      <h2>Nếu maximum channel delay là D samples, thường cần N<sub>CP</sub> ≥ D để tránh previous-symbol ISI trong useful window.</h2>
+      <p>
+        Tương đương nếu FIR channel có L taps từ delay 0 tới L-1, điều kiện thường viết N<sub>CP</sub> ≥ L-1.
+        Thực tế còn cần margin cho timing error, channel tails và implementation assumptions.
+      </p>
+    </section>
+
+    <section class="concept-block" id="circular">
+      <p class="concept-kicker">05 · TẠI SAO CIRCULAR CONVOLUTION QUAN TRỌNG?</p>
+      <h2>DFT biến circular convolution thành multiplication theo bin.</h2>
+      <div class="cp-frequency-equation">
+        <span>y[n] = x[n] ⊛ h[n]</span><b>FFT →</b><span>Y[k] = X[k]H[k]</span>
+      </div>
+      <p>
+        Đây là payoff chính: thay vì equalize một long time-domain convolution jointly, receiver có thể equalize từng subcarrier bằng complex scalar H[k].
+      </p>
+    </section>
+
+    <section class="concept-block" id="overhead">
+      <p class="concept-kicker">06 · CP CÓ GIÁ</p>
+      <h2>CP chiếm time và transmit energy nhưng không tăng số QAM symbols trong useful IFFT block.</h2>
+      <div class="cp-overhead-equation">
+        <span>efficiency factor</span><b>=</b><span>N / (N + N<sub>CP</sub>)</span>
+      </div>
+      <p>CP dài hơn chịu được channel delay dài hơn, nhưng overhead lớn hơn. Waveform design phải cân bằng hai phía.</p>
+    </section>
+
+    <section class="concept-block" id="not-zero">
+      <p class="concept-kicker">07 · TẠI SAO KHÔNG CHỈ THÊM ZERO GUARD?</p>
+      <h2>Zero guard có thể giảm overlap, nhưng không tự tạo cyclic structure cho useful FFT block.</h2>
+      <p>
+        Có waveform dùng zero padding theo cách riêng, nhưng textbook CP-OFDM dùng cyclic extension vì nó làm channel matrix trên useful block trở thành circulant dưới assumptions phù hợp.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <ol class="recap-list">
+        <li><strong>CP:</strong> copy cuối useful OFDM symbol lên phía trước.</li>
+        <li><strong>Guard interval:</strong> hấp thụ channel memory trước FFT window.</li>
+        <li><strong>Điều kiện simplified:</strong> N<sub>CP</sub> ≥ maximum discrete delay.</li>
+        <li><strong>Circular convolution:</strong> cấu trúc mà DFT diagonalizes.</li>
+        <li><strong>Per-subcarrier equalization:</strong> Y[k]=H[k]X[k] trong ideal model.</li>
+        <li><strong>Overhead:</strong> CP không mang data mới và làm giảm time efficiency.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation">
+      <a class="lesson-nav-card previous" href="/hoc/ifft-fft-trong-ofdm/"><span>← BÀI TRƯỚC</span><strong>IFFT/FFT trong OFDM</strong><small>Từ X[k] tới x[n] và quay lại.</small></a>
+      <a class="lesson-nav-card next" href="/hoc/resource-grid/"><span>BÀI TIẾP THEO →</span><strong>Resource grid</strong><small>Symbols được tổ chức theo frequency và time như thế nào?</small></a>
+    </nav>
+  </article>
+</BaseLayout>
