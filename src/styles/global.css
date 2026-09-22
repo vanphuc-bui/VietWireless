@@ -6610,3 +6610,1153 @@ main,
     padding: 16px;
   }
 }
+
+
+/* --- Lessons 13-18: correlation and OFDM foundations --- */
+.corr-equation,
+.ofdm-main-equation,
+.ifft-main-equation,
+.rb-definition,
+.numerology-main-equation,
+.cp-overhead-equation {
+  max-width: 800px;
+  margin: 26px 0;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.corr-equation span,
+.corr-equation b,
+.ofdm-main-equation span,
+.ofdm-main-equation b,
+.ifft-main-equation span,
+.ifft-main-equation b,
+.rb-definition span,
+.rb-definition b,
+.numerology-main-equation span,
+.numerology-main-equation b,
+.cp-overhead-equation span,
+.cp-overhead-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 2.6vw, 1.7rem);
+}
+
+.corr-equation b,
+.ofdm-main-equation b,
+.ifft-main-equation b,
+.rb-definition b,
+.numerology-main-equation b,
+.cp-overhead-equation b {
+  color: var(--accent);
+}
+
+.correlation-story,
+.ofdm-problem-flow,
+.ofdm-overview-chain,
+.ifft-channel-flow,
+.grid-coordinate-story,
+.grid-column-flow,
+.frame-structure-flow {
+  margin: 30px 0;
+  display: grid;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.correlation-story,
+.ofdm-problem-flow,
+.grid-coordinate-story,
+.frame-structure-flow {
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+}
+
+.ofdm-overview-chain,
+.grid-column-flow,
+.ifft-channel-flow {
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+}
+
+.correlation-story > div,
+.ofdm-problem-flow > div,
+.ofdm-overview-chain > div,
+.ifft-channel-flow > div,
+.grid-coordinate-story > div,
+.grid-column-flow > div,
+.frame-structure-flow > div {
+  min-width: 0;
+  min-height: 120px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-story > b,
+.ofdm-problem-flow > b,
+.ofdm-overview-chain > b,
+.ifft-channel-flow > b,
+.grid-coordinate-story > b,
+.grid-column-flow > b,
+.frame-structure-flow > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-size: .8rem;
+  text-align: center;
+}
+
+.correlation-story small,
+.ofdm-problem-flow small,
+.ofdm-overview-chain small,
+.ifft-channel-flow small,
+.grid-coordinate-story small,
+.grid-column-flow small,
+.frame-structure-flow small {
+  color: var(--accent);
+  font-size: .61rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.correlation-story strong,
+.ofdm-problem-flow strong,
+.ofdm-overview-chain strong,
+.ifft-channel-flow strong,
+.grid-coordinate-story strong,
+.grid-column-flow strong,
+.frame-structure-flow strong {
+  margin: 6px 0 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+}
+
+.correlation-story span,
+.ofdm-problem-flow span,
+.ofdm-overview-chain span,
+.ifft-channel-flow span,
+.grid-coordinate-story span,
+.grid-column-flow span,
+.frame-structure-flow span {
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.corr-two-cards,
+.ifft-two-domains,
+.numerology-tradeoff {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.corr-two-cards article,
+.ifft-two-domains article,
+.numerology-tradeoff article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.corr-two-cards h3,
+.ifft-two-domains h3,
+.numerology-tradeoff h3 {
+  margin: 12px 0 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+}
+
+.corr-two-cards p,
+.ifft-two-domains p,
+.numerology-tradeoff p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.correlation-use-grid,
+.ofdm-tradeoff-grid,
+.grid-mapping-types {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.correlation-use-grid article,
+.ofdm-tradeoff-grid article,
+.grid-mapping-types article {
+  padding: 17px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-use-grid strong,
+.ofdm-tradeoff-grid strong,
+.grid-mapping-types strong {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.correlation-use-grid p,
+.ofdm-tradeoff-grid p,
+.grid-mapping-types p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: .79rem;
+}
+
+.correlation-lab,
+.ofdm-orthogonality-lab,
+.ifft-fft-lab,
+.cp-lab,
+.resource-grid-lab,
+.numerology-lab {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+}
+
+.correlation-controls,
+.ofdm-orth-controls,
+.cp-controls,
+.numerology-controls {
+  padding: 18px;
+  display: grid;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.correlation-controls,
+.cp-controls {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ofdm-orth-controls {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.numerology-controls {
+  grid-template-columns: minmax(260px, 1fr);
+}
+
+.correlation-controls label,
+.ofdm-orth-controls label,
+.cp-controls label,
+.numerology-controls label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.correlation-controls label > span,
+.ofdm-orth-controls label > span,
+.cp-controls label > span,
+.numerology-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.correlation-controls strong,
+.ofdm-orth-controls strong,
+.cp-controls strong,
+.numerology-controls strong {
+  color: var(--ink);
+}
+
+.correlation-readout,
+.ofdm-orth-readout,
+.cp-readout,
+.resource-grid-readout,
+.numerology-readout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.correlation-readout > div,
+.ofdm-orth-readout > div,
+.cp-readout > div,
+.resource-grid-readout > div,
+.numerology-readout > div {
+  min-height: 98px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+}
+
+.correlation-readout > div:last-child,
+.ofdm-orth-readout > div:last-child,
+.cp-readout > div:last-child,
+.resource-grid-readout > div:last-child,
+.numerology-readout > div:last-child {
+  border-right: 0;
+}
+
+.correlation-readout small,
+.ofdm-orth-readout small,
+.cp-readout small,
+.resource-grid-readout small,
+.numerology-readout small {
+  color: var(--muted);
+  font-size: .6rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.correlation-readout strong,
+.ofdm-orth-readout strong,
+.cp-readout strong,
+.resource-grid-readout strong,
+.numerology-readout strong {
+  margin: 5px 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.14rem;
+}
+
+.correlation-readout span,
+.ofdm-orth-readout span,
+.cp-readout span,
+.resource-grid-readout span,
+.numerology-readout span {
+  color: var(--muted);
+  font-size: .73rem;
+}
+
+.correlation-readout .warning,
+.ofdm-orth-readout .warning,
+.cp-readout .warning {
+  background: #fbf2ef;
+}
+
+.correlation-readout .ok,
+.ofdm-orth-readout .ok,
+.cp-readout .ok {
+  background: #f2f7f4;
+}
+
+.correlation-panels {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.correlation-panels > div {
+  min-width: 0;
+  padding: 18px;
+}
+
+.correlation-panels > div:first-child {
+  border-right: 1px solid var(--line);
+}
+
+.stem-plot,
+.correlation-bars {
+  position: relative;
+  height: 210px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 8px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.stem-plot::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.stem-plot i {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 2px;
+  max-width: 7px;
+  background: var(--blue);
+  opacity: .5;
+}
+
+.stem-plot i.inside-sequence {
+  background: var(--accent);
+  opacity: .9;
+}
+
+.correlation-bars {
+  align-items: end;
+  gap: 3px;
+}
+
+.correlation-bars i {
+  flex: 1 1 0;
+  min-width: 3px;
+  background: var(--violet);
+  opacity: .6;
+}
+
+.correlation-bars i.peak {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.correlation-caption {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.parallel-subcarriers {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.parallel-subcarriers article {
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: center;
+}
+
+.parallel-subcarriers span {
+  color: var(--accent);
+  font-size: .67rem;
+  font-weight: 850;
+}
+
+.parallel-subcarriers strong {
+  display: block;
+  margin: 7px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.22rem;
+}
+
+.parallel-subcarriers p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.ofdm-orth-wave {
+  padding: 18px;
+}
+
+.ofdm-orth-wave svg {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ofdm-orth-axis {
+  stroke: #cfc9c0;
+  stroke-width: 1;
+}
+
+.ofdm-orth-wave-a,
+.ofdm-orth-wave-b {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.ofdm-orth-wave-a { stroke: var(--blue); }
+.ofdm-orth-wave-b { stroke: var(--violet); }
+
+.ofdm-orth-legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.ofdm-orth-legend i {
+  width: 18px;
+  height: 3px;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.ofdm-orth-legend .a { background: var(--blue); }
+.ofdm-orth-legend .b { background: var(--violet); }
+
+.ifft-bin-editor,
+.ifft-time-panel {
+  padding: 18px;
+}
+
+.ifft-bin-row,
+.ifft-recovered {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+
+.ifft-bin-row button {
+  min-width: 0;
+  min-height: 100px;
+  padding: 8px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  cursor: pointer;
+}
+
+.ifft-bin-row button.active {
+  border-color: #9ebdce;
+  background: var(--blue-soft);
+}
+
+.ifft-bin-row small,
+.ifft-recovered small {
+  color: var(--muted);
+  font-size: .58rem;
+}
+
+.ifft-bin-row strong {
+  margin: 5px 0;
+  color: var(--accent);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.ifft-bin-row span {
+  color: var(--muted);
+  font-size: .62rem;
+  overflow-wrap: anywhere;
+}
+
+.ifft-transform-arrow {
+  min-height: 74px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--violet);
+  background: #fcfbfe;
+}
+
+.ifft-transform-arrow strong {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.ifft-transform-arrow span {
+  color: var(--muted);
+  font-size: .7rem;
+}
+
+.ifft-transform-arrow b {
+  font-size: 1.2rem;
+}
+
+.ifft-sample-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+}
+
+.ifft-sample-grid > div {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ifft-sample-grid > div::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 50%;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.ifft-sample-grid small {
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  color: var(--muted);
+  font-size: .57rem;
+}
+
+.ifft-sample-grid i {
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  transform-origin: center top;
+}
+
+.ifft-sample-grid i.real { left: 42%; background: var(--blue); }
+.ifft-sample-grid i.imag { left: 56%; background: var(--violet); }
+
+.ifft-sample-grid span {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 4px;
+  color: var(--muted);
+  font-size: .55rem;
+  text-align: center;
+}
+
+.ifft-recovered {
+  padding: 0 18px 18px;
+}
+
+.ifft-recovered > div {
+  padding: 10px 5px;
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.ifft-recovered strong,
+.ifft-recovered span {
+  display: block;
+}
+
+.ifft-recovered strong {
+  margin-top: 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: .8rem;
+}
+
+.ifft-recovered span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: .56rem;
+}
+
+.cp-concept-row,
+.cp-frequency-equation {
+  max-width: 820px;
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.cp-concept-row > div {
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.cp-concept-row > b,
+.cp-frequency-equation > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+}
+
+.cp-concept-row small {
+  color: var(--accent);
+  font-size: .62rem;
+  font-weight: 850;
+}
+
+.cp-concept-row strong {
+  display: block;
+  margin-top: 6px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.cp-frequency-equation {
+  padding: 20px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.cp-frequency-equation span,
+.cp-frequency-equation b {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+}
+
+.cp-visual {
+  padding: 18px;
+}
+
+.cp-cell-row {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding: 12px 0;
+}
+
+.cp-cell-row i {
+  flex: 0 0 42px;
+  min-height: 62px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border: 1px solid var(--line);
+  font-style: normal;
+}
+
+.cp-cell-row i.cp-cell {
+  background: var(--accent-soft);
+  border-color: #d8b1a8;
+}
+
+.cp-cell-row i.useful-cell {
+  background: var(--blue-soft);
+  border-color: #bfd4e1;
+}
+
+.cp-cell-row small {
+  color: var(--muted);
+  font-size: .55rem;
+}
+
+.cp-cell-row strong {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.cp-copy-note,
+.cp-channel-memory,
+.cp-fft-window {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+}
+
+.cp-copy-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.cp-copy-note span {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.cp-channel-memory {
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-channel-memory span,
+.cp-channel-memory strong {
+  position: relative;
+  z-index: 2;
+}
+
+.cp-channel-memory strong {
+  margin-left: 8px;
+}
+
+.cp-channel-memory i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--violet);
+}
+
+.cp-fft-window.safe { background: #f2f7f4; }
+.cp-fft-window.unsafe { background: #fbf2ef; }
+
+.cp-fft-window p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.resource-grid-interactive-wrap {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.resource-grid-y-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--muted);
+  font-size: .7rem;
+  text-align: center;
+}
+
+.resource-grid-interactive {
+  min-width: 720px;
+}
+
+.resource-grid-top-axis {
+  margin-left: 32px;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 2px;
+}
+
+.resource-grid-top-axis span {
+  color: var(--muted);
+  font-size: .55rem;
+  text-align: center;
+}
+
+.resource-grid-row {
+  display: grid;
+  grid-template-columns: 30px repeat(14, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.resource-grid-k {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: .55rem;
+}
+
+.resource-grid-row button {
+  min-height: 19px;
+  padding: 0;
+  border: 1px solid #e4e0da;
+  background: #fff;
+  cursor: pointer;
+}
+
+.resource-grid-row button.same-rb {
+  background: var(--blue-soft);
+}
+
+.resource-grid-row button.selected {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.resource-grid-x-label {
+  margin: 7px 0 0 32px;
+  color: var(--muted);
+  font-size: .7rem;
+  text-align: center;
+}
+
+.resource-grid-lab-note,
+.spec-source {
+  margin: 0;
+  padding: 0 18px 18px;
+  color: var(--muted);
+  font-size: .83rem;
+}
+
+.spec-source {
+  padding: 16px 18px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.spec-source a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.nr-slot-equations,
+.numerology-simple-table {
+  margin: 28px 0;
+  display: grid;
+  gap: 12px;
+}
+
+.nr-slot-equations {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.numerology-simple-table {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.nr-slot-equations > div,
+.numerology-simple-table > div {
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.nr-slot-equations span,
+.numerology-simple-table span {
+  display: block;
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.nr-slot-equations strong,
+.numerology-simple-table strong {
+  display: block;
+  margin-top: 6px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+}
+
+.numerology-subframe {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.numerology-slot-strip {
+  position: relative;
+  min-height: 120px;
+  margin-top: 12px;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line-strong);
+}
+
+.numerology-slot-strip i {
+  flex: 1 1 0;
+  min-width: 2px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid #d8d2ca;
+  background: var(--blue-soft);
+  font-style: normal;
+}
+
+.numerology-slot-strip i:nth-child(even) {
+  background: #f1eef8;
+}
+
+.numerology-slot-strip i:last-of-type {
+  border-right: 0;
+}
+
+.numerology-slot-strip small {
+  color: var(--ink-soft);
+  font-size: .58rem;
+}
+
+.numerology-slot-strip.dense span {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  padding: 3px 6px;
+  background: rgba(255,255,255,.9);
+  color: var(--muted);
+  font-size: .63rem;
+}
+
+.numerology-symbol-story {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.numerology-symbol-story > div {
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.numerology-symbol-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+}
+
+.numerology-symbol-story small {
+  color: var(--accent);
+  font-size: .61rem;
+  font-weight: 850;
+}
+
+.numerology-symbol-story strong,
+.numerology-symbol-story span {
+  display: block;
+}
+
+.numerology-symbol-story strong {
+  margin: 6px 0 3px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.numerology-symbol-story span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+@media (max-width: 900px) {
+  .correlation-use-grid,
+  .ofdm-tradeoff-grid,
+  .grid-mapping-types {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .parallel-subcarriers,
+  .numerology-simple-table {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ifft-bin-row,
+  .ifft-sample-grid,
+  .ifft-recovered {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .corr-two-cards,
+  .ifft-two-domains,
+  .numerology-tradeoff,
+  .correlation-panels,
+  .correlation-use-grid,
+  .ofdm-tradeoff-grid,
+  .grid-mapping-types,
+  .parallel-subcarriers,
+  .nr-slot-equations,
+  .numerology-simple-table {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-panels > div:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .correlation-controls,
+  .ofdm-orth-controls,
+  .cp-controls {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .correlation-readout,
+  .ofdm-orth-readout,
+  .cp-readout,
+  .resource-grid-readout,
+  .numerology-readout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .correlation-readout > div,
+  .ofdm-orth-readout > div,
+  .cp-readout > div,
+  .resource-grid-readout > div,
+  .numerology-readout > div {
+    min-width: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .correlation-readout > div:nth-child(odd),
+  .ofdm-orth-readout > div:nth-child(odd),
+  .cp-readout > div:nth-child(odd),
+  .resource-grid-readout > div:nth-child(odd),
+  .numerology-readout > div:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .correlation-readout > div:nth-last-child(-n+2),
+  .ofdm-orth-readout > div:nth-last-child(-n+2),
+  .cp-readout > div:nth-last-child(-n+2),
+  .resource-grid-readout > div:nth-last-child(-n+2),
+  .numerology-readout > div:nth-last-child(-n+2) {
+    border-bottom: 0;
+  }
+
+  .correlation-story,
+  .ofdm-problem-flow,
+  .ofdm-overview-chain,
+  .ifft-channel-flow,
+  .grid-coordinate-story,
+  .grid-column-flow,
+  .frame-structure-flow,
+  .cp-concept-row,
+  .cp-frequency-equation,
+  .numerology-symbol-story {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-story > b,
+  .ofdm-problem-flow > b,
+  .ofdm-overview-chain > b,
+  .ifft-channel-flow > b,
+  .grid-coordinate-story > b,
+  .grid-column-flow > b,
+  .frame-structure-flow > b,
+  .cp-concept-row > b,
+  .cp-frequency-equation > b,
+  .numerology-symbol-story > b {
+    min-height: 20px;
+    transform: rotate(90deg);
+  }
+
+  .ifft-bin-row,
+  .ifft-sample-grid,
+  .ifft-recovered {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resource-grid-interactive-wrap {
+    padding: 12px;
+  }
+
+  .corr-equation,
+  .ofdm-main-equation,
+  .ifft-main-equation,
+  .rb-definition,
+  .numerology-main-equation,
+  .cp-overhead-equation {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  .correlation-readout,
+  .ofdm-orth-readout,
+  .cp-readout,
+  .resource-grid-readout,
+  .numerology-readout {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-readout > div:nth-child(odd),
+  .ofdm-orth-readout > div:nth-child(odd),
+  .cp-readout > div:nth-child(odd),
+  .resource-grid-readout > div:nth-child(odd),
+  .numerology-readout > div:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .ifft-bin-row,
+  .ifft-sample-grid,
+  .ifft-recovered {
+    grid-template-columns: 1fr;
+  }
+}
