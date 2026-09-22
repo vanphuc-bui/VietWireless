@@ -1,0 +1,339 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Lộ trình học viễn thông từ signal tới 5G NR và NTN | VietWireless"
+  description="Lộ trình học VietWireless đi từ signal, sampling, I/Q, FFT, OFDM tới 5G NR synchronization, SSB, PBCH, MIB, SIB1, PRACH, data transmission và NTN."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/">← Về trang đầu</a>
+      <p class="eyebrow">LỘ TRÌNH HỌC · VIETWIRELESS</p>
+      <h1>Từ signal tới 5G NR và NTN.</h1>
+      <p class="lesson-deck">
+        Tôi muốn các chủ đề trên VietWireless nối với nhau như một câu chuyện.
+        Ta bắt đầu từ signal và cách máy tính biểu diễn nó, rồi đi qua OFDM. Câu hỏi sau đó rất thực tế: <strong>một UE vừa bật lên thì làm cách nào tìm được gNB và bắt đầu kết nối?</strong>
+      </p>
+    </header>
+
+    <section class="concept-block">
+      <p class="concept-kicker">BỨC TRANH TỔNG THỂ</p>
+      <h2>Mỗi phần lớn bắt đầu bằng một bức tranh chung, sau đó mới zoom vào từng khối.</h2>
+      <p>
+        Bài đầu tiên hiện tại, <a class="inline-cta" href="/hoc/tin-hieu-la-gi/">Signal là gì?</a>,
+        đã chạm qua sampling, miền thời gian, miền tần số, FFT, I/Q và resource grid.
+        Tôi xem bài đó như một bản đồ nền tảng. Các bài sau sẽ không viết lại từ đầu mà đi sâu vào từng mắt xích.
+      </p>
+
+      <ol class="course-list">
+        <li class="available">
+          <span class="course-no">PHẦN I</span>
+          <div>
+            <h3>Nền tảng signal</h3>
+            <p>Signal → sampling → phase → số phức → I/Q → Fourier/FFT → modulation.</p>
+          </div>
+          <span class="course-status">Bắt đầu ở đây</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN II</span>
+          <div>
+            <h3>Từ signal tới wireless link</h3>
+            <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN III</span>
+          <div>
+            <h3>UE tìm mạng 5G như thế nào?</h3>
+            <p>Power on → synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN IV</span>
+          <div>
+            <h3>Từ MIB tới system information</h3>
+            <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN V</span>
+          <div>
+            <h3>UE bắt đầu nói với gNB</h3>
+            <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN VI</span>
+          <div>
+            <h3>Truyền data khi đã connected</h3>
+            <p>PDCCH, PDSCH, PUSCH, PUCCH, DMRS, channel estimation, HARQ và MIMO.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN VII</span>
+          <div>
+            <h3>Receiver thực tế</h3>
+            <p>Timing offset, CFO, sampling offset, phase noise và EVM.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+        <li>
+          <span class="course-no">PHẦN VIII</span>
+          <div>
+            <h3>5G NTN</h3>
+            <p>Delay, Doppler, synchronization, SIB19, Timing Advance, PRACH và satellite mobility.</p>
+          </div>
+          <span class="course-status">Roadmap</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="ue-tim-mang">
+      <p class="concept-kicker">MỘT CÂU CHUYỆN XUYÊN SUỐT CỦA 5G NR</p>
+      <h2>UE vừa bật nguồn thì chưa biết gần như bất cứ điều gì về cell.</h2>
+      <p>
+        Nó chưa biết chính xác OFDM symbol bắt đầu ở sample nào, carrier của gNB lệch bao nhiêu so với oscillator của nó,
+        Physical Cell ID là gì, hay phải nhìn vào vùng resource grid nào để đọc system information.
+        Vì vậy phần 5G NR sẽ bắt đầu từ bài tổng quan về initial access trước khi đi sâu vào PSS, SSS hay PBCH.
+      </p>
+
+      <div class="system-position">
+        <span>UE POWER ON → CONNECTED</span>
+        <div class="system-position-flow" aria-label="Hành trình từ UE bật nguồn tới kết nối 5G">
+          <span>Power on</span><b>→</b>
+          <span>SSB</span><b>→</b>
+          <span>PSS / SSS</span><b>→</b>
+          <strong>Sync</strong><b>→</b>
+          <span>PBCH / MIB</span><b>→</b>
+          <span>SIB1</span><b>→</b>
+          <span>PRACH</span><b>→</b>
+          <span>Timing Advance</span><b>→</b>
+          <span>Connected</span>
+        </div>
+        <p>
+          Đây là flow cấp cao. Mỗi mắt xích sẽ trở thành một bài riêng khi tới phần tương ứng.
+        </p>
+      </div>
+
+      <div class="two-column">
+        <article class="explain-card">
+          <span class="card-label">DOWNLINK SYNC</span>
+          <h3>gNB → UE</h3>
+          <p>
+            gNB phát theo timing và frequency reference của nó. UE dùng các signal đã biết để tìm cell,
+            ước lượng timing và frequency offset, rồi align receiver của UE với downlink.
+          </p>
+        </article>
+        <article class="explain-card">
+          <span class="card-label">UPLINK SYNC</span>
+          <h3>UE → gNB</h3>
+          <p>
+            Sau khi đã nghe được network, UE mới bắt đầu random access. gNB quan sát uplink timing
+            và dùng Timing Advance để các UE phát sao cho tín hiệu tới gNB đúng thời điểm hơn.
+          </p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Một chỗ khá dễ lẫn</strong>
+        <p>
+          Downlink synchronization và uplink timing alignment không phải cùng một bước.
+          Phần đầu giúp UE nghe và hiểu cell. Phần sau giúp tín hiệu uplink của UE tới gNB đúng timing.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="phan-1">
+      <p class="concept-kicker">PHẦN I · NỀN TẢNG SIGNAL</p>
+      <h2>Từ một đại lượng thay đổi theo thời gian tới complex symbols.</h2>
+      <ol class="course-list">
+        <li class="available">
+          <span class="course-no">Bài 01</span>
+          <div>
+            <h3>Signal là gì?</h3>
+            <p>Âm thanh → microphone → samples → time/frequency domain → FFT → I/Q → resource grid.</p>
+          </div>
+          <a href="/hoc/tin-hieu-la-gi/">Đọc bài →</a>
+        </li>
+        <li>
+          <span class="course-no">Bài 02</span>
+          <div>
+            <h3>Sampling, aliasing và Nyquist</h3>
+            <p>Làm sao waveform liên tục trở thành samples, và điều gì xảy ra khi sampling quá chậm?</p>
+          </div>
+          <span class="course-status">Đang viết</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 03</span>
+          <div>
+            <h3>Amplitude, frequency và phase</h3>
+            <p>Một sinusoid mang những tham số nào và phase có ý nghĩa gì?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 04</span>
+          <div>
+            <h3>Số phức và phasor</h3>
+            <p>Vì sao biểu diễn bằng số phức lại tự nhiên trong signal processing?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 05</span>
+          <div>
+            <h3>I/Q và complex baseband</h3>
+            <p>I và Q biểu diễn amplitude và phase như thế nào?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 06</span>
+          <div>
+            <h3>Miền thời gian và miền tần số</h3>
+            <p>Hai cách nhìn khác nhau của cùng một signal giúp ta thấy điều gì?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 07</span>
+          <div>
+            <h3>Fourier, DFT và FFT</h3>
+            <p>Ta đang phân tích signal thành các thành phần tần số như thế nào?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+        <li>
+          <span class="course-no">Bài 08</span>
+          <div>
+            <h3>Modulation: BPSK → QPSK → QAM</h3>
+            <p>Bits trở thành các điểm constellation và complex symbols như thế nào?</p>
+          </div>
+          <span class="course-status">Sắp tới</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-2">
+      <p class="concept-kicker">PHẦN II · TỪ SIGNAL TỚI WIRELESS LINK</p>
+      <h2>Từ complex baseband tới một waveform đi qua không gian và quay lại receiver.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 09</span><div><h3>Baseband → RF → antenna</h3><p>I/Q samples trở thành tín hiệu RF vật lý như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 10</span><div><h3>Wireless channel</h3><p>Signal bị attenuation, delay, phase rotation và fading như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 11</span><div><h3>Noise, SNR và EVM</h3><p>Receiver nhìn thấy chất lượng signal giảm đi bằng những đại lượng nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 12</span><div><h3>Multipath và delay spread</h3><p>Vì sao nhiều bản sao của cùng signal có thể tới receiver ở các thời điểm khác nhau?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 13</span><div><h3>Correlation</h3><p>Làm sao receiver tìm một sequence đã biết trong noise?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 14</span><div><h3>OFDM: bức tranh tổng thể</h3><p>Vì sao chia bandwidth thành nhiều subcarriers lại hữu ích?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 15</span><div><h3>IFFT/FFT trong OFDM</h3><p>Frequency-domain symbols trở thành time-domain samples và quay lại như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 16</span><div><h3>Cyclic Prefix</h3><p>CP giúp OFDM xử lý multipath theo cách nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 17</span><div><h3>Resource grid</h3><p>Subcarrier, OFDM symbol, resource element và resource block liên hệ ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 18</span><div><h3>Numerology trong 5G NR</h3><p>SCS, symbol duration, slot và frame thay đổi với numerology thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-3">
+      <p class="concept-kicker">PHẦN III · UE BẬT LÊN VÀ TÌM MẠNG 5G</p>
+      <h2>Từ một receiver chưa biết timing, frequency hay cell ID tới việc đọc được MIB.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 19</span><div><h3>UE bật nguồn thì chuyện gì xảy ra?</h3><p>Bài tổng quan về toàn bộ initial access trước khi zoom vào từng signal.</p></div><span class="course-status">Ưu tiên sớm</span></li>
+        <li><span class="course-no">Bài 20</span><div><h3>Synchronization là gì?</h3><p>UE và gNB cần align những gì về timing, frequency và frame structure?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 21</span><div><h3>SSB là gì?</h3><p>PSS, SSS, PBCH và PBCH DM-RS nằm cùng nhau như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 22</span><div><h3>PSS</h3><p>UE phát hiện candidate cell và coarse timing bằng một sequence đã biết như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 23</span><div><h3>SSS và Physical Cell ID</h3><p>Sau PSS, UE hoàn thiện cell identity như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 24</span><div><h3>Fine timing và frequency synchronization</h3><p>Từ coarse detection tới receiver alignment chính xác hơn.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 25</span><div><h3>PBCH DM-RS</h3><p>UE estimate channel cần thiết để decode PBCH như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 26</span><div><h3>PBCH</h3><p>Broadcast channel đầu tiên mà UE decode đang mang gì?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 27</span><div><h3>MIB</h3><p>Sau PBCH, UE có thêm những mảnh thông tin nào để tiếp tục tìm system information?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-4">
+      <p class="concept-kicker">PHẦN IV · TỪ MIB TỚI SYSTEM INFORMATION</p>
+      <h2>Biết cell tồn tại chưa đủ. UE còn phải tìm nơi gNB gửi control và cấu hình chung.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 28</span><div><h3>CORESET#0 và SearchSpace#0</h3><p>Từ thông tin trong MIB, UE tìm vùng control ban đầu như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 29</span><div><h3>PDCCH là gì?</h3><p>gNB chỉ cho UE biết data hoặc grant nằm ở đâu bằng cách nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 30</span><div><h3>DCI cơ bản</h3><p>Một control message trên PDCCH có thể chỉ định resource và transmission parameters ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 31</span><div><h3>SIB1 nằm ở đâu?</h3><p>UE đi từ PDCCH tới PDSCH để tìm SIB1 như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 32</span><div><h3>SIB1</h3><p>Cell broadcast những cấu hình chung nào cần cho bước truy nhập tiếp theo?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 33</span><div><h3>Cell selection và camping</h3><p>Khi nào UE xem một cell là phù hợp để camp?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-5">
+      <p class="concept-kicker">PHẦN V · UE BẮT ĐẦU NÓI VỚI gNB</p>
+      <h2>Downlink đã nghe được. Bây giờ UE cần tạo một uplink mà gNB có thể phát hiện và align.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 34</span><div><h3>Random Access tổng quan</h3><p>Từ PRACH tới khi UE có thể gửi uplink có scheduling.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 35</span><div><h3>PRACH là gì?</h3><p>Vì sao initial uplink cần một physical channel và waveform riêng?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 36</span><div><h3>PRACH preamble</h3><p>Sequence detection cho phép gNB phát hiện UE như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 37</span><div><h3>SSB ↔ PRACH occasion</h3><p>UE nối beam/SSB đã thấy với cơ hội phát PRACH như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 38</span><div><h3>Random Access Response</h3><p>gNB trả lời Msg1 và cấp tài nguyên cho bước tiếp theo ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 39</span><div><h3>Timing Advance</h3><p>gNB làm cho uplink từ các UE ở khoảng cách khác nhau tới đúng timing như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 40</span><div><h3>Msg3 và Msg4</h3><p>Random access hoàn tất và contention được giải quyết như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 41</span><div><h3>RRC Setup</h3><p>Từ initial access tới một UE có connection context.</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-6">
+      <p class="concept-kicker">PHẦN VI · TRUYỀN DATA SAU KHI CONNECTED</p>
+      <h2>Khi UE đã vào mạng, các physical channels bắt đầu phối hợp để truyền control và data.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 42</span><div><h3>Bức tranh PHY khi UE đã connected</h3><p>PDCCH, PDSCH, PUSCH và PUCCH nằm ở đâu trong một scheduling cycle?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 43</span><div><h3>PDSCH</h3><p>Downlink user data và các transport blocks được mang thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 44</span><div><h3>PUSCH</h3><p>UE truyền uplink data theo grant như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 45</span><div><h3>PUCCH</h3><p>ACK/NACK, Scheduling Request và CSI được gửi ở đâu?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 46</span><div><h3>DMRS</h3><p>Receiver lấy reference nào để estimate channel cho một transmission?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 47</span><div><h3>Channel estimation</h3><p>Từ reference symbols tới estimate của channel H[k].</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 48</span><div><h3>Equalization</h3><p>Từ Y[k] và H[k] quay về estimate của transmitted symbols như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 49</span><div><h3>HARQ</h3><p>Khi decoding thất bại, retransmission và combining hoạt động ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 50</span><div><h3>MCS và link adaptation</h3><p>Network cân bằng throughput và reliability bằng modulation/coding như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 51</span><div><h3>MIMO và beamforming</h3><p>Nhiều antenna mở thêm những khả năng gì cho link?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-7">
+      <p class="concept-kicker">PHẦN VII · RECEIVER THỰC TẾ</p>
+      <h2>Receiver ngoài đời không nhận một signal hoàn hảo đúng sample và đúng carrier.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 52</span><div><h3>Timing offset</h3><p>FFT window đặt sai vị trí ảnh hưởng OFDM như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 53</span><div><h3>Carrier Frequency Offset</h3><p>Oscillator mismatch và Doppler tạo CFO ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 54</span><div><h3>CFO estimation và correction</h3><p>Receiver có thể ước lượng và bù rotation do frequency offset như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 55</span><div><h3>Sampling Frequency Offset</h3><p>Clock ADC lệch tạo ra sai số tích lũy theo thời gian như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 56</span><div><h3>Phase noise</h3><p>Phase không ổn định làm constellation và OFDM bị biến dạng ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 57</span><div><h3>EVM</h3><p>Khoảng cách giữa symbol lý tưởng và symbol đo được nói gì về chất lượng tín hiệu?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <section class="concept-block" id="phan-8">
+      <p class="concept-kicker">PHẦN VIII · 5G NTN</p>
+      <h2>Khi cùng NR PHY đi qua satellite, delay và Doppler làm nhiều giả định quen thuộc thay đổi.</h2>
+      <ol class="course-list">
+        <li><span class="course-no">Bài 58</span><div><h3>Từ terrestrial NR tới NTN</h3><p>Bài tổng quan về những vấn đề mới khi đường truyền đi qua satellite.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 59</span><div><h3>Propagation delay</h3><p>Khoảng cách lớn tác động tới timing, scheduling và protocol timers như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 60</span><div><h3>Doppler trong NTN</h3><p>Chuyển động satellite tạo frequency shift và variation lớn ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 61</span><div><h3>NTN synchronization</h3><p>UE duy trì timing và frequency alignment trong một geometry thay đổi như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 62</span><div><h3>NTN Timing Advance</h3><p>Uplink timing phải bù propagation delay lớn và biến thiên như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 63</span><div><h3>SIB19</h3><p>UE nhận NTN-specific assistance information từ system information như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 64</span><div><h3>Ephemeris và satellite position</h3><p>Biết satellite ở đâu giúp tính delay và Doppler như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 65</span><div><h3>NTN Random Access</h3><p>PRACH và uplink acquisition thay đổi ra sao khi delay/Doppler lớn?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 66</span><div><h3>Moving satellite, beam và handover</h3><p>Khi satellite hoặc beam di chuyển, UE duy trì service continuity như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+      </ol>
+    </section>
+
+    <nav class="next-lesson" aria-label="Bắt đầu học">
+      <span>BẮT ĐẦU TỪ ĐÂY</span>
+      <div>
+        <h2>Signal là gì?</h2>
+        <p>Bài mở đầu để xây mental model trước khi đi sâu vào sampling, I/Q, FFT và OFDM.</p>
+      </div>
+      <a class="text-button" href="/hoc/tin-hieu-la-gi/">Đọc bài →</a>
+    </nav>
+  </article>
+</BaseLayout>

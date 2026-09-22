@@ -251,59 +251,82 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
     <section class="essay-section" id="lo-trinh">
       <div class="section-number">05</div>
       <div class="essay-content">
-        <p class="section-kicker">NẾU MUỐN ĐI TỪ NỀN TẢNG</p>
-        <h2>Một lộ trình tôi thấy khá tự nhiên là bắt đầu từ signal rồi mới đi dần tới 5G.</h2>
+        <p class="section-kicker">LỘ TRÌNH HỌC</p>
+        <h2>Từ signal tới một UE tìm được mạng 5G, kết nối và truyền data.</h2>
+        <p>
+          Tôi muốn các chủ đề nối với nhau theo một trục rõ ràng. Ta đi từ cách biểu diễn signal,
+          qua wireless link và OFDM, rồi mới theo chân một UE từ lúc bật nguồn tới synchronization,
+          PBCH, random access, connected mode và cuối cùng là NTN.
+        </p>
 
         <ol class="course-list">
           <li class="available">
-            <span class="course-no">Bài 01</span>
+            <span class="course-no">PHẦN I</span>
             <div>
-              <h3>Signal là gì?</h3>
-              <p>Âm thanh → microphone → samples → time/frequency domain → FFT → I/Q.</p>
+              <h3>Nền tảng signal</h3>
+              <p>Signal → sampling → phase → số phức → I/Q → FFT → modulation.</p>
             </div>
-            <a href="/hoc/tin-hieu-la-gi/">Đọc bài →</a>
+            <a href="/hoc/tin-hieu-la-gi/">Bắt đầu →</a>
           </li>
           <li>
-            <span class="course-no">Bài 02</span>
+            <span class="course-no">PHẦN II</span>
             <div>
-              <h3>Sampling, aliasing và Nyquist</h3>
-              <p>Tại sao lấy mẫu quá chậm có thể làm ta “nhìn thấy” một tần số không tồn tại?</p>
+              <h3>Từ signal tới wireless link</h3>
+              <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
             </div>
-            <span class="course-status">Đang viết</span>
+            <span class="course-status">Roadmap</span>
           </li>
           <li>
-            <span class="course-no">Bài 03</span>
+            <span class="course-no">PHẦN III</span>
             <div>
-              <h3>Sin, cos, phase và complex number</h3>
-              <p>Tại sao số phức lại xuất hiện ở gần như mọi receiver hiện đại?</p>
+              <h3>UE bật lên và tìm mạng 5G</h3>
+              <p>Synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
             </div>
-            <span class="course-status">Sắp tới</span>
+            <span class="course-status">Roadmap</span>
           </li>
           <li>
-            <span class="course-no">Bài 04</span>
+            <span class="course-no">PHẦN IV</span>
             <div>
-              <h3>I/Q, constellation và modulation</h3>
-              <p>Từ complex sample tới QPSK, 16QAM và symbol.</p>
+              <h3>Từ MIB tới system information</h3>
+              <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
             </div>
-            <span class="course-status">Sắp tới</span>
+            <span class="course-status">Roadmap</span>
           </li>
           <li>
-            <span class="course-no">Bài 05</span>
+            <span class="course-no">PHẦN V</span>
             <div>
-              <h3>FFT/IFFT và OFDM</h3>
-              <p>Tại sao transmitter dùng IFFT còn receiver dùng FFT?</p>
+              <h3>UE bắt đầu nói với gNB</h3>
+              <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
             </div>
-            <span class="course-status">Sắp tới</span>
+            <span class="course-status">Roadmap</span>
           </li>
           <li>
-            <span class="course-no">Sau nền tảng</span>
+            <span class="course-no">PHẦN VI</span>
             <div>
-              <h3>LTE → 5G NR → NTN</h3>
-              <p>Resource grid, synchronization, SSB, PDCCH, PDSCH, PUSCH, DMRS, PRACH và satellite.</p>
+              <h3>Truyền data khi đã connected</h3>
+              <p>PDCCH, PDSCH, PUSCH, PUCCH, DMRS, equalization, HARQ và MIMO.</p>
+            </div>
+            <span class="course-status">Roadmap</span>
+          </li>
+          <li>
+            <span class="course-no">PHẦN VII</span>
+            <div>
+              <h3>Receiver thực tế</h3>
+              <p>Timing offset, CFO, sampling offset, phase noise và EVM.</p>
+            </div>
+            <span class="course-status">Roadmap</span>
+          </li>
+          <li>
+            <span class="course-no">PHẦN VIII</span>
+            <div>
+              <h3>5G NTN</h3>
+              <p>Delay, Doppler, synchronization, SIB19, Timing Advance, PRACH và satellite mobility.</p>
             </div>
             <span class="course-status">Roadmap</span>
           </li>
         </ol>
+
+        <a class="text-button" href="/hoc/">Xem toàn bộ lộ trình 66 bài →</a>
       </div>
     </section>
 
