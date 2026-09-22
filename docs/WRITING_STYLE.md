@@ -247,3 +247,22 @@ Trong một bài học, tiêu đề bài là điểm nhấn lớn nhất.
 Các section title bên trong bài không nên có kích thước gần bằng title bài. Chúng chỉ cần giúp người đọc định vị nội dung, không nên ngắt nhịp đọc hoặc cạnh tranh với diagram, plot và interactive lab.
 
 Nếu một câu heading dài như một câu văn hoàn chỉnh, ưu tiên kích thước vừa phải. Không dùng typography quá lớn chỉ vì đó là H2.
+
+
+## 15. Câu chuyển ý không cần thành section
+
+Không biến mọi ý mới thành một section có số thứ tự, kicker và heading.
+
+Nếu một câu chỉ có nhiệm vụ chuyển từ ý trước sang visual hoặc giải thích tiếp theo, viết nó như một paragraph bình thường.
+
+Ví dụ:
+
+`Miền thời gian và miền tần số chỉ là hai cách nhìn khác nhau của cùng một tín hiệu.`
+
+Không cần thêm:
+
+`03 · HAI CÁCH NHÌN CÙNG MỘT TÍN HIỆU`
+
+và cũng không cần lặp lại cùng ý bằng một H2 ngay bên dưới.
+
+Mục tiêu là giữ nhịp đọc liên tục. Chỉ tạo section mới khi thật sự có một khối nội dung độc lập.
