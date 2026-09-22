@@ -9,12 +9,12 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/">← Foundations</a>
-      <p class="eyebrow">LESSON 01 · SIGNAL FOUNDATIONS</p>
+      <a class="back-link" href="/">← Về bức tranh lớn</a>
+      <p class="eyebrow">GHI CHÉP 01 · SIGNAL FOUNDATIONS</p>
       <h1>Signal là gì?</h1>
       <p class="lesson-deck">
-        Trước 4G, 5G hay OFDM, hãy trả lời một câu hỏi tưởng như rất đơn giản:
-        <strong>chúng ta thực sự đang truyền cái gì?</strong>
+        Trước khi đi tới 4G, 5G hay OFDM, có một câu hỏi mình thấy đáng quay lại:
+        <strong>rốt cuộc chúng ta đang truyền cái gì?</strong>
       </p>
       <div class="lesson-meta">
         <span>Trực giác trước</span>
@@ -24,7 +24,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BẠN ĐANG ĐỨNG Ở ĐÂU TRONG HỆ THỐNG?</p>
+      <p class="concept-kicker">SIGNAL NẰM Ở ĐÂU TRONG BỨC TRANH?</p>
       <h2>Bài này zoom vào chữ “signal” trong bức tranh lớn.</h2>
       <div class="system-position">
         <span>END-TO-END MAP</span>
@@ -37,8 +37,8 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
           <span>Receiver</span>
         </div>
         <p>
-          Chương 0 đã cho bạn xem toàn bộ đường đi từ bits → QAM → IFFT → I/Q → RF → channel → FFT → bits.
-          Bây giờ ta tạm gác phần còn lại sang một bên và hỏi câu nền tảng nhất:
+          Ở trang đầu mình đã đặt cả chuỗi bits → QAM → IFFT → I/Q → RF → channel → FFT → bits cạnh nhau.
+          Ở đây mình tạm gác phần còn lại sang một bên và chỉ nhìn kỹ hơn vào một chữ xuất hiện xuyên suốt:
           <strong>signal thực sự là gì?</strong>
           <a href="/#buc-tranh-lon">Xem lại sơ đồ tổng thể ↑</a>
         </p>
@@ -46,7 +46,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
     </section>
 
     <section class="concept-block">
-      <p class="concept-kicker">01 · BẮT ĐẦU TỪ THẾ GIỚI THẬT</p>
+      <p class="concept-kicker">01 · TỪ THẾ GIỚI THẬT</p>
       <h2>Tín hiệu là một đại lượng thay đổi và mang thông tin.</h2>
       <p>
         Khi bạn nói, áp suất không khí thay đổi theo thời gian. Microphone biến sự thay đổi đó thành
@@ -93,7 +93,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       </div>
 
       <aside class="mental-model">
-        <strong>Mental model</strong>
+        <strong>Một cách mình hay hình dung</strong>
         <p>
           “Signal” không đồng nghĩa với “radio wave”. Một dãy samples trong RAM cũng là signal.
           Một waveform ở đầu ADC cũng là signal. Sóng RF ngoài anten chỉ là một dạng biểu diễn vật lý khác.
@@ -122,7 +122,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       </div>
       <p>
         Sampling rate nói cho ta biết mỗi giây lấy bao nhiêu samples. Đây chưa phải câu chuyện đầy đủ của ADC
-        — còn quantization, dynamic range và anti-alias filtering — nhưng trước hết hãy giữ một trực giác:
+        — còn quantization, dynamic range và anti-alias filtering. Nhưng ở đoạn này mình chỉ cần giữ lại một hình dung:
         <strong>sampling biến một waveform theo thời gian thành một dãy số theo thời gian.</strong>
       </p>
     </section>
@@ -154,7 +154,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       </div>
 
       <aside class="mental-model">
-        <strong>Quan trọng</strong>
+        <strong>Một cách mình hay hình dung</strong>
         <p>
           FFT không “biến signal thành một signal khác”. Nó cho ta một cách biểu diễn khác của cùng dữ liệu,
           giống như nhìn cùng một thành phố trên ảnh vệ tinh và trên bản đồ đường phố.
@@ -164,10 +164,10 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 
     <section class="concept-block lab-section" id="fft">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Tự tay nhìn FFT tìm ra tần số.</h2>
+      <h2>Thử nhìn xem FFT làm rõ điều gì.</h2>
       <p>
-        Thay đổi hai tone bên dưới. Time waveform có thể trông khá rối, nhưng frequency view lập tức tách
-        hai thành phần ra thành hai peak. Phần demo dùng DFT trực tiếp để dễ minh họa; FFT là thuật toán
+        Khi thay đổi hai tone bên dưới, time waveform có thể trông khá rối, còn frequency view thì tách
+        hai thành phần ra thành hai peak khá rõ. Phần demo dùng DFT trực tiếp cho dễ minh họa; FFT là thuật toán
         tính cùng phép biến đổi đó hiệu quả hơn rất nhiều.
       </p>
       <SignalExplorer client:load />
@@ -214,16 +214,16 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         vuông góc. Điểm (I, Q) có khoảng cách tới gốc là amplitude và góc của nó là phase.
       </p>
       <p>
-        Điều này cực kỳ hữu ích vì modulation, channel rotation, frequency offset và nhiều phép xử lý wireless
-        trở nên gọn hơn bằng số phức. Nhưng nhớ rằng tín hiệu RF vật lý ngoài anten vẫn là một tín hiệu thực;
+        Cách biểu diễn này rất tiện vì modulation, channel rotation, frequency offset và nhiều phép xử lý wireless
+        trở nên gọn hơn bằng số phức. Một chi tiết dễ lẫn là tín hiệu RF vật lý ngoài anten vẫn là tín hiệu thực;
         complex baseband là cách biểu diễn toán học và implementation rất tiện lợi.
       </p>
       <a class="inline-cta" href="#fft">↑ Thử tab I/Q trong Signal Lab phía trên</a>
     </section>
 
     <section class="concept-block recap">
-      <p class="concept-kicker">07 · RECAP</p>
-      <h2>Nếu chỉ nhớ 6 điều sau bài này</h2>
+      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
+      <h2>Tóm lại, mình đang nối các khái niệm này với nhau như sau.</h2>
       <ol class="recap-list">
         <li><strong>Signal</strong> là một đại lượng thay đổi dùng để biểu diễn hoặc mang thông tin.</li>
         <li><strong>Sampling</strong> biến waveform liên tục thành một dãy giá trị rời rạc theo thời gian.</li>
@@ -235,7 +235,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
     </section>
 
     <nav class="next-lesson" aria-label="Bài học tiếp theo">
-      <span>TIẾP THEO</span>
+      <span>GHI CHÉP TIẾP THEO</span>
       <div>
         <h2>Sampling, aliasing và Nyquist</h2>
         <p>Tại sao lấy samples quá chậm có thể khiến một tần số “biến thành” tần số khác?</p>
