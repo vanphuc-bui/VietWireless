@@ -193,28 +193,29 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
     </section>
 
     <section class="concept-block">
-      <p class="concept-kicker">03 · HAI CÁCH NHÌN CÙNG MỘT SIGNAL</p>
-      <h2>Time domain và frequency domain chỉ là hai cách nhìn khác nhau vào cùng một signal.</h2>
       <p>
-        Trong time domain, trục ngang là thời gian. Bạn nhìn được waveform đang thay đổi thế nào.
-        Nhưng nếu nhiều tone cộng vào nhau, chỉ nhìn waveform thường rất khó biết chính xác từng thành phần.
+        Miền thời gian và miền tần số chỉ là hai cách nhìn khác nhau của cùng một tín hiệu.
       </p>
       <p>
-        Frequency domain đổi câu hỏi: thay vì hỏi signal có giá trị bao nhiêu tại từng thời điểm,
-        ta hỏi <strong>những sinusoid ở tần số nào đang đóng góp vào signal, với amplitude và phase bao nhiêu?</strong>
+        Ở miền thời gian, trục ngang là thời gian. Ta nhìn được dạng sóng thay đổi như thế nào.
+        Nhưng nếu nhiều thành phần tần số cộng vào nhau, chỉ nhìn dạng sóng thường rất khó biết chính xác từng thành phần.
+      </p>
+      <p>
+        Ở miền tần số, câu hỏi thay đổi. Thay vì hỏi tín hiệu có giá trị bao nhiêu tại từng thời điểm,
+        ta hỏi <strong>những thành phần tần số nào đang tạo nên tín hiệu, với biên độ và pha bao nhiêu?</strong>
       </p>
 
       <div class="perspective">
         <div>
-          <small>TIME DOMAIN</small>
+          <small>MIỀN THỜI GIAN</small>
           <strong>x(t)</strong>
-          <span>“Signal thay đổi như thế nào theo thời gian?”</span>
+          <span>“Tín hiệu thay đổi như thế nào theo thời gian?”</span>
         </div>
         <div class="perspective-equals">=</div>
         <div>
-          <small>FREQUENCY DOMAIN</small>
+          <small>MIỀN TẦN SỐ</small>
           <strong>X(f)</strong>
-          <span>“Signal được tạo bởi những thành phần tần số nào?”</span>
+          <span>“Tín hiệu gồm những thành phần tần số nào?”</span>
         </div>
       </div>
 
