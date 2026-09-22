@@ -9,19 +9,19 @@ Công thức trên VietWireless phải nhìn như toán học thật, không ph�
 Import:
 
 ```astro
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ```
 
 Inline math:
 
 ```astro
-<Math tex="x[n] = I[n] + jQ[n]" />
+<MathExpr tex="x[n] = I[n] + jQ[n]" />
 ```
 
 Display math:
 
 ```astro
-<Math
+<MathExpr
   tex="\\mathrm{EVM}_{\\mathrm{RMS}} = \\sqrt{\\frac{\\sum_k |Y_k-X_k|^2}{\\sum_k |X_k|^2}}"
   display
 />
@@ -30,7 +30,7 @@ Display math:
 Có thể thêm class khi cần layout riêng:
 
 ```astro
-<Math tex="\\Delta f = 1/T_u" display class="math-compact" />
+<MathExpr tex="\\Delta f = 1/T_u" display class="math-compact" />
 ```
 
 ## Khi nào dùng inline và display
