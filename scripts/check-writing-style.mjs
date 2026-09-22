@@ -52,6 +52,29 @@ for (const file of files) {
       }
     }
   }
+
+  const crossLineRules = [
+    {
+      name: 'missing explicit space before inline HTML across lines',
+      regex: /([:\p{L}\p{N}])\n\s*<(?:strong|em|a)\b/gu,
+      message: 'Astro may trim this newline. Add an explicit {" "} before the inline element.',
+    },
+    {
+      name: 'missing explicit space after inline HTML across lines',
+      regex: /<\/(?:strong|em|a)>\n\s*([\p{L}\p{N}])/gu,
+      message: 'Astro may trim this newline. Add an explicit {" "} after the inline element.',
+    },
+  ];
+
+  for (const rule of crossLineRules) {
+    rule.regex.lastIndex = 0;
+    let match;
+    while ((match = rule.regex.exec(content)) !== null) {
+      failed = true;
+      const line = content.slice(0, match.index).split('\n').length;
+      console.error(`${relative('.', file)}:${line}: ${rule.name}: ${rule.message}`);
+    }
+  }
 }
 
 if (failed) process.exit(1);
