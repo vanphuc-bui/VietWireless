@@ -221,7 +221,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
       <div class="nyquist-spectrum-grid">
         <article>
-          <span class="sampling-stage-label">fₛ &gt; 2B · TÁCH NHAU</span>
+          <span class="sampling-stage-label"><MathExpr tex="f_s>2B" /> · TÁCH NHAU</span>
           <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum không chồng lên nhau khi sampling đủ nhanh">
             <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
             <path class="spectrum-copy muted-copy" d="M36 132 L66 82 L96 132 Z" />
@@ -234,7 +234,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           <p>Mỗi copy còn khoảng trống với copy bên cạnh.</p>
         </article>
         <article>
-          <span class="sampling-stage-label">fₛ &lt; 2B · CHỒNG LÊN NHAU</span>
+          <span class="sampling-stage-label"><MathExpr tex="f_s<2B" /> · CHỒNG LÊN NHAU</span>
           <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum chồng lên nhau khi sampling quá chậm">
             <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
             <path class="spectrum-copy muted-copy" d="M92 132 L178 66 L264 132 Z" />
@@ -266,7 +266,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           <span class="card-label">NYQUIST RATE</span>
           <h3><MathExpr tex="2B" /></h3>
           <p>
-            Nếu signal cần giữ tới B Hz, 2B là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
+            Nếu signal cần giữ tới <MathExpr tex="B\\,\\mathrm{Hz}" />, <MathExpr tex="2B" /> là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
           </p>
         </article>
         <article class="explain-card">
@@ -287,7 +287,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
     <section class="concept-block" id="anti-alias">
       <p class="concept-kicker">06 · NGOÀI ĐỜI THỰC</p>
-      <h2>ADC không thể trông chờ mọi thứ phía trên fₛ/2 tự biến mất.</h2>
+      <h2>ADC không thể trông chờ mọi thứ phía trên <MathExpr tex="f_s/2" /> tự biến mất.</h2>
       <p>
         Signal analog thực tế có thể chứa noise, blocker hoặc các thành phần ngoài bandwidth ta quan tâm.
         Nếu chúng đi thẳng vào ADC, những thành phần phía trên Nyquist frequency có thể alias vào dải cần giữ.
@@ -306,12 +306,12 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         <b>→</b>
         <div>
           <small>ADC</small>
-          <strong>sampling @ fₛ</strong>
+          <strong>sampling @ <MathExpr tex="f_s" /></strong>
         </div>
         <b>→</b>
         <div>
           <small>DIGITAL</small>
-          <strong>x[n]</strong>
+          <strong><MathExpr tex="x[n]" /></strong>
         </div>
       </div>
 
