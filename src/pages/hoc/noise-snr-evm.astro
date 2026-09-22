@@ -233,7 +233,7 @@ import Math from '../../components/Math.astro';
         <li><strong>SNR:</strong> ratio giữa wanted-signal power và noise power tại cùng reference point.</li>
         <li><strong>dB:</strong> biến power ratio thành phép cộng/trừ thuận tiện.</li>
         <li><strong>EVM:</strong> normalized RMS complex error giữa measured và reference symbols.</li>
-        <li><strong>AWGN relation:</strong> EVM ≈ 1/√SNR chỉ dưới assumptions phù hợp.</li>
+        <li><strong>AWGN relation:</strong> <Math tex="\\mathrm{EVM}\\approx1/\\sqrt{\\mathrm{SNR}}" /> chỉ dưới assumptions phù hợp.</li>
         <li><strong>Structured errors:</strong> CFO, phase noise, IQ imbalance và nonlinearity cũng làm EVM tăng.</li>
         <li><strong>Measurement point:</strong> quyết định những impairment nào còn xuất hiện trong metric.</li>
       </ol>
