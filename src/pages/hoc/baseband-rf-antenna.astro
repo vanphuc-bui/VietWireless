@@ -5,7 +5,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
 
 <BaseLayout
   title="Baseband → RF → antenna | VietWireless"
-  description="Hiểu complex baseband I/Q được DAC, quadrature upconversion, RF filtering và power amplifier biến thành waveform RF vật lý trước antenna như thế nào."
+  description="Theo một tín hiệu từ complex baseband I/Q qua DAC, quadrature upconversion, RF front-end và antenna để hiểu sample trong code liên quan gì tới sóng được phát ra."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
@@ -13,86 +13,104 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
       <p class="eyebrow">GHI CHÉP 09 · WIRELESS LINK</p>
       <h1>Baseband → RF → antenna</h1>
       <p class="lesson-deck">
-        Sau modulation, DSP chỉ có một chuỗi complex samples. Antenna thì không phát “số phức”.
-        <strong>Giữa hai đầu đó là cả một chain biến I/Q samples thành điện áp và công suất RF thực ở tần số carrier.</strong>
+        Sau Bài 08, ta đã có bits → complex symbols → complex samples. Nhưng antenna không phát một mảng số phức trong RAM.{" "}
+        <strong>Bài này theo cùng một tín hiệu từ I/Q samples trong DSP cho tới điện áp RF thực ở cổng antenna.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="concept-kicker">BÀI TOÁN CẦN GIẢI</p>
       <p class="map-intro">
-        Bài 08 kết thúc ở complex symbols và time-domain baseband samples. Bài này theo signal đi tiếp qua phần analog/RF tới antenna.
+        Giả sử trong code tôi đang có một buffer:
+        x[n] = I[n] + jQ[n].
+        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài GHz?
       </p>
+
       <div class="system-position">
-        <span>DIGITAL BASEBAND → RF</span>
-        <div class="system-position-flow" aria-label="Chuỗi từ baseband samples tới antenna">
+        <span>TỪ MEMORY TỚI ANTENNA</span>
+        <div class="system-position-flow" aria-label="Chuỗi từ complex samples tới antenna">
           <strong>I/Q samples</strong><b>→</b>
           <span>DAC</span><b>→</b>
-          <span>baseband analog</span><b>→</b>
-          <span>upconversion</span><b>→</b>
-          <span>RF filtering / PA</span><b>→</b>
+          <span>analog I/Q</span><b>→</b>
+          <span>quadrature mixer</span><b>→</b>
+          <span>RF filter + PA</span><b>→</b>
           <span>antenna</span>
         </div>
         <p>
-          Đây là block diagram khái niệm. Radio thực tế có thể dùng nhiều kiến trúc khác nhau, nhưng dependency vật lý cơ bản vẫn tương tự.
+          Block diagram này là mental model. Radio thực tế có thể dùng direct-conversion, low-IF, digital upconversion
+          hoặc nhiều stage khác nhau, nhưng ý tưởng “baseband representation → RF waveform” vẫn giữ nguyên.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="digital-baseband">
-      <p class="concept-kicker">01 · ĐIỂM XUẤT PHÁT: COMPLEX SAMPLES</p>
-      <h2>DSP làm việc với x[n] = I[n] + jQ[n], chưa phải với một carrier vài GHz.</h2>
+    <section class="concept-block" id="complex-samples">
+      <p class="concept-kicker">01 · DIGITAL BASEBAND CHƯA CÓ CARRIER RF</p>
+      <h2>Trong DSP, ta thường xử lý phần modulation quanh 0 Hz thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
+
       <p>
-        Trong digital baseband, sampling rate thường được chọn theo bandwidth cần xử lý chứ không phải trực tiếp theo RF carrier.
-        Điều này là một lợi thế rất lớn: ta có thể xử lý modulation, filtering, synchronization và OFDM ở quanh 0 Hz.
+        Một sample complex có dạng x[n] = I[n] + jQ[n].
+        Nếu tại một thời điểm I = 0.8 và Q = 0.6 thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
+        Hai con số I và Q đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
+      </p>
+
+      <p>
+        Điều quan trọng là <strong>sample này chưa phải điện áp RF ngoài antenna</strong>.
+        Nó là representation mà DSP dùng vì filtering, modulation, FFT, channel estimation và nhiều phép toán khác trở nên gọn hơn trên số phức.
       </p>
 
       <div class="rf-chain-overview">
-        <div><small>DIGITAL</small><strong>I[n], Q[n]</strong><span>complex samples</span></div>
+        <div><small>MEMORY</small><strong>I[n], Q[n]</strong><span>hai dãy số rời rạc</span></div>
         <b>→</b>
-        <div><small>DAC</small><strong>I(t), Q(t)</strong><span>analog baseband</span></div>
+        <div><small>DAC</small><strong>I(t), Q(t)</strong><span>hai waveform analog</span></div>
         <b>→</b>
-        <div><small>MIXER / LO</small><strong>f<sub>c</sub></strong><span>dịch lên carrier</span></div>
+        <div><small>UPCONVERSION</small><strong>f<sub>c</sub></strong><span>dịch spectrum lên RF</span></div>
         <b>→</b>
-        <div><small>RF</small><strong>s(t)</strong><span>real passband waveform</span></div>
+        <div><small>RF PORT</small><strong>s(t)</strong><span>một waveform thực</span></div>
       </div>
     </section>
 
     <section class="concept-block" id="dac">
-      <p class="concept-kicker">02 · DAC KHÔNG TẠO RA MỘT ĐƯỜNG CONG HOÀN HẢO NGAY LẬP TỨC</p>
-      <h2>Digital samples được chuyển thành mức analog rồi qua reconstruction filtering.</h2>
+      <p class="concept-kicker">02 · DAC BIẾN SAMPLE VALUE THÀNH ANALOG WAVEFORM</p>
+      <h2>DAC không “vẽ một đường cong” từ công thức; nó cập nhật output theo sample clock rồi analog filter xử lý phần ngoài dải.</h2>
+
       <p>
-        DAC nhận các sample values theo clock và tạo điện áp hoặc dòng analog tương ứng.
-        Output thô của DAC chứa ảnh phổ do sampling/update process, vì vậy radio thường có analog filtering để giữ dải mong muốn và làm suy giảm các spectral images.
+        Với mỗi nhánh I và Q, DAC nhận một chuỗi số theo thời gian.
+        Nếu sample rate là f<sub>s</sub>, mỗi T<sub>s</sub> = 1/f<sub>s</sub> giây DAC nhận một giá trị mới.
+        Output analog thô vì vậy liên quan trực tiếp tới các mức sample và cơ chế hold/update của DAC.
+      </p>
+
+      <p>
+        Sampling tạo ra các spectral replicas cách nhau theo sample rate.
+        Vì thế sau DAC thường có reconstruction filter để giữ wanted analog bandwidth và làm suy giảm các ảnh phổ không mong muốn.
+        Ta không cần nhớ chi tiết circuit ở đây; chỉ cần hiểu rằng <strong>digital samples không nhảy thẳng thành một waveform RF sạch</strong>.
       </p>
 
       <div class="dac-story">
         <div>
-          <span class="card-label">SAMPLES</span>
+          <span class="card-label">DIGITAL</span>
           <strong>I[n], Q[n]</strong>
-          <p>Giá trị rời rạc theo sample clock.</p>
+          <p>Các giá trị theo sample index.</p>
         </div>
         <b>→ DAC →</b>
         <div>
-          <span class="card-label">ANALOG OUTPUT</span>
+          <span class="card-label">ANALOG BASEBAND</span>
           <strong>I(t), Q(t)</strong>
-          <p>Hai waveform analog baseband trước mixer.</p>
+          <p>Hai tín hiệu điện analog quanh baseband.</p>
         </div>
         <b>→ FILTER →</b>
         <div>
           <span class="card-label">WANTED BAND</span>
-          <strong>baseband sạch hơn</strong>
-          <p>Spectral images ngoài dải bị làm suy giảm.</p>
+          <strong>giữ dải cần phát</strong>
+          <p>Giảm spectral images và thành phần ngoài dải.</p>
         </div>
       </div>
     </section>
 
     <section class="concept-block" id="upconversion">
-      <p class="concept-kicker">03 · QUADRATURE UPCONVERSION</p>
-      <h2>I và Q điều khiển hai carrier vuông pha để tạo một waveform RF thực.</h2>
-      <p>
-        Với convention thường gặp:
-      </p>
+      <p class="concept-kicker">03 · I VÀ Q ĐIỀU KHIỂN HAI CARRIER VUÔNG PHA</p>
+      <h2>Quadrature upconversion biến complex baseband thành một waveform RF thực.</h2>
+
+      <p>Với một convention thường gặp:</p>
 
       <div class="rf-main-equation">
         <span>s(t)</span>
@@ -101,127 +119,158 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
       </div>
 
       <p>
-        Hai oscillator cos và sin lệch nhau 90°. Mixer nhân I và Q với hai carrier này, sau đó hai nhánh được cộng lại.
-        Nếu I và Q đang là hằng số tương ứng một symbol A∠φ, tổng RF trở thành A cos(2πf<sub>c</sub>t + φ).
+        Nhánh I nhân với cosine. Nhánh Q nhân với sine lệch 90°. Sau đó hai nhánh được cộng lại.
+        Kết quả s(t) là một giá trị thực theo thời gian, đúng loại waveform mà RF circuit và antenna có thể xử lý.
+      </p>
+
+      <p>
+        Lấy ví dụ đơn giản I = 0.8 và Q = 0.6 trong một khoảng ngắn. Khi đó A = 1 và φ ≈ 36.9°.
+        Công thức phía trên trở thành một sinusoid có cùng magnitude A và phase φ quanh carrier f<sub>c</sub>.
+        Nói cách khác, <strong>tọa độ I/Q ở baseband quyết định amplitude và phase của RF carrier</strong>.
       </p>
 
       <aside class="precision-note">
-        <strong>Dấu và phase convention có thể khác giữa tài liệu</strong>
+        <strong>Dấu của nhánh Q phụ thuộc convention</strong>
         <p>
-          Có nơi viết +Q sin thay vì -Q sin vì định nghĩa complex exponential, mixer hoặc Fourier convention khác.
-          Điều quan trọng là transmitter và receiver phải nhất quán với nhau.
+          Một số tài liệu viết +Q sin thay vì -Q sin vì dùng định nghĩa complex exponential hoặc mixer convention khác.
+          Không có mâu thuẫn nếu toàn bộ transmitter và receiver dùng cùng convention.
         </p>
       </aside>
     </section>
 
     <section class="concept-block lab-section" id="rf-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thay magnitude và phase của một baseband symbol rồi nhìn hai mixer branches cộng thành RF waveform.</h2>
+      <h2>Thay amplitude và phase của một complex symbol rồi nhìn I·cos và -Q·sin cộng thành RF waveform.</h2>
       <p>
-        Carrier trong demo chỉ dùng số chu kỳ trên màn hình để dễ nhìn, không đại diện một tần số RF cụ thể.
-        Mục tiêu là thấy rõ I·cos và -Q·sin tạo ra cùng amplitude/phase mà complex symbol đang biểu diễn.
+        Carrier trong demo chỉ là một số chu kỳ minh họa trên màn hình.
+        Điều cần quan sát là khi phase của điểm I+jQ thay đổi, cách hai nhánh I và Q phối hợp cũng thay đổi,
+        nhưng tổng cuối cùng vẫn là một waveform thực.
       </p>
       <RFChainExplorer client:load />
     </section>
 
-    <section class="concept-block" id="lo">
-      <p class="concept-kicker">05 · LOCAL OSCILLATOR QUYẾT ĐỊNH SIGNAL ĐƯỢC ĐẶT Ở ĐÂU TRÊN SPECTRUM</p>
-      <h2>Baseband mang nội dung; LO đưa nội dung đó lên quanh carrier frequency.</h2>
+    <section class="concept-block" id="frequency-translation">
+      <p class="concept-kicker">05 · UPCONVERSION LÀ DỊCH SPECTRUM LÊN QUANH CARRIER</p>
+      <h2>Baseband mô tả nội dung quanh 0 Hz; mixer đặt cùng nội dung đó quanh f<sub>c</sub>.</h2>
+
+      <p>
+        Nếu complex baseband chiếm một bandwidth B quanh 0 Hz, sau upconversion wanted RF signal nằm quanh carrier f<sub>c</sub>.
+        Carrier không tạo thêm information. Nó chuyển vị trí của spectrum tới band mà antenna và wireless channel sử dụng.
+      </p>
 
       <div class="frequency-translation">
         <div>
-          <span class="card-label">BASEBAND</span>
+          <span class="card-label">COMPLEX BASEBAND</span>
           <strong>quanh 0 Hz</strong>
-          <p>Bandwidth chứa modulation/data.</p>
+          <p>DSP xử lý modulation và filtering ở frequency thấp tương đối.</p>
         </div>
-        <b>+ f<sub>c</sub> →</b>
+        <b>dịch lên f<sub>c</sub> →</b>
         <div>
-          <span class="card-label">RF</span>
+          <span class="card-label">RF PASSBAND</span>
           <strong>quanh f<sub>c</sub></strong>
-          <p>Cùng nội dung spectrum nhưng được frequency-translate.</p>
+          <p>Cùng information structure, nay nằm trong RF band.</p>
         </div>
       </div>
 
       <p>
-        Trong receiver, downconversion làm ngược lại: mixer với local oscillator đưa RF channel mong muốn trở về quanh baseband để ADC/DSP xử lý.
+        Receiver làm chiều ngược lại. RF front-end chọn band cần thu, mixer đưa channel đó về complex baseband,
+        rồi ADC tạo lại các I/Q samples để DSP xử lý.
       </p>
     </section>
 
     <section class="concept-block" id="rf-front-end">
-      <p class="concept-kicker">06 · TRƯỚC ANTENNA CÒN CÓ RF FILTER VÀ POWER AMPLIFIER</p>
-      <h2>Signal phải đúng băng tần, đủ công suất và không tạo quá nhiều distortion ngoài ý muốn.</h2>
+      <p class="concept-kicker">06 · MIXER XONG VẪN CHƯA THỂ NỐI THẲNG ANTENNA</p>
+      <h2>Signal cần được lọc, khuếch đại và ghép đúng với RF path.</h2>
 
       <div class="rf-front-end-grid">
         <article>
           <span class="card-label">RF FILTER</span>
-          <h3>Giữ wanted band</h3>
-          <p>Làm suy giảm LO leakage, images, mixer products và emissions ngoài băng theo kiến trúc cụ thể.</p>
+          <h3>Giữ wanted RF band</h3>
+          <p>
+            Mixer và oscillator có thể tạo images, leakage và mixing products.
+            Filter giúp làm suy giảm các thành phần không mong muốn trước khi phát.
+          </p>
         </article>
+
         <article>
           <span class="card-label">POWER AMPLIFIER</span>
-          <h3>Tăng RF power</h3>
-          <p>PA phải cân bằng efficiency và linearity. Nếu quá nonlinear, constellation và spectrum đều bị biến dạng.</p>
+          <h3>Tăng công suất phát</h3>
+          <p>
+            PA nâng RF waveform tới power level cần thiết.
+            Nếu PA đi quá sâu vào vùng nonlinear, amplitude/phase của waveform bị méo và spectrum có thể regrow.
+          </p>
         </article>
+
         <article>
-          <span class="card-label">MATCHING / DUPLEXING</span>
-          <h3>Ghép với antenna</h3>
-          <p>RF path thực tế còn có switch, duplexer, matching network hoặc circulator tùy radio architecture.</p>
+          <span class="card-label">RF NETWORK</span>
+          <h3>Đưa power tới antenna</h3>
+          <p>
+            Matching network, switch, duplexer hoặc filter bank tùy architecture giúp nối PA/LNA với antenna và band đang dùng.
+          </p>
         </article>
       </div>
 
       <aside class="mental-model">
-        <strong>Gain không tự tạo information mới</strong>
+        <strong>PA khuếch đại waveform, không khuếch đại “bit 1” hay “bit 0” riêng lẻ</strong>
         <p>
-          PA chỉ tăng mức công suất của waveform đã có. Nếu waveform đã méo hoặc noise đã cao, khuếch đại lý tưởng cũng khuếch đại chúng cùng signal.
+          Tại stage này information đã nằm trong toàn bộ shape của RF waveform.
+          Nếu waveform có peak lớn, như OFDM thường có thể gặp, PA linearity trở thành một vấn đề thiết kế thực tế.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="antenna">
-      <p class="concept-kicker">07 · ANTENNA LÀ CẦU NỐI GIỮA RF CIRCUIT VÀ SÓNG ĐIỆN TỪ</p>
-      <h2>RF current/voltage ở feed tạo electromagnetic fields lan ra không gian.</h2>
+      <p class="concept-kicker">07 · ANTENNA KHÔNG THỰC HIỆN MODULATION</p>
+      <h2>Modulation đã nằm trong RF voltage/current trước antenna; antenna biến năng lượng đó thành electromagnetic fields.</h2>
+
       <p>
-        Antenna không “gắn data vào không khí”. Data đã nằm trong amplitude/phase/frequency structure của RF waveform trước đó.
-        Antenna biến năng lượng RF ở feed thành trường điện từ có spatial radiation pattern phụ thuộc hình học và môi trường.
+        RF current phân bố trên cấu trúc antenna tạo electric và magnetic fields.
+        Hình học antenna, polarization, matching và môi trường quyết định radiation pattern và efficiency.
+        Nhưng data không được “gắn thêm” tại antenna. Nó đã nằm trong amplitude/phase/time structure của waveform từ các stage trước.
       </p>
 
       <div class="antenna-story">
-        <div><small>RF PORT</small><strong>voltage / current</strong><span>waveform có modulation</span></div>
+        <div><small>RF PORT</small><strong>s(t)</strong><span>voltage/current có modulation</span></div>
         <b>→</b>
-        <div><small>ANTENNA</small><strong>current distribution</strong><span>phụ thuộc geometry</span></div>
+        <div><small>ANTENNA</small><strong>current distribution</strong><span>geometry + matching</span></div>
         <b>→</b>
-        <div><small>SPACE</small><strong>E/H fields</strong><span>propagating EM wave</span></div>
+        <div><small>SPACE</small><strong>EM wave</strong><span>lan truyền trong wireless channel</span></div>
       </div>
     </section>
 
     <section class="concept-block" id="receiver">
-      <p class="concept-kicker">08 · RECEIVER ĐI NGƯỢC LẠI</p>
-      <h2>Antenna thu RF, RF front-end chọn/khuếch đại band, rồi mixer và ADC đưa signal về samples.</h2>
+      <p class="concept-kicker">08 · RECEIVER ĐI NGƯỢC LẠI, NHƯNG KHÔNG HOÀN HẢO</p>
+      <h2>Antenna thu một RF waveform đã bị channel và noise làm thay đổi, rồi radio đưa nó trở lại I/Q samples.</h2>
 
       <div class="receiver-chain">
-        <div><strong>Antenna</strong><span>EM → RF voltage/current</span></div>
+        <div><strong>Antenna</strong><span>EM field → RF signal</span></div>
         <b>→</b>
-        <div><strong>RF filter / LNA</strong><span>chọn band + low-noise gain</span></div>
+        <div><strong>Filter / LNA</strong><span>chọn band, low-noise gain</span></div>
         <b>→</b>
-        <div><strong>Downconversion</strong><span>RF → I/Q baseband</span></div>
+        <div><strong>Downconversion</strong><span>RF → analog I/Q</span></div>
         <b>→</b>
         <div><strong>ADC</strong><span>I[n], Q[n]</span></div>
         <b>→</b>
-        <div><strong>DSP</strong><span>sync, FFT, equalization...</span></div>
+        <div><strong>DSP</strong><span>sync, FFT, equalization, decode</span></div>
       </div>
+
+      <p>
+        Đây là chỗ Bài 10 bắt đầu. Từ antenna phát tới antenna thu, waveform không còn là bản sao lý tưởng.
+        Khoảng cách, vật cản và multipath tạo ra chính “wireless channel”.
+      </p>
     </section>
 
     <section class="concept-block recap">
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
-      <h2>Baseband giữ structure của information; RF chain đặt structure đó lên một carrier và đưa đủ công suất tới antenna.</h2>
+      <h2>Một sample trong code liên quan tới sóng ngoài antenna qua một chuỗi biến đổi có ý nghĩa vật lý rõ ràng.</h2>
       <ol class="recap-list">
-        <li><strong>I/Q samples:</strong> complex representation mà DSP xử lý.</li>
-        <li><strong>DAC:</strong> biến digital samples thành analog baseband waveforms.</li>
-        <li><strong>Quadrature mixer:</strong> dùng cos/sin carriers để upconvert I và Q lên RF.</li>
-        <li><strong>LO:</strong> xác định carrier frequency quanh đó signal được đặt.</li>
-        <li><strong>RF filtering / PA:</strong> giới hạn spectrum và đưa signal tới mức power cần thiết.</li>
+        <li><strong>I/Q samples:</strong> representation số của complex baseband.</li>
+        <li><strong>DAC:</strong> tạo hai analog baseband waveforms I(t) và Q(t).</li>
+        <li><strong>Quadrature upconversion:</strong> đặt I/Q lên hai carrier vuông pha rồi cộng thành RF waveform thực.</li>
+        <li><strong>Local oscillator:</strong> quyết định signal được frequency-translate lên quanh carrier nào.</li>
+        <li><strong>Filter và PA:</strong> làm sạch spectrum và đưa waveform tới mức power cần thiết.</li>
         <li><strong>Antenna:</strong> nối RF circuit với electromagnetic wave trong không gian.</li>
-        <li><strong>Receiver:</strong> thực hiện chuỗi ngược lại để lấy về I/Q samples.</li>
+        <li><strong>Receiver:</strong> làm chuỗi gần như ngược lại để quay về I/Q samples.</li>
       </ol>
     </section>
 
@@ -234,7 +283,7 @@ import RFChainExplorer from '../../components/RFChainExplorer.jsx';
       <a class="lesson-nav-card next" href="/hoc/wireless-channel/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Wireless channel</strong>
-        <small>Signal thay đổi thế nào sau khi rời antenna?</small>
+        <small>Waveform thay đổi thế nào sau khi rời antenna?</small>
       </a>
     </nav>
   </article>
