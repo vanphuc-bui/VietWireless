@@ -7,9 +7,9 @@ const { compact = false } = Astro.props;
     <p class="section-kicker">BỨC TRANH LỚN</p>
     <h2 id="communication-journey-title">Một bức ảnh đi từ người gửi tới người nhận như thế nào?</h2>
     <p>
-      Ta dùng một hệ thống OFDM hiện đại làm ví dụ. Hãy nhìn toàn bộ chuỗi trước:
+      Mình dùng một hệ thống OFDM hiện đại làm ví dụ. Nếu nhìn từ xa, cả chuỗi có thể thu gọn thành:
       <strong>information → bits → symbols → IFFT → I/Q → RF → channel → receiver</strong>.
-      Sau đó từng bài sẽ zoom vào một khối.
+      Những phần sau chỉ đơn giản là lần lượt mở từng khối ra xem bên trong có gì.
     </p>
   </div>
 
@@ -274,19 +274,19 @@ const { compact = false } = Astro.props;
       </div>
 
       <aside class="precision-note">
-        <strong>Một chỗ rất dễ nhầm</strong>
+        <strong>Một chỗ mình từng hay nhầm</strong>
         <p>
           Trước IFFT, <strong>X[k]</strong> là các <em>complex modulation symbols ở frequency domain</em>.
           Sau IFFT, <strong>x[n]</strong> mới là <em>time-domain complex I/Q samples</em>.
-          Đây là một trong những mental model quan trọng nhất trước khi học OFDM.
+          Với mình, đây là một trong những chỗ giúp OFDM bớt “mơ hồ” hẳn.
         </p>
       </aside>
 
       <aside class="scope-note">
-        <strong>Đây là bản đồ, không phải mọi radio đều giống hệt như vậy.</strong>
+        <strong>Sơ đồ này chỉ là một ví dụ OFDM điển hình.</strong>
         <p>
-          Chuỗi trên minh hoạ một kiến trúc OFDM điển hình để chuẩn bị cho LTE, 5G NR và Wi-Fi.
-          Mỗi bài sau sẽ zoom vào một khối và giải thích trực giác trước khi đi sâu vào toán.
+          Không phải mọi hệ thống radio đều đi qua đúng chuỗi này. Mình chọn OFDM vì nó nối khá tự nhiên
+          với LTE, 5G NR và Wi-Fi, và vì nhiều khái niệm thú vị sẽ quay lại ở các phần sau.
         </p>
       </aside>
     </>

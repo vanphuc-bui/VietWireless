@@ -6,13 +6,13 @@ VietWireless không phải blog tin tức. Đây là knowledge platform giúp ng
 
 ## Anatomy bắt buộc của một bài kỹ thuật
 
-1. **Problem first** — bắt đầu bằng câu hỏi hoặc vấn đề thực tế.
-2. **Visual intuition** — sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
-3. **Plain-language explanation** — giải thích bằng tiếng Việt, giữ thuật ngữ kỹ thuật chuẩn bằng tiếng Anh.
-4. **Math layer** — công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
-5. **Implementation layer** — nối khái niệm với samples, buffers, resource grid, transmitter/receiver hoặc code.
-6. **Specification layer** — khi liên quan 3GPP, dẫn đúng TS/section và phân biệt rõ điều spec nói với cách diễn giải của VietWireless.
-7. **Recap + next concept** — cuối bài phải cho người học biết họ vừa xây được mental model gì và nên học gì tiếp.
+1. **Problem first:** bắt đầu bằng câu hỏi hoặc vấn đề thực tế.
+2. **Visual intuition:** sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
+3. **Plain-language explanation:** giải thích bằng tiếng Việt, giữ thuật ngữ kỹ thuật chuẩn bằng tiếng Anh.
+4. **Math layer:** công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
+5. **Implementation layer:** nối khái niệm với samples, buffers, resource grid, transmitter/receiver hoặc code.
+6. **Specification layer:** khi liên quan 3GPP, dẫn đúng TS/section và phân biệt rõ điều spec nói với cách diễn giải của VietWireless.
+7. **Recap + next concept:** cuối bài phải cho người học biết họ vừa xây được mental model gì và nên học gì tiếp.
 
 ## Quy tắc thuật ngữ
 
@@ -58,17 +58,20 @@ Ví dụ kỹ thuật phải được dựng độc lập từ kiến thức cô
 - Internal links phải theo learning graph chứ không nhồi keyword.
 - Cornerstone page phải đủ tốt để người đọc không cần quay lại Google để hiểu khái niệm cơ bản.
 
-## Editorial voice: “một người đang dạy”
+## Editorial voice: một người đang chia sẻ
 
-VietWireless phải có cảm giác như một người có kinh nghiệm đang ngồi cạnh sinh viên và giải thích trên bảng,
-không phải landing page của một startup.
+VietWireless nên có cảm giác như một người đã từng bối rối với cùng câu hỏi, sau đó ngồi xuống kể lại cách mình hiểu nó.
+Không viết theo giọng ra lệnh, phán xét hoặc đứng trên người đọc.
 
-- Tone sáng, sạch, gần với giáo trình/blog học thuật cá nhân.
-- Ưu tiên câu hỏi mà sinh viên thực sự từng mắc: “FFT để làm gì?”, “tại sao phải đổi miền?”, “sample này nằm ở đâu trong hệ thống?”.
-- Có thể dùng trải nghiệm cá nhân của tác giả để mở bài, nhưng không biến bài thành nhật ký.
-- Không coi câu hỏi cơ bản là “ngớ ngẩn”. Nếu nhiều người dùng một công cụ mà chưa có mental model, hãy giải thích lại từ nền tảng.
-- Mỗi chương nên có cảm giác nối tiếp một khóa học: Chương 0 → Bài 01 → Bài 02...
-- Homepage kể câu chuyện ngành học trước, sau đó mới dẫn tới learning path.
+- Dùng “mình” khi chia sẻ góc nhìn, trải nghiệm hoặc cách hình dung cá nhân.
+- Có thể dùng “ta” khi cùng người đọc quan sát một hiện tượng, nhưng không lạm dụng.
+- Ưu tiên câu hỏi tự nhiên: “FFT để làm gì?”, “vì sao lúc thì nhìn time domain, lúc lại nhìn frequency domain?”.
+- Tránh các câu kiểu “bạn phải nhớ”, “đừng làm”, “điều quan trọng nhất”, “bài học là”, trừ khi thật sự cần cảnh báo kỹ thuật.
+- Không tạo cảm giác người đọc bị kiểm tra. Recap nên giống một đoạn nối ý hơn là danh sách điều phải thuộc.
+- Khi có trải nghiệm cá nhân phù hợp, có thể kể ngắn gọn để người đọc thấy câu hỏi đó là bình thường.
+- Câu nên có độ dài tự nhiên, xen kẽ ngắn và vừa. Tránh viết đều đều theo một template.
+- Giữ thuật ngữ kỹ thuật chuẩn, nhưng phần giải thích xung quanh nên là tiếng Việt đời thường, rõ và gọn.
+- Xem thêm `docs/WRITING_STYLE.md` để giữ giọng văn thống nhất.
 
 ## QA trước khi merge
 
