@@ -55,7 +55,7 @@ Ví dụ kỹ thuật phải được dựng độc lập từ kiến thức cô
 - Một page = một search intent chính.
 - Tránh hai URL cùng trả lời một câu hỏi.
 - Title và H1 nói thẳng câu hỏi người học đang muốn hiểu.
-- Internal links phải theo learning graph chứ không nhồi keyword.
+- Internal links phải theo learning graph chứ không nhồi keyword. Learning graph chính thức nằm trong `docs/CURRICULUM.md`.
 - Cornerstone page phải đủ tốt để người đọc không cần quay lại Google để hiểu khái niệm cơ bản.
 
 ## Editorial voice: một người đang chia sẻ
