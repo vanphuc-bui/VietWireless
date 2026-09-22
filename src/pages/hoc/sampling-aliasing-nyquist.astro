@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SamplingAliasExplorer from '../../components/SamplingAliasExplorer.jsx';
+import Math from '../../components/Math.astro';
 
 const aliasPlot = {
   width: 820,
@@ -74,12 +75,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         0, T<sub>s</sub>, 2T<sub>s</sub>, 3T<sub>s</sub>... Khi đó:
       </p>
 
-      <div class="sampling-equation lesson02-equation">
-        <span>x[n]</span>
-        <b>=</b>
-        <span>x(nT<sub>s</sub>)</span>
-        <small>n = 0, 1, 2... và T<sub>s</sub> là khoảng thời gian giữa hai lần lấy mẫu</small>
-      </div>
+      <Math tex="x[n] = x(nT_s)" display />
+      <p class="math-caption"><Math tex="n = 0,1,2,\\ldots" /> và <Math tex="T_s" /> là khoảng thời gian giữa hai lần lấy mẫu.</p>
 
       <div class="sampling-visual sampling-process-visual" aria-label="Waveform liên tục được lấy mẫu rồi lượng tử hóa">
         <article class="sampling-stage">
@@ -147,8 +144,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       </aside>
 
       <p>
-        Sampling rate là số lần đo trong một giây: <strong>f<sub>s</sub> = 1/T<sub>s</sub></strong>.
-        Nếu f<sub>s</sub> = 48 kHz, khoảng cách giữa hai sample là khoảng 20,83 µs.
+        Sampling rate là số lần đo trong một giây: <Math tex="f_s = 1/T_s" />.
+        Nếu <Math tex="f_s" /> = 48 kHz, khoảng cách giữa hai sample là khoảng 20,83 µs.
       </p>
     </section>
 
@@ -186,12 +183,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         Với một cosine 7 Hz được lấy mẫu ở 10 Hz:
       </p>
 
-      <div class="sampling-equation alias-equation">
-        <span>7 Hz</span>
-        <b>→</b>
-        <span>|7 - 10| = 3 Hz</span>
-        <small>7 Hz nằm phía trên f<sub>s</sub>/2 = 5 Hz và bị “fold” về 3 Hz</small>
-      </div>
+      <Math tex="7\\,\\mathrm{Hz} \\;\\longrightarrow\\; |7-10| = 3\\,\\mathrm{Hz}" display />
+      <p class="math-caption"><Math tex="7\\,\\mathrm{Hz}" /> nằm phía trên <Math tex="f_s/2 = 5\\,\\mathrm{Hz}" /> và bị “fold” về <Math tex="3\\,\\mathrm{Hz}" />.</p>
 
       <p>
         Sau sampling, các giá trị x[n] của tone 7 Hz trùng với một tone 3 Hz tại đúng các sample time.
@@ -204,7 +197,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <p class="concept-kicker">03 · INTERACTIVE LAB</p>
       <h2>Thay đổi tần số signal và sampling rate để nhìn aliasing xuất hiện.</h2>
       <p>
-        Demo dùng một cosine đơn để giữ hình dễ đọc. Khi tần số input vượt quá f<sub>s</sub>/2,
+        Demo dùng một cosine đơn để giữ hình dễ đọc. Khi tần số input vượt quá <Math tex="f_s/2" />,
         đường nét đứt cho thấy một waveform tần số thấp khác đi qua đúng cùng các sample.
       </p>
       <SamplingAliasExplorer client:load />
@@ -218,16 +211,12 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         Trong mô hình lý tưởng, định lý Nyquist-Shannon cho ta điều kiện thường viết là:
       </p>
 
-      <div class="nyquist-rule">
-        <span>f<sub>s</sub></span>
-        <b>&gt;</b>
-        <span>2B</span>
-        <small>sampling rate phải lớn hơn hai lần tần số cao nhất cần giữ lại</small>
-      </div>
+      <Math tex="f_s > 2B" display />
+      <p class="math-caption">Sampling rate phải lớn hơn hai lần tần số cao nhất cần giữ lại trong ideal band-limited model.</p>
 
       <p>
-        Một cách nhìn ở miền tần số là: sampling tạo ra các bản sao của spectrum cách nhau f<sub>s</sub>.
-        Nếu f<sub>s</sub> đủ lớn, các bản sao đứng tách nhau. Nếu f<sub>s</sub> quá nhỏ, chúng chồng lên nhau và phần bị chồng chính là aliasing.
+        Một cách nhìn ở miền tần số là: sampling tạo ra các bản sao của spectrum cách nhau <Math tex="f_s" />.
+        Nếu <Math tex="f_s" /> đủ lớn, các bản sao đứng tách nhau. Nếu <Math tex="f_s" /> quá nhỏ, chúng chồng lên nhau và phần bị chồng chính là aliasing.
       </p>
 
       <div class="nyquist-spectrum-grid">
@@ -275,16 +264,16 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <div class="two-column">
         <article class="explain-card">
           <span class="card-label">NYQUIST RATE</span>
-          <h3>2B</h3>
+          <h3><Math tex="2B" /></h3>
           <p>
             Nếu signal cần giữ tới B Hz, 2B là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
           </p>
         </article>
         <article class="explain-card">
           <span class="card-label">NYQUIST FREQUENCY</span>
-          <h3>f<sub>s</sub>/2</h3>
+          <h3><Math tex="f_s/2" /></h3>
           <p>
-            Khi sampling ở f<sub>s</sub>, đây là biên tần số cao nhất của dải baseband không bị lặp theo cách nhìn discrete-time.
+            Khi sampling ở <Math tex="f_s" />, đây là biên tần số cao nhất của dải baseband không bị lặp theo cách nhìn discrete-time.
           </p>
         </article>
       </div>
@@ -328,7 +317,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
       <p>
         Anti-alias filter là filter analog đặt trước sampling để làm suy giảm các thành phần không muốn giữ.
-        Vì transition band của filter thực không thể dựng đứng tại một tần số duy nhất, hệ thống thường chọn f<sub>s</sub>
+        Vì transition band của filter thực không thể dựng đứng tại một tần số duy nhất, hệ thống thường chọn <Math tex="f_s" />
         cao hơn giới hạn lý thuyết để có khoảng chuyển tiếp dễ thiết kế hơn. Đây là một lý do oversampling rất hữu ích.
       </p>
 
@@ -371,10 +360,10 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <h2>Tới đây ta có thể nhìn sampling như một bài toán giữ đủ thông tin, không chỉ là “đo thật nhiều điểm”.</h2>
       <ol class="recap-list">
         <li><strong>Sampling</strong> làm rời rạc thời gian: x[n] = x(nT<sub>s</sub>).</li>
-        <li><strong>Sampling rate</strong> là f<sub>s</sub> = 1/T<sub>s</sub>.</li>
+        <li><strong>Sampling rate</strong> là <Math tex="f_s" /> = 1/T<sub>s</sub>.</li>
         <li><strong>Aliasing</strong> xảy ra khi những thành phần khác nhau trở nên không phân biệt được sau sampling.</li>
-        <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: f<sub>s</sub> &gt; 2B.</li>
-        <li><strong>Nyquist frequency</strong> là f<sub>s</sub>/2, còn <strong>Nyquist rate</strong> của signal band-limited tới B là 2B.</li>
+        <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: <Math tex="f_s" /> &gt; 2B.</li>
+        <li><strong>Nyquist frequency</strong> là <Math tex="f_s/2" />, còn <strong>Nyquist rate</strong> của signal band-limited tới B là 2B.</li>
         <li><strong>Anti-alias filter</strong> phải xử lý out-of-band energy trước ADC.</li>
       </ol>
     </section>
