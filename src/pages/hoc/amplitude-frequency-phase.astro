@@ -58,9 +58,9 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <div class="system-position">
         <span>MỘT SINUSOID ĐƠN GIẢN</span>
         <div class="system-position-flow" aria-label="Một sinusoid được mô tả bởi amplitude frequency và phase">
-          <span>x(t)</span><b>→</b>
-          <strong>Amplitude A</strong><b>·</b>
-          <strong>Frequency f</strong><b>·</b>
+          <span><MathExpr tex="x(t)" /></span><b>→</b>
+          <strong>Amplitude <MathExpr tex="A" /></strong><b>·</b>
+          <strong>Frequency <MathExpr tex="f" /></strong><b>·</b>
           <strong>Phase <MathExpr tex="\\phi" /></strong>
         </div>
         <p>
@@ -118,14 +118,14 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
 
       <div class="sinusoid-parameter-list">
         <article>
-          <strong>A</strong>
+          <strong><MathExpr tex="A" /></strong>
           <div>
             <h3>Amplitude</h3>
             <p>Độ lớn cực đại của cosine tính từ mức 0. Đơn vị phụ thuộc đại lượng đang đo, ví dụ volt.</p>
           </div>
         </article>
         <article>
-          <strong>f</strong>
+          <strong><MathExpr tex="f" /></strong>
           <div>
             <h3>Frequency</h3>
             <p>Số chu kỳ mỗi giây. Đơn vị là hertz, viết tắt Hz.</p>
@@ -142,7 +142,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
 
       <p>
         Cùng công thức này cũng thường được viết là <MathExpr tex="x(t) = A\\cos(\\omega t + \\phi)" />,
-        với <MathExpr tex="\\omega = 2\\pi f" />. Khi đó ω là angular frequency và có đơn vị rad/s.
+        với <MathExpr tex="\\omega = 2\\pi f" />. Khi đó <MathExpr tex="\\omega" /> là angular frequency và có đơn vị <MathExpr tex="\\mathrm{rad/s}" />.
       </p>
     </section>
 
