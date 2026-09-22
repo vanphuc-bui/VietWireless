@@ -140,3 +140,24 @@ Thay vì:
 - có em dash `—` không?
 
 CI sẽ tự kiểm tra em dash trong các file nội dung.
+
+
+## 10. Khoảng trắng quanh chữ nhấn mạnh và inline markup
+
+Không để chữ dính vào phần `strong`, `em`, link hoặc inline component.
+
+Sai:
+
+```html
+một câu hỏi đơn giản:<strong>chúng ta đang truyền gì?</strong>
+```
+
+Đúng:
+
+```html
+một câu hỏi đơn giản: <strong>chúng ta đang truyền gì?</strong>
+```
+
+Khi JSX/Astro expression làm khoảng trắng không rõ ràng, dùng khoảng trắng tường minh hoặc viết lại câu để hai phần không bị dính.
+
+Trước khi merge, rà cả desktop và mobile. Các lỗi kiểu `là<strong>`, `</strong>và`, `:<em>` hoặc `</em>mà` phải được sửa.
