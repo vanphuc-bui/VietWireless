@@ -1,0 +1,239 @@
+---
+const { compact = false } = Astro.props;
+---
+
+<section class:list={["communication-journey", { compact }]} aria-labelledby="communication-journey-title">
+  <div class="communication-intro">
+    <p class="section-kicker">BỨC TRANH LỚN</p>
+    <h2 id="communication-journey-title">Một bức ảnh đi từ người gửi tới người nhận như thế nào?</h2>
+    <p>
+      Ta sẽ dùng một hệ thống OFDM hiện đại làm ví dụ. Đây chưa phải chi tiết của riêng 4G hay 5G,
+      nhưng nó đủ gần với LTE/5G/Wi-Fi để bạn thấy <strong>bits, QAM, IFFT, I/Q và RF</strong>
+      đang nằm ở đâu trong cùng một chuỗi.
+    </p>
+  </div>
+
+  <div class="overview-chain" role="img" aria-label="Người gửi, transmitter, kênh truyền, receiver và người nhận">
+    <div class="overview-node source">
+      <span class="node-icon" aria-hidden="true">👤</span>
+      <strong>Người gửi</strong>
+      <small>voice · image · data</small>
+    </div>
+    <span class="overview-arrow" aria-hidden="true">→</span>
+    <div class="overview-node">
+      <span class="node-icon" aria-hidden="true">⚙</span>
+      <strong>Transmitter</strong>
+      <small>information → signal</small>
+    </div>
+    <span class="overview-arrow" aria-hidden="true">→</span>
+    <div class="overview-node channel">
+      <span class="node-icon" aria-hidden="true">⌁</span>
+      <strong>Wireless channel</strong>
+      <small>propagation · noise · fading</small>
+    </div>
+    <span class="overview-arrow" aria-hidden="true">→</span>
+    <div class="overview-node">
+      <span class="node-icon" aria-hidden="true">⚙</span>
+      <strong>Receiver</strong>
+      <small>signal → information</small>
+    </div>
+    <span class="overview-arrow" aria-hidden="true">→</span>
+    <div class="overview-node source">
+      <span class="node-icon" aria-hidden="true">👤</span>
+      <strong>Người nhận</strong>
+      <small>nghe · thấy · đọc</small>
+    </div>
+  </div>
+
+  {!compact && (
+    <>
+      <div class="chain-legend">
+        <span><i class="legend-dot info"></i> Information</span>
+        <span><i class="legend-dot digital"></i> Digital baseband</span>
+        <span><i class="legend-dot radio"></i> RF / physical world</span>
+      </div>
+
+      <div class="signal-chain-board">
+        <div class="chain-side-label tx">TRANSMITTER</div>
+
+        <div class="chain-stage information-stage">
+          <span class="stage-no">01</span>
+          <div class="mini-picture" aria-label="Ảnh mẫu gồm các pixel màu">
+            <i></i><i></i><i class="dark"></i><i class="dark"></i>
+            <i></i><i class="accent"></i><i class="accent"></i><i class="dark"></i>
+            <i class="dark"></i><i class="accent"></i><i class="accent"></i><i></i>
+            <i class="dark"></i><i class="dark"></i><i></i><i></i>
+          </div>
+          <h3>Information</h3>
+          <p>Một bức ảnh, giọng nói hoặc packet dữ liệu.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage information-stage">
+          <span class="stage-no">02</span>
+          <div class="bit-stream" aria-hidden="true">1011 0010<br />0110 1101</div>
+          <h3>Bits</h3>
+          <p>Pixels/audio/data được biểu diễn hoặc nén thành chuỗi bit.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage digital-stage">
+          <span class="stage-no">03</span>
+          <div class="coding-visual" aria-hidden="true">
+            <span>1011</span><span class="parity">10</span>
+          </div>
+          <h3>Coding</h3>
+          <p>Thêm cấu trúc và redundancy để phát hiện/sửa lỗi.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage digital-stage">
+          <span class="stage-no">04</span>
+          <div class="constellation-mini" aria-label="Minh họa các điểm constellation QPSK">
+            <i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p4"></i>
+            <span class="axis-h"></span><span class="axis-v"></span>
+          </div>
+          <h3>QAM / PSK mapping</h3>
+          <p>Nhóm bits được ánh xạ thành complex modulation symbols.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage digital-stage key-stage">
+          <span class="stage-no">05</span>
+          <div class="frequency-bins" aria-label="Các subcarrier trong miền tần số">
+            <i style="--h:28%"></i><i style="--h:58%"></i><i style="--h:82%"></i><i style="--h:42%"></i>
+            <i style="--h:70%"></i><i style="--h:36%"></i><i style="--h:64%"></i><i style="--h:48%"></i>
+          </div>
+          <h3>Frequency domain</h3>
+          <p><strong>X[k]</strong>: complex symbols được đặt lên các subcarriers.</p>
+        </div>
+
+        <div class="chain-transform">
+          <strong>IFFT</strong>
+          <span>frequency → time</span>
+          <b aria-hidden="true">→</b>
+        </div>
+
+        <div class="chain-stage digital-stage key-stage">
+          <span class="stage-no">06</span>
+          <svg class="wave-mini" viewBox="0 0 180 64" role="img" aria-label="Time-domain I Q samples">
+            <line x1="4" y1="32" x2="176" y2="32" />
+            <path d="M4 32 C10 8 16 56 22 32 S34 8 40 32 S52 54 58 32 S70 13 76 32 S88 49 94 32 S106 16 112 32 S124 50 130 32 S142 10 148 32 S160 52 176 32" />
+          </svg>
+          <h3>Time-domain I/Q</h3>
+          <p><strong>x[n]</strong>: complex baseband samples sau IFFT.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage radio-stage">
+          <span class="stage-no">07</span>
+          <svg class="rf-wave-mini" viewBox="0 0 180 64" role="img" aria-label="Sóng RF tần số cao">
+            <line x1="4" y1="32" x2="176" y2="32" />
+            <path d="M4 32 Q8 5 12 32 T20 32 T28 32 T36 32 T44 32 T52 32 T60 32 T68 32 T76 32 T84 32 T92 32 T100 32 T108 32 T116 32 T124 32 T132 32 T140 32 T148 32 T156 32 T164 32 T176 32" />
+          </svg>
+          <h3>DAC + RF upconversion</h3>
+          <p>Baseband được đưa lên carrier cao hơn để tạo waveform RF vật lý.</p>
+        </div>
+
+        <div class="chain-arrow" aria-hidden="true">→</div>
+
+        <div class="chain-stage radio-stage antenna-stage">
+          <span class="stage-no">08</span>
+          <div class="antenna-visual" aria-hidden="true"><span>│</span><i></i><i></i><i></i></div>
+          <h3>Antenna</h3>
+          <p>Điện áp/dòng điện cao tần tạo ra trường điện từ lan truyền.</p>
+        </div>
+
+        <div class="air-channel">
+          <div>
+            <span class="air-label">WIRELESS CHANNEL</span>
+            <strong>noise · multipath · fading · delay · Doppler</strong>
+          </div>
+          <span class="air-wave" aria-hidden="true">))))))))))))))))</span>
+        </div>
+
+        <div class="chain-side-label rx">RECEIVER</div>
+
+        <div class="chain-stage radio-stage antenna-stage">
+          <span class="stage-no">09</span>
+          <div class="antenna-visual receive" aria-hidden="true"><span>│</span><i></i><i></i><i></i></div>
+          <h3>Antenna + RF front-end</h3>
+          <p>Thu một RF waveform rất nhỏ giữa noise và interferers.</p>
+        </div>
+
+        <div class="chain-arrow reverse" aria-hidden="true">→</div>
+
+        <div class="chain-stage digital-stage key-stage">
+          <span class="stage-no">10</span>
+          <svg class="wave-mini received" viewBox="0 0 180 64" role="img" aria-label="Received time-domain I Q samples">
+            <line x1="4" y1="32" x2="176" y2="32" />
+            <path d="M4 34 C10 13 16 54 22 29 S34 11 40 35 S52 51 58 30 S70 17 76 35 S88 48 94 30 S106 20 112 34 S124 47 130 29 S142 14 148 35 S160 48 176 31" />
+          </svg>
+          <h3>Downconversion + ADC</h3>
+          <p><strong>y[n]</strong>: received time-domain complex I/Q samples.</p>
+        </div>
+
+        <div class="chain-transform reverse">
+          <strong>FFT</strong>
+          <span>time → frequency</span>
+          <b aria-hidden="true">→</b>
+        </div>
+
+        <div class="chain-stage digital-stage key-stage">
+          <span class="stage-no">11</span>
+          <div class="frequency-bins received" aria-label="Received subcarriers trong miền tần số">
+            <i style="--h:30%"></i><i style="--h:54%"></i><i style="--h:78%"></i><i style="--h:45%"></i>
+            <i style="--h:67%"></i><i style="--h:39%"></i><i style="--h:59%"></i><i style="--h:45%"></i>
+          </div>
+          <h3>Frequency domain</h3>
+          <p><strong>Y[k]</strong>: các subcarrier sau FFT, đã bị channel làm thay đổi.</p>
+        </div>
+
+        <div class="chain-arrow reverse" aria-hidden="true">→</div>
+
+        <div class="chain-stage digital-stage">
+          <span class="stage-no">12</span>
+          <div class="equalize-visual" aria-hidden="true"><span>Y[k]</span><b>÷ Ĥ[k]</b><span>≈ X[k]</span></div>
+          <h3>Estimate + equalize</h3>
+          <p>Ước lượng channel, sửa amplitude/phase rồi demap và decode.</p>
+        </div>
+
+        <div class="chain-arrow reverse" aria-hidden="true">→</div>
+
+        <div class="chain-stage information-stage">
+          <span class="stage-no">13</span>
+          <div class="mini-picture recovered" aria-label="Ảnh được khôi phục ở receiver">
+            <i></i><i></i><i class="dark"></i><i class="dark"></i>
+            <i></i><i class="accent"></i><i class="accent"></i><i class="dark"></i>
+            <i class="dark"></i><i class="accent"></i><i class="accent"></i><i></i>
+            <i class="dark"></i><i class="dark"></i><i></i><i></i>
+          </div>
+          <h3>Information recovered</h3>
+          <p>Bits cuối cùng được dựng lại thành image, audio hoặc application data.</p>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Một chỗ rất dễ nhầm</strong>
+        <p>
+          Trước IFFT, <strong>X[k]</strong> là các <em>complex modulation symbols ở frequency domain</em>.
+          Sau IFFT, <strong>x[n]</strong> mới là <em>time-domain complex I/Q samples</em>.
+          Ta sẽ quay lại điểm này nhiều lần khi học OFDM và 5G NR.
+        </p>
+      </aside>
+
+      <aside class="scope-note">
+        <strong>Đây là bản đồ, không phải bài học duy nhất.</strong>
+        <p>
+          Không phải mọi hệ thống radio đều dùng đúng chuỗi IFFT/FFT này. Sơ đồ trên mô tả một kiến trúc OFDM điển hình
+          để chuẩn bị cho LTE, 5G NR và Wi-Fi. Mỗi bài sau sẽ zoom vào một khối, giải thích trực giác trước rồi mới tới toán.
+        </p>
+      </aside>
+    </>
+  )}
+</section>
