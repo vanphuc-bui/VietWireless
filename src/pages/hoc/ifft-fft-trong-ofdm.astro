@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
-import Math from '../../components/Math.astro';
+import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -40,12 +40,12 @@ import Math from '../../components/Math.astro';
       <p class="concept-kicker">01 · IFFT ĐANG CỘNG CÁC SUBCARRIERS NHƯ THẾ NÀO?</p>
       <h2>Mỗi X[k] là amplitude/phase của một complex exponential có frequency index k.</h2>
 
-      <Math tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
+      <MathExpr tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
 
       <p>
         Nhìn từng term:
         X[k] quyết định complex amplitude của subcarrier k.
-        <Math tex="e^{j2\\pi kn/N}" /> là basis waveform của subcarrier đó tại sample n.
+        <MathExpr tex="e^{j2\\pi kn/N}" /> là basis waveform của subcarrier đó tại sample n.
         IFFT lấy tất cả các basis waveforms, scale chúng bằng X[k], rồi cộng lại.
       </p>
 
@@ -65,7 +65,7 @@ import Math from '../../components/Math.astro';
         Khi đó:
       </p>
 
-      <Math tex="x[n] = \\frac{1}{4}e^{j2\\pi n/4}" display />
+      <MathExpr tex="x[n] = \\frac{1}{4}e^{j2\\pi n/4}" display />
 
       <p>
         Bốn samples lần lượt là:
@@ -126,9 +126,9 @@ import Math from '../../components/Math.astro';
 
     <section class="concept-block" id="fft">
       <p class="concept-kicker">05 · FFT Ở RECEIVER LÀ PHÉP PROJECT NGƯỢC</p>
-      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis <Math tex="e^{j2\\pi kn/N}" />.</h2>
+      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis <MathExpr tex="e^{j2\\pi kn/N}" />.</h2>
 
-      <Math tex="Y[k] = \\sum_{n=0}^{N-1}y[n]e^{-j2\\pi kn/N}" display />
+      <MathExpr tex="Y[k] = \\sum_{n=0}^{N-1}y[n]e^{-j2\\pi kn/N}" display />
 
       <p>
         Nếu y[n]=x[n] và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
@@ -188,7 +188,7 @@ import Math from '../../components/Math.astro';
         <b>→ h[n] →</b>
         <div><small>RX TIME</small><strong>y[n]</strong></div>
         <b>→ FFT →</b>
-        <div><small>RX FREQ</small><strong><Math tex="Y[k]=H[k]X[k]+W[k]" /></strong></div>
+        <div><small>RX FREQ</small><strong><MathExpr tex="Y[k]=H[k]X[k]+W[k]" /></strong></div>
       </div>
 
       <p>
@@ -204,7 +204,7 @@ import Math from '../../components/Math.astro';
       <p>
         Receiver cũng làm chiều ngược lại:
         xác định symbol timing,
-        bỏ <Math tex="N_{\\mathrm{CP}}" /> samples,
+        bỏ <MathExpr tex="N_{\\mathrm{CP}}" /> samples,
         lấy đúng N useful samples,
         rồi mới chạy N-point FFT.
         Nếu đưa CP vào FFT window như data thông thường, orthogonal basis assumption không còn đúng như thiết kế.
