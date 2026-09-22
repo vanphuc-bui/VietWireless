@@ -52,7 +52,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         <MathExpr tex="\\tau" /> nói signal tới muộn bao nhiêu.
-        h là một complex number, thường viết <MathExpr tex="h = Ge^{j\\theta}" />, mô tả amplitude scaling G và phase rotation θ.
+        <MathExpr tex="h" /> là một complex number, thường viết <MathExpr tex="h = Ge^{j\\theta}" />, mô tả amplitude scaling <MathExpr tex="G" /> và phase rotation <MathExpr tex="\\theta" />.
         n(t) đại diện cho noise, sẽ được tách riêng ở Bài 11.
       </p>
 
@@ -113,7 +113,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Một mét propagation tương ứng khoảng 3.33 ns.
-        Với một pure sinusoid ở frequency f, delay τ tạo phase shift <MathExpr tex="-2\\pi f\\tau" />:
+        Với một pure sinusoid ở frequency <MathExpr tex="f" />, delay <MathExpr tex="\\tau" /> tạo phase shift <MathExpr tex="-2\\pi f\\tau" />:
       </p>
 
       <MathExpr tex="\\cos\\!\\left[2\\pi f(t-\\tau)\\right] = \\cos(2\\pi f t - 2\\pi f\\tau)" display />
