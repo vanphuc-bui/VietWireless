@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CommunicationJourney from '../components/CommunicationJourney.astro';
 ---
 
 <BaseLayout
@@ -11,110 +12,187 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="chapter-label">VIETWIRELESS · CHƯƠNG 0</p>
       <h1>Trước 5G, hãy bắt đầu từ một câu hỏi đơn giản: <em>làm sao gửi thông tin đi xa?</em></h1>
       <p class="essay-lead">
-        Viễn thông không bắt đầu từ 5G, anten hay một bảng thông số trong 3GPP.
-        Nó bắt đầu từ mong muốn rất con người: nói với một người không đứng cạnh mình,
-        gửi một bức ảnh tới nơi mình chưa từng đến, và truyền thông tin nhanh hơn khoảng cách.
+        Viễn thông không bắt đầu từ một bảng thông số trong 3GPP. Nó bắt đầu từ mong muốn rất con người:
+        nói với một người không đứng cạnh mình, gửi một bức ảnh tới nơi mình chưa từng đến,
+        và đưa information vượt qua khoảng cách.
       </p>
 
       <div class="hero-note">
         <span class="note-mark">Ghi chú mở đầu</span>
         <p>
           Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, I/Q, OFDM hay resource grid
-          như một tập hợp công thức rời rạc, VietWireless được viết cho đúng cảm giác đó.
+          giống những công thức rời rạc, VietWireless được viết để nối chúng thành một bức tranh.
         </p>
       </div>
     </header>
 
     <section class="essay-section" id="lich-su">
       <div class="section-number">01</div>
-      <div class="essay-content">
+      <div class="essay-content wide-content">
         <p class="section-kicker">MỘT LƯỢC SỬ RẤT NGẮN</p>
-        <h2>Từ một dấu chấm Morse tới giọng nói và hình ảnh bay qua không trung.</h2>
+        <h2>Từ điện báo tới giọng nói, hình ảnh và mạng di động.</h2>
         <p>
-          Trước khi có wireless, con người đã biết truyền thông tin bằng dây. Telegraph thế kỷ XIX
-          biến ký tự thành các xung điện. Telephone sau đó biến giọng nói thành tín hiệu điện để truyền
-          qua đường dây. Nhưng câu hỏi lớn tiếp theo là: <strong>có thể bỏ sợi dây đi không?</strong>
+          Có thể đọc lịch sử viễn thông như một chuỗi những câu hỏi: làm sao biến information thành một đại lượng có thể truyền đi?
+          Làm sao bỏ sợi dây? Làm sao gửi không chỉ ký tự mà cả giọng nói, hình ảnh và cuối cùng là dữ liệu số?
         </p>
 
-        <div class="history-timeline">
-          <article>
-            <time>1860s–1880s</time>
-            <h3>Từ lý thuyết tới sóng điện từ</h3>
-            <p>
-              Maxwell dự đoán sự tồn tại của sóng điện từ; Hertz sau đó chứng minh chúng trong phòng thí nghiệm.
-              Từ đây, “gửi tín hiệu qua không gian” trở thành một khả năng vật lý có thật.
-            </p>
+        <div class="history-gallery">
+          <article class="history-card">
+            <figure class="history-figure">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/7/71/Portrait_of_James_Clerk_Maxwell_%281831-1879%29%2C_Physicist_%282551826378%29.jpg"
+                alt="Chân dung James Clerk Maxwell"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                James Clerk Maxwell · Smithsonian Institution Libraries ·
+                <a href="https://commons.wikimedia.org/wiki/File:Portrait_of_James_Clerk_Maxwell_(1831-1879),_Physicist_(2551826378).jpg" target="_blank" rel="noreferrer">Wikimedia Commons ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1864 → 1888</time>
+              <h3>Sóng điện từ: từ phương trình tới thí nghiệm</h3>
+              <p>
+                Maxwell xây dựng lý thuyết thống nhất điện và từ, từ đó suy ra khả năng tồn tại của sóng điện từ.
+                Những thí nghiệm của Hertz sau này cho thấy các sóng đó thực sự có thể được tạo ra và phát hiện.
+              </p>
+              <p class="history-lesson"><strong>Góc nhìn viễn thông:</strong> không gian có thể trở thành một “kênh truyền”.</p>
+            </div>
           </article>
 
-          <article>
-            <time>1890s–1901</time>
-            <h3>Wireless telegraphy</h3>
-            <p>
-              Marconi phát triển hệ thống truyền điện báo vô tuyến trên khoảng cách ngày càng xa.
-              Năm 1901, một tín hiệu Morse vượt Đại Tây Dương — một cột mốc cho liên lạc không dây đường dài.
-            </p>
+          <article class="history-card reverse">
+            <figure class="history-figure landscape">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Marconi_Poldhu_UK_radio_transmitter_-_made_first_transatlantic_transmission_1901.jpg"
+                alt="Máy phát Poldhu của Marconi dùng trong thí nghiệm vô tuyến xuyên Đại Tây Dương năm 1901"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                Poldhu transmitter, 1901 · John Ambrose Fleming · Public domain ·
+                <a href="https://commons.wikimedia.org/wiki/File:Marconi_Poldhu_UK_radio_transmitter_-_made_first_transatlantic_transmission_1901.jpg" target="_blank" rel="noreferrer">Wikimedia Commons ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1890s → 1901</time>
+              <h3>Wireless telegraphy: information rời khỏi sợi dây</h3>
+              <p>
+                Marconi phát triển các hệ thống radiotelegraphy đường dài. Năm 1901, ông báo cáo việc nhận tín hiệu Morse
+                xuyên Đại Tây Dương. Information lúc này vẫn rất đơn giản — các ký hiệu được biến thành những trạng thái/xung có thể phát qua radio.
+              </p>
+              <p class="history-lesson"><strong>Bài học:</strong> information và signal không phải cùng một thứ; signal là cách ta mang information.</p>
+            </div>
           </article>
 
-          <article>
-            <time>1900–1906</time>
-            <h3>Không chỉ gửi “tít tít”: bắt đầu truyền âm thanh</h3>
-            <p>
-              Reginald Fessenden là một trong những người tiên phong đưa voice và music lên sóng radio.
-              Khi âm thanh có thể được modulation lên carrier, wireless bắt đầu giống radio mà chúng ta quen thuộc hơn.
-            </p>
+          <article class="history-card">
+            <figure class="history-figure landscape">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Reginald_Fessenden%2C_probably_1906.jpg"
+                alt="Reginald Fessenden trong phòng thí nghiệm radio khoảng năm 1906"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                Reginald Fessenden, circa 1906 · CC0 / public domain ·
+                <a href="https://commons.wikimedia.org/wiki/File:Reginald_Fessenden,_probably_1906.jpg" target="_blank" rel="noreferrer">Wikimedia Commons ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1900s</time>
+              <h3>Từ “tít tít” tới giọng nói</h3>
+              <p>
+                Fessenden là một trong những người tiên phong trong việc truyền speech bằng radio.
+                Khi một waveform liên tục như giọng nói được đặt lên một carrier, radio không còn chỉ mang ký hiệu Morse:
+                nó có thể mang nội dung âm thanh.
+              </p>
+              <p class="history-lesson"><strong>Bài học:</strong> một waveform có thể mang cấu trúc phong phú hơn rất nhiều so với on/off.</p>
+            </div>
           </article>
 
-          <article>
-            <time>1920s</time>
-            <h3>Hình ảnh cũng có thể được truyền đi</h3>
-            <p>
-              Những thử nghiệm television đầu tiên cho thấy hình ảnh chuyển động có thể được biến thành tín hiệu,
-              truyền đi rồi dựng lại ở đầu nhận. Năm 1928, John Logie Baird đã truyền hình ảnh television qua Đại Tây Dương.
-            </p>
+          <article class="history-card reverse">
+            <figure class="history-figure landscape">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/e/ee/John_Logie_Baird_and_mechanical_television.jpg"
+                alt="John Logie Baird cùng hệ thống television quét cơ học"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                John Logie Baird và mechanical television · Public domain ·
+                <a href="https://commons.wikimedia.org/wiki/File:John_Logie_Baird_and_mechanical_television.jpg" target="_blank" rel="noreferrer">Wikimedia Commons ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1925 → 1928</time>
+              <h3>Hình ảnh cũng có thể trở thành signal</h3>
+              <p>
+                Những hệ television sơ khai của John Logie Baird cho thấy hình ảnh chuyển động có thể được quét,
+                biến thành tín hiệu, truyền đi và dựng lại ở đầu nhận. Năm 1928, Baird trình diễn television xuyên Đại Tây Dương.
+              </p>
+              <p class="history-lesson"><strong>Bài học:</strong> voice, image hay data khác nhau ở information gốc, nhưng đều cần một representation để truyền.</p>
+            </div>
           </article>
 
-          <article>
-            <time>1980s → nay</time>
-            <h3>Cellular: từ thoại tới Internet di động</h3>
-            <p>
-              Các thế hệ mạng di động dần chuyển từ thoại analog sang số hóa, dữ liệu packet, broadband,
-              rồi tới 4G, 5G và NTN. Công nghệ thay đổi rất nhanh, nhưng nền tảng vẫn quay về signal,
-              time, frequency, sampling, modulation và propagation.
-            </p>
+          <article class="history-card">
+            <figure class="history-figure">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Mobile_phone_base_station.jpg"
+                alt="Một trạm gốc mạng di động"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                Mobile phone base station · Wolfgang Duven · CC BY-SA 3.0 ·
+                <a href="https://commons.wikimedia.org/wiki/File:Mobile_phone_base_station.jpg" target="_blank" rel="noreferrer">Wikimedia Commons ↗</a>
+              </figcaption>
+            </figure>
+            <div class="history-copy">
+              <time>1979 → nay</time>
+              <h3>Cellular: tái sử dụng spectrum và phục vụ hàng triệu người dùng</h3>
+              <p>
+                Mạng cellular thương mại tự động xuất hiện từ cuối thập niên 1970 và đầu 1980, rồi tiến từ 1G analog
+                tới 2G số, packet data, broadband 4G, 5G và NTN. Hệ thống ngày nay lớn hơn rất nhiều,
+                nhưng nền móng vẫn là signal, sampling, time/frequency, modulation, channel và synchronization.
+              </p>
+              <p class="history-lesson"><strong>Bài học:</strong> càng lên các thế hệ mới, mental model nền tảng càng quan trọng.</p>
+            </div>
           </article>
         </div>
 
         <aside class="source-note">
-          <strong>Đọc thêm về các mốc lịch sử</strong>
+          <strong>Tại sao phần lịch sử có mặt ở đây?</strong>
           <p>
-            Timeline trên chỉ giữ những mốc cần thiết để tạo bức tranh lớn. Các bài chuyên sâu sau này sẽ
-            dẫn nguồn đầy đủ và tách rõ lịch sử, lý thuyết và implementation.
+            Không phải để học thuộc năm tháng. Mỗi cột mốc thêm một lớp vào cùng một câu chuyện:
+            <em>information → representation → signal → channel → information</em>.
           </p>
-          <div class="source-links">
-            <a href="https://technav.ieee.org/topic/radio/" target="_blank" rel="noreferrer">IEEE · History of radio ↗</a>
-            <a href="https://engage.ieee.org/AESNewsletter_HistoryColumn_q1_2020.html" target="_blank" rel="noreferrer">IEEE · Marconi 1901 ↗</a>
-            <a href="https://blog.scienceandmediamuseum.org.uk/history-of-british-television-timeline/" target="_blank" rel="noreferrer">Science + Media Museum · Television timeline ↗</a>
-          </div>
         </aside>
       </div>
     </section>
 
-    <section class="essay-section" id="tai-sao">
+    <section class="essay-section" id="buc-tranh-lon">
       <div class="section-number">02</div>
+      <div class="essay-content wide-content">
+        <CommunicationJourney />
+      </div>
+    </section>
+
+    <section class="essay-section" id="tai-sao">
+      <div class="section-number">03</div>
       <div class="essay-content">
         <p class="section-kicker">VÌ SAO TÔI VIẾT VIETWIRELESS</p>
         <h2>Học rất nhiều công thức không có nghĩa là đã có một mental model rõ ràng.</h2>
 
         <p>
           Khi học viễn thông, tôi từng gặp chính những câu hỏi rất cơ bản mà giáo trình thường đi qua quá nhanh:
-          <strong>FFT thực sự để làm gì? Tại sao lúc thì nhìn tín hiệu theo thời gian, lúc lại nhìn theo tần số?
-          I và Q có ý nghĩa vật lý thế nào? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
+          <strong>FFT thực sự để làm gì? Tại sao lúc thì tín hiệu ở miền thời gian, lúc lại ở miền tần số?
+          I và Q là gì? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
         </p>
 
         <p>
-          Sau này, khi học và làm việc sâu hơn trong wireless, tôi nhận ra đây không chỉ là câu hỏi của sinh viên năm nhất.
-          Có những người đã ra trường nhiều năm, học cao học hoặc làm nghiên cứu nhưng vẫn có thể dùng FFT, OFDM hay I/Q
-          như một “công cụ quen tay” mà chưa xây được một bức tranh trực giác thật sự nối mọi thứ lại với nhau.
+          Sau này, khi học, nghiên cứu và làm việc sâu hơn với wireless, tôi nhận ra đây không chỉ là câu hỏi của sinh viên năm nhất.
+          Một người có thể dùng FFT, OFDM, channel estimation hay I/Q trong nhiều năm mà vẫn chưa có một bức tranh trực giác
+          thật sự rõ về việc <em>tín hiệu đang ở representation nào tại từng bước</em>.
         </p>
 
         <blockquote class="teaching-quote">
@@ -125,8 +203,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </blockquote>
 
         <p>
-          Vì vậy website này sẽ đi chậm ở những chỗ đáng đi chậm. Ta sẽ nhìn waveform trước khi viết Fourier Transform,
-          xoay một phasor trước khi nói complex baseband, và tự tay thay đổi subcarrier trước khi mở 3GPP TS 38.211.
+          Vì vậy website này sẽ đi chậm ở những chỗ đáng đi chậm. Ta nhìn waveform trước Fourier Transform,
+          xoay một phasor trước complex baseband, và hiểu một subcarrier là gì trước khi mở 3GPP TS 38.211.
         </p>
 
         <div class="author-strip">
@@ -134,8 +212,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <div>
             <strong>Van-Phuc Bui</strong>
             <p>
-              Tôi viết VietWireless từ góc nhìn của một người học, nghiên cứu và làm việc với wireless communications,
-              với mong muốn tạo thêm một cách học trực quan bằng tiếng Việt.
+              Tôi viết VietWireless từ góc nhìn của một người từng phải tự nối các mảnh kiến thức này với nhau,
+              rồi tiếp tục làm việc với wireless communications trong nghiên cứu và công nghiệp.
             </p>
             <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">vanphucbui.com ↗</a>
           </div>
@@ -144,38 +222,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </section>
 
     <section class="essay-section" id="cach-hoc">
-      <div class="section-number">03</div>
+      <div class="section-number">04</div>
       <div class="essay-content">
         <p class="section-kicker">CÁCH CHÚNG TA SẼ HỌC</p>
-        <h2>Đi từ câu hỏi thật → hình dung → toán học → implementation.</h2>
+        <h2>Câu hỏi thật → hình dung → toán học → implementation.</h2>
 
         <div class="teaching-steps">
           <article>
             <span>1</span>
             <h3>Đầu tiên: tại sao?</h3>
-            <p>Mỗi khái niệm phải bắt đầu từ một vấn đề mà hệ thống communication cần giải quyết.</p>
+            <p>Mỗi khái niệm bắt đầu từ một vấn đề mà communication system cần giải quyết.</p>
           </article>
           <article>
             <span>2</span>
             <h3>Sau đó: nhìn thấy nó</h3>
-            <p>Dùng waveform, spectrum, animation và interactive lab để tạo trực giác trước.</p>
+            <p>Waveform, spectrum, phasor, animation và interactive lab tạo trực giác trước.</p>
           </article>
           <article>
             <span>3</span>
             <h3>Rồi mới tới toán</h3>
-            <p>Công thức xuất hiện khi từng biến đã có ý nghĩa, không phải để người học thuộc lòng.</p>
+            <p>Công thức xuất hiện khi từng biến đã có ý nghĩa, thay vì trở thành thứ để học thuộc.</p>
           </article>
           <article>
             <span>4</span>
-            <h3>Cuối cùng: code & hệ thống thật</h3>
-            <p>Nối khái niệm về samples, buffers, FFT bins, resource grid và receiver/transmitter chain.</p>
+            <h3>Cuối cùng: code & hệ thống</h3>
+            <p>Nối lại với samples, buffers, FFT bins, resource grid và transmitter/receiver chain.</p>
           </article>
         </div>
       </div>
     </section>
 
     <section class="essay-section" id="lo-trinh">
-      <div class="section-number">04</div>
+      <div class="section-number">05</div>
       <div class="essay-content">
         <p class="section-kicker">LỘ TRÌNH CHO NGƯỜI MỚI</p>
         <h2>Đừng bắt đầu bằng 5G. Hãy bắt đầu bằng signal.</h2>
@@ -209,7 +287,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span class="course-no">Bài 04</span>
             <div>
               <h3>I/Q, constellation và modulation</h3>
-              <p>Từ một complex sample tới QPSK, 16QAM và symbol.</p>
+              <p>Từ complex sample tới QPSK, 16QAM và symbol.</p>
             </div>
             <span class="course-status">Sắp tới</span>
           </li>
@@ -235,10 +313,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <section class="start-card">
       <p class="chapter-label">BÀI 01 · SIGNAL FOUNDATIONS</p>
-      <h2>Mọi hệ thống wireless cuối cùng đều phải xử lý tín hiệu.</h2>
+      <h2>Bây giờ hãy zoom vào thứ chạy xuyên suốt toàn bộ sơ đồ phía trên: signal.</h2>
       <p>
-        Bắt đầu bằng giọng nói, một microphone và một câu hỏi:
-        máy tính nhìn thấy tín hiệu như thế nào?
+        Bắt đầu bằng giọng nói, một microphone và câu hỏi:
+        máy tính thực sự “nhìn thấy” tín hiệu như thế nào?
       </p>
       <a class="text-button" href="/hoc/tin-hieu-la-gi/">Bắt đầu bài Signal là gì? →</a>
     </section>

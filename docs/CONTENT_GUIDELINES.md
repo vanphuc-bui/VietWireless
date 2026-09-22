@@ -79,3 +79,24 @@ không phải landing page của một startup.
 - Công thức và notation có nhất quán không?
 - Có câu nào dễ khiến người mới xây mental model sai không?
 - Có nội dung nào dựa trên thông tin nội bộ không?
+
+
+## Historical media
+
+- Mỗi mốc lịch sử quan trọng trên homepage phải có visual thật: ảnh tư liệu, diagram hoặc video phù hợp trực tiếp với mốc đó.
+- Không dùng ảnh “radio/antenna” generic cho một nhân vật hay sự kiện cụ thể.
+- Ảnh ngoài phải có nguồn và license/credit ngay dưới ảnh khi cần.
+- Ưu tiên public domain, CC0 hoặc nguồn có điều khoản tái sử dụng rõ ràng.
+- Media lịch sử phải giúp người đọc hiểu “điều gì vừa trở nên khả thi về mặt truyền thông”, không chỉ trang trí.
+
+## End-to-end signal chain accuracy
+
+Khi vẽ chuỗi OFDM hiện đại:
+
+- Information (image/voice/data) → representation/compression → bits.
+- Channel coding/scrambling → modulation mapping.
+- Trước IFFT, mô tả là **complex modulation symbols X[k] trên các subcarriers / frequency-domain bins**.
+- Sau IFFT, mô tả là **time-domain complex I/Q samples x[n]**.
+- DAC/upconversion/RF chain tạo tín hiệu RF vật lý; không gọi complex baseband trực tiếp là “sóng ngoài anten”.
+- Receiver: RF/downconversion/ADC → time-domain I/Q y[n] → FFT → Y[k] → channel estimation/equalization → demapping/decoding.
+- Luôn ghi rõ IFFT/FFT chain là ví dụ OFDM điển hình; không ngụ ý mọi hệ thống wireless đều dùng OFDM.
