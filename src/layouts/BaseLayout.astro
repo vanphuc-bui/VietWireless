@@ -2,7 +2,7 @@
 import '../styles/global.css';
 
 const {
-  title = 'VietWireless — Hiểu viễn thông bằng trực quan',
+  title = 'VietWireless — Học viễn thông từ trực giác',
   description = 'Học tín hiệu, wireless, 4G, 5G NR, NTN và 6G bằng trực giác, đồ thị và interactive labs.',
 } = Astro.props;
 ---
@@ -13,7 +13,7 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#07111f" />
+    <meta name="theme-color" content="#fbfaf7" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
@@ -21,12 +21,16 @@ const {
     <header class="site-header">
       <a class="brand" href="/" aria-label="VietWireless home">
         <span class="brand-mark" aria-hidden="true">≈</span>
-        <span>VietWireless</span>
+        <span>
+          <strong>VietWireless</strong>
+          <small>Ghi chép về viễn thông</small>
+        </span>
       </a>
       <nav class="site-nav" aria-label="Điều hướng chính">
-        <a href="/#lo-trinh">Lộ trình</a>
-        <a href="/hoc/tin-hieu-la-gi/">Signal Lab</a>
-        <a href="/#nguyen-tac">Cách học</a>
+        <a href="/#lich-su">Lịch sử</a>
+        <a href="/#lo-trinh">Bài học</a>
+        <a href="/hoc/tin-hieu-la-gi/">Signal</a>
+        <a href="/#tai-sao">Về VietWireless</a>
       </nav>
     </header>
 
@@ -37,9 +41,12 @@ const {
     <footer class="site-footer">
       <div>
         <strong>VietWireless</strong>
-        <p>Hiểu viễn thông bằng trực quan — từ tín hiệu đến 5G, NTN và 6G.</p>
+        <p>Một góc nhìn trực quan về tín hiệu, wireless, 4G, 5G, NTN và 6G.</p>
       </div>
-      <p class="footer-note">Nội dung kỹ thuật độc lập, xây dựng từ kiến thức và nguồn công khai.</p>
+      <div class="footer-note">
+        <p>Viết bởi <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">Van-Phuc Bui</a>.</p>
+        <p>Nội dung kỹ thuật độc lập, dựa trên kiến thức và nguồn công khai.</p>
+      </div>
     </footer>
   </body>
 </html>
