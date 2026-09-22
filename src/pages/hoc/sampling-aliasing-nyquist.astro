@@ -1,6 +1,35 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SamplingAliasExplorer from '../../components/SamplingAliasExplorer.jsx';
+
+const aliasPlot = {
+  width: 820,
+  height: 260,
+  left: 40,
+  right: 28,
+  mid: 130,
+  amplitude: 68,
+  duration: 1,
+};
+
+function cosinePolyline(frequency, points = 640) {
+  return Array.from({ length: points + 1 }, (_, i) => {
+    const t = (i / points) * aliasPlot.duration;
+    const x = aliasPlot.left + (t / aliasPlot.duration) * (aliasPlot.width - aliasPlot.left - aliasPlot.right);
+    const y = aliasPlot.mid - aliasPlot.amplitude * Math.cos(2 * Math.PI * frequency * t);
+    return `${x.toFixed(2)},${y.toFixed(2)}`;
+  }).join(' ');
+}
+
+const aliasFastPoints = cosinePolyline(7);
+const aliasSlowPoints = cosinePolyline(3);
+const aliasSamples = Array.from({ length: 11 }, (_, n) => {
+  const t = n / 10;
+  return {
+    x: aliasPlot.left + t * (aliasPlot.width - aliasPlot.left - aliasPlot.right),
+    y: aliasPlot.mid - aliasPlot.amplitude * Math.cos(2 * Math.PI * 7 * t),
+  };
+});
 ---
 
 <BaseLayout
@@ -137,15 +166,13 @@ import SamplingAliasExplorer from '../../components/SamplingAliasExplorer.jsx';
           <strong>7 Hz và 3 Hz khi fₛ = 10 Hz</strong>
         </div>
         <svg viewBox="0 0 820 260" role="img" aria-label="Tone 7 Hz và tone 3 Hz đi qua cùng một tập sample khi sampling ở 10 Hz">
-          <line class="sample-axis" x1="38" y1="130" x2="792" y2="130" />
-          <path class="alias-fast-wave" d="M40 62 C53 191 66 190 80 68 S107 62 120 190 S147 196 160 74 S187 56 200 185 S227 201 240 80 S267 50 280 180 S307 207 320 87 S347 45 360 175 S387 212 400 94 S427 40 440 170 S467 217 480 101 S507 35 520 165 S547 222 560 108 S587 30 600 160 S627 227 640 115 S667 25 680 155 S707 232 720 122 S747 20 760 150 S783 220 792 132" />
-          <path class="alias-slow-wave" d="M40 62 C76 62 84 198 120 190 S164 50 200 72 S244 210 280 180 S324 39 360 88 S404 220 440 170 S484 28 520 104 S564 224 600 160 S644 23 680 120 S724 216 760 150 S784 120 792 132" />
+          <line class="sample-axis" x1={aliasPlot.left} y1={aliasPlot.mid} x2={aliasPlot.width - aliasPlot.right} y2={aliasPlot.mid} />
+          <polyline class="alias-fast-wave" points={aliasFastPoints} />
+          <polyline class="alias-slow-wave" points={aliasSlowPoints} />
           <g class="alias-sample-dots">
-            <circle cx="40" cy="62" r="5" /><circle cx="120" cy="190" r="5" />
-            <circle cx="200" cy="72" r="5" /><circle cx="280" cy="180" r="5" />
-            <circle cx="360" cy="88" r="5" /><circle cx="440" cy="170" r="5" />
-            <circle cx="520" cy="104" r="5" /><circle cx="600" cy="160" r="5" />
-            <circle cx="680" cy="120" r="5" /><circle cx="760" cy="150" r="5" />
+            {aliasSamples.map((sample) => (
+              <circle cx={sample.x} cy={sample.y} r="5" />
+            ))}
           </g>
         </svg>
         <div class="alias-story-legend">
