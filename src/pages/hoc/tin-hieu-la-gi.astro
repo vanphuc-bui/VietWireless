@@ -47,7 +47,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 
     <section class="concept-block">
       <p class="concept-kicker">01 · TỪ THẾ GIỚI THẬT</p>
-      <h2>Tín hiệu là một đại lượng thay đổi và mang thông tin.</h2>
+      <h2>Mình có thể bắt đầu rất đơn giản: signal là một đại lượng thay đổi và mang thông tin.</h2>
       <p>
         Khi bạn nói, áp suất không khí thay đổi theo thời gian. Microphone biến sự thay đổi đó thành
         điện áp thay đổi theo thời gian. Camera làm một việc khác: nó đo ánh sáng tại rất nhiều vị trí
@@ -103,7 +103,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 
     <section class="concept-block" id="sampling">
       <p class="concept-kicker">02 · ANALOG → DIGITAL</p>
-      <h2>Máy tính không thấy đường cong. Nó thấy samples.</h2>
+      <h2>Nếu nhìn từ phía máy tính, waveform cuối cùng lại trở thành các samples.</h2>
       <p>
         Một microphone có thể tạo ra điện áp liên tục. ADC lấy giá trị của điện áp đó tại các thời điểm
         xác định. Kết quả là một dãy số như x[0], x[1], x[2]… Đây là nơi signal processing số bắt đầu.
@@ -122,14 +122,14 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       </div>
       <p>
         Sampling rate nói cho ta biết mỗi giây lấy bao nhiêu samples. Đây chưa phải câu chuyện đầy đủ của ADC
-        — còn quantization, dynamic range và anti-alias filtering. Nhưng ở đoạn này mình chỉ cần giữ lại một hình dung:
+        , còn quantization, dynamic range và anti-alias filtering. Nhưng ở đoạn này mình chỉ cần giữ lại một hình dung:
         <strong>sampling biến một waveform theo thời gian thành một dãy số theo thời gian.</strong>
       </p>
     </section>
 
     <section class="concept-block">
       <p class="concept-kicker">03 · HAI CÁCH NHÌN CÙNG MỘT SIGNAL</p>
-      <h2>Time domain trả lời “khi nào”. Frequency domain trả lời “có những nhịp nào”.</h2>
+      <h2>Time domain và frequency domain chỉ là hai cách nhìn khác nhau vào cùng một signal.</h2>
       <p>
         Trong time domain, trục ngang là thời gian. Bạn nhìn được waveform đang thay đổi thế nào.
         Nhưng nếu nhiều tone cộng vào nhau, chỉ nhìn waveform thường rất khó biết chính xác từng thành phần.
@@ -175,7 +175,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 
     <section class="concept-block">
       <p class="concept-kicker">05 · VẬY TẠI SAO KỸ SƯ WIRELESS CỨ FFT RỒI IFFT?</p>
-      <h2>Vì có việc dễ làm trong time domain, và có việc dễ làm trong frequency domain.</h2>
+      <h2>Có những việc nhìn ở time domain sẽ tự nhiên hơn, và cũng có những việc sang frequency domain lại dễ thấy hơn.</h2>
       <div class="domain-grid">
         <article>
           <span class="domain-badge">TIME</span>
