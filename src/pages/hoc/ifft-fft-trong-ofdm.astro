@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
+import Math from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -39,16 +40,12 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
       <p class="concept-kicker">01 · IFFT ĐANG CỘNG CÁC SUBCARRIERS NHƯ THẾ NÀO?</p>
       <h2>Mỗi X[k] là amplitude/phase của một complex exponential có frequency index k.</h2>
 
-      <div class="ifft-main-equation">
-        <span>x[n]</span>
-        <b>=</b>
-        <span>(1/N) Σ<sub>k=0</sub><sup>N-1</sup> X[k]e<sup>j2πkn/N</sup></span>
-      </div>
+      <Math tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
 
       <p>
         Nhìn từng term:
         X[k] quyết định complex amplitude của subcarrier k.
-        e<sup>j2πkn/N</sup> là basis waveform của subcarrier đó tại sample n.
+        <Math tex="e^{j2\\pi kn/N}" /> là basis waveform của subcarrier đó tại sample n.
         IFFT lấy tất cả các basis waveforms, scale chúng bằng X[k], rồi cộng lại.
       </p>
 
@@ -68,11 +65,7 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
         Khi đó:
       </p>
 
-      <div class="ifft-main-equation">
-        <span>x[n]</span>
-        <b>=</b>
-        <span>(1/4)e<sup>j2πn/4</sup></span>
-      </div>
+      <Math tex="x[n] = \\frac{1}{4}e^{j2\\pi n/4}" display />
 
       <p>
         Bốn samples lần lượt là:
@@ -133,13 +126,9 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
 
     <section class="concept-block" id="fft">
       <p class="concept-kicker">05 · FFT Ở RECEIVER LÀ PHÉP PROJECT NGƯỢC</p>
-      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis e<sup>j2πkn/N</sup>.</h2>
+      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis <Math tex="e^{j2\\pi kn/N}" />.</h2>
 
-      <div class="ifft-main-equation">
-        <span>Y[k]</span>
-        <b>=</b>
-        <span>Σ<sub>n=0</sub><sup>N-1</sup> y[n]e<sup>-j2πkn/N</sup></span>
-      </div>
+      <Math tex="Y[k] = \\sum_{n=0}^{N-1}y[n]e^{-j2\\pi kn/N}" display />
 
       <p>
         Nếu y[n]=x[n] và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
@@ -199,7 +188,7 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
         <b>→ h[n] →</b>
         <div><small>RX TIME</small><strong>y[n]</strong></div>
         <b>→ FFT →</b>
-        <div><small>RX FREQ</small><strong>Y[k]=H[k]X[k]+W[k]</strong></div>
+        <div><small>RX FREQ</small><strong><Math tex="Y[k]=H[k]X[k]+W[k]" /></strong></div>
       </div>
 
       <p>
@@ -215,7 +204,7 @@ import IFFTFFTExplorer from '../../components/IFFTFFTExplorer.jsx';
       <p>
         Receiver cũng làm chiều ngược lại:
         xác định symbol timing,
-        bỏ N<sub>CP</sub> samples,
+        bỏ <Math tex="N_{\\mathrm{CP}}" /> samples,
         lấy đúng N useful samples,
         rồi mới chạy N-point FFT.
         Nếu đưa CP vào FFT window như data thông thường, orthogonal basis assumption không còn đúng như thiết kế.
