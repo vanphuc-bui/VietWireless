@@ -22,13 +22,13 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 04 đã có một điểm z = a + jb trên mặt phẳng phức. Trong baseband, ta đổi tên hai tọa độ đó thành I và Q.
+        Bài 04 đã có một điểm <MathExpr tex="z = a + jb" /> trên mặt phẳng phức. Trong baseband, ta đổi tên hai tọa độ đó thành <MathExpr tex="I" /> và <MathExpr tex="Q" />.
       </p>
       <div class="system-position">
         <span>TỪ SỐ PHỨC TỚI SIGNAL PROCESSING</span>
         <div class="system-position-flow" aria-label="Số phức nối sang I Q và RF">
-          <span>a + jb</span><b>→</b>
-          <strong>I + jQ</strong><b>→</b>
+          <span><MathExpr tex="a+jb" /></span><b>→</b>
+          <strong><MathExpr tex="I+jQ" /></strong><b>→</b>
           <span>complex baseband</span><b>→</b>
           <span>DAC / RF</span><b>→</b>
           <span>anten</span>
@@ -43,32 +43,28 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">01 · I VÀ Q LÀ HAI TỌA ĐỘ</p>
       <h2>Một complex sample có thể được đọc theo Cartesian hoặc theo magnitude và phase.</h2>
 
-      <div class="iq-core-equations">
-        <div>
+      <div class="math-card-grid">
+        <article class="math-card">
           <span class="card-label">CARTESIAN</span>
-          <strong><MathExpr tex="x = I + jQ" /></strong>
-          <p>Ta lưu hai thành phần vuông góc I và Q.</p>
-        </div>
-        <b>↔</b>
-        <div>
-          <span class="card-label">POLAR</span>
-          <strong><MathExpr tex="x = Ae^{j\\phi}" /></strong>
-          <p>Ta đọc cùng điểm đó bằng magnitude A và phase φ.</p>
-        </div>
-      </div>
-
-      <div class="two-column">
-        <article class="explain-card">
-          <span class="card-label">TỪ I,Q → A,φ</span>
-          <h3><MathExpr tex="A = \\sqrt{I^2+Q^2}" /></h3>
-          <p>Magnitude là khoảng cách từ gốc tới điểm I/Q.</p>
-          <p><MathExpr tex="\\phi = \\operatorname{atan2}(Q,I)" /></p>
+          <div class="math-card-formula"><MathExpr tex="x = I + jQ" /></div>
+          <p>Ta lưu hai thành phần vuông góc <MathExpr tex="I" /> và <MathExpr tex="Q" />.</p>
         </article>
-        <article class="explain-card">
+        <article class="math-card">
+          <span class="card-label">POLAR</span>
+          <div class="math-card-formula"><MathExpr tex="x = Ae^{j\\phi}" /></div>
+          <p>Ta đọc cùng điểm đó bằng magnitude <MathExpr tex="A" /> và phase <MathExpr tex="\\phi" />.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">TỪ I,Q → A,φ</span>
+          <div class="math-card-formula"><MathExpr tex="A = \\sqrt{I^2+Q^2}" /></div>
+          <p>Magnitude là khoảng cách từ gốc tới điểm <MathExpr tex="(I,Q)" />.</p>
+          <div class="math-card-secondary"><MathExpr tex="\\phi = \\operatorname{atan2}(Q,I)" /></div>
+        </article>
+        <article class="math-card">
           <span class="card-label">TỪ A,φ → I,Q</span>
-          <h3><MathExpr tex="I = A\\cos\\phi" /></h3>
-          <p>Q là projection vuông góc còn lại.</p>
-          <p><MathExpr tex="Q = A\\sin\\phi" /></p>
+          <div class="math-card-formula"><MathExpr tex="I = A\\cos\\phi" /></div>
+          <p><MathExpr tex="Q" /> là projection vuông góc còn lại.</p>
+          <div class="math-card-secondary"><MathExpr tex="Q = A\\sin\\phi" /></div>
         </article>
       </div>
 
@@ -82,7 +78,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">02 · TẠI SAO KHÔNG CHỈ LƯU AMPLITUDE VÀ PHASE?</p>
       <h2>I/Q làm nhiều phép xử lý trở thành các phép toán rất gọn trên số phức.</h2>
       <p>
-        Phase có điểm bất tiện là nó wrap tại ±π hoặc 0/360°. I và Q thì biến thiên liên tục trên hai trục.
+        Phase có điểm bất tiện là nó wrap tại <MathExpr tex="\\pm\\pi" /> hoặc <MathExpr tex="0^\\circ/360^\\circ" />. <MathExpr tex="I" /> và <MathExpr tex="Q" /> thì biến thiên liên tục trên hai trục.
         Khi channel gây scale và rotation, hoặc khi receiver cần bù phase, phép nhân complex xử lý hai hiệu ứng này cùng lúc.
       </p>
 
@@ -104,7 +100,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Nếu bỏ noise để nhìn trực giác, magnitude của x bị nhân với G và phase bị cộng thêm θ.
+        Nếu bỏ noise để nhìn trực giác, magnitude của <MathExpr tex="x" /> bị nhân với <MathExpr tex="G" /> và phase bị cộng thêm <MathExpr tex="\\theta" />.
         Đây là mental model sẽ quay lại khi học channel estimation và equalization.
       </p>
     </section>
@@ -124,11 +120,11 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="s_{\\mathrm{RF}}(t) = I(t)\\cos(2\\pi f_c t) - Q(t)\\sin(2\\pi f_c t)" display />
 
       <div class="iq-carrier-flow">
-        <div><small>I PATH</small><strong>I(t)</strong><span>× cos(2πfct)</span></div>
+        <div><small>I PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex="\\times\\cos(2\\pi f_ct)" /></span></div>
         <b>+</b>
-        <div><small>Q PATH</small><strong>Q(t)</strong><span>× -sin(2πfct)</span></div>
+        <div><small>Q PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex="-\\sin(2\\pi f_ct)" /></span></div>
         <b>→</b>
-        <div><small>RF</small><strong>s(t)</strong><span>real waveform</span></div>
+        <div><small>RF</small><strong><MathExpr tex="s(t)" /></strong><span>real waveform</span></div>
       </div>
 
       <aside class="precision-note">
@@ -155,7 +151,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>ADC/DSP không nhất thiết lưu một “waveform đẹp”; chúng làm việc với các cặp số theo sample index.</h2>
 
       <div class="iq-buffer">
-        <div class="iq-buffer-head"><span>n</span><span>I[n]</span><span>Q[n]</span><span>x[n]</span></div>
+        <div class="iq-buffer-head"><span><MathExpr tex="n" /></span><span><MathExpr tex="I[n]" /></span><span><MathExpr tex="Q[n]" /></span><span><MathExpr tex="x[n]" /></span></div>
         <div><span>0</span><span>0.71</span><span>0.71</span><span>0.71 + j0.71</span></div>
         <div><span>1</span><span>0.38</span><span>0.92</span><span>0.38 + j0.92</span></div>
         <div><span>2</span><span>-0.20</span><span>0.98</span><span>-0.20 + j0.98</span></div>
@@ -204,12 +200,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
       <h2>I/Q là nơi hình học số phức bắt đầu trở thành dữ liệu mà DSP thực sự xử lý.</h2>
       <ol class="recap-list">
-        <li><strong>x = I + jQ:</strong> một complex sample có hai thành phần trực giao.</li>
+        <li><strong><MathExpr tex="x=I+jQ" />:</strong> một complex sample có hai thành phần trực giao.</li>
         <li><strong><MathExpr tex="A=\\sqrt{I^2+Q^2}" />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
         <li><strong><MathExpr tex="\\phi=\\operatorname{atan2}(Q,I)" />:</strong> phase là góc của điểm I/Q.</li>
         <li><strong>Complex baseband:</strong> representation quanh 0 Hz, không phải waveform RF vật lý.</li>
         <li><strong>RF reconstruction:</strong> I và Q điều khiển hai carrier trực giao cos và sin.</li>
-        <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples x[n].</li>
+        <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples <MathExpr tex="x[n]" />.</li>
       </ol>
     </section>
 
