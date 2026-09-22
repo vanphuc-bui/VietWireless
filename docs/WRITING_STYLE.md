@@ -238,3 +238,12 @@ không cần thêm một H2 lớn chỉ để lặp lại lý do. Có thể đi 
 Khi một section có visual chính, title phụ không được lấn át visual đó. Dùng paragraph ngắn hoặc heading nhỏ hơn, để mắt người đọc tập trung vào diagram, map hoặc interactive element.
 
 Mỗi section nên có một điểm nhấn chính, không phải nhiều tầng title cạnh tranh với nhau.
+
+
+## 14. Kích thước heading trong bài học
+
+Trong một bài học, tiêu đề bài là điểm nhấn lớn nhất.
+
+Các section title bên trong bài không nên có kích thước gần bằng title bài. Chúng chỉ cần giúp người đọc định vị nội dung, không nên ngắt nhịp đọc hoặc cạnh tranh với diagram, plot và interactive lab.
+
+Nếu một câu heading dài như một câu văn hoàn chỉnh, ưu tiên kích thước vừa phải. Không dùng typography quá lớn chỉ vì đó là H2.
