@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResourceGridExplorer from '../../components/ResourceGridExplorer.jsx';
+---
+
+<BaseLayout
+  title="Resource grid trong 5G NR | VietWireless"
+  description="Hiểu resource element, subcarrier, OFDM symbol, resource block và cách complex modulation symbols được đặt lên resource grid trong NR."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 17 · WIRELESS LINK</p>
+      <h1>Resource grid</h1>
+      <p class="lesson-deck">
+        OFDM cho ta subcarriers theo frequency và OFDM symbols theo time.
+        <strong>Resource grid chỉ là cách đặt hai trục đó thành một lưới để mỗi ô có thể chứa một complex value.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <div class="system-position">
+        <span>FREQUENCY × TIME</span>
+        <div class="system-position-flow"><span>subcarrier k</span><b>×</b><span>OFDM-symbol position l</span><b>→</b><strong>resource element (k,l)</strong><b>→</b><span>complex value a<sub>k,l</sub></span></div>
+        <p>Đây là representation trong physical layer. Sau mapping, mỗi OFDM-symbol column sẽ đi qua IFFT để thành time-domain samples.</p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="re">
+      <p class="concept-kicker">01 · RESOURCE ELEMENT LÀ MỘT Ô</p>
+      <h2>Một RE được xác định bởi một subcarrier index k và một OFDM-symbol position l.</h2>
+      <p>
+        Theo 3GPP TS 38.211, resource element (k,l) ứng với một physical resource và một complex value a<sub>k,l</sub>.
+        Nó có thể mang data symbol, reference symbol, control-related symbol hoặc không được dùng, tùy physical channel/signal mapping.
+      </p>
+      <div class="grid-coordinate-story">
+        <div><small>FREQUENCY</small><strong>k</strong><span>subcarrier index</span></div>
+        <b>+</b>
+        <div><small>TIME</small><strong>l</strong><span>OFDM-symbol position</span></div>
+        <b>→</b>
+        <div><small>RESOURCE ELEMENT</small><strong>(k,l)</strong><span>one complex value</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="grid-lab">
+      <p class="concept-kicker">02 · INTERACTIVE GRID</p>
+      <h2>Click một ô để xem k, l và resource block chứa subcarrier đó.</h2>
+      <ResourceGridExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="rb">
+      <p class="concept-kicker">03 · RESOURCE BLOCK KHÔNG PHẢI MẶC ĐỊNH “12 × 14 Ô”</p>
+      <h2>Trong NR, một resource block được định nghĩa là 12 consecutive subcarriers trong frequency domain.</h2>
+      <div class="rb-definition">
+        <span>N<sub>sc</sub><sup>RB</sup></span><b>=</b><span>12 subcarriers</span>
+      </div>
+      <p>
+        Ta thường vẽ một PRB trong một slot thành rectangle 12 subcarriers × 14 OFDM symbols khi normal CP,
+        nhưng “14” đến từ slot structure, không phải từ định nghĩa resource block itself.
+      </p>
+      <aside class="precision-note">
+        <strong>CRB và PRB không phải cùng reference</strong>
+        <p>
+          Common Resource Blocks được đánh số theo common reference Point A. Physical Resource Blocks được đánh số bên trong một Bandwidth Part.
+          Khi đi sâu vào BWP/CORESET sau này, distinction này sẽ quan trọng hơn.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="mapping">
+      <p class="concept-kicker">04 · GRID LÀ CONTAINER, KHÔNG PHẢI TẤT CẢ Ô ĐỀU LÀ DATA</p>
+      <h2>Physical channels và reference signals map vào các RE patterns khác nhau.</h2>
+      <div class="grid-mapping-types">
+        <article><strong>Data</strong><p>QAM symbols của PDSCH/PUSCH có thể chiếm các RE được cấp.</p></article>
+        <article><strong>DM-RS</strong><p>Known reference symbols phục vụ channel estimation/demodulation.</p></article>
+        <article><strong>Control</strong><p>Control channels có resource mapping riêng.</p></article>
+        <article><strong>Reserved / unused</strong><p>Một số RE có thể để trống hoặc dành cho structure khác.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="column">
+      <p class="concept-kicker">05 · MỘT COLUMN CỦA GRID TRỞ THÀNH MỘT OFDM SYMBOL</p>
+      <h2>Giữ l cố định, lấy tất cả X[k,l], map vào IFFT bins rồi IFFT.</h2>
+      <div class="grid-column-flow">
+        <div><small>GRID COLUMN l</small><strong>X[k,l]</strong><span>frequency-domain values</span></div>
+        <b>→ map bins →</b>
+        <div><small>IFFT INPUT</small><strong>X[k]</strong><span>N-point array</span></div>
+        <b>→ IFFT →</b>
+        <div><small>TIME SAMPLES</small><strong>x[n]</strong><span>one useful OFDM symbol</span></div>
+        <b>→ CP →</b>
+        <div><small>TX BLOCK</small><strong>CP + x[n]</strong><span>sent in time</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="spec">
+      <p class="concept-kicker">06 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa grid theo numerology, carrier, antenna port và transmission direction.</h2>
+      <p>
+        Bài này dùng một grid nhỏ 24×14 để học geometry. Grid thực tế có số subcarriers phụ thuộc carrier/BWP configuration,
+        và OFDM-symbol structure phụ thuộc numerology/cyclic prefix.
+      </p>
+      <p class="spec-source">
+        Nguồn chuẩn: 3GPP TS 38.211, clauses 4.4.2–4.4.4 ·
+        <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">ETSI TS 138 211 V18.8.0 ↗</a>
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
+      <ol class="recap-list">
+        <li><strong>Resource grid:</strong> frequency × time representation của physical resources.</li>
+        <li><strong>Resource element:</strong> một ô (k,l) với một complex value.</li>
+        <li><strong>Resource block:</strong> 12 consecutive subcarriers trong frequency.</li>
+        <li><strong>PRB:</strong> resource-block numbering bên trong BWP.</li>
+        <li><strong>Grid mapping:</strong> data, reference và control structures dùng các RE khác nhau.</li>
+        <li><strong>Grid → waveform:</strong> mỗi OFDM-symbol column đi qua IFFT rồi thêm CP.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation">
+      <a class="lesson-nav-card previous" href="/hoc/cyclic-prefix/"><span>← BÀI TRƯỚC</span><strong>Cyclic Prefix</strong><small>Guard interval bảo vệ useful FFT block.</small></a>
+      <a class="lesson-nav-card next" href="/hoc/numerology-5g-nr/"><span>BÀI TIẾP THEO →</span><strong>Numerology trong 5G NR</strong><small>SCS, symbol duration và slot thay đổi với μ thế nào?</small></a>
+    </nav>
+  </article>
+</BaseLayout>
