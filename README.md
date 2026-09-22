@@ -1,6 +1,6 @@
 # VietWireless
 
-**Hiểu viễn thông bằng trực quan : từ tín hiệu đến 4G, 5G, NTN và 6G.**
+**Hiểu viễn thông bằng trực quan: từ tín hiệu đến 4G, 5G, NTN và 6G.**
 
 VietWireless là nơi mình ghi lại những cách hình dung về wireless communication bằng tiếng Việt, từ các câu hỏi cơ bản cho tới 4G, 5G, NTN và 6G.
 
