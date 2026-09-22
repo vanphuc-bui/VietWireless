@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CorrelationExplorer from '../../components/CorrelationExplorer.jsx';
+---
+
+<BaseLayout
+  title="Correlation trực quan trong receiver | VietWireless"
+  description="Hiểu correlation, sliding correlation, autocorrelation, matched filtering và cách receiver tìm một sequence đã biết trong noise."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 13 · WIRELESS LINK</p>
+      <h1>Correlation</h1>
+      <p class="lesson-deck">
+        Receiver thường biết trước một sequence nhưng không biết nó bắt đầu ở sample nào.
+        <strong>Correlation trả lời câu hỏi: “nếu tôi trượt local sequence qua buffer này, ở vị trí nào hai pattern giống nhau nhất?”</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Sau channel và noise, receiver có một buffer samples lẫn signal mong muốn với nhiều thứ khác.
+        Nếu transmitter đã chèn một pattern mà receiver biết trước, correlation là một cách tự nhiên để tìm nó.
+      </p>
+      <div class="system-position">
+        <span>KNOWN PATTERN DETECTION</span>
+        <div class="system-position-flow">
+          <span>received buffer r[n]</span><b>+</b>
+          <strong>known sequence s[n]</strong><b>→</b>
+          <span>slide + multiply + sum</span><b>→</b>
+          <span>correlation peak</span>
+        </div>
+        <p>
+          Ý tưởng này sẽ quay lại khi học synchronization, PSS và PRACH. Mỗi signal cụ thể có cấu trúc và detector riêng, nhưng trực giác correlation là nền tảng.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="dot-product">
+      <p class="concept-kicker">01 · BẮT ĐẦU TỪ DOT PRODUCT</p>
+      <h2>Hai vector cùng hướng cho tổng tích lớn; pattern không giống nhau có xu hướng triệt tiêu.</h2>
+      <p>
+        Với hai sequence thực cùng độ dài, một similarity score đơn giản là:
+      </p>
+      <div class="corr-equation">
+        <span>C</span><b>=</b><span>Σ r[n]s[n]</span>
+      </div>
+      <p>
+        Nếu dấu và cấu trúc của r[n] giống s[n], nhiều tích r[n]s[n] cùng dương và cộng lại.
+        Nếu không giống, contribution dương và âm thường cancel nhiều hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sliding">
+      <p class="concept-kicker">02 · KHI KHÔNG BIẾT TIMING, TA TRƯỢT SEQUENCE</p>
+      <h2>Mỗi candidate delay tạo một correlation value.</h2>
+      <div class="corr-equation">
+        <span>C[ℓ]</span><b>=</b><span>Σ r[n+ℓ] s[n]</span>
+      </div>
+      <div class="correlation-story">
+        <div><small>ℓ = 0</small><strong>không align</strong><span>score nhỏ</span></div>
+        <b>→ slide →</b>
+        <div><small>ℓ = 1,2,...</small><strong>thử mọi candidate</strong><span>mỗi vị trí một score</span></div>
+        <b>→</b>
+        <div><small>ℓ = τ̂</small><strong>peak</strong><span>candidate timing mạnh nhất</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="correlation-lab">
+      <p class="concept-kicker">03 · INTERACTIVE LAB</p>
+      <h2>Giấu một known sequence trong noise rồi xem correlation có tìm lại đúng sample index không.</h2>
+      <p>
+        Tăng noise dần. Khi SNR đủ thấp, một false peak có thể vượt true peak. Đây là lý do detector thực tế cần threshold,
+        averaging hoặc thêm structure chứ không chỉ lấy max một cách mù quáng.
+      </p>
+      <CorrelationExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="complex-correlation">
+      <p class="concept-kicker">04 · VỚI COMPLEX I/Q, CÓ THÊM CONJUGATE</p>
+      <h2>Complex correlation thường nhân received samples với complex conjugate của reference.</h2>
+      <div class="corr-equation">
+        <span>C[ℓ]</span><b>=</b><span>Σ r[n+ℓ] s<sup>*</sup>[n]</span>
+      </div>
+      <p>
+        Conjugate làm inner product trên complex plane có đúng geometry mong muốn.
+        Nếu r[n] là một scaled/rotated copy của s[n], correlation vẫn có magnitude lớn và phase của C chứa information về complex rotation đó.
+      </p>
+    </section>
+
+    <section class="concept-block" id="auto-cross">
+      <p class="concept-kicker">05 · AUTOCORRELATION VÀ CROSS-CORRELATION</p>
+      <h2>Ta có thể so sequence với chính nó hoặc với một sequence khác.</h2>
+      <div class="corr-two-cards">
+        <article>
+          <span class="card-label">AUTOCORRELATION</span>
+          <h3>s với shifted s</h3>
+          <p>Cho biết sequence giống chính nó tới mức nào khi bị dịch. Một sharp main peak và small sidelobes thường có lợi cho timing detection.</p>
+        </article>
+        <article>
+          <span class="card-label">CROSS-CORRELATION</span>
+          <h3>s₁ với s₂</h3>
+          <p>Cho biết hai sequence khác nhau giống nhau tới mức nào. Low cross-correlation giúp phân biệt các candidates tốt hơn.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="matched-filter">
+      <p class="concept-kicker">06 · CORRELATOR VÀ MATCHED FILTER LÀ HAI CÁCH NHÌN GẦN NHAU</p>
+      <h2>Matched filter có impulse response là phiên bản time-reversed/conjugated của waveform cần phát hiện.</h2>
+      <p>
+        Chạy received signal qua matched filter rồi nhìn output theo thời gian tương đương với việc tính correlation theo lag,
+        tùy convention indexing. Trong AWGN và assumptions phù hợp, matched filter tối đa hóa output SNR tại sampling instant cho waveform đã biết.
+      </p>
+      <aside class="precision-note">
+        <strong>Matched filter không tự giải quyết mọi impairment</strong>
+        <p>
+          Frequency offset, time scaling, multipath và phase rotation có thể làm reference không còn khớp hoàn hảo.
+          Detector thực tế thường phải search thêm frequency/timing hypotheses hoặc dùng structure riêng của signal.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="receiver-use">
+      <p class="concept-kicker">07 · RECEIVER DÙNG CORRELATION Ở ĐÂU?</p>
+      <h2>Bất cứ khi nào transmitter và receiver cùng biết trước một structure, correlation đều có thể trở thành detector.</h2>
+      <div class="correlation-use-grid">
+        <article><strong>Timing</strong><p>Tìm nơi một preamble hoặc sync sequence bắt đầu.</p></article>
+        <article><strong>Sequence ID</strong><p>So nhiều references để xem candidate nào khớp nhất.</p></article>
+        <article><strong>Channel probing</strong><p>Known reference giúp suy ra channel response sau khi align.</p></article>
+        <article><strong>Random access</strong><p>Preamble detection là một application quan trọng sẽ xuất hiện ở PRACH.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <h2>Correlation biến pattern matching thành một curve theo candidate delay.</h2>
+      <ol class="recap-list">
+        <li><strong>Dot product:</strong> đo mức similarity giữa hai vectors.</li>
+        <li><strong>Sliding correlation:</strong> thử reference ở nhiều candidate timing offsets.</li>
+        <li><strong>Peak:</strong> vị trí alignment có score lớn nhất, nhưng cần detection logic phù hợp.</li>
+        <li><strong>Complex correlation:</strong> dùng conjugate của reference.</li>
+        <li><strong>Autocorrelation:</strong> sequence so với chính nó theo shift.</li>
+        <li><strong>Matched filter:</strong> cách implement/nhìn tương đương với correlation theo assumptions phù hợp.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/multipath-delay-spread/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Multipath và delay spread</strong>
+        <small>Channel biến signal thành nhiều delayed copies như thế nào?</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/ofdm-buc-tranh-tong-the/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>OFDM: bức tranh tổng thể</strong>
+        <small>Vì sao chia bandwidth thành nhiều subcarriers lại hữu ích?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

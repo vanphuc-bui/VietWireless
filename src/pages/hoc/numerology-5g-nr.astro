@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NumerologyExplorer from '../../components/NumerologyExplorer.jsx';
+---
+
+<BaseLayout
+  title="Numerology trong 5G NR | VietWireless"
+  description="Hiểu subcarrier spacing Δf=15·2^μ kHz, useful symbol duration, slots, normal/extended CP và frame structure trong 5G NR."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 18 · WIRELESS LINK</p>
+      <h1>Numerology trong 5G NR</h1>
+      <p class="lesson-deck">
+        OFDM không bắt buộc chỉ một subcarrier spacing.
+        <strong>NR dùng numerology μ để scale SCS, useful symbol duration và số slots nằm trong mỗi 1 ms subframe.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <div class="system-position">
+        <span>NR NUMEROLOGY</span>
+        <div class="system-position-flow"><strong>μ</strong><b>→</b><span>Δf = 15·2<sup>μ</sup> kHz</span><b>→</b><span>T<sub>u</sub>=1/Δf</span><b>→</b><span>slot structure</span></div>
+        <p>Numerology thay “scale” của OFDM lattice. Frame vẫn 10 ms và subframe vẫn 1 ms theo TS 38.211.</p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="scs">
+      <p class="concept-kicker">01 · SUBCARRIER SPACING</p>
+      <h2>NR định nghĩa SCS theo powers of two quanh 15 kHz.</h2>
+      <div class="numerology-main-equation">
+        <span>Δf</span><b>=</b><span>2<sup>μ</sup> · 15 kHz</span>
+      </div>
+      <p>
+        Trong Release 18 TS 38.211 V18.8.0, table 4.2-1 liệt kê μ = 0…6, tương ứng 15, 30, 60, 120, 240, 480 và 960 kHz.
+        Normal CP được hỗ trợ cho các numerology đó; extended CP được liệt kê cho μ=2.
+      </p>
+      <aside class="precision-note">
+        <strong>“Spec hỗ trợ” không có nghĩa mọi carrier/band/configuration đều dùng được mọi μ</strong>
+        <p>Applicability còn phụ thuộc frequency range, band, UE capability, channel type và higher-layer configuration.</p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="symbol-duration">
+      <p class="concept-kicker">02 · SCS TĂNG THÌ USEFUL SYMBOL NGẮN LẠI</p>
+      <div class="numerology-main-equation">
+        <span>T<sub>u</sub></span><b>=</b><span>1 / Δf</span>
+      </div>
+      <div class="numerology-simple-table">
+        <div><strong>15 kHz</strong><span>Tᵤ ≈ 66.67 µs</span></div>
+        <div><strong>30 kHz</strong><span>Tᵤ ≈ 33.33 µs</span></div>
+        <div><strong>60 kHz</strong><span>Tᵤ ≈ 16.67 µs</span></div>
+        <div><strong>120 kHz</strong><span>Tᵤ ≈ 8.33 µs</span></div>
+      </div>
+      <p>T<sub>u</sub> là useful IFFT interval, chưa tính Cyclic Prefix. Total OFDM-symbol duration lớn hơn T<sub>u</sub>.</p>
+    </section>
+
+    <section class="concept-block" id="slots">
+      <p class="concept-kicker">03 · 1 ms SUBFRAME ĐƯỢC CHIA THÀNH NHIỀU SLOTS HƠN KHI μ TĂNG</p>
+      <p>Với normal CP, TS 38.211 table 4.3.2-1 cho:</p>
+      <div class="nr-slot-equations">
+        <div><span>slots / subframe</span><strong>2<sup>μ</sup></strong></div>
+        <div><span>slot duration</span><strong>1 ms / 2<sup>μ</sup></strong></div>
+        <div><span>OFDM symbols / slot</span><strong>14</strong></div>
+      </div>
+      <p>
+        Vì một subframe luôn 1 ms, μ=0 có 1 slot/subframe, μ=1 có 2, μ=2 có 4, ... μ=6 có 64 slots/subframe trong normal-CP table.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="numerology-lab">
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Kéo μ từ 0 tới 6 để xem SCS, Tᵤ và slot duration scale cùng nhau.</h2>
+      <NumerologyExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="frame">
+      <p class="concept-kicker">05 · FRAME VÀ SUBFRAME KHÔNG CO LẠI THEO μ</p>
+      <h2>NR giữ frame = 10 ms và subframe = 1 ms; numerology thay số OFDM symbols/slots nằm bên trong.</h2>
+      <div class="frame-structure-flow">
+        <div><small>FRAME</small><strong>10 ms</strong><span>10 subframes</span></div>
+        <b>→</b>
+        <div><small>SUBFRAME</small><strong>1 ms</strong><span>2^μ slots với normal CP</span></div>
+        <b>→</b>
+        <div><small>SLOT</small><strong>14 symbols</strong><span>normal CP</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="extended-cp">
+      <p class="concept-kicker">06 · EXTENDED CP LÀ MỘT TRƯỜNG HỢP RIÊNG</p>
+      <h2>Trong current Release 18 table, extended CP được định nghĩa cho μ=2 và có 12 OFDM symbols per slot.</h2>
+      <p>
+        Slot rate vẫn theo μ=2: 4 slots trong mỗi 1 ms subframe. Khác biệt là CP dài hơn và số useful OFDM symbols trong slot giảm từ 14 xuống 12.
+      </p>
+    </section>
+
+    <section class="concept-block" id="tradeoff">
+      <p class="concept-kicker">07 · TẠI SAO CẦN NHIỀU NUMEROLOGIES?</p>
+      <h2>Không có một SCS tối ưu cho mọi carrier frequency, Doppler, delay spread và latency target.</h2>
+      <div class="numerology-tradeoff">
+        <article>
+          <span class="card-label">NHỎ HƠN Δf</span>
+          <h3>symbol lâu hơn</h3>
+          <p>Có thể phù hợp khi muốn longer useful symbol và finer frequency spacing, nhưng fractional CFO/Doppler so với SCS lớn hơn.</p>
+        </article>
+        <article>
+          <span class="card-label">LỚN HƠN Δf</span>
+          <h3>symbol ngắn hơn</h3>
+          <p>Slot/symbol timing scale nhanh hơn và relative sensitivity với a fixed frequency error giảm, nhưng delay spread chiếm tỷ lệ lớn hơn nếu guard không theo kịp.</p>
+        </article>
+      </div>
+      <p>Đây là tradeoff trực giác, không phải rule chọn numerology duy nhất. Standard/configuration constraints mới quyết định các lựa chọn hợp lệ.</p>
+    </section>
+
+    <section class="concept-block" id="spec-source">
+      <p class="concept-kicker">08 · SPECIFICATION LAYER</p>
+      <p class="spec-source">
+        Các con số trong bài này được đối chiếu với 3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 4.2 và 4.3.2 ·
+        <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
+      <ol class="recap-list">
+        <li><strong>Numerology μ:</strong> scale SCS theo Δf=15·2^μ kHz.</li>
+        <li><strong>Useful symbol:</strong> Tᵤ=1/Δf, chưa gồm CP.</li>
+        <li><strong>Normal CP:</strong> 14 OFDM symbols/slot trong current table.</li>
+        <li><strong>Slots/subframe:</strong> 2^μ trong 1 ms subframe.</li>
+        <li><strong>Frame:</strong> 10 ms, gồm 10 subframes.</li>
+        <li><strong>Extended CP:</strong> current table liệt kê μ=2 với 12 symbols/slot.</li>
+        <li><strong>Tradeoff:</strong> SCS ảnh hưởng time scale, Doppler/CFO sensitivity và relation với channel delay spread.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation">
+      <a class="lesson-nav-card previous" href="/hoc/resource-grid/"><span>← BÀI TRƯỚC</span><strong>Resource grid</strong><small>Frequency × time resources được tổ chức ra sao?</small></a>
+      <div class="lesson-nav-card next pending"><span>BÀI TIẾP THEO →</span><strong>UE bật nguồn thì chuyện gì xảy ra?</strong><small>Từ OFDM foundations sang initial access 5G.</small></div>
+    </nav>
+  </article>
+</BaseLayout>

@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OFDMOrthogonalityExplorer from '../../components/OFDMOrthogonalityExplorer.jsx';
+---
+
+<BaseLayout
+  title="OFDM: bức tranh tổng thể | VietWireless"
+  description="Hiểu vì sao OFDM chia bandwidth thành nhiều subcarriers trực giao, quan hệ Δf=1/Tu, lợi ích với multipath và các tradeoff chính."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 14 · WIRELESS LINK</p>
+      <h1>OFDM: bức tranh tổng thể</h1>
+      <p class="lesson-deck">
+        Một wideband channel có thể rất frequency-selective.
+        <strong>OFDM đổi bài toán đó thành nhiều narrowband subcarriers song song, được đặt đủ khéo để spectrum có thể overlap mà vẫn tách lại được.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI TOÁN HỆ THỐNG</p>
+      <p class="map-intro">
+        Bài 12 cho thấy multipath làm H(f) thay đổi theo frequency. Nếu ta gửi một symbol cực nhanh trên cả bandwidth,
+        equalization có thể trở nên khó. OFDM chọn một hướng khác.
+      </p>
+      <div class="system-position">
+        <span>WIDEBAND LINK</span>
+        <div class="system-position-flow">
+          <span>wideband data stream</span><b>→</b>
+          <strong>many subcarriers</strong><b>→</b>
+          <span>parallel symbols</span><b>→</b>
+          <span>IFFT</span><b>→</b>
+          <span>one time waveform</span>
+        </div>
+        <p>Bài này chỉ nhìn kiến trúc và trực giác. IFFT/FFT được zoom riêng ở Bài 15.</p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="single-carrier-problem">
+      <p class="concept-kicker">01 · WIDEBAND SINGLE-CARRIER KHÓ Ở ĐÂU?</p>
+      <h2>Symbol càng ngắn, channel memory càng dễ chiếm phần đáng kể của symbol duration.</h2>
+      <div class="ofdm-problem-flow">
+        <div><small>HIGH SYMBOL RATE</small><strong>short symbols</strong><span>wide bandwidth</span></div>
+        <b>+</b>
+        <div><small>MULTIPATH</small><strong>channel memory</strong><span>delayed copies</span></div>
+        <b>→</b>
+        <div><small>RESULT</small><strong>ISI + frequency selectivity</strong><span>equalization phức tạp hơn</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="parallel">
+      <p class="concept-kicker">02 · OFDM CHIA DATA THÀNH NHIỀU LUỒNG CHẬM HƠN</p>
+      <h2>Thay vì một symbol rất nhanh trên cả bandwidth, mỗi subcarrier mang một symbol lâu hơn.</h2>
+      <div class="parallel-subcarriers">
+        <article><span>k=0</span><strong>X[0]</strong><p>một complex symbol</p></article>
+        <article><span>k=1</span><strong>X[1]</strong><p>một complex symbol</p></article>
+        <article><span>k=2</span><strong>X[2]</strong><p>một complex symbol</p></article>
+        <article><span>...</span><strong>X[k]</strong><p>nhiều carriers song song</p></article>
+      </div>
+      <p>
+        Mỗi subcarrier hẹp hơn, nên nếu channel không thay đổi quá nhiều trong bandwidth của một subcarrier,
+        nó có thể được xấp xỉ bằng một complex coefficient H[k]. Equalization lúc đó gần như chỉ là một phép chia complex trên mỗi k.
+      </p>
+    </section>
+
+    <section class="concept-block" id="orthogonality">
+      <p class="concept-kicker">03 · SPECTRA OVERLAP NHƯNG VẪN TÁCH ĐƯỢC</p>
+      <h2>Điểm mấu chốt là orthogonality trên useful OFDM-symbol interval.</h2>
+      <div class="ofdm-main-equation">
+        <span>Δf</span><b>=</b><span>1 / T<sub>u</sub></span>
+      </div>
+      <p>
+        Nếu subcarrier frequencies nằm trên integer multiples của 1/T<sub>u</sub>, complex exponentials khác k có inner product bằng 0
+        trên đúng interval T<sub>u</sub>. Vì vậy các spectra kiểu sinc có thể overlap nhưng tại sampling points của FFT, neighboring subcarriers không đóng góp trong ideal case.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="orthogonality-lab">
+      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
+      <h2>Giữ spacing đúng 1/Tᵤ rồi kéo lệch nó để thấy orthogonality biến mất.</h2>
+      <OFDMOrthogonalityExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="chain">
+      <p class="concept-kicker">05 · TRANSMITTER KHÔNG CẦN MỘT OSCILLATOR RIÊNG CHO MỖI SUBCARRIER</p>
+      <h2>IFFT tổng hợp toàn bộ subcarriers thành một block complex samples.</h2>
+      <div class="ofdm-overview-chain">
+        <div><small>BITS</small><strong>mapper</strong><span>BPSK/QPSK/QAM</span></div>
+        <b>→</b>
+        <div><small>FREQUENCY</small><strong>X[k]</strong><span>symbols trên subcarriers</span></div>
+        <b>→ IFFT →</b>
+        <div><small>TIME</small><strong>x[n]</strong><span>một OFDM symbol</span></div>
+        <b>→ add CP →</b>
+        <div><small>TX</small><strong>DAC / RF</strong><span>physical waveform</span></div>
+      </div>
+      <p>Receiver đi ngược lại: remove CP → FFT → Y[k] → equalization → detected QAM symbols.</p>
+    </section>
+
+    <section class="concept-block" id="why-multipath">
+      <p class="concept-kicker">06 · VÌ SAO OFDM HỢP VỚI MULTIPATH?</p>
+      <h2>Cyclic prefix cộng với FFT biến convolution theo thời gian thành multiplication theo từng subcarrier.</h2>
+      <p>
+        Khi CP đủ dài và timing phù hợp, receiver có thể nhìn mỗi subcarrier gần như:
+      </p>
+      <div class="ofdm-main-equation">
+        <span>Y[k]</span><b>=</b><span>H[k]X[k] + W[k]</span>
+      </div>
+      <p>
+        Từ một filter channel nhiều taps trong time domain, ta có nhiều scalar complex gains H[k] trong frequency domain.
+        Bài 16 sẽ giải thích chính xác CP tạo điều kiện cho điều này như thế nào.
+      </p>
+    </section>
+
+    <section class="concept-block" id="tradeoffs">
+      <p class="concept-kicker">07 · OFDM KHÔNG MIỄN PHÍ</p>
+      <h2>Đổi equalization đơn giản hơn lấy một số tradeoff khác.</h2>
+      <div class="ofdm-tradeoff-grid">
+        <article><strong>CP overhead</strong><p>CP tiêu tốn time/energy nhưng không mang data mới.</p></article>
+        <article><strong>PAPR</strong><p>Nhiều subcarriers có thể cộng đồng pha tạo time-domain peaks lớn.</p></article>
+        <article><strong>Frequency error</strong><p>CFO/Doppler phá orthogonality và tạo inter-carrier interference.</p></article>
+        <article><strong>Phase noise</strong><p>Common phase rotation và ICI có thể làm constellation xấu đi.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <h2>OFDM là cách dùng nhiều orthogonal narrowband subcarriers để mang symbols song song.</h2>
+      <ol class="recap-list">
+        <li><strong>Nhiều subcarriers:</strong> chia wideband problem thành nhiều narrowband pieces.</li>
+        <li><strong>Orthogonality:</strong> Δf = 1/T<sub>u</sub> trong ideal construction.</li>
+        <li><strong>IFFT:</strong> tổng hợp X[k] thành one time-domain block x[n].</li>
+        <li><strong>FFT:</strong> tách received block trở lại các bins Y[k].</li>
+        <li><strong>CP:</strong> bảo vệ FFT window trước channel memory trong điều kiện phù hợp.</li>
+        <li><strong>Tradeoffs:</strong> CP overhead, PAPR và sensitivity với frequency/phase errors.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation">
+      <a class="lesson-nav-card previous" href="/hoc/correlation/"><span>← BÀI TRƯỚC</span><strong>Correlation</strong><small>Tìm known sequence trong noise.</small></a>
+      <a class="lesson-nav-card next" href="/hoc/ifft-fft-trong-ofdm/"><span>BÀI TIẾP THEO →</span><strong>IFFT/FFT trong OFDM</strong><small>Frequency-domain symbols trở thành samples ra sao?</small></a>
+    </nav>
+  </article>
+</BaseLayout>
