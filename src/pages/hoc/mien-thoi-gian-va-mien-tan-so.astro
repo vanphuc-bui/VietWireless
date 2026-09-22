@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SignalExplorer from '../../components/SignalExplorer.jsx';
+import Math from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -32,7 +33,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
           <strong>X[k]</strong>
         </div>
         <p>
-          Với signal liên tục thường viết x(t) ↔ X(f). Với một record rời rạc hữu hạn dùng DFT, ta thường viết x[n] ↔ X[k].
+          Với signal liên tục thường viết <Math tex="x(t) \\leftrightarrow X(f)" />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <Math tex="x[n] \\leftrightarrow X[k]" />.
         </p>
       </div>
     </section>
@@ -101,7 +102,7 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         <strong>Tại sao có -f?</strong>
         <p>
           Negative frequency xuất hiện tự nhiên từ complex exponential:
-          cos(2πf₀t) = [e<sup>j2πf₀t</sup> + e<sup>-j2πf₀t</sup>]/2.
+          <Math tex="\\cos(2\\pi f_0 t) = \\frac{e^{j2\\pi f_0 t}+e^{-j2\\pi f_0 t}}{2}" />.
           Nó là một phần của representation toán học, không phải một đồng hồ vật lý đang chạy ngược.
         </p>
       </aside>
@@ -156,12 +157,12 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       <div class="spectrum-two-parts">
         <article>
           <span class="card-label">MAGNITUDE</span>
-          <h3>|X[k]|</h3>
+          <h3><Math tex="|X[k]|" /></h3>
           <p>Thành phần tại bin đó mạnh tới đâu.</p>
         </article>
         <article>
           <span class="card-label">PHASE</span>
-          <h3>∠X[k]</h3>
+          <h3><Math tex="\\angle X[k]" /></h3>
           <p>Thành phần đó có phase nào so với reference của record.</p>
         </article>
       </div>
