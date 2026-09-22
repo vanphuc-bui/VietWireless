@@ -239,18 +239,95 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
       <SignalExplorer client:load />
     </section>
 
-    <section class="concept-block ofdm-explainer" id="ofdm-grid">
-      <p class="concept-kicker">05 · FFT, IFFT VÀ RESOURCE GRID</p>
-      <h2>Trong OFDM, dữ liệu được tổ chức trên các subcarriers trước khi trở thành waveform để phát.</h2>
+    <section class="concept-block" id="iq">
+      <p class="concept-kicker">05 · COMPLEX NUMBER, I/Q VÀ MODULATION</p>
+      <h2>Trước khi nhìn resource grid, cần biết một ô trong grid thực sự đang chứa gì.</h2>
+      <p>
+        Trong complex baseband, một giá trị thường được viết dưới dạng <strong>I + jQ</strong>.
+        I và Q là hai thành phần trực giao. Nếu xem chúng như tọa độ trên một mặt phẳng,
+        khoảng cách tới gốc cho ta amplitude còn góc của vector cho ta phase.
+      </p>
+      <p>
+        Đây là lý do số phức xuất hiện rất tự nhiên trong wireless. Thay vì theo dõi amplitude và phase bằng hai cách riêng,
+        ta có thể gói chúng trong cùng một complex value.
+      </p>
+
+      <div class="re-zoom-panel">
+        <div class="zoom-label">TỪ BITS TỚI MỘT COMPLEX MODULATION SYMBOL</div>
+        <div class="re-zoom-flow">
+          <div class="zoom-step">
+            <small>bits</small>
+            <strong class="mono-value">10</strong>
+          </div>
+          <span class="zoom-arrow" aria-hidden="true">→</span>
+          <div class="zoom-step">
+            <small>QPSK</small>
+            <div class="qpsk-zoom" role="img" aria-label="QPSK constellation với một complex symbol được chọn">
+              <span class="qpsk-axis horizontal"></span>
+              <span class="qpsk-axis vertical"></span>
+              <i class="q1 selected-point"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
+              <b>I</b><em>Q</em>
+            </div>
+          </div>
+          <span class="zoom-arrow" aria-hidden="true">→</span>
+          <div class="zoom-step symbol-step">
+            <small>complex modulation symbol</small>
+            <strong>X[k,m]</strong>
+            <span>I + jQ</span>
+          </div>
+        </div>
+        <p>
+          Với QPSK, một nhóm bits được map thành một điểm constellation. Tọa độ của điểm đó là một complex modulation symbol.
+          Sau này với 16QAM hay 64QAM, số điểm tăng lên nhưng ý tưởng vẫn như vậy.
+        </p>
+      </div>
+
+      <div class="two-column">
+        <article class="explain-card">
+          <span class="card-label">TRƯỚC IFFT · FREQUENCY DOMAIN</span>
+          <h3>X[k,m] = I + jQ</h3>
+          <p>
+            Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier k và OFDM symbol m.
+            Nó là giá trị ta sẽ đặt vào resource grid.
+          </p>
+        </article>
+        <article class="explain-card">
+          <span class="card-label">SAU IFFT · TIME DOMAIN</span>
+          <h3>x[n] = I[n] + jQ[n]</h3>
+          <p>
+            Đây là một <strong>complex time-domain sample</strong>. Nó cũng dùng biểu diễn I/Q,
+            nhưng là một đại lượng ở stage khác của transmitter.
+          </p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Một chỗ khá dễ lẫn</strong>
+        <p>
+          X[k,m] và x[n] đều có thể là số phức, nhưng không phải cùng một thứ.
+          X[k,m] là modulation symbol trong miền tần số. IFFT biến cả một tập X[k,m] thành các time-domain samples x[n].
+        </p>
+      </aside>
 
       <p>
-        Ở phía digital baseband, ta thường làm việc với các complex modulation symbols trong frequency domain.
-        LTE và 5G biểu diễn chúng trên một <strong>resource grid</strong>. Trục dọc là subcarrier, tức frequency.
+        Tín hiệu RF vật lý ngoài anten vẫn là tín hiệu thực. Complex baseband và I/Q là cách biểu diễn toán học
+        và implementation rất tiện lợi trước khi signal đi qua DAC và RF chain.
+      </p>
+      <a class="inline-cta" href="#fft">↑ Thử tab I/Q trong Signal Lab phía trên</a>
+    </section>
+
+    <section class="concept-block ofdm-explainer" id="ofdm-grid">
+      <p class="concept-kicker">06 · RESOURCE GRID → IFFT → TIME-DOMAIN SAMPLES</p>
+      <h2>Trong OFDM, các complex modulation symbols được đặt lên resource grid trước khi trở thành waveform để phát.</h2>
+
+      <p>
+        Tới đây, X[k,m] không còn là một ký hiệu mới. Nó là complex modulation symbol vừa được tạo ra từ modulation.
+        LTE và 5G tổ chức các symbol này trên một <strong>resource grid</strong>. Trục dọc là subcarrier, tức frequency.
         Trục ngang là OFDM symbol, tức time.
       </p>
       <p>
-        Mỗi ô nhỏ là một <strong>resource element (RE)</strong>. Một RE tương ứng với một subcarrier trong một
-        OFDM symbol và có thể mang một complex symbol, ví dụ QPSK hoặc 16QAM.
+        Mỗi ô nhỏ là một <strong>resource element (RE)</strong>. Một RE xác định một vị trí trên grid,
+        tương ứng với một subcarrier trong một OFDM symbol. Giá trị đặt vào vị trí đó có thể là một complex modulation symbol.
       </p>
 
       <div class="resource-grid-explainer">
@@ -292,44 +369,33 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
 
         <div class="re-zoom-panel">
           <div class="zoom-label">ZOOM VÀO 1 RE</div>
-          <div class="re-zoom-flow">
-            <div class="zoom-step">
-              <small>bits</small>
-              <strong class="mono-value">10</strong>
-            </div>
-            <span class="zoom-arrow" aria-hidden="true">→</span>
-            <div class="zoom-step">
-              <small>QPSK</small>
-              <div class="qpsk-zoom" role="img" aria-label="QPSK constellation với một complex symbol được chọn">
-                <span class="qpsk-axis horizontal"></span>
-                <span class="qpsk-axis vertical"></span>
-                <i class="q1 selected-point"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
-                <b>I</b><em>Q</em>
-              </div>
-            </div>
-            <span class="zoom-arrow" aria-hidden="true">→</span>
-            <div class="zoom-step symbol-step">
-              <small>complex symbol</small>
-              <strong>X[k₀,m₀]</strong>
-              <span>I + jQ</span>
-            </div>
+          <div class="sampling-equation">
+            <span>X[k₀,m₀]</span>
+            <b>=</b>
+            <span>I + jQ</span>
+            <small>complex modulation symbol tại subcarrier k₀ và OFDM symbol m₀</small>
           </div>
           <p>
-            Đây là ý nghĩa của việc “đặt data lên resource grid”. Bits được map thành một điểm constellation.
-            Complex value của điểm đó được đặt vào một RE.
+            Resource element là vị trí trên grid. X[k₀,m₀] là giá trị complex được đặt vào vị trí đó.
+            Phần modulation ở trên cho ta biết giá trị này đến từ đâu.
           </p>
         </div>
       </div>
 
+      <p>
+        Bây giờ lấy một cột của grid, tức một OFDM symbol m₀. Ta có một complex value trên mỗi subcarrier k.
+        IFFT dùng toàn bộ vector đó để tạo ra một chuỗi complex samples theo thời gian.
+      </p>
+
       <div class="ofdm-column-flow">
         <div class="ofdm-column-step frequency-step">
-          <small>ONE OFDM SYMBOL</small>
+          <small>FREQUENCY-DOMAIN SYMBOLS</small>
           <strong>X[k,m₀]</strong>
           <div class="mini-subcarrier-stack" aria-hidden="true">
             <i style="--v:35%"></i><i style="--v:65%"></i><i style="--v:46%"></i><i style="--v:82%"></i>
             <i style="--v:58%"></i><i style="--v:72%"></i><i style="--v:42%"></i><i style="--v:67%"></i>
           </div>
-          <span>một complex symbol trên mỗi subcarrier k</span>
+          <span>một complex modulation symbol trên mỗi subcarrier k</span>
         </div>
 
         <div class="ofdm-transform-card">
@@ -339,53 +405,38 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         </div>
 
         <div class="ofdm-column-step time-step">
-          <small>TIME-DOMAIN I/Q</small>
-          <strong>x[n]</strong>
+          <small>TIME-DOMAIN COMPLEX SAMPLES</small>
+          <strong>x[n] = I[n] + jQ[n]</strong>
           <svg viewBox="0 0 240 90" role="img" aria-label="Time-domain OFDM waveform sau IFFT">
             <line x1="6" y1="46" x2="234" y2="46"></line>
             <path d="M6 46 C12 13 18 73 25 40 S38 20 46 55 S58 69 67 36 S82 25 91 53 S105 62 114 38 S129 18 138 48 S153 73 163 38 S179 25 188 51 S204 63 214 40 S227 29 234 48"></path>
           </svg>
-          <span>samples theo thời gian để đi tiếp tới DAC/RF</span>
+          <span>complex I/Q samples để đi tiếp tới DAC/RF</span>
         </div>
       </div>
 
       <aside class="precision-note ofdm-precision-note">
         <strong>Frequency domain không phải là sóng đang bay ngoài anten</strong>
         <p>
-          Trong OFDM, ta tổ chức và xử lý data trên các subcarriers ở frequency domain. IFFT chuyển một cột
-          frequency-domain symbols thành time-domain I/Q samples. Sau DAC và RF upconversion, transmitter mới tạo ra
-          waveform RF vật lý để anten phát đi.
+          Trong OFDM, ta tổ chức data thành các frequency-domain modulation symbols X[k,m].
+          IFFT chuyển một cột X[k,m₀] thành time-domain complex samples x[n].
+          Sau DAC và RF upconversion, transmitter mới tạo ra waveform RF vật lý để anten phát đi.
         </p>
       </aside>
 
       <div class="ofdm-rx-return">
-        <div><strong>TX</strong><span>Resource grid / X[k,m]</span></div>
+        <div><strong>TX baseband</strong><span>X[k,m] trên resource grid</span></div>
         <b>→ IFFT →</b>
-        <div><strong>Channel</strong><span>time-domain RF waveform</span></div>
-        <b>→ FFT →</b>
-        <div><strong>RX</strong><span>Y[k,m] trên từng subcarrier</span></div>
+        <div><strong>Time domain</strong><span>x[n] rồi DAC / RF / channel</span></div>
+        <b>→ ADC / FFT →</b>
+        <div><strong>RX baseband</strong><span>Y[k,m] trên từng subcarrier</span></div>
       </div>
 
       <p>
-        Ở receiver, quá trình đi ngược lại. Sau RF front-end và ADC, receiver có time-domain samples y[n].
+        Ở receiver, quá trình đi ngược lại. Sau RF front-end, downconversion và ADC, receiver có time-domain complex samples y[n].
         FFT đưa chúng trở lại các frequency bins Y[k]. Từ đó receiver có thể channel estimate, equalize,
         demodulate và lấy lại bits trên từng RE.
       </p>
-    </section>
-
-    <section class="concept-block" id="iq">
-      <p class="concept-kicker">06 · I/Q SAMPLES</p>
-      <h2>Một complex sample lưu được cả amplitude lẫn phase.</h2>
-      <p>
-        Trong complex baseband, ta biểu diễn một sample là <strong>I + jQ</strong>. I và Q là hai thành phần
-        vuông góc. Điểm (I, Q) có khoảng cách tới gốc là amplitude và góc của nó là phase.
-      </p>
-      <p>
-        Cách biểu diễn này rất tiện vì modulation, channel rotation, frequency offset và nhiều phép xử lý wireless
-        trở nên gọn hơn bằng số phức. Một chi tiết dễ lẫn là tín hiệu RF vật lý ngoài anten vẫn là tín hiệu thực;
-        complex baseband là cách biểu diễn toán học và implementation rất tiện lợi.
-      </p>
-      <a class="inline-cta" href="#fft">↑ Thử tab I/Q trong Signal Lab phía trên</a>
     </section>
 
     <section class="concept-block recap">
@@ -396,8 +447,9 @@ import SignalExplorer from '../../components/SignalExplorer.jsx';
         <li><strong>Sampling</strong> biến waveform liên tục thành một dãy giá trị rời rạc theo thời gian.</li>
         <li><strong>Time domain</strong> cho ta thấy signal biến đổi khi nào và như thế nào.</li>
         <li><strong>Frequency domain</strong> cho ta thấy các thành phần sinusoid cấu tạo nên signal.</li>
-        <li><strong>Trong OFDM</strong>, complex symbols được đặt trên resource grid theo frequency và time; IFFT biến một OFDM symbol thành time-domain I/Q samples để phát.</li>
         <li><strong>I/Q</strong> là complex representation giúp ta làm việc trực tiếp với amplitude và phase.</li>
+        <li><strong>Complex modulation symbol X[k,m]</strong> và <strong>time-domain sample x[n]</strong> đều có thể là số phức, nhưng nằm ở hai stage khác nhau.</li>
+        <li><strong>Trong OFDM</strong>, modulation symbols X[k,m] được đặt trên resource grid; IFFT biến một cột của grid thành time-domain complex samples x[n] để đi tiếp tới DAC/RF.</li>
       </ol>
     </section>
 
