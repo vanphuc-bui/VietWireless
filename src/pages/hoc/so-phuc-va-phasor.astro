@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
+import Math from '../../components/Math.astro';
 ---
 
 <BaseLayout
@@ -76,11 +77,7 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
         </article>
       </div>
 
-      <div class="complex-equation">
-        <span>z</span>
-        <b>=</b>
-        <span>a + jb</span>
-      </div>
+      <Math tex="z = a + jb" display />
 
       <p>
         Trong kỹ thuật điện, ta thường dùng <strong>j</strong> thay cho i vì i thường đã được dùng cho dòng điện.
@@ -97,18 +94,18 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
           <span class="card-label">CARTESIAN</span>
           <h3>z = a + jb</h3>
           <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
-          <div class="complex-mini-formula">
-            <span>Re&#123;z&#125; = a</span>
-            <span>Im&#123;z&#125; = b</span>
+          <div class="math-pair">
+            <Math tex="\\operatorname{Re}\\{z\\} = a" display class="math-compact" />
+            <Math tex="\\operatorname{Im}\\{z\\} = b" display class="math-compact" />
           </div>
         </article>
         <article>
           <span class="card-label">POLAR</span>
           <h3>z = A∠φ</h3>
           <p>Ta hỏi: vector dài bao nhiêu và tạo góc bao nhiêu so với trục thực?</p>
-          <div class="complex-mini-formula">
-            <span>A = √(a² + b²)</span>
-            <span>φ = atan2(b, a)</span>
+          <div class="math-pair">
+            <Math tex="A = \\sqrt{a^2+b^2}" display class="math-compact" />
+            <Math tex="\\phi = \\operatorname{atan2}(b,a)" display class="math-compact" />
           </div>
         </article>
       </div>
@@ -123,21 +120,13 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <p class="concept-kicker">03 · CÔNG THỨC EULER</p>
       <h2>Euler nối một góc quay trên mặt phẳng phức với cosine và sine.</h2>
 
-      <div class="euler-equation">
-        <span>e<sup>jθ</sup></span>
-        <b>=</b>
-        <span>cos θ + j sin θ</span>
-      </div>
+      <Math tex="e^{j\\theta} = \\cos\\theta + j\\sin\\theta" display />
 
       <p>
         Nếu nhân thêm amplitude A:
       </p>
 
-      <div class="euler-equation secondary">
-        <span>Ae<sup>jθ</sup></span>
-        <b>=</b>
-        <span>A cos θ + jA sin θ</span>
-      </div>
+      <Math tex="Ae^{j\\theta} = A\\cos\\theta + jA\\sin\\theta" display />
 
       <p>
         Đây là chiếc cầu quan trọng. Một vector có magnitude A và góc θ có phần thực bằng A cos θ,
@@ -168,11 +157,7 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <p class="concept-kicker">04 · TỪ MỘT ĐIỂM TỚI MỘT VECTOR QUAY</p>
       <h2>Nếu góc tăng tuyến tính theo thời gian, điểm trên mặt phẳng phức sẽ quay đều.</h2>
 
-      <div class="rotating-equation">
-        <span>z(t)</span>
-        <b>=</b>
-        <span>Ae<sup>j(ωt+φ)</sup></span>
-      </div>
+      <Math tex="z(t) = Ae^{j(\\omega t + \\phi)}" display />
 
       <p>
         Magnitude A giữ nguyên. Góc của vector là ωt + φ. Khi thời gian tăng, góc tăng và vector quay quanh gốc.
@@ -182,13 +167,13 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <div class="projection-story">
         <div>
           <small>VECTOR PHỨC</small>
-          <strong>Ae<sup>j(ωt+φ)</sup></strong>
+          <strong><Math tex="Ae^{j(\\omega t+\\phi)}" /></strong>
           <span>quay trên mặt phẳng</span>
         </div>
         <b>→ lấy phần thực →</b>
         <div>
           <small>PROJECTION</small>
-          <strong>A cos(ωt+φ)</strong>
+          <strong><Math tex="A\\cos(\\omega t+\\phi)" /></strong>
           <span>sinusoid trên trục thực</span>
         </div>
       </div>
@@ -214,7 +199,7 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
 
     <section class="concept-block" id="phasor">
       <p class="concept-kicker">06 · PHASOR THỰC SỰ LÀ GÌ?</p>
-      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor e<sup>jωt</sup>.</h2>
+      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor <Math tex="e^{j\\omega t}" />.</h2>
       <p>
         Giả sử:
       </p>
@@ -222,31 +207,31 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <div class="phasor-definition">
         <div>
           <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
-          <strong>z(t) = Ae<sup>j(ωt+φ)</sup></strong>
+          <strong>z(t) = <Math tex="Ae^{j(\\omega t+\\phi)}" /></strong>
         </div>
         <b>=</b>
         <div>
           <small>PHASOR</small>
-          <strong>Ae<sup>jφ</sup></strong>
+          <strong><Math tex="Ae^{j\\phi}" /></strong>
         </div>
         <b>×</b>
         <div>
           <small>COMMON ROTATION</small>
-          <strong>e<sup>jωt</sup></strong>
+          <strong><Math tex="e^{j\\omega t}" /></strong>
         </div>
       </div>
 
       <p>
         Khi nhiều sinusoid cùng frequency ω được xử lý trong một bài toán steady-state,
-        factor e<sup>jωt</sup> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với{" "}
-        <strong>Ae<sup>jφ</sup></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
+        factor <Math tex="e^{j\\omega t}" /> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với{" "}
+        <strong><Math tex="Ae^{j\\phi}" /></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
       </p>
 
       <aside class="precision-note">
         <strong>Đừng đồng nhất phasor với complex exponential theo thời gian</strong>
         <p>
           Hình vector quay rất hữu ích để xây trực giác, nhưng về mặt notation,
-          Ae<sup>j(ωt+φ)</sup> vẫn còn phụ thuộc thời gian. Phasor Ae<sup>jφ</sup> là complex amplitude sau khi common time factor được tách ra.
+          <Math tex="Ae^{j(\\omega t+\\phi)}" /> vẫn còn phụ thuộc thời gian. Phasor <Math tex="Ae^{j\\phi}" /> là complex amplitude sau khi common time factor được tách ra.
           Tùy convention, magnitude của phasor có thể dùng peak hoặc RMS, nên khi đọc tài liệu cần xem tác giả đang dùng convention nào.
         </p>
       </aside>
@@ -259,17 +244,17 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <div class="complex-multiply">
         <div>
           <small>SIGNAL</small>
-          <strong>Ae<sup>jφ</sup></strong>
+          <strong><Math tex="Ae^{j\\phi}" /></strong>
         </div>
         <b>×</b>
         <div>
           <small>HỆ SỐ</small>
-          <strong>Ge<sup>jθ</sup></strong>
+          <strong><Math tex="Ge^{j\\theta}" /></strong>
         </div>
         <b>=</b>
         <div>
           <small>KẾT QUẢ</small>
-          <strong>AGe<sup>j(φ+θ)</sup></strong>
+          <strong><Math tex="AGe^{j(\\phi+\\theta)}" /></strong>
         </div>
       </div>
 
@@ -315,11 +300,11 @@ import ComplexPhasorExplorer from '../../components/ComplexPhasorExplorer.jsx';
       <h2>Tới đây, số phức có thể được nhìn như hình học chứ không chỉ là ký hiệu j.</h2>
       <ol class="recap-list">
         <li><strong>z = a + jb:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
-        <li><strong>Magnitude:</strong> A = √(a² + b²) là độ dài vector từ gốc tới điểm z.</li>
+        <li><strong>Magnitude:</strong> <Math tex="A=\\sqrt{a^2+b^2}" /> là độ dài vector từ gốc tới điểm z.</li>
         <li><strong>Phase:</strong> φ là góc của vector so với trục thực.</li>
-        <li><strong>Euler:</strong> e<sup>jθ</sup> = cos θ + j sin θ nối số phức với sinusoid.</li>
-        <li><strong>Complex exponential:</strong> Ae<sup>j(ωt+φ)</sup> có thể được hình dung như một vector quay.</li>
-        <li><strong>Phasor:</strong> Ae<sup>jφ</sup> là complex amplitude khi common factor e<sup>jωt</sup> được tách ra.</li>
+        <li><strong>Euler:</strong> <Math tex="e^{j\\theta}=\\cos\\theta+j\\sin\\theta" /> nối số phức với sinusoid.</li>
+        <li><strong>Complex exponential:</strong> <Math tex="Ae^{j(\\omega t+\\phi)}" /> có thể được hình dung như một vector quay.</li>
+        <li><strong>Phasor:</strong> <Math tex="Ae^{j\\phi}" /> là complex amplitude khi common factor <Math tex="e^{j\\omega t}" /> được tách ra.</li>
         <li><strong>Complex multiplication:</strong> magnitude nhân nhau, phase cộng nhau.</li>
       </ol>
     </section>
