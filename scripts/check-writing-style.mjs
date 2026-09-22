@@ -31,7 +31,7 @@ const rules = [
   },
   {
     name: 'missing space before inline HTML',
-    regex: /[\p{L}\p{N}:;,!?)]<(?:strong|em|a)\b/gu,
+    regex: /[\p{L}\p{N}.:;,!?)]<(?:strong|em|a)\b/gu,
     message: 'Add a space before inline strong/em/a markup.',
   },
   {
@@ -61,7 +61,7 @@ for (const file of files) {
   const crossLineRules = [
     {
       name: 'missing explicit space before inline HTML across lines',
-      regex: /([:\p{L}\p{N}])\n\s*<(?:strong|em|a)\b/gu,
+      regex: /([.:;,!?\p{L}\p{N})])\n\s*<(?:strong|em|a)\b/gu,
       message: 'Astro may trim this newline. Add an explicit {" "} before the inline element.',
     },
     {
