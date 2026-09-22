@@ -72,6 +72,20 @@ for (const file of files) {
     failed = true;
     console.error(`${relative('.', file)}: raw Σ/√ formula glyph found. Use TeX inside <MathExpr />.`);
   }
+
+  const visibleSource = content
+    .replace(/<MathExpr\\b[^>]*\\/>/gs, '')
+    .replace(/tex=(?:\"[^\"]*\"|'[^']*')/gs, '');
+
+  if (/\\bN\\s+samples?\\b/u.test(visibleSource)) {
+    failed = true;
+    console.error(`${relative('.', file)}: bare "N sample(s)" found. Render N with <MathExpr />.`);
+  }
+
+  if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C)\\[[^\\]<>]+\\]/u.test(visibleSource)) {
+    failed = true;
+    console.error(`${relative('.', file)}: bare indexed math notation found. Use <MathExpr />.`);
+  }
 }
 
 if (failed) process.exit(1);
