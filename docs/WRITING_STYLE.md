@@ -44,12 +44,12 @@ Tránh các mẫu câu:
 - “Rõ ràng là...”
 - “Hiển nhiên...”
 
-Có thể thay bằng:
-- “Điều mình thấy thú vị ở đây là...”
-- “Chỗ này từng làm mình khá bối rối...”
-- “Nếu nhìn theo góc này...”
-- “Tới đây mình có thể nối lại như sau...”
-- “Có một chi tiết khá dễ lẫn...”
+Có thể thay bằng cách nói trực tiếp hơn:
+- “Bài học:” khi cần chốt một ý ngắn dưới timeline hoặc ví dụ;
+- “Chỗ này từng làm mình khá bối rối...” khi thật sự đang kể trải nghiệm cá nhân;
+- “Nếu nhìn theo góc này...” khi đổi cách biểu diễn;
+- “Tới đây mình có thể nối các ý lại như sau...” ở phần recap;
+- “Có một chi tiết khá dễ lẫn...” khi cần cảnh báo kỹ thuật.
 
 ## 4. Human writing
 
@@ -182,3 +182,21 @@ câu hỏi:{" "}
 ```
 
 CI kiểm tra cả trường hợp lỗi nằm qua ranh giới dòng, không chỉ trên cùng một dòng.
+
+
+## 11. Tránh các nhãn mang giọng AI
+
+Không dùng các nhãn kiểu:
+- “Điều mình thấy thú vị:”
+- “Một ý khá hay ở đây:”
+- “Điểm thú vị:”
+- “Điều đáng chú ý là:”
+- “Và đây là chỗ mọi thứ nối lại:”
+
+Các cụm này thường làm câu văn có cảm giác được thêm vào để tạo giọng, thay vì nói điều cần nói.
+
+Nếu một đoạn timeline cần chốt ý, dùng đơn giản:
+
+`Bài học:`
+
+Sau đó viết thẳng nội dung kỹ thuật. Không cần thêm cảm xúc hoặc nhận xét dẫn đường nếu chúng không mang thêm thông tin.
