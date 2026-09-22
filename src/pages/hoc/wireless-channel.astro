@@ -1,0 +1,273 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WirelessChannelExplorer from '../../components/WirelessChannelExplorer.jsx';
+---
+
+<BaseLayout
+  title="Wireless channel trực quan | VietWireless"
+  description="Hiểu attenuation, delay, phase rotation, path loss, shadowing và fading bằng complex baseband model và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 10 · WIRELESS LINK</p>
+      <h1>Wireless channel</h1>
+      <p class="lesson-deck">
+        Signal rời antenna không đi thẳng tới receiver như một bản sao hoàn hảo.
+        <strong>Khoảng cách, vật cản, geometry và chuyển động làm signal bị suy hao, trễ và quay phase trước khi receiver nhìn thấy nó.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 09 kết thúc khi antenna phát electromagnetic wave ra không gian. Bài này chỉ hỏi:
+        từ đầu antenna phát tới đầu antenna thu, channel đã làm gì với signal?
+      </p>
+      <div class="system-position">
+        <span>TX → CHANNEL → RX</span>
+        <div class="system-position-flow" aria-label="Channel biến đổi signal giữa transmitter và receiver">
+          <span>TX waveform</span><b>→</b>
+          <strong>wireless channel</strong><b>→</b>
+          <span>attenuation</span><b>·</b>
+          <span>delay</span><b>·</b>
+          <span>phase</span><b>→</b>
+          <span>RX waveform</span>
+        </div>
+        <p>
+          Bài này bắt đầu bằng single-path/flat-channel model. Multipath sẽ được mở rộng riêng ở Bài 12.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="channel-model">
+      <p class="concept-kicker">01 · MÔ HÌNH ĐƠN GIẢN NHẤT</p>
+      <h2>Với một path duy nhất và bandwidth đủ hẹp, channel có thể được nhìn như một complex gain cộng với delay.</h2>
+
+      <div class="channel-main-equation">
+        <span>y(t)</span>
+        <b>=</b>
+        <span>h · x(t - τ)</span>
+      </div>
+
+      <div class="channel-parameter-grid">
+        <article>
+          <span class="card-label">COMPLEX GAIN</span>
+          <h3>h = G e<sup>jθ</sup></h3>
+          <p>G scale amplitude; θ rotate phase.</p>
+        </article>
+        <article>
+          <span class="card-label">PROPAGATION DELAY</span>
+          <h3>τ</h3>
+          <p>Signal tới receiver muộn hơn vì propagation cần thời gian.</p>
+        </article>
+        <article>
+          <span class="card-label">RECEIVED SIGNAL</span>
+          <h3>y(t)</h3>
+          <p>Một phiên bản bị delay, attenuation và phase rotation của x(t).</p>
+        </article>
+      </div>
+
+      <p>
+        Nếu thêm noise, model trở thành y(t) = h x(t-τ) + n(t).
+        Ta tách noise sang Bài 11 để nhìn từng cơ chế rõ hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="attenuation">
+      <p class="concept-kicker">02 · ATTENUATION VÀ PATH LOSS</p>
+      <h2>Ngay cả trong free space, power density giảm khi wavefront lan rộng ra.</h2>
+      <p>
+        Khi khoảng cách tăng, cùng một radiated power phải trải trên diện tích lớn hơn.
+        Trong free-space idealization, received power giảm xấp xỉ theo 1/d² nếu antenna gains, wavelength và orientation được giữ cố định.
+      </p>
+
+      <div class="path-loss-story">
+        <div class="path-loss-source">
+          <strong>TX</strong>
+          <span>cùng radiated power</span>
+        </div>
+        <div class="path-loss-rings" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </div>
+        <div class="path-loss-receivers">
+          <span class="near-rx">RX gần</span>
+          <span class="far-rx">RX xa</span>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Path loss không phải fading</strong>
+        <p>
+          Path loss thường mô tả xu hướng suy hao lớn theo khoảng cách và môi trường.
+          Fading mô tả variation quanh xu hướng đó do multipath, movement và geometry nhỏ hơn.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="delay">
+      <p class="concept-kicker">03 · DELAY ĐẾN TỪ TỐC ĐỘ LAN TRUYỀN HỮU HẠN</p>
+      <h2>Signal không tới receiver ngay lập tức.</h2>
+
+      <div class="propagation-equation">
+        <span>τ</span>
+        <b>≈</b>
+        <span>d / c</span>
+        <small>trong free space, c xấp xỉ tốc độ ánh sáng</small>
+      </div>
+
+      <p>
+        Với terrestrial cell vài trăm mét, propagation delay có thể chỉ ở mức microsecond.
+        Với satellite link, khoảng cách lớn hơn nhiều nên delay trở thành một tham số hệ thống quan trọng.
+      </p>
+
+      <p>
+        Delay tác động trực tiếp tới timing acquisition và uplink alignment. Đây là lý do synchronization và Timing Advance xuất hiện sau này trong 5G.
+      </p>
+    </section>
+
+    <section class="concept-block" id="phase">
+      <p class="concept-kicker">04 · TẠI SAO MỘT DELAY LẠI CÓ THỂ NHÌN NHƯ PHASE ROTATION?</p>
+      <h2>Với một sinusoid, dịch theo thời gian tương đương đổi phase.</h2>
+
+      <div class="delay-phase-equation">
+        <span>cos[2πf(t-τ)]</span>
+        <b>=</b>
+        <span>cos(2πft - 2πfτ)</span>
+      </div>
+
+      <p>
+        Với carrier frequency rất cao, một thay đổi khoảng cách rất nhỏ cũng có thể tạo phase change lớn.
+        Vì vậy receiver thường nhìn channel coefficient như một complex quantity có amplitude và phase.
+      </p>
+
+      <div class="phase-distance-story">
+        <div>
+          <small>PATH LENGTH</small>
+          <strong>d</strong>
+          <span>geometry hiện tại</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>DELAY</small>
+          <strong>τ = d/c</strong>
+          <span>time shift</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>PHASE AT f</small>
+          <strong>-2πfτ</strong>
+          <span>frequency dependent</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="channel-lab">
+      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
+      <h2>Thay attenuation, delay và phase rotation của một flat channel đơn giản.</h2>
+      <p>
+        Waveform bên trái cho thấy time shift và amplitude change.
+        Complex plane bên phải cho thấy cùng channel coefficient scale và rotate một symbol như thế nào.
+      </p>
+      <WirelessChannelExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="shadowing">
+      <p class="concept-kicker">06 · SHADOWING: CÙNG KHOẢNG CÁCH NHƯNG KHÔNG CÙNG SIGNAL LEVEL</p>
+      <h2>Building, terrain và vật cản lớn làm received power lệch khỏi simple distance law.</h2>
+      <p>
+        Hai UE cách gNB cùng khoảng cách có thể có signal strength rất khác nếu một UE nhìn thấy đường truyền thoáng
+        còn UE kia nằm sau building hoặc terrain blockage. Large-scale variation kiểu này thường được gọi là shadowing.
+      </p>
+
+      <div class="shadowing-cases">
+        <article>
+          <span class="card-label">CLEAR PATH</span>
+          <h3>ít obstruction hơn</h3>
+          <p>Received power có thể gần hơn với xu hướng path-loss trung bình.</p>
+        </article>
+        <article>
+          <span class="card-label">BLOCKED PATH</span>
+          <h3>thêm penetration / diffraction loss</h3>
+          <p>Power có thể thấp hơn rõ rệt dù geometric distance tương tự.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="fading">
+      <p class="concept-kicker">07 · SMALL-SCALE FADING</p>
+      <h2>Movement nhỏ có thể làm received amplitude đổi nhiều vì các paths cộng với phase khác nhau.</h2>
+      <p>
+        Khi nhiều reflected/scattered copies tồn tại, chỉ cần UE hoặc scatterer di chuyển một phần nhỏ của wavelength,
+        relative phase giữa các copies đã thay đổi. Tổng tại antenna có thể chuyển từ constructive sang destructive interference.
+      </p>
+
+      <div class="fading-story">
+        <div>
+          <small>POSITION A</small>
+          <strong>paths gần cùng phase</strong>
+          <span>constructive sum → signal mạnh</span>
+        </div>
+        <b>→ move →</b>
+        <div>
+          <small>POSITION B</small>
+          <strong>paths lệch phase</strong>
+          <span>destructive sum → signal yếu</span>
+        </div>
+      </div>
+
+      <p>
+        Đây mới chỉ là preview. Bài 12 sẽ viết channel thành nhiều taps có delay khác nhau và định nghĩa delay spread.
+      </p>
+    </section>
+
+    <section class="concept-block" id="flat-selective">
+      <p class="concept-kicker">08 · KHI NÀO MỘT COMPLEX GAIN h LÀ CHƯA ĐỦ?</p>
+      <h2>Nếu channel thay đổi đáng kể trong bandwidth của signal, ta cần frequency-selective model.</h2>
+
+      <div class="channel-model-compare">
+        <article>
+          <span class="card-label">FLAT FADING</span>
+          <h3>Y(f) ≈ hX(f)</h3>
+          <p>Các frequency components trong wanted band nhìn gần như cùng gain/phase.</p>
+        </article>
+        <article>
+          <span class="card-label">FREQUENCY SELECTIVE</span>
+          <h3>Y(f) = H(f)X(f)</h3>
+          <p>Channel response thay đổi theo frequency; các phần của signal bị tác động khác nhau.</p>
+        </article>
+      </div>
+
+      <p>
+        Multipath delay spread là một nguyên nhân quan trọng tạo frequency-selective channel.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
+      <h2>Wireless channel không chỉ làm signal yếu đi; nó còn đổi timing và phase.</h2>
+      <ol class="recap-list">
+        <li><strong>Attenuation:</strong> received amplitude/power giảm trên đường truyền.</li>
+        <li><strong>Propagation delay:</strong> signal cần thời gian để đi từ TX tới RX.</li>
+        <li><strong>Phase rotation:</strong> delay và propagation tạo phase change phụ thuộc frequency.</li>
+        <li><strong>Path loss:</strong> xu hướng large-scale theo distance và environment.</li>
+        <li><strong>Shadowing:</strong> vật cản lớn làm power lệch khỏi xu hướng trung bình.</li>
+        <li><strong>Fading:</strong> multipath và movement tạo variation nhanh hơn theo position/time.</li>
+        <li><strong>Flat vs selective:</strong> một complex gain đủ hay phải dùng H(f) phụ thuộc signal bandwidth và channel delay structure.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/baseband-rf-antenna/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Baseband → RF → antenna</strong>
+        <small>Complex samples trở thành RF waveform như thế nào?</small>
+      </a>
+      <a class="lesson-nav-card next" href="/hoc/noise-snr-evm/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Noise, SNR và EVM</strong>
+        <small>Receiver đo chất lượng signal bằng những đại lượng nào?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
