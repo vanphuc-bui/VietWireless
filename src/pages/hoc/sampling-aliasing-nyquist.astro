@@ -261,17 +261,17 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <p class="concept-kicker">05 · HAI CỤM TỪ DỄ NHẦM</p>
       <h2>Nyquist rate và Nyquist frequency không phải cùng một đại lượng.</h2>
 
-      <div class="two-column">
-        <article class="explain-card">
+      <div class="math-card-grid">
+        <article class="math-card">
           <span class="card-label">NYQUIST RATE</span>
-          <h3><MathExpr tex="2B" /></h3>
+          <div class="math-card-formula"><MathExpr tex="2B" /></div>
           <p>
             Nếu signal cần giữ tới <MathExpr tex="B\\,\\mathrm{Hz}" />, <MathExpr tex="2B" /> là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
           </p>
         </article>
-        <article class="explain-card">
+        <article class="math-card">
           <span class="card-label">NYQUIST FREQUENCY</span>
-          <h3><MathExpr tex="f_s/2" /></h3>
+          <div class="math-card-formula"><MathExpr tex="f_s/2" /></div>
           <p>
             Khi sampling ở <MathExpr tex="f_s" />, đây là biên tần số cao nhất của dải baseband không bị lặp theo cách nhìn discrete-time.
           </p>
