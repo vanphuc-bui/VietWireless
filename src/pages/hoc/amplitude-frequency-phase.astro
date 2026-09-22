@@ -1,0 +1,344 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SinusoidExplorer from '../../components/SinusoidExplorer.jsx';
+
+const comparePlot = {
+  width: 760,
+  height: 180,
+  left: 32,
+  right: 14,
+  mid: 90,
+};
+
+function cosinePath({ amplitude = 1, frequency = 2, phaseDeg = 0 }) {
+  const points = [];
+  const count = 520;
+  const phase = (phaseDeg * Math.PI) / 180;
+
+  for (let i = 0; i <= count; i += 1) {
+    const t = i / count;
+    const x = comparePlot.left + t * (comparePlot.width - comparePlot.left - comparePlot.right);
+    const y = comparePlot.mid - 52 * amplitude * Math.cos(2 * Math.PI * frequency * t + phase);
+    points.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`);
+  }
+
+  return points.join(' ');
+}
+
+const amplitudeLow = cosinePath({ amplitude: 0.55, frequency: 2 });
+const amplitudeHigh = cosinePath({ amplitude: 1, frequency: 2 });
+const frequencyLow = cosinePath({ amplitude: .82, frequency: 1.5 });
+const frequencyHigh = cosinePath({ amplitude: .82, frequency: 3.5 });
+const phaseZero = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 0 });
+const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
+---
+
+<BaseLayout
+  title="Amplitude, frequency và phase của sinusoid | VietWireless"
+  description="Hiểu trực quan amplitude, frequency, period và phase qua waveform sinusoid, công thức x(t)=A cos(2πft+φ) và interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 03 · SIGNAL FOUNDATIONS</p>
+      <h1>Amplitude, frequency và phase</h1>
+      <p class="lesson-deck">
+        Một sinusoid nhìn rất đơn giản, nhưng chỉ với ba tham số này ta đã có thể mô tả
+        <strong>nó lớn tới đâu, dao động nhanh tới mức nào và đang nằm ở đâu trong chu kỳ.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Bài 02 nói về việc đo waveform tại những thời điểm rời rạc. Trước khi lấy sample,
+        ta cần nhìn kỹ hơn chính waveform đang thay đổi như thế nào.
+      </p>
+      <div class="system-position">
+        <span>MỘT SINUSOID ĐƠN GIẢN</span>
+        <div class="system-position-flow" aria-label="Một sinusoid được mô tả bởi amplitude frequency và phase">
+          <span>x(t)</span><b>→</b>
+          <strong>Amplitude A</strong><b>·</b>
+          <strong>Frequency f</strong><b>·</b>
+          <strong>Phase φ</strong>
+        </div>
+        <p>
+          Đây chưa phải mọi loại signal. Tôi chọn sinusoid vì nó là khối xây dựng rất quan trọng:
+          Fourier cho phép ta nhìn nhiều signal phức tạp như tổ hợp của các thành phần sinusoid.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="ba-tham-so">
+      <p class="concept-kicker">01 · BA NÚT ĐIỀU KHIỂN</p>
+      <h2>Nếu giữ hai tham số cố định và chỉ đổi một tham số, waveform thay đổi theo ba cách rất khác nhau.</h2>
+
+      <div class="sinusoid-three-grid">
+        <article>
+          <span class="sampling-stage-label">AMPLITUDE</span>
+          <svg viewBox="0 0 760 180" role="img" aria-label="Hai sinusoid cùng tần số và phase nhưng khác amplitude">
+            <line class="sample-axis" x1="32" y1="90" x2="746" y2="90" />
+            <path class="parameter-wave secondary" d={amplitudeLow} />
+            <path class="parameter-wave primary" d={amplitudeHigh} />
+          </svg>
+          <strong>Cao hay thấp</strong>
+          <p>Amplitude thay đổi độ lớn theo trục dọc, nhưng không làm chu kỳ ngắn hay dài hơn.</p>
+        </article>
+
+        <article>
+          <span class="sampling-stage-label">FREQUENCY</span>
+          <svg viewBox="0 0 760 180" role="img" aria-label="Hai sinusoid cùng amplitude và phase nhưng khác frequency">
+            <line class="sample-axis" x1="32" y1="90" x2="746" y2="90" />
+            <path class="parameter-wave secondary" d={frequencyLow} />
+            <path class="parameter-wave primary" d={frequencyHigh} />
+          </svg>
+          <strong>Nhanh hay chậm</strong>
+          <p>Frequency cho biết waveform hoàn thành bao nhiêu chu kỳ trong một giây.</p>
+        </article>
+
+        <article>
+          <span class="sampling-stage-label">PHASE</span>
+          <svg viewBox="0 0 760 180" role="img" aria-label="Hai sinusoid cùng amplitude và frequency nhưng khác phase">
+            <line class="sample-axis" x1="32" y1="90" x2="746" y2="90" />
+            <path class="parameter-wave secondary" d={phaseZero} />
+            <path class="parameter-wave primary" d={phaseShifted} />
+          </svg>
+          <strong>Đang ở đâu trong chu kỳ</strong>
+          <p>Phase thay đổi vị trí tương đối của waveform mà không đổi amplitude hay frequency.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="cong-thuc">
+      <p class="concept-kicker">02 · CÔNG THỨC XUẤT HIỆN SAU HÌNH</p>
+      <h2>Ba thay đổi vừa nhìn thấy nằm gọn trong một công thức.</h2>
+
+      <div class="sinusoid-formula">
+        <span>x(t)</span>
+        <b>=</b>
+        <span>A cos(2πft + φ)</span>
+      </div>
+
+      <div class="sinusoid-parameter-list">
+        <article>
+          <strong>A</strong>
+          <div>
+            <h3>Amplitude</h3>
+            <p>Độ lớn cực đại của cosine tính từ mức 0. Đơn vị phụ thuộc đại lượng đang đo, ví dụ volt.</p>
+          </div>
+        </article>
+        <article>
+          <strong>f</strong>
+          <div>
+            <h3>Frequency</h3>
+            <p>Số chu kỳ mỗi giây. Đơn vị là hertz, viết tắt Hz.</p>
+          </div>
+        </article>
+        <article>
+          <strong>φ</strong>
+          <div>
+            <h3>Phase</h3>
+            <p>Vị trí của sinusoid trong chu kỳ so với mốc thời gian đã chọn. Có thể viết bằng radian hoặc độ.</p>
+          </div>
+        </article>
+      </div>
+
+      <p>
+        Cùng công thức này cũng thường được viết là <strong>x(t) = A cos(ωt + φ)</strong>,
+        với <strong>ω = 2πf</strong>. Khi đó ω là angular frequency và có đơn vị rad/s.
+      </p>
+    </section>
+
+    <section class="concept-block" id="amplitude">
+      <p class="concept-kicker">03 · AMPLITUDE</p>
+      <h2>Amplitude nói signal lớn tới đâu, không nói nó dao động nhanh tới đâu.</h2>
+      <p>
+        Với x(t) = A cos(2πft + φ), giá trị lớn nhất là +A và nhỏ nhất là -A.
+        Vì vậy khoảng từ đáy tới đỉnh là 2A, thường gọi là peak-to-peak.
+      </p>
+
+      <div class="amplitude-visual">
+        <svg viewBox="0 0 760 260" role="img" aria-label="Minh họa amplitude A và peak to peak 2A trên sinusoid">
+          <line class="sample-axis" x1="42" y1="130" x2="735" y2="130" />
+          <line class="amplitude-guide" x1="42" y1="60" x2="735" y2="60" />
+          <line class="amplitude-guide" x1="42" y1="200" x2="735" y2="200" />
+          <path class="parameter-wave primary" d="M42 60 C100 60 100 200 158 200 S216 60 274 60 S332 200 390 200 S448 60 506 60 S564 200 622 200 S680 60 735 60" />
+          <line class="amplitude-bracket" x1="78" y1="60" x2="78" y2="130" />
+          <path class="amplitude-bracket" d="M72 66 L78 60 L84 66 M72 124 L78 130 L84 124" />
+          <text class="amplitude-label" x="89" y="100">A</text>
+          <line class="amplitude-bracket" x1="684" y1="60" x2="684" y2="200" />
+          <path class="amplitude-bracket" d="M678 66 L684 60 L690 66 M678 194 L684 200 L690 194" />
+          <text class="amplitude-label" x="696" y="134">2A</text>
+        </svg>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Amplitude không phải là một từ đồng nghĩa với power</strong>
+        <p>
+          Trong nhiều hệ điện với impedance cố định, average power của một sinusoid tỉ lệ với A².
+          Vì vậy tăng amplitude thường làm power tăng, nhưng hai khái niệm vẫn không nên dùng thay cho nhau.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="frequency">
+      <p class="concept-kicker">04 · FREQUENCY VÀ PERIOD</p>
+      <h2>Một chu kỳ dài bao lâu và một giây có bao nhiêu chu kỳ là cùng một câu chuyện nhìn từ hai phía.</h2>
+
+      <div class="frequency-period-visual">
+        <div>
+          <span class="card-label">PERIOD</span>
+          <strong>T</strong>
+          <p>Thời gian để waveform lặp lại một chu kỳ.</p>
+        </div>
+        <b>↔</b>
+        <div>
+          <span class="card-label">FREQUENCY</span>
+          <strong>f = 1/T</strong>
+          <p>Số chu kỳ hoàn thành trong một giây.</p>
+        </div>
+      </div>
+
+      <p>
+        Ví dụ, một tone 2 Hz có period T = 0,5 s. Một tone 10 kHz có period 100 µs.
+        Frequency càng cao thì các chu kỳ càng nằm sát nhau trên trục thời gian.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Frequency không phải bandwidth</strong>
+        <p>
+          Một sinusoid lý tưởng chỉ có một frequency. Bandwidth bắt đầu trở nên có ý nghĩa khi signal chứa một dải
+          các thành phần tần số. Ta sẽ quay lại chuyện này khi đi sâu vào Fourier và wireless channel.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="phase">
+      <p class="concept-kicker">05 · PHASE</p>
+      <h2>Phase chỉ có ý nghĩa khi ta biết đang so với mốc nào.</h2>
+      <p>
+        Nếu f và A giữ nguyên, thay φ không làm waveform dao động nhanh hơn hoặc lớn hơn.
+        Nó thay đổi vị trí của waveform so với mốc t = 0.
+      </p>
+
+      <div class="phase-comparison">
+        <article>
+          <span class="card-label">φ = 0°</span>
+          <strong>x(0) = A</strong>
+          <p>Cosine bắt đầu tại đỉnh dương.</p>
+        </article>
+        <article>
+          <span class="card-label">φ = +90°</span>
+          <strong>x(0) = 0</strong>
+          <p>Waveform đã tiến một phần tư chu kỳ so với cosine tham chiếu.</p>
+        </article>
+        <article>
+          <span class="card-label">φ = 180°</span>
+          <strong>x(0) = -A</strong>
+          <p>Waveform đảo vị trí so với φ = 0° tại cùng mốc thời gian.</p>
+        </article>
+      </div>
+
+      <p>
+        Có một cách khác để đọc phase. Với cùng frequency, phase shift có thể được viết thành một time shift:
+      </p>
+
+      <div class="sinusoid-shift-equation">
+        <span>A cos(2πft + φ)</span>
+        <b>=</b>
+        <span>A cos[2πf(t - τ)]</span>
+        <small>với τ = -φ/(2πf)</small>
+      </div>
+
+      <p>
+        Vì vậy một phase +90° tương ứng với waveform dịch sang trái một phần tư chu kỳ.
+        Dấu cộng của phase và hướng dịch theo thời gian thường là chỗ dễ lẫn nếu chỉ nhìn công thức.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Không có “absolute phase” tách rời khỏi reference</strong>
+        <p>
+          Nếu ta đổi mốc thời gian t = 0, giá trị phase của cùng một sinusoid cũng thay đổi.
+          Trong thực tế, phase thường hữu ích vì ta đang so một signal với một reference, một oscillator hoặc một signal khác.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="sinusoid-lab">
+      <p class="concept-kicker">06 · INTERACTIVE LAB</p>
+      <h2>Kéo từng tham số một để nhìn xem waveform thực sự thay đổi theo cách nào.</h2>
+      <p>
+        Đường nét đứt giữ cùng amplitude và frequency với waveform hiện tại nhưng đặt phase bằng 0°.
+        Điều này giúp tách riêng ảnh hưởng của phase khỏi hai tham số còn lại.
+      </p>
+      <SinusoidExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="tai-sao-can">
+      <p class="concept-kicker">07 · VÌ SAO BA THAM SỐ NÀY SẼ QUAY LẠI LIÊN TỤC?</p>
+      <h2>Một sinusoid đơn giản là chiếc cầu dẫn sang Fourier, modulation và I/Q.</h2>
+      <p>
+        Khi một signal phức tạp được nhìn trong frequency domain, ta thường quan tâm từng thành phần sinusoid đang có
+        frequency nào, amplitude bao nhiêu và phase ra sao. Đây chính là lý do ba tham số này xuất hiện lại trong Fourier.
+      </p>
+
+      <div class="concept-bridge">
+        <div>
+          <small>SINUSOID</small>
+          <strong>A · f · φ</strong>
+          <span>một thành phần đơn</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>FOURIER</small>
+          <strong>nhiều thành phần</strong>
+          <span>amplitude + phase theo frequency</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>MODULATION</small>
+          <strong>thay A / φ</strong>
+          <span>mang information lên signal</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>I/Q</small>
+          <strong>complex representation</strong>
+          <span>làm amplitude và phase dễ xử lý hơn</span>
+        </div>
+      </div>
+
+      <p>
+        Trong QPSK, phase sẽ trực tiếp phân biệt các constellation points.
+        Trong QAM, amplitude và phase cùng thay đổi. Trong receiver, channel và synchronization cũng liên tục tác động lên những đại lượng này.
+        Bài này chỉ xây trực giác để những phần đó sau này không xuất hiện như các khái niệm hoàn toàn mới.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <h2>Một sinusoid có thể được đọc như ba câu hỏi rất đơn giản.</h2>
+      <ol class="recap-list">
+        <li><strong>Amplitude A:</strong> waveform lớn tới đâu theo trục dọc?</li>
+        <li><strong>Frequency f:</strong> waveform hoàn thành bao nhiêu chu kỳ mỗi giây?</li>
+        <li><strong>Period T = 1/f:</strong> một chu kỳ kéo dài bao lâu?</li>
+        <li><strong>Phase φ:</strong> waveform đang nằm ở đâu trong chu kỳ so với reference đã chọn?</li>
+        <li><strong>Angular frequency ω = 2πf:</strong> cùng tốc độ dao động nhưng biểu diễn bằng radian trên mỗi giây.</li>
+        <li><strong>x(t) = A cos(2πft + φ):</strong> ba tham số trên được gói lại trong một biểu thức duy nhất.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/sampling-aliasing-nyquist/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Sampling, aliasing và Nyquist</strong>
+        <small>Khi nào samples còn giữ đủ thông tin về waveform?</small>
+      </a>
+      <div class="lesson-nav-card next pending">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Số phức và phasor</strong>
+        <small>Từ phase trên waveform tới một vector quay trên mặt phẳng phức.</small>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
