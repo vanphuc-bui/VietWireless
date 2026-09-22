@@ -142,15 +142,15 @@ import Math from '../../components/Math.astro';
       </div>
 
       <p>
-        Ví dụ f<sub>s</sub> = 64 Hz và N = 64 cho Δf = 1 Hz.
-        Tăng N lên 128 trong khi giữ f<sub>s</sub> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
+        Ví dụ <Math tex="f_s=64\\,\\mathrm{Hz}" /> và <Math tex="N=64" /> cho <Math tex="\\Delta f=1\\,\\mathrm{Hz}" />.
+        Tăng <Math tex="N" /> lên 128 trong khi giữ <Math tex="f_s" /> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
       </p>
 
       <aside class="precision-note">
         <strong>Bin spacing và khả năng phân giải hai tone không hoàn toàn đồng nghĩa trong mọi tình huống</strong>
         <p>
           Window shape, SNR và độ dài quan sát đều ảnh hưởng việc hai spectral components có tách được hay không.
-          Δf = f<sub>s</sub>/N là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
+          <Math tex="\\Delta f=f_s/N" /> là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
         </p>
       </aside>
     </section>
