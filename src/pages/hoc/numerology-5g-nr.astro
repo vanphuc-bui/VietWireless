@@ -15,12 +15,12 @@ import MathExpr from '../../components/Math.astro';
       <h1>Numerology trong 5G NR</h1>
       <p class="lesson-deck">
         OFDM chỉ yêu cầu một relation giữa subcarrier spacing và useful symbol duration; nó không bắt buộc mọi deployment phải dùng cùng một spacing.{" "}
-        <strong>5G NR đưa relation đó thành một họ numerology, nơi μ scale SCS, OFDM time scale và số slots trong mỗi 1 ms subframe.</strong>
+        <strong>5G NR đưa relation đó thành một họ numerology, nơi <MathExpr tex="\\mu" /> scale SCS, OFDM time scale và số slots trong mỗi <MathExpr tex="1\\,\\mathrm{ms}" /> subframe.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TẠI SAO 5G KHÔNG CHỈ DÙNG 15 kHz?</p>
+      <p class="concept-kicker">TẠI SAO 5G KHÔNG CHỈ DÙNG <MathExpr tex="15\\,\\mathrm{kHz}" />?</p>
       <p class="map-intro">
         Carrier frequency, expected Doppler, delay spread, bandwidth và latency target khác nhau giữa use cases.
         Một OFDM time-frequency lattice duy nhất không phải lúc nào cũng là tradeoff tốt.
@@ -28,36 +28,36 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="system-position">
-        <span>NUMEROLOGY μ</span>
+        <span>NUMEROLOGY <MathExpr tex="\\mu" /></span>
         <div class="system-position-flow">
-          <strong>μ</strong><b>→</b>
+          <strong><MathExpr tex="\\mu" /></strong><b>→</b>
           <span><MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" /></span><b>→</b>
           <span><MathExpr tex="T_u" />=1/Δf</span><b>→</b>
           <span>OFDM symbol scale</span><b>→</b>
-          <span>slots / 1 ms</span>
+          <span>slots / <MathExpr tex="1\\,\\mathrm{ms}" /></span>
         </div>
         <p>
-          Frame và subframe duration không co lại theo μ.
-          Phần nằm bên trong 1 ms subframe mới được chia thành nhiều slots hơn.
+          Frame và subframe duration không co lại theo <MathExpr tex="\\mu" />.
+          Phần nằm bên trong <MathExpr tex="1\\,\\mathrm{ms}" /> subframe mới được chia thành nhiều slots hơn.
         </p>
       </div>
     </section>
 
     <section class="concept-block" id="scs">
       <p class="concept-kicker">01 · SUBCARRIER SPACING SCALE THEO <MathExpr tex="2^{\\mu}" /></p>
-      <h2>Reference 15 kHz được nhân đôi mỗi khi μ tăng một đơn vị.</h2>
+      <h2>Reference <MathExpr tex="15\\,\\mathrm{kHz}" /> được nhân đôi mỗi khi <MathExpr tex="\\mu" /> tăng một đơn vị.</h2>
 
       <MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" display />
 
       <div class="numerology-simple-table">
-        <div><strong>μ=0</strong><span>15 kHz</span></div>
-        <div><strong>μ=1</strong><span>30 kHz</span></div>
-        <div><strong>μ=2</strong><span>60 kHz</span></div>
-        <div><strong>μ=3</strong><span>120 kHz</span></div>
+        <div><strong><MathExpr tex="\\mu=0" /></strong><span><MathExpr tex="15\\,\\mathrm{kHz}" /></span></div>
+        <div><strong><MathExpr tex="\\mu=1" /></strong><span><MathExpr tex="30\\,\\mathrm{kHz}" /></span></div>
+        <div><strong><MathExpr tex="\\mu=2" /></strong><span><MathExpr tex="60\\,\\mathrm{kHz}" /></span></div>
+        <div><strong><MathExpr tex="\\mu=3" /></strong><span><MathExpr tex="120\\,\\mathrm{kHz}" /></span></div>
       </div>
 
       <p>
-        Current Release 18 TS 38.211 table 4.2-1 còn liệt kê μ=4,5,6 tương ứng 240, 480 và 960 kHz.
+        Current Release 18 TS 38.211 table 4.2-1 còn liệt kê <MathExpr tex="\\mu=4,5,6" /> tương ứng <MathExpr tex="240,\\,480,\\,960\\,\\mathrm{kHz}" />.
         Nhưng “được định nghĩa trong physical-layer spec” không có nghĩa mọi band, channel và UE capability đều hỗ trợ mọi numerology.
       </p>
     </section>
@@ -69,44 +69,44 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="T_u = \\frac{1}{\\Delta f}" display />
 
       <div class="numerology-simple-table">
-        <div><strong>15 kHz</strong><span>66.67 µs</span></div>
-        <div><strong>30 kHz</strong><span>33.33 µs</span></div>
-        <div><strong>60 kHz</strong><span>16.67 µs</span></div>
-        <div><strong>120 kHz</strong><span>8.33 µs</span></div>
+        <div><strong><MathExpr tex="15\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="66.67\\,\\mu\\mathrm{s}" /></span></div>
+        <div><strong><MathExpr tex="30\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="33.33\\,\\mu\\mathrm{s}" /></span></div>
+        <div><strong><MathExpr tex="60\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="16.67\\,\\mu\\mathrm{s}" /></span></div>
+        <div><strong><MathExpr tex="120\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="8.33\\,\\mu\\mathrm{s}" /></span></div>
       </div>
 
       <p>
         Đây là useful interval, chưa cộng CP.
         Total OFDM-symbol interval dài hơn <MathExpr tex="T_u" />.
-        Khi μ tăng, cả useful duration và CP time scale đều ngắn lại theo numerology structure.
+        Khi <MathExpr tex="\\mu" /> tăng, cả useful duration và CP time scale đều ngắn lại theo numerology structure.
       </p>
     </section>
 
     <section class="concept-block" id="frame">
-      <p class="concept-kicker">03 · FRAME VẪN 10 ms, SUBFRAME VẪN 1 ms</p>
+      <p class="concept-kicker">03 · FRAME VẪN <MathExpr tex="10\\,\\mathrm{ms}" />, SUBFRAME VẪN <MathExpr tex="1\\,\\mathrm{ms}" /></p>
       <h2>Numerology thay số slots nằm trong một subframe, không thay definition của subframe.</h2>
 
       <div class="frame-structure-flow">
-        <div><small>RADIO FRAME</small><strong>10 ms</strong><span>10 subframes</span></div>
+        <div><small>RADIO FRAME</small><strong><MathExpr tex="10\\,\\mathrm{ms}" /></strong><span>10 subframes</span></div>
         <b>→</b>
-        <div><small>SUBFRAME</small><strong>1 ms</strong><span>fixed time unit</span></div>
+        <div><small>SUBFRAME</small><strong><MathExpr tex="1\\,\\mathrm{ms}" /></strong><span>fixed time unit</span></div>
         <b>→</b>
         <div><small>SLOTS</small><strong><MathExpr tex="2^{\\mu}" /></strong><span>normal CP, per subframe</span></div>
       </div>
 
       <p>
         Với normal CP:
-        μ=0 có 1 slot trong 1 ms,
-        μ=1 có 2 slots,
-        μ=2 có 4,
-        μ=3 có 8.
-        Slot duration vì vậy lần lượt là 1 ms, 0.5 ms, 0.25 ms và 0.125 ms.
+        <MathExpr tex="\\mu=0" /> có 1 slot trong <MathExpr tex="1\\,\\mathrm{ms}" />,
+        <MathExpr tex="\\mu=1" /> có 2 slots,
+        <MathExpr tex="\\mu=2" /> có 4,
+        <MathExpr tex="\\mu=3" /> có 8.
+        Slot duration vì vậy lần lượt là <MathExpr tex="1,\\,0.5,\\,0.25,\\,0.125\\,\\mathrm{ms}" />.
       </p>
     </section>
 
     <section class="concept-block" id="symbols">
       <p class="concept-kicker">04 · NORMAL-CP SLOT CÓ 14 OFDM SYMBOLS</p>
-      <h2>Tăng μ không làm slot giữ nguyên thời gian; slot co lại theo đúng OFDM time scale.</h2>
+      <h2>Tăng <MathExpr tex="\\mu" /> không làm slot giữ nguyên thời gian; slot co lại theo đúng OFDM time scale.</h2>
 
       <div class="nr-slot-equations">
         <div><span>slots / subframe</span><strong><MathExpr tex="2^{\\mu}" /></strong></div>
@@ -115,11 +115,11 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Ví dụ μ=1:
-        SCS = 30 kHz,
+        Ví dụ <MathExpr tex="\\mu=1" />:
+        SCS = <MathExpr tex="30\\,\\mathrm{kHz}" />,
         <MathExpr tex="T_u" />≈33.33 µs,
-        slot dài 0.5 ms và chứa 14 symbols với normal CP.
-        Average symbol interval bao gồm CP vì vậy khoảng 0.5 ms / 14 ≈ 35.7 µs.
+        slot dài <MathExpr tex="0.5\\,\\mathrm{ms}" /> và chứa 14 symbols với normal CP.
+        Average symbol interval bao gồm CP vì vậy khoảng <MathExpr tex="0.5\\,\\mathrm{ms}/14 \\approx 35.7\\,\\mu\\mathrm{s}" />.
       </p>
 
       <aside class="precision-note">
@@ -133,10 +133,10 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="numerology-lab">
       <p class="concept-kicker">05 · INTERACTIVE LAB</p>
-      <h2>Kéo μ từ 0 tới 6 để thấy SCS tăng, Tᵤ giảm và 1 ms subframe chứa ngày càng nhiều slots.</h2>
+      <h2>Kéo <MathExpr tex="\\mu" /> từ 0 tới 6 để thấy SCS tăng, <MathExpr tex="T_u" /> giảm và <MathExpr tex="1\\,\\mathrm{ms}" /> subframe chứa ngày càng nhiều slots.</h2>
       <p>
-        Hãy đặc biệt so μ=0 với μ=3:
-        spacing tăng từ 15 lên 120 kHz, useful symbol ngắn đi 8 lần và slot duration cũng ngắn đi 8 lần.
+        Hãy đặc biệt so <MathExpr tex="\\mu=0" /> với <MathExpr tex="\\mu=3" />:
+        spacing tăng từ <MathExpr tex="15" /> lên <MathExpr tex="120\\,\\mathrm{kHz}" />, useful symbol ngắn đi 8 lần và slot duration cũng ngắn đi 8 lần.
       </p>
       <NumerologyExplorer client:load />
     </section>
@@ -158,25 +158,25 @@ import MathExpr from '../../components/Math.astro';
           <span class="card-label">LARGER SCS</span>
           <h3>shorter useful symbol</h3>
           <p>
-            Fixed frequency error trở thành fraction nhỏ hơn của Δf,
+            Fixed frequency error trở thành fraction nhỏ hơn của <MathExpr tex="\\Delta f" />,
             nhưng cùng một absolute delay spread chiếm tỷ lệ lớn hơn so với useful symbol duration.
           </p>
         </article>
       </div>
 
       <p>
-        Đây là intuition về tradeoff, không phải thuật toán chọn μ.
+        Đây là intuition về tradeoff, không phải thuật toán chọn <MathExpr tex="\\mu" />.
         Band rules, channel type, frequency range, deployment và UE capability mới quyết định configurations hợp lệ.
       </p>
     </section>
 
     <section class="concept-block" id="cfo-example">
       <p class="concept-kicker">07 · NHÌN CFO THEO “FRACTION OF SCS” GIÚP HIỂU NUMEROLOGY</p>
-      <h2>Cùng một absolute 1 kHz offset tác động tương đối khác nhau ở 15 kHz và 120 kHz SCS.</h2>
+      <h2>Cùng một absolute <MathExpr tex="1\\,\\mathrm{kHz}" /> offset tác động tương đối khác nhau ở <MathExpr tex="15\\,\\mathrm{kHz}" /> và <MathExpr tex="120\\,\\mathrm{kHz}" /> SCS.</h2>
 
       <p>
-        Với 15 kHz SCS, 1 kHz tương đương khoảng 0.067 subcarrier spacing.
-        Với 120 kHz SCS, cùng 1 kHz chỉ khoảng 0.0083 spacing.
+        Với <MathExpr tex="15\\,\\mathrm{kHz}" /> SCS, <MathExpr tex="1\\,\\mathrm{kHz}" /> tương đương khoảng <MathExpr tex="0.067" /> subcarrier spacing.
+        Với <MathExpr tex="120\\,\\mathrm{kHz}" /> SCS, cùng <MathExpr tex="1\\,\\mathrm{kHz}" /> chỉ khoảng <MathExpr tex="0.0083" /> spacing.
         Relative CFO nhỏ hơn thường nghĩa orthogonality ít bị phá hơn, nếu các yếu tố khác giữ nguyên.
       </p>
 
@@ -189,10 +189,10 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="extended-cp">
       <p class="concept-kicker">08 · EXTENDED CP LÀ MỘT TRƯỜNG HỢP RIÊNG</p>
-      <h2>Trong Release 18 table hiện tại, extended CP được định nghĩa cho μ=2 và có 12 OFDM symbols per slot.</h2>
+      <h2>Trong Release 18 table hiện tại, extended CP được định nghĩa cho <MathExpr tex="\\mu=2" /> và có 12 OFDM symbols per slot.</h2>
 
       <p>
-        μ=2 vẫn tương ứng 60 kHz SCS và 4 slots trong một 1 ms subframe.
+        <MathExpr tex="\\mu=2" /> vẫn tương ứng <MathExpr tex="60\\,\\mathrm{kHz}" /> SCS và 4 slots trong một <MathExpr tex="1\\,\\mathrm{ms}" /> subframe.
         Extended CP dành nhiều time hơn cho guard, nên số useful OFDM symbols trong slot giảm từ 14 xuống 12.
       </p>
 
@@ -230,13 +230,13 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap">
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Numerology:</strong> scale OFDM lattice bằng μ.</li>
+        <li><strong>Numerology:</strong> scale OFDM lattice bằng <MathExpr tex="\\mu" />.</li>
         <li><strong>SCS:</strong> Δf = 15·<MathExpr tex="2^{\\mu}" /> kHz.</li>
         <li><strong>Useful duration:</strong> <MathExpr tex="T_u" /> = 1/Δf, chưa gồm CP.</li>
-        <li><strong>Frame:</strong> 10 ms và gồm 10 subframes 1 ms.</li>
+        <li><strong>Frame:</strong> <MathExpr tex="10\\,\\mathrm{ms}" /> và gồm 10 subframes <MathExpr tex="1\\,\\mathrm{ms}" />.</li>
         <li><strong>Normal CP:</strong> 14 OFDM symbols/slot và <MathExpr tex="2^{\\mu}" /> slots/subframe.</li>
         <li><strong>Tradeoff:</strong> larger SCS giảm relative CFO nhưng rút ngắn useful symbol so với absolute delay spread.</li>
-        <li><strong>Extended CP:</strong> current Release 18 table liệt kê cho μ=2 với 12 symbols/slot.</li>
+        <li><strong>Extended CP:</strong> current Release 18 table liệt kê cho <MathExpr tex="\\mu=2" /> với 12 symbols/slot.</li>
         <li><strong>Slot:</strong> là time structure, không phải bắt buộc mọi allocation phải dùng đủ cả slot.</li>
       </ol>
     </section>
