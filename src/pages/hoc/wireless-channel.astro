@@ -51,7 +51,7 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="y(t) = h\\,x(t-\\tau) + n(t)" display />
 
       <p>
-        τ nói signal tới muộn bao nhiêu.
+        <MathExpr tex="\\tau" /> nói signal tới muộn bao nhiêu.
         h là một complex number, thường viết <MathExpr tex="h = Ge^{j\\theta}" />, mô tả amplitude scaling G và phase rotation θ.
         n(t) đại diện cho noise, sẽ được tách riêng ở Bài 11.
       </p>
@@ -63,12 +63,12 @@ import MathExpr from '../../components/Math.astro';
           <p>Nếu G &lt; 1, signal bị attenuate. Power scaling tương ứng là G² nếu G là voltage/amplitude ratio.</p>
         </article>
         <article>
-          <span class="card-label">θ</span>
+          <span class="card-label"><MathExpr tex="\\theta" /></span>
           <h3>Phase rotation</h3>
-          <p>Trên complex plane, constellation bị quay một góc θ nếu chưa equalize.</p>
+          <p>Trên complex plane, constellation bị quay một góc <MathExpr tex="\\theta" /> nếu chưa equalize.</p>
         </article>
         <article>
-          <span class="card-label">τ</span>
+          <span class="card-label"><MathExpr tex="\\tau" /></span>
           <h3>Propagation delay</h3>
           <p>Receiver nhìn thấy waveform muộn hơn vì electromagnetic wave cần thời gian để đi hết path.</p>
         </article>
@@ -120,7 +120,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Vì carrier frequency cao, phase có thể đổi rất mạnh chỉ với thay đổi position nhỏ.
-        Ví dụ ở 3.5 GHz, wavelength trong free space chỉ khoảng 8.6 cm.
+        Ví dụ ở <MathExpr tex="3.5\\,\\mathrm{GHz}" />, wavelength trong free space chỉ khoảng <MathExpr tex="8.6\\,\\mathrm{cm}" />.
         Di chuyển vài centimet đã là một phần đáng kể của một wavelength, nên relative phase giữa các paths có thể đổi rõ rệt.
       </p>
 
@@ -208,7 +208,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Timing estimator nhìn delay. Channel estimator nhìn complex gain trên reference symbols.
-        Equalizer dùng estimate H[k] để undo phần channel có thể bù.
+        Equalizer dùng estimate <MathExpr tex="H[k]" /> để undo phần channel có thể bù.
         AGC phản ứng với received level. Các khối khác nhau đang quan sát những mặt khác nhau của cùng physical propagation.
       </p>
 
@@ -228,7 +228,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <h2>Wireless channel làm nhiều hơn việc “giảm signal strength”.</h2>
       <ol class="recap-list">
-        <li><strong>Single-path model:</strong> delay τ và complex gain h là điểm bắt đầu hữu ích.</li>
+        <li><strong>Single-path model:</strong> delay <MathExpr tex="\\tau" /> và complex gain <MathExpr tex="h" /> là điểm bắt đầu hữu ích.</li>
         <li><strong>Path loss:</strong> mô tả xu hướng attenuation lớn theo distance/environment.</li>
         <li><strong>Delay:</strong> xuất phát từ propagation time hữu hạn.</li>
         <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift <MathExpr tex="-2\\pi f\\tau" />.</li>
