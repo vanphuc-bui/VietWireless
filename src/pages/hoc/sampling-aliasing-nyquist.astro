@@ -1,0 +1,395 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SamplingAliasExplorer from '../../components/SamplingAliasExplorer.jsx';
+
+const aliasPlot = {
+  width: 820,
+  height: 260,
+  left: 40,
+  right: 28,
+  mid: 130,
+  amplitude: 68,
+  duration: 1,
+};
+
+function cosinePolyline(frequency, points = 640) {
+  return Array.from({ length: points + 1 }, (_, i) => {
+    const t = (i / points) * aliasPlot.duration;
+    const x = aliasPlot.left + (t / aliasPlot.duration) * (aliasPlot.width - aliasPlot.left - aliasPlot.right);
+    const y = aliasPlot.mid - aliasPlot.amplitude * Math.cos(2 * Math.PI * frequency * t);
+    return `${x.toFixed(2)},${y.toFixed(2)}`;
+  }).join(' ');
+}
+
+const aliasFastPoints = cosinePolyline(7);
+const aliasSlowPoints = cosinePolyline(3);
+const aliasSamples = Array.from({ length: 11 }, (_, n) => {
+  const t = n / 10;
+  return {
+    x: aliasPlot.left + t * (aliasPlot.width - aliasPlot.left - aliasPlot.right),
+    y: aliasPlot.mid - aliasPlot.amplitude * Math.cos(2 * Math.PI * 7 * t),
+  };
+});
+---
+
+<BaseLayout
+  title="Sampling, aliasing và Nyquist trực quan | VietWireless"
+  description="Hiểu sampling rate, Nyquist frequency, aliasing và anti-alias filter bằng waveform, spectrum và interactive lab trực quan."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 02 · SIGNAL FOUNDATIONS</p>
+      <h1>Sampling, aliasing và Nyquist</h1>
+      <p class="lesson-deck">
+        ADC chỉ nhìn waveform tại một số thời điểm rời rạc. Câu hỏi là: <strong>cần nhìn nhanh tới mức nào để những sample đó vẫn giữ đủ thông tin về signal ban đầu?</strong>
+      </p>
+    </header>
+
+    <section class="concept-block lesson-map-block">
+      <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
+      <p class="map-intro">
+        Ở Bài 01, waveform liên tục đã được biến thành dãy x[n]. Bài này chỉ zoom vào đúng bước đó.
+      </p>
+      <div class="system-position">
+        <span>ANALOG → DIGITAL</span>
+        <div class="system-position-flow" aria-label="Waveform liên tục qua ADC thành samples">
+          <span>Waveform x(t)</span><b>→</b>
+          <strong>Sampling</strong><b>→</b>
+          <span>x[n]</span><b>→</b>
+          <span>DSP</span>
+        </div>
+        <p>
+          Nếu sampling đủ nhanh, dãy x[n] vẫn có thể đại diện cho waveform ban đầu trong những điều kiện nhất định.
+          Nếu sampling quá chậm, nhiều waveform khác nhau có thể tạo ra cùng một dãy sample.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="sampling-la-gi">
+      <p class="concept-kicker">01 · LẤY MẪU THEO THỜI GIAN</p>
+      <h2>Sampling không biến amplitude thành các mức rời rạc. Nó chọn những thời điểm để đo waveform.</h2>
+      <p>
+        Giả sử một điện áp analog x(t) tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
+        0, T<sub>s</sub>, 2T<sub>s</sub>, 3T<sub>s</sub>... Khi đó:
+      </p>
+
+      <div class="sampling-equation lesson02-equation">
+        <span>x[n]</span>
+        <b>=</b>
+        <span>x(nT<sub>s</sub>)</span>
+        <small>n = 0, 1, 2... và T<sub>s</sub> là khoảng thời gian giữa hai lần lấy mẫu</small>
+      </div>
+
+      <div class="sampling-visual sampling-process-visual" aria-label="Waveform liên tục được lấy mẫu rồi lượng tử hóa">
+        <article class="sampling-stage">
+          <span class="sampling-stage-label">1 · WAVEFORM</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Waveform liên tục">
+            <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
+            <path class="analog-wave" d="M20 82 C44 22 69 24 92 78 S138 126 163 65 S210 18 232 79 S275 125 302 56" />
+            <text class="sample-svg-label" x="278" y="68">thời gian</text>
+          </svg>
+          <strong>x(t)</strong>
+          <p>Giá trị tồn tại ở mọi thời điểm.</p>
+        </article>
+
+        <div class="sampling-arrow" aria-hidden="true">→</div>
+
+        <article class="sampling-stage sampling-stage-center">
+          <span class="sampling-stage-label">2 · SAMPLING</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Đo waveform tại các thời điểm cách đều">
+            <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
+            <path class="analog-wave muted-wave" d="M20 82 C44 22 69 24 92 78 S138 126 163 65 S210 18 232 79 S275 125 302 56" />
+            <g class="sample-stems">
+              <line x1="28" y1="75" x2="28" y2="64" /><circle cx="28" cy="64" r="4" />
+              <line x1="68" y1="75" x2="68" y2="38" /><circle cx="68" cy="38" r="4" />
+              <line x1="108" y1="75" x2="108" y2="102" /><circle cx="108" cy="102" r="4" />
+              <line x1="148" y1="75" x2="148" y2="95" /><circle cx="148" cy="95" r="4" />
+              <line x1="188" y1="75" x2="188" y2="38" /><circle cx="188" cy="38" r="4" />
+              <line x1="228" y1="75" x2="228" y2="72" /><circle cx="228" cy="72" r="4" />
+              <line x1="268" y1="75" x2="268" y2="104" /><circle cx="268" cy="104" r="4" />
+            </g>
+          </svg>
+          <strong>x[n]</strong>
+          <p>Thời gian đã trở thành các sample index n.</p>
+        </article>
+
+        <div class="sampling-arrow" aria-hidden="true">→</div>
+
+        <article class="sampling-stage">
+          <span class="sampling-stage-label">3 · QUANTIZATION</span>
+          <svg viewBox="0 0 320 150" role="img" aria-label="Các sample được lượng tử hóa thành các mức amplitude rời rạc">
+            <g class="quant-grid">
+              <line x1="18" y1="30" x2="304" y2="30" />
+              <line x1="18" y1="52" x2="304" y2="52" />
+              <line x1="18" y1="74" x2="304" y2="74" />
+              <line x1="18" y1="96" x2="304" y2="96" />
+              <line x1="18" y1="118" x2="304" y2="118" />
+            </g>
+            <g class="quant-dots">
+              <circle cx="28" cy="74" r="4" /><circle cx="68" cy="30" r="4" />
+              <circle cx="108" cy="96" r="4" /><circle cx="148" cy="96" r="4" />
+              <circle cx="188" cy="30" r="4" /><circle cx="228" cy="74" r="4" />
+              <circle cx="268" cy="118" r="4" />
+            </g>
+          </svg>
+          <strong>Các mức số hữu hạn</strong>
+          <p>Quantization xử lý amplitude. Đây là bước khác với sampling.</p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Sampling và quantization là hai việc khác nhau</strong>
+        <p>
+          Sampling làm rời rạc trục thời gian. Quantization làm rời rạc amplitude.
+          Aliasing mà bài này nói tới xuất phát từ sampling theo thời gian, không phải từ số bit của ADC.
+        </p>
+      </aside>
+
+      <p>
+        Sampling rate là số lần đo trong một giây: <strong>f<sub>s</sub> = 1/T<sub>s</sub></strong>.
+        Nếu f<sub>s</sub> = 48 kHz, khoảng cách giữa hai sample là khoảng 20,83 µs.
+      </p>
+    </section>
+
+    <section class="concept-block" id="qua-cham">
+      <p class="concept-kicker">02 · KHI LẤY MẪU QUÁ CHẬM</p>
+      <h2>Một dãy sample không tự nói cho ta biết waveform đã chạy qua giữa các sample như thế nào.</h2>
+      <p>
+        Nếu các sample nằm đủ gần nhau so với tốc độ biến thiên của signal, ta còn có cơ hội dựng lại waveform.
+        Nhưng khi khoảng cách giữa các sample quá lớn, một waveform nhanh có thể đi qua đúng những điểm mà một waveform chậm hơn cũng đi qua.
+      </p>
+
+      <div class="alias-story" aria-label="Hai waveform khác tần số đi qua cùng các sample">
+        <div class="visual-caption">
+          <span>CÙNG SAMPLE, HAI CÁCH DIỄN GIẢI</span>
+          <strong>7 Hz và 3 Hz khi fₛ = 10 Hz</strong>
+        </div>
+        <svg viewBox="0 0 820 260" role="img" aria-label="Tone 7 Hz và tone 3 Hz đi qua cùng một tập sample khi sampling ở 10 Hz">
+          <line class="sample-axis" x1={aliasPlot.left} y1={aliasPlot.mid} x2={aliasPlot.width - aliasPlot.right} y2={aliasPlot.mid} />
+          <polyline class="alias-fast-wave" points={aliasFastPoints} />
+          <polyline class="alias-slow-wave" points={aliasSlowPoints} />
+          <g class="alias-sample-dots">
+            {aliasSamples.map((sample) => (
+              <circle cx={sample.x} cy={sample.y} r="5" />
+            ))}
+          </g>
+        </svg>
+        <div class="alias-story-legend">
+          <span><i class="legend-fast"></i> waveform nhanh 7 Hz</span>
+          <span><i class="legend-slow"></i> waveform chậm 3 Hz</span>
+          <span><i class="legend-dot"></i> samples ở 10 Hz</span>
+        </div>
+      </div>
+
+      <p>
+        Với một cosine 7 Hz được lấy mẫu ở 10 Hz:
+      </p>
+
+      <div class="sampling-equation alias-equation">
+        <span>7 Hz</span>
+        <b>→</b>
+        <span>|7 - 10| = 3 Hz</span>
+        <small>7 Hz nằm phía trên f<sub>s</sub>/2 = 5 Hz và bị “fold” về 3 Hz</small>
+      </div>
+
+      <p>
+        Sau sampling, các giá trị x[n] của tone 7 Hz trùng với một tone 3 Hz tại đúng các sample time.
+        Receiver chỉ nhìn dãy sample thì không thể biết chắc waveform analog trước ADC là 7 Hz hay 3 Hz.
+        Hiện tượng một thành phần tần số cao xuất hiện như một tần số thấp khác được gọi là <strong>aliasing</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="aliasing-lab">
+      <p class="concept-kicker">03 · INTERACTIVE LAB</p>
+      <h2>Thay đổi tần số signal và sampling rate để nhìn aliasing xuất hiện.</h2>
+      <p>
+        Demo dùng một cosine đơn để giữ hình dễ đọc. Khi tần số input vượt quá f<sub>s</sub>/2,
+        đường nét đứt cho thấy một waveform tần số thấp khác đi qua đúng cùng các sample.
+      </p>
+      <SamplingAliasExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="nyquist">
+      <p class="concept-kicker">04 · NYQUIST</p>
+      <h2>Với một signal band-limited, sampling phải đủ nhanh để các bản sao spectrum không chồng lên nhau.</h2>
+      <p>
+        Giả sử signal không có thành phần tần số nào cao hơn B Hz.
+        Trong mô hình lý tưởng, định lý Nyquist-Shannon cho ta điều kiện thường viết là:
+      </p>
+
+      <div class="nyquist-rule">
+        <span>f<sub>s</sub></span>
+        <b>&gt;</b>
+        <span>2B</span>
+        <small>sampling rate phải lớn hơn hai lần tần số cao nhất cần giữ lại</small>
+      </div>
+
+      <p>
+        Một cách nhìn ở miền tần số là: sampling tạo ra các bản sao của spectrum cách nhau f<sub>s</sub>.
+        Nếu f<sub>s</sub> đủ lớn, các bản sao đứng tách nhau. Nếu f<sub>s</sub> quá nhỏ, chúng chồng lên nhau và phần bị chồng chính là aliasing.
+      </p>
+
+      <div class="nyquist-spectrum-grid">
+        <article>
+          <span class="sampling-stage-label">fₛ &gt; 2B · TÁCH NHAU</span>
+          <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum không chồng lên nhau khi sampling đủ nhanh">
+            <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
+            <path class="spectrum-copy muted-copy" d="M36 132 L66 82 L96 132 Z" />
+            <path class="spectrum-copy main-copy" d="M210 132 L240 62 L270 132 Z" />
+            <path class="spectrum-copy muted-copy" d="M384 132 L414 82 L444 132 Z" />
+            <text class="sample-svg-label" x="230" y="151">0</text>
+            <text class="sample-svg-label" x="49" y="151">-fₛ</text>
+            <text class="sample-svg-label" x="402" y="151">+fₛ</text>
+          </svg>
+          <p>Mỗi copy còn khoảng trống với copy bên cạnh.</p>
+        </article>
+        <article>
+          <span class="sampling-stage-label">fₛ &lt; 2B · CHỒNG LÊN NHAU</span>
+          <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum chồng lên nhau khi sampling quá chậm">
+            <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
+            <path class="spectrum-copy muted-copy" d="M92 132 L178 66 L264 132 Z" />
+            <path class="spectrum-copy main-copy" d="M154 132 L240 52 L326 132 Z" />
+            <path class="spectrum-copy muted-copy" d="M216 132 L302 66 L388 132 Z" />
+            <rect class="spectrum-overlap" x="154" y="82" width="172" height="50" rx="4" />
+            <text class="sample-svg-label" x="207" y="108">overlap → aliasing</text>
+          </svg>
+          <p>Hai vùng spectrum khác nhau bị fold vào cùng dải tần sau sampling.</p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Một cách nhìn khác</strong>
+        <p>
+          Nyquist không nói rằng “hai sample là đủ để vẽ đẹp một chu kỳ”.
+          Nó nói về khả năng biểu diễn và khôi phục một signal band-limited trong mô hình lý tưởng.
+          Trong hệ thống thực, filter không lý tưởng nên thường cần khoảng guard và sampling rate cao hơn mức biên lý thuyết.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="nyquist-rate-frequency">
+      <p class="concept-kicker">05 · HAI CỤM TỪ DỄ NHẦM</p>
+      <h2>Nyquist rate và Nyquist frequency không phải cùng một đại lượng.</h2>
+
+      <div class="two-column">
+        <article class="explain-card">
+          <span class="card-label">NYQUIST RATE</span>
+          <h3>2B</h3>
+          <p>
+            Nếu signal cần giữ tới B Hz, 2B là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
+          </p>
+        </article>
+        <article class="explain-card">
+          <span class="card-label">NYQUIST FREQUENCY</span>
+          <h3>f<sub>s</sub>/2</h3>
+          <p>
+            Khi sampling ở f<sub>s</sub>, đây là biên tần số cao nhất của dải baseband không bị lặp theo cách nhìn discrete-time.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        Ví dụ một ADC đang chạy ở 20 MHz có Nyquist frequency là 10 MHz.
+        Còn nếu signal cần giữ có bandwidth từ DC tới 4 MHz, Nyquist rate lý tưởng của signal đó là 8 MHz.
+        Hai câu đang nhìn cùng bài toán từ hai phía khác nhau.
+      </p>
+    </section>
+
+    <section class="concept-block" id="anti-alias">
+      <p class="concept-kicker">06 · NGOÀI ĐỜI THỰC</p>
+      <h2>ADC không thể trông chờ mọi thứ phía trên fₛ/2 tự biến mất.</h2>
+      <p>
+        Signal analog thực tế có thể chứa noise, blocker hoặc các thành phần ngoài bandwidth ta quan tâm.
+        Nếu chúng đi thẳng vào ADC, những thành phần phía trên Nyquist frequency có thể alias vào dải cần giữ.
+      </p>
+
+      <div class="anti-alias-flow">
+        <div>
+          <small>ANALOG INPUT</small>
+          <strong>signal + out-of-band energy</strong>
+        </div>
+        <b>→</b>
+        <div class="filter-stage">
+          <small>TRƯỚC ADC</small>
+          <strong>Anti-alias filter</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>ADC</small>
+          <strong>sampling @ fₛ</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>DIGITAL</small>
+          <strong>x[n]</strong>
+        </div>
+      </div>
+
+      <p>
+        Anti-alias filter là filter analog đặt trước sampling để làm suy giảm các thành phần không muốn giữ.
+        Vì transition band của filter thực không thể dựng đứng tại một tần số duy nhất, hệ thống thường chọn f<sub>s</sub>
+        cao hơn giới hạn lý thuyết để có khoảng chuyển tiếp dễ thiết kế hơn. Đây là một lý do oversampling rất hữu ích.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Aliasing xảy ra trước khi DSP có cơ hội sửa nó</strong>
+        <p>
+          Một khi hai thành phần analog khác nhau đã tạo ra cùng dãy samples, một filter digital thông thường không thể
+          tự biết thành phần nào là “đúng”. Vì vậy chống alias phải bắt đầu từ trước ADC hoặc từ kiến trúc sampling phù hợp.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="wireless">
+      <p class="concept-kicker">07 · NỐI LẠI VỚI WIRELESS</p>
+      <h2>Sampling rate quyết định cách receiver số nhìn thấy bandwidth mà RF front-end đưa vào.</h2>
+      <p>
+        Trong một receiver wireless, RF front-end và downconversion đưa phần spectrum cần quan tâm về một dạng phù hợp cho ADC.
+        ADC sau đó tạo time-domain samples để các khối như synchronization, FFT, channel estimation và demodulation xử lý.
+      </p>
+
+      <div class="ofdm-rx-return sampling-wireless-flow">
+        <div><strong>RF</strong><span>continuous-time waveform</span></div>
+        <b>→ filter →</b>
+        <div><strong>ADC</strong><span>sampling</span></div>
+        <b>→</b>
+        <div><strong>DSP</strong><span>x[n] / I,Q samples</span></div>
+        <b>→ FFT →</b>
+        <div><strong>OFDM</strong><span>frequency bins</span></div>
+      </div>
+
+      <p>
+        Trong bài này, điều kiện Nyquist được minh họa bằng signal real, low-pass để giữ trực giác đơn giản.
+        Khi tới complex baseband và I/Q, cách nói về positive/negative frequency và bandwidth cần chính xác hơn.
+        Ta sẽ quay lại điểm này sau khi đã có phasor và số phức.
+      </p>
+    </section>
+
+    <section class="concept-block recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
+      <h2>Tới đây ta có thể nhìn sampling như một bài toán giữ đủ thông tin, không chỉ là “đo thật nhiều điểm”.</h2>
+      <ol class="recap-list">
+        <li><strong>Sampling</strong> làm rời rạc thời gian: x[n] = x(nT<sub>s</sub>).</li>
+        <li><strong>Sampling rate</strong> là f<sub>s</sub> = 1/T<sub>s</sub>.</li>
+        <li><strong>Aliasing</strong> xảy ra khi những thành phần khác nhau trở nên không phân biệt được sau sampling.</li>
+        <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: f<sub>s</sub> &gt; 2B.</li>
+        <li><strong>Nyquist frequency</strong> là f<sub>s</sub>/2, còn <strong>Nyquist rate</strong> của signal band-limited tới B là 2B.</li>
+        <li><strong>Anti-alias filter</strong> phải xử lý out-of-band energy trước ADC.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" href="/hoc/tin-hieu-la-gi/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Signal là gì?</strong>
+        <small>Từ thế giới thật tới samples, FFT và I/Q.</small>
+      </a>
+      <div class="lesson-nav-card next pending">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Amplitude, frequency và phase</strong>
+        <small>Một sinusoid thực sự được mô tả bởi những tham số nào?</small>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
