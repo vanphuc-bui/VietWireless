@@ -57,7 +57,7 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="simple-example">
-      <p class="concept-kicker">02 · MỘT VÍ DỤ N=4 ĐỂ THẤY IFFT KHÔNG HỀ BÍ ẨN</p>
+      <p class="concept-kicker">02 · MỘT VÍ DỤ <MathExpr tex="N=4" /> ĐỂ THẤY IFFT KHÔNG HỀ BÍ ẨN</p>
       <h2>Nếu chỉ bật một bin, time-domain samples chính là các điểm của một complex sinusoid.</h2>
 
       <p>
@@ -74,7 +74,7 @@ import MathExpr from '../../components/Math.astro';
         -0.25,
         -j0.25.
         Trên complex plane, vector quay 90° sau mỗi sample.
-        Đó chính là subcarrier k=1.
+        Đó chính là subcarrier <MathExpr tex="k=1" />.
       </p>
 
       <p>
@@ -148,7 +148,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Khi vẽ spectrum, ta hay dùng fftshift để đưa negative frequencies sang trái, DC vào giữa và positive frequencies sang phải.
         Nhưng FFT library thường trả array theo raw order:
-        k=0 trước, rồi positive bins, rồi negative bins wrap ở cuối.
+        <MathExpr tex="k=0" /> trước, rồi positive bins, rồi negative bins wrap ở cuối.
       </p>
 
       <aside class="precision-note">
