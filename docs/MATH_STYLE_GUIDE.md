@@ -238,6 +238,10 @@ Trong Astro SVG, dùng `<foreignObject>` + `<MathExpr />`. Trong React SVG, dùn
 
 QA phải quét cả text node bên trong SVG; không được bỏ qua toàn bộ SVG khi kiểm tra math style.
 
+Các dạng rất dễ sót nhưng vẫn bắt buộc dùng MathExpr: `subcarrier k`, `bin k`, `frequency f`, `sample index n`, `N useful samples`, `N-point FFT`, `I\cos(\cdot)`, `Q\sin(\cdot)`. Không chỉ các công thức có dấu `=` mới được xem là math notation.
+
+Ký tự đơn chỉ là dữ liệu minh họa, ví dụ chữ “A” được encode thành bits trong một sơ đồ Shannon, có thể giữ text thường. Quyết định dựa trên semantics: nếu ký tự là biến toán thì KaTeX; nếu nó là nội dung/data literal thì text thường.
+
 ## Rule layout khi MathExpr nằm trong text
 
 Không viết CSS selector kiểu `.foo span { display:block }` nếu bên trong `.foo` có thể chứa `MathExpr`, vì `MathExpr` cũng render thành `span` và sẽ bị bẻ dòng. Dùng direct-child selector như `.foo > span` hoặc target class cụ thể. Inline math phải luôn ở cùng dòng với câu khi còn đủ chỗ.
