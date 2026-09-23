@@ -69,6 +69,19 @@ for (const file of files) {
     report(file, 'do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.');
   }
 
+  if (extension === '.jsx' || extension === '.tsx') {
+    for (const match of content.matchAll(/tex=\{\s*(?:`([^`]*)`|"([^"]*)"|'([^']*)')\s*\}/gs)) {
+      const body = match[1] ?? match[2] ?? match[3] ?? '';
+      if (/(^|[^\\])\\[A-Za-z]/u.test(body)) {
+        report(file, `single-backslash TeX found inside a JavaScript string/template: "${match[0]}". Use String.raw or double escaping.`);
+      }
+    }
+
+    if (/<text\b[^>]*>\s*(?:Re|Im)\s*<\/text>/u.test(content)) {
+      report(file, 'raw Re/Im SVG text found. Use SvgMathExpr for mathematical axis labels.');
+    }
+  }
+
   if (/<\/?(?:sub|sup)>/i.test(content)) {
     report(file, 'raw <sub>/<sup> math markup found. Use MathExpr.');
   }
@@ -200,6 +213,38 @@ for (const token of mathCardTokens) {
   }
 }
 
+const technicalCardTokens = [
+  '--lesson-technical-card-padding',
+  '--lesson-technical-card-label-size',
+  '--lesson-technical-card-body-size',
+  '--lesson-formula-card-min-height',
+  '--lesson-formula-card-main-size',
+  '--lesson-visual-card-figure-height',
+  '--lesson-metric-card-min-height',
+  '--lesson-metric-card-value-size',
+  '--lesson-metric-card-formula-size',
+];
+
+for (const token of technicalCardTokens) {
+  if (!css.includes(`${token}:`)) {
+    report(cssFile, `missing shared technical-card token "${token}". Keep formula/visual/metric sizing centralized.`);
+  }
+}
+
+const requiredTechnicalCardCss = [
+  [/\.formula-card\s*\{[\s\S]*?min-height:\s*var\(--lesson-formula-card-min-height\)/, 'formula-card min-height'],
+  [/\.visual-card-figure\s*\{[\s\S]*?min-height:\s*var\(--lesson-visual-card-figure-height\)/, 'visual-card figure height'],
+  [/\.metric-card\s*\{[\s\S]*?min-height:\s*var\(--lesson-metric-card-min-height\)/, 'metric-card min-height'],
+  [/\.metric-card-value\s*\{[\s\S]*?font-size:\s*var\(--lesson-metric-card-value-size\)/, 'metric-card value size'],
+  [/\.metric-card-formula\s*\{[\s\S]*?font-size:\s*var\(--lesson-metric-card-formula-size\)/, 'metric-card formula size'],
+];
+
+for (const [regex, label] of requiredTechnicalCardCss) {
+  if (!regex.test(css)) {
+    report(cssFile, `shared ${label} must use the technical-card token system.`);
+  }
+}
+
 const mathCardScaleMarker = '--lesson-math-card-min-height:';
 const mathCardScaleIndex = css.indexOf(mathCardScaleMarker);
 if (mathCardScaleIndex < 0) {
@@ -229,6 +274,26 @@ for (const file of files) {
   }
   if (/class(?:Name)?=["'][^"']*perspective[^"']*["'][\s\S]{0,1400}<strong>\s*<MathExpr\b/u.test(content)) {
     report(file, 'formula comparison inside perspective card found. Use shared math-card system.');
+  }
+}
+
+for (const file of files) {
+  const content = readFileSync(file, 'utf8');
+  const normalized = relative('.', file).replaceAll('\\', '/');
+
+  if (normalized.endsWith('src/pages/hoc/so-phuc-va-phasor.astro')) {
+    if (!/class="technical-card visual-card"/u.test(content)) {
+      report(file, 'complex-number visual boxes must use the shared visual-card variant.');
+    }
+    if (!/class="technical-card formula-card"/u.test(content)) {
+      report(file, 'complex-number formula boxes must use the shared formula-card variant.');
+    }
+  }
+
+  if (normalized.endsWith('src/components/ComplexPhasorExplorer.jsx')) {
+    if (!/className="phasor-readout metric-card-grid"/u.test(content) || !/className="metric-card"/u.test(content)) {
+      report(file, 'phasor readout must use the shared metric-card system.');
+    }
   }
 }
 
