@@ -191,7 +191,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
         <b>↔</b>
         <div>
           <span class="card-label">FREQUENCY</span>
-          <strong>f = 1/T</strong>
+          <strong><MathExpr tex="f=1/T" /></strong>
           <p>Số chu kỳ hoàn thành trong một giây.</p>
         </div>
       </div>
@@ -215,7 +215,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <h2>Phase chỉ có ý nghĩa khi ta biết đang so với mốc nào.</h2>
       <p>
         Nếu <MathExpr tex="f" /> và <MathExpr tex="A" /> giữ nguyên, thay <MathExpr tex="\phi" /> không làm waveform dao động nhanh hơn hoặc lớn hơn.
-        Nó thay đổi vị trí của waveform so với mốc t = 0.
+        Nó thay đổi vị trí của waveform so với mốc <MathExpr tex="t=0" />.
       </p>
 
       <div class="phase-comparison">
@@ -251,7 +251,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <aside class="precision-note">
         <strong>Không có “absolute phase” tách rời khỏi reference</strong>
         <p>
-          Nếu ta đổi mốc thời gian t = 0, giá trị phase của cùng một sinusoid cũng thay đổi.
+          Nếu ta đổi mốc thời gian <MathExpr tex="t=0" />, giá trị phase của cùng một sinusoid cũng thay đổi.
           Trong thực tế, phase thường hữu ích vì ta đang so một signal với một reference, một oscillator hoặc một signal khác.
         </p>
       </aside>
@@ -269,7 +269,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
 
     <section class="concept-block" id="tai-sao-can">
       <p class="concept-kicker">07 · VÌ SAO BA THAM SỐ NÀY SẼ QUAY LẠI LIÊN TỤC?</p>
-      <h2>Một sinusoid đơn giản là chiếc cầu dẫn sang Fourier, modulation và I/Q.</h2>
+      <h2>Một sinusoid đơn giản là chiếc cầu dẫn sang Fourier, modulation và <MathExpr tex="I/Q" />.</h2>
       <p>
         Khi một signal phức tạp được nhìn trong frequency domain, ta thường quan tâm từng thành phần sinusoid đang có
         frequency nào, amplitude bao nhiêu và phase ra sao. Đây chính là lý do ba tham số này xuất hiện lại trong Fourier.
@@ -295,7 +295,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
         </div>
         <b>→</b>
         <div>
-          <small>I/Q</small>
+          <small><MathExpr tex="I/Q" /></small>
           <strong>complex representation</strong>
           <span>làm amplitude và phase dễ xử lý hơn</span>
         </div>
