@@ -32,14 +32,14 @@ export default function NumerologyExplorer() {
       </div>
 
       <div className="numerology-readout">
-        <div><small>SCS</small><strong><MathExpr tex={`${row.scs}\\,\\mathrm{kHz}`} /></strong><span><MathExpr tex="15\\cdot2^{\\mu}" /></span></div>
-        <div><small>USEFUL <MathExpr tex="T_u" /></small><strong><MathExpr tex={`${usefulUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></strong><span><MathExpr tex="1/\\Delta f" />, excludes CP</span></div>
-        <div><small>SLOTS / <MathExpr tex="1\\,\\mathrm{ms}" /></small><strong>{row.slots}</strong><span>normal CP</span></div>
-        <div><small>SLOT DURATION</small><strong><MathExpr tex={`${slotMs.toFixed(5)}\\,\\mathrm{ms}`} /></strong><span><MathExpr tex="1\\,\\mathrm{ms}/2^{\\mu}" /></span></div>
+        <div><small>SCS</small><strong><MathExpr tex={`${row.scs}\\,\\mathrm{kHz}`} /></strong><span><MathExpr tex={String.raw`15\\cdot2^{\\mu}`} /></span></div>
+        <div><small>USEFUL <MathExpr tex="T_u" /></small><strong><MathExpr tex={`${usefulUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></strong><span><MathExpr tex={String.raw`1/\\Delta f`} />, excludes CP</span></div>
+        <div><small>SLOTS / <MathExpr tex={String.raw`1\\,\\mathrm{ms}`} /></small><strong>{row.slots}</strong><span>normal CP</span></div>
+        <div><small>SLOT DURATION</small><strong><MathExpr tex={`${slotMs.toFixed(5)}\\,\\mathrm{ms}`} /></strong><span><MathExpr tex={String.raw`1\\,\\mathrm{ms}/2^{\\mu}`} /></span></div>
       </div>
 
       <div className="numerology-subframe">
-        <div className="visual-caption"><span>ONE <MathExpr tex="1\\,\\mathrm{ms}" /> SUBFRAME</span><strong>{row.slots} slot{row.slots > 1 ? 's' : ''}</strong></div>
+        <div className="visual-caption"><span>ONE <MathExpr tex={String.raw`1\\,\\mathrm{ms}`} /> SUBFRAME</span><strong>{row.slots} slot{row.slots > 1 ? 's' : ''}</strong></div>
         <div className={`numerology-slot-strip ${row.slots > 16 ? 'dense' : ''}`}>
           {displaySlots.map((slot) => (
             <i key={slot}><small>{row.slots <= 16 ? slot : ''}</small></i>
@@ -51,7 +51,7 @@ export default function NumerologyExplorer() {
       <div className="numerology-symbol-story">
         <div>
           <small>USEFUL PART</small>
-          <strong><MathExpr tex="T_u=1/\\Delta f" /></strong>
+          <strong><MathExpr tex={String.raw`T_u=1/\\Delta f`} /></strong>
           <span><MathExpr tex={`${usefulUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></span>
         </div>
         <b>+</b>
