@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CommunicationJourney from '../components/CommunicationJourney.astro';
+import MathExpr from '../components/Math.astro';
 ---
 
 <BaseLayout
@@ -24,7 +25,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
       <div class="hero-note">
         <span class="note-mark">Ghi chú mở đầu</span>
         <p>
-          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, I/Q, OFDM hay resource grid
+          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, <MathExpr tex="I/Q" />, OFDM hay resource grid
           hơi rời rạc, tôi cũng từng có cảm giác như vậy. VietWireless là nơi tôi thử nối chúng lại bằng hình ảnh và những ví dụ dễ nhìn hơn.
         </p>
       </div>
@@ -366,7 +367,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
 
         <p>
           Sau này, khi học, nghiên cứu và làm việc sâu hơn với wireless, tôi nhận ra cảm giác này khá phổ biến.
-          Ta có thể dùng FFT, OFDM, channel estimation hay I/Q rất thường xuyên nhưng đôi khi vẫn phải dừng lại một chút để hỏi:{" "}
+          Ta có thể dùng FFT, OFDM, channel estimation hay <MathExpr tex="I/Q" /> rất thường xuyên nhưng đôi khi vẫn phải dừng lại một chút để hỏi:{" "}
           <em>ở bước này tín hiệu đang được biểu diễn theo cách nào?</em>
         </p>
 
@@ -443,7 +444,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
             <span class="course-no">PHẦN I</span>
             <div>
               <h3>Nền tảng signal</h3>
-              <p>Signal → sampling → phase → số phức → I/Q → FFT → modulation.</p>
+              <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → FFT → modulation.</p>
             </div>
             <a href="/hoc/tin-hieu-la-gi/">Bắt đầu →</a>
           </li>
