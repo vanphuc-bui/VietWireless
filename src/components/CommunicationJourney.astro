@@ -1,4 +1,6 @@
 ---
+import MathExpr from './Math.astro';
+
 const { compact = false } = Astro.props;
 ---
 
@@ -8,7 +10,7 @@ const { compact = false } = Astro.props;
     <h2 id="communication-journey-title">Một bức ảnh đi từ người gửi tới người nhận như thế nào?</h2>
     <p>
       Tôi dùng một hệ thống OFDM hiện đại làm ví dụ. Nếu nhìn từ xa, cả chuỗi có thể thu gọn thành:{" "}
-      <strong>information → bits → symbols → IFFT → I/Q → RF → channel → receiver</strong>.
+      <strong>information → bits → symbols → IFFT → <MathExpr tex="I/Q" /> → RF → channel → receiver</strong>.
       Những phần sau chỉ đơn giản là lần lượt mở từng khối ra xem bên trong có gì.
     </p>
   </div>
@@ -133,7 +135,7 @@ const { compact = false } = Astro.props;
                 <i style="--h:28%"></i><i style="--h:58%"></i><i style="--h:82%"></i><i style="--h:42%"></i>
                 <i style="--h:70%"></i><i style="--h:36%"></i><i style="--h:64%"></i><i style="--h:48%"></i>
               </div>
-              <strong>X[k]</strong>
+              <strong><MathExpr tex="X[k]" /></strong>
               <span>Symbols nằm trên các subcarriers trong <b>frequency domain</b>.</span>
             </div>
 
@@ -150,8 +152,8 @@ const { compact = false } = Astro.props;
                   <path d="M4 32 C10 8 16 56 22 32 S34 8 40 32 S52 54 58 32 S70 13 76 32 S88 49 94 32 S106 16 112 32 S124 50 130 32 S142 10 148 32 S160 52 176 32" />
                 </svg>
               </div>
-              <strong>x[n]</strong>
-              <span><b>Time-domain complex I/Q samples</b> sau IFFT.</span>
+              <strong><MathExpr tex="x[n]" /></strong>
+              <span><b>Time-domain complex <MathExpr tex="I/Q" /> samples</b> sau IFFT.</span>
             </div>
           </div>
         </section>
@@ -226,7 +228,7 @@ const { compact = false } = Astro.props;
                   <path d="M4 34 C10 13 16 54 22 29 S34 11 40 35 S52 51 58 30 S70 17 76 35 S88 48 94 30 S106 20 112 34 S124 47 130 29 S142 14 148 35 S160 48 176 31" />
                 </svg>
               </div>
-              <strong>y[n]</strong>
+              <strong><MathExpr tex="y[n]" /></strong>
               <span>Received time-domain complex I/Q samples.</span>
             </div>
 
@@ -241,7 +243,7 @@ const { compact = false } = Astro.props;
                 <i style="--h:30%"></i><i style="--h:54%"></i><i style="--h:78%"></i><i style="--h:45%"></i>
                 <i style="--h:67%"></i><i style="--h:39%"></i><i style="--h:59%"></i><i style="--h:45%"></i>
               </div>
-              <strong>Y[k]</strong>
+              <strong><MathExpr tex="Y[k]" /></strong>
               <span>Các subcarrier sau FFT, đã bị channel làm thay đổi.</span>
             </div>
 
@@ -249,7 +251,7 @@ const { compact = false } = Astro.props;
 
             <div class="journey-step">
               <div class="step-visual equalize-visual compact-eq">
-                <span>Y[k]</span><b>÷ Ĥ[k]</b><span>≈ X[k]</span>
+                <span><MathExpr tex="Y[k]" /></span><b><MathExpr tex="\\div\\hat{H}[k]" /></b><span><MathExpr tex="\\approx X[k]" /></span>
               </div>
               <strong>Equalize + decode</strong>
               <span>Sửa channel, demap, decode rồi dựng lại bits.</span>
@@ -276,8 +278,8 @@ const { compact = false } = Astro.props;
       <aside class="precision-note">
         <strong>Một chỗ tôi từng hay nhầm</strong>
         <p>
-          Trước IFFT, <strong>X[k]</strong> là các <em>complex modulation symbols ở frequency domain</em>.
-          Sau IFFT, <strong>x[n]</strong> mới là <em>time-domain complex I/Q samples</em>.
+          Trước IFFT, <strong><MathExpr tex="X[k]" /></strong> là các <em>complex modulation symbols ở frequency domain</em>.
+          Sau IFFT, <strong><MathExpr tex="x[n]" /></strong> mới là <em>time-domain complex I/Q samples</em>.
           Theo kinh nghiệm của tôi, đây là một trong những chỗ giúp OFDM bớt “mơ hồ” hẳn.
         </p>
       </aside>
