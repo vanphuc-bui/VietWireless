@@ -139,6 +139,7 @@ Không dùng Unicode subscript/superscript như `Tₛ`, `x²` trong source khi �
 
 - `npm run check:math`;
 - `npm run check:writing`;
+- `npm run check:lesson`;
 - `npm run build`;
 - kiểm tra desktop + mobile với ít nhất một công thức dài;
 - kiểm tra Windows/Chromium vì đây là nơi typography fallback từng gây lỗi dấu;
@@ -328,3 +329,16 @@ Thay vào đó box phải thuộc một role chung:
 Nếu một page cần math lớn hơn chỉ vì “nhìn hơi nhỏ”, trước tiên kiểm tra page đang gán **đúng role** chưa. Không tạo một font-size riêng cho page đó.
 
 Inline math trong prose không thuộc box-role system; nó tiếp tục theo kích thước chữ của câu xung quanh.
+
+
+## Math trong lesson contract
+
+Từ Bài 19 trở đi, math không được tồn tại như một lớp tách rời khỏi system explanation.
+
+- Nếu công thức mô tả detector/estimator, prose phải nói input và output của operation đó.
+- Nếu công thức dùng parameter từ 3GPP, specification layer phải cho biết parameter đó đến từ đâu.
+- Nếu numerical example dùng giá trị tự chọn, phải phân biệt illustrative value với spec value.
+- Không dùng một công thức dài để thay cho visual hoặc state progression khi người đọc chưa biết các biến đang đại diện cho gì.
+- Math correctness, visual scale và system semantics đều phải pass trước merge.
+
+Rule tổng thể nằm trong `docs/LESSON_CONTRACT.md` và `docs/SOURCE_POLICY.md`.
