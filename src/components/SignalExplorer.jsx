@@ -97,8 +97,8 @@ function TimeFrequencyLab() {
               const y = PAD + ((2 - v) / 4) * (H - PAD * 2);
               return <circle key={i} cx={x} cy={y} r="2.6" className="sample-dot" />;
             })}
-            <text x={PAD} y={H - 7} className="plot-label">0 s</text>
-            <text x={W - PAD - 26} y={H - 7} className="plot-label">1 s</text>
+            <SvgMathExpr tex="0\\,\\mathrm{s}" x={PAD} y={H - 13} width={38} />
+            <SvgMathExpr tex="1\\,\\mathrm{s}" x={W - PAD - 26} y={H - 13} width={38} />
           </svg>
         ) : (
           <svg viewBox={"0 0 " + W + " " + H} role="img" aria-label="Magnitude spectrum trong frequency domain">
@@ -125,7 +125,7 @@ function TimeFrequencyLab() {
                 </g>
               );
             })}
-            <text x={W - 62} y={20} className="plot-label">Hz</text>
+            <SvgMathExpr tex="\\mathrm{Hz}" x={W - 62} y={18} width={34} />
           </svg>
         )}
       </div>
@@ -187,7 +187,7 @@ function IQLab() {
           <p className="formula"><MathExpr tex="s=I+jQ" /></p>
           <div><span><MathExpr tex="I" /></span><strong>{i.toFixed(3)}</strong></div>
           <div><span><MathExpr tex="Q" /></span><strong>{q.toFixed(3)}</strong></div>
-          <div><span>Amplitude</span><strong>1.000</strong></div>
+          <div><span>Amplitude</span><strong><MathExpr tex="A=1.000" /></strong></div>
           <div><span>Phase</span><strong><MathExpr tex={`${Math.round(phase)}^\\circ`} /></strong></div>
           <button className="play-button" onClick={() => setPlaying((v) => !v)}>
             {playing ? 'Tạm dừng phasor' : 'Cho phasor quay'}
@@ -225,7 +225,7 @@ export default function SignalExplorer() {
           Time ↔ Frequency
         </button>
         <button className={lab === 'iq' ? 'selected' : ''} onClick={() => setLab('iq')}>
-          I/Q phasor
+          <MathExpr tex="I/Q" /> phasor
         </button>
       </div>
       {lab === 'fft' ? <TimeFrequencyLab /> : <IQLab />}
