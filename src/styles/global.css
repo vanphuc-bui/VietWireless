@@ -1,5 +1,8 @@
 :root {
-  --font-serif: Cambria, "Times New Roman", "Noto Serif", serif;
+  --font-text: "STIX Two Text", "Times New Roman", serif;
+  --font-serif: var(--font-text);
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-math: "STIX Two Math", "Cambria Math", "STIX Two Text", serif;
   color-scheme: light;
   --paper: #fbfaf7;
   --paper-2: #f5f2ec;
@@ -16,7 +19,7 @@
   --violet: #6c58a6;
   --max: 1080px;
   --reading: 760px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-ui);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--paper); }
@@ -103,7 +106,10 @@ button, input { font: inherit; }
 
 .concept-block { padding-block: 68px; border-bottom: 1px solid var(--line); }
 .concept-block > h2 { max-width: 820px; margin: 0 0 22px; font-family: var(--font-serif); font-size: clamp(1.65rem, 3vw, 2.45rem); font-weight: 500; line-height: 1.16; letter-spacing: -0.02em; }
-:root { --lesson-prose-size: 1.03rem; }
+:root {
+  --article-prose-size: 1.125rem;
+  --lesson-prose-size: var(--article-prose-size);
+}
 .concept-block > p { max-width: 780px; color: var(--ink-soft); font-size: var(--lesson-prose-size); }
 .concept-block > p strong { color: var(--ink); }
 
@@ -168,7 +174,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .projection { stroke: var(--violet); stroke-width:1.5; stroke-dasharray:5 5; opacity:.7; }
 .phasor-dot { fill: var(--accent); }
 .iq-readout { display:grid; gap:8px; }
-.formula { margin:0 0 10px; color:var(--accent); font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; font-weight:700; }
+.formula { margin:0 0 10px; color:var(--accent); font-family:var(--font-text); font-size:1.5rem; font-weight:700; }
 .iq-readout > div { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); }
 .iq-readout > div > span { color:var(--muted); }
 .play-button { margin-top:10px; padding:9px 11px; color:var(--ink); border-color:var(--line-strong); background:#fff; }
@@ -177,12 +183,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 
 .domain-badge { display:inline-block; padding:4px 8px; border-radius:4px; color:#fff; background:var(--blue); font-size:.67rem; font-weight:900; }
 .domain-badge.violet { background:var(--violet); }
-.domain-grid h3 { margin:18px 0 8px; font-family:Georgia,"Times New Roman",serif; }
+.domain-grid h3 { margin:18px 0 8px; font-family:var(--font-text); }
 
 .ofdm-flow { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; align-items:center; gap:9px; margin:36px 0; }
 .ofdm-flow > div { min-height:132px; padding:16px; display:flex; flex-direction:column; justify-content:center; border:1px solid var(--line); background:#fff; }
 .ofdm-flow small { color:var(--accent); font-size:.62rem; font-weight:850; letter-spacing:.08em; }
-.ofdm-flow strong { margin:4px 0; font-family:Georgia,"Times New Roman",serif; font-size:1.4rem; }
+.ofdm-flow strong { margin:4px 0; font-family:var(--font-text); font-size:1.4rem; }
 .ofdm-flow > div > span:not(.flow-op) { color:var(--muted); font-size:.74rem; }
 .flow-op { color:var(--violet); font-size:.77rem; font-weight:850; white-space:nowrap; }
 
@@ -194,12 +200,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 
 .next-lesson { margin-top:65px; padding:25px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:22px; border:1px solid var(--line-strong); background:#fff; }
 .next-lesson > span:first-child { color:var(--accent); font-size:.66rem; font-weight:850; letter-spacing:.1em; }
-.next-lesson h2 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:1.22rem; }
+.next-lesson h2 { margin:0; font-family:var(--font-text); font-size:1.22rem; }
 .next-lesson p { margin:4px 0 0; color:var(--muted); }
 .soon { color:#99938b; font-size:.8rem; }
 
 .site-footer { width:min(calc(100% - 42px), var(--max)); min-height:180px; margin:0 auto; padding:42px 0; display:flex; justify-content:space-between; gap:30px; color:var(--muted); border-top:1px solid var(--line); font-size:.86rem; }
-.site-footer strong { color:var(--ink); font-family:Georgia,"Times New Roman",serif; }
+.site-footer strong { color:var(--ink); font-family:var(--font-text); }
 .site-footer p { max-width:450px; margin:6px 0 0; }
 .footer-note { text-align:right; }
 .footer-note a { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
@@ -10251,4 +10257,74 @@ main,
   .initial-access-state-table {
     min-width: 680px;
   }
+}
+
+
+/* --- Unified STIX typography: scientific text + native MathML --- */
+.home-essay,
+.lesson {
+  font-family: var(--font-text);
+}
+
+.essay-content > p {
+  font-size: var(--article-prose-size);
+}
+
+/* Navigation, controls and metadata stay sans-serif so the reading surface remains book-like without making the UI feel old-fashioned. */
+.site-header,
+.site-nav,
+.language-switcher,
+button,
+input,
+select,
+textarea,
+.home-essay :is(.chapter-label, .section-kicker, .concept-kicker, .eyebrow, .note-mark, .course-no, .course-status, .card-label),
+.lesson :is(.back-link, .chapter-label, .section-kicker, .concept-kicker, .eyebrow, .card-label, .domain-badge, .process-card-step, .metric-card-label, .process-op) {
+  font-family: var(--font-ui);
+}
+
+/* KaTeX remains the TeX parser; its visible output is MathML rendered with STIX Two Math. */
+.math-inline,
+.math-display,
+.svg-math,
+.katex,
+.katex math {
+  font-family: var(--font-math);
+}
+
+.katex math {
+  font-size: 1em;
+  line-height: 1;
+}
+
+.math-inline .katex {
+  font-size: 1em;
+  line-height: inherit;
+}
+
+/* Display equations are deliberately only about 8% larger than prose. */
+.math-display .katex {
+  font-size: calc(var(--lesson-prose-size) + .09rem);
+}
+
+/* Cards/readouts inherit their purpose tokens; math never gets a page-specific font family. */
+.lesson :is(
+  .math-card,
+  .technical-card,
+  .formula-card,
+  .visual-card,
+  .metric-card,
+  .mental-model,
+  .explain-card,
+  .system-position,
+  .concept-flow-card
+) {
+  font-family: var(--font-text);
+}
+
+.math-caption,
+.lab-caption,
+.visual-caption,
+.lesson figcaption {
+  font-family: var(--font-text);
 }
