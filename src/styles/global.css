@@ -10328,3 +10328,148 @@ textarea,
 .lesson figcaption {
   font-family: var(--font-text);
 }
+
+
+/* --- Technical-document typography scale: deliberately small number of sizes --- */
+:root {
+  --lesson-meta-size: 1rem;
+  --lesson-prose-size: var(--article-prose-size);
+  --lesson-subheading-size: var(--article-prose-size);
+  --lesson-section-title-size: 1.5rem;
+  --lesson-page-title-size: 2rem;
+}
+
+/* Treat every lesson as one technical document, not a collection of differently-sized cards. */
+.lesson {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.65;
+}
+
+/* Only the page title and section title are meaningfully larger than body copy. */
+.lesson .lesson-hero h1 {
+  font-size: var(--lesson-page-title-size);
+  line-height: 1.15;
+  letter-spacing: -.012em;
+}
+
+.lesson .lesson-deck {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.65;
+}
+
+.lesson .concept-block > h2 {
+  font-size: var(--lesson-section-title-size);
+  line-height: 1.3;
+  letter-spacing: -.008em;
+}
+
+.lesson :is(
+  h3,
+  .explain-card h3,
+  .domain-grid h3,
+  .next-lesson h2
+) {
+  font-size: var(--lesson-subheading-size);
+  line-height: 1.4;
+}
+
+/* Main reading content has one size everywhere, including cards, tables and callouts. */
+.lesson :is(
+  p,
+  li,
+  td,
+  figcaption,
+  .math-caption,
+  .lab-caption,
+  .visual-caption
+) {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.65;
+}
+
+/* Secondary labels use one readable size instead of many 10–13 px variants. */
+.lesson :is(
+  small,
+  th,
+  .chapter-label,
+  .section-kicker,
+  .concept-kicker,
+  .eyebrow,
+  .card-label,
+  .note-mark,
+  .domain-badge,
+  .process-card-step,
+  .metric-card-label,
+  .process-op,
+  .sampling-stage-label,
+  .zoom-label,
+  .course-no,
+  .course-status
+) {
+  font-size: var(--lesson-meta-size);
+  line-height: 1.35;
+}
+
+/* Flow/state labels are content, so they stay at prose size rather than becoming mini-headings. */
+.lesson :is(
+  .journey-node strong,
+  .perspective strong,
+  .ofdm-flow strong,
+  .rf-chain-overview.process-flow > .process-card > strong,
+  .ia-flow-card strong,
+  .receiver-chain-mini strong,
+  .pbch-decode-pipeline strong,
+  .ssb-symbol strong,
+  .metric-card-value
+) {
+  font-size: var(--lesson-prose-size);
+}
+
+/* Formula sizing follows prose. Separation and spacing create hierarchy, not oversized equations. */
+.lesson .math-display .katex,
+.lesson .math-card .math-card-formula .katex,
+.lesson .math-card .math-card-secondary .katex,
+.lesson .formula-card-main .katex,
+.lesson .formula-card-details .katex,
+.lesson .metric-card-value .katex,
+.lesson .metric-card-formula .katex,
+.lesson .process-op-math .katex,
+.lesson .math-data-table td .katex {
+  font-size: 1em;
+}
+
+.lesson .math-display {
+  font-size: var(--lesson-prose-size);
+}
+
+.lesson .math-data-table th {
+  font-size: var(--lesson-meta-size);
+}
+
+.lesson .math-data-table td {
+  font-size: var(--lesson-prose-size);
+}
+
+/* Content inside common technical boxes always inherits document body scale. */
+.lesson :is(
+  .math-card,
+  .technical-card,
+  .formula-card,
+  .visual-card,
+  .metric-card,
+  .mental-model,
+  .explain-card,
+  .system-position,
+  .concept-flow-card,
+  .source-note
+) {
+  --lesson-box-content-size: var(--lesson-prose-size);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --lesson-meta-size: 1rem;
+    --lesson-section-title-size: 1.375rem;
+    --lesson-page-title-size: 1.75rem;
+  }
+}
