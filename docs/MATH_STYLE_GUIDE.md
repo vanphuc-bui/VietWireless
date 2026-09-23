@@ -311,7 +311,9 @@ Các role chuẩn:
 | Flow state | giá trị/ký hiệu chính trong process, flow, story, chain, overview, step box | `--lesson-box-math-flow` |
 | Readout primary | đại lượng toán chính trong readout/metric | `--lesson-box-math-readout-primary` |
 | Readout secondary | công thức giải thích nhỏ dưới readout | `--lesson-box-math-readout-secondary` |
-| SVG math | notation nằm trong diagram/SVG | `--lesson-box-math-svg` |
+| SVG axis/small annotation | notation phụ nằm trong diagram/SVG | `--lesson-box-math-svg` |
+| SVG label | ký hiệu/đại lượng cần đọc rõ trong diagram | `--lesson-box-math-svg-label` |
+| SVG equation | công thức chính nằm trong diagram | `--lesson-box-math-svg-equation` |
 
 Các token này dùng **fixed rem/px values**, không dùng clamp riêng theo page. Mục tiêu là cùng một purpose thì cùng optical size trên toàn website.
 
@@ -342,3 +344,16 @@ Từ Bài 19 trở đi, math không được tồn tại như một lớp tách 
 - Math correctness, visual scale và system semantics đều phải pass trước merge.
 
 Rule tổng thể nằm trong `docs/LESSON_CONTRACT.md` và `docs/SOURCE_POLICY.md`.
+
+
+## SVG math phải phân cấp theo vai trò
+
+Không dùng một cỡ duy nhất cho mọi math nằm trong SVG.
+
+- Axis tick hoặc notation phụ: dùng class `.svg-math`.
+- Đại lượng cần đọc như `d_0`, `d_1`, `f_c`: thêm `.svg-math-label`.
+- Công thức chính nằm trực tiếp trong hình: thêm `.svg-math-equation`.
+
+Không giảm font-size riêng trong từng page. Nếu công thức chính trong một SVG vẫn nhỏ hơn prose xung quanh, sửa shared role token thay vì hard-code page-specific size.
+
+ForeignObject phải đủ width/height cho cỡ math role tương ứng; không để KaTeX bị clip sau khi tăng kích thước.
