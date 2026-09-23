@@ -108,7 +108,8 @@ for (const file of files) {
       report(file, `single-backslash TeX found inside a JavaScript string/template: "${match[0]}". Use String.raw or double escaping.`);
     }
 
-    const stripped = findStrippedTexCommand(body);
+    const literalBody = body.replace(/\$\{[^}]*\}/g, '');
+    const stripped = findStrippedTexCommand(literalBody);
     if (stripped) {
       report(file, `TeX command "${stripped}" appears without a backslash in "${match[0]}". The escape was probably stripped before KaTeX received it.`);
     }
@@ -121,7 +122,8 @@ for (const file of files) {
       report(file, `double backslash found inside String.raw TeX: "${match[0]}". String.raw must contain one source backslash per TeX command.`);
     }
 
-    const stripped = findStrippedTexCommand(body);
+    const literalBody = body.replace(/\$\{[^}]*\}/g, '');
+    const stripped = findStrippedTexCommand(literalBody);
     if (stripped) {
       report(file, `TeX command "${stripped}" appears without a backslash inside String.raw: "${match[0]}".`);
     }
