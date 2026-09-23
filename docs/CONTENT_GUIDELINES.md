@@ -154,3 +154,6 @@ Nguồn chuẩn chi tiết: `docs/MATH_STYLE_GUIDE.md`.
 ### Math notation áp dụng cho toàn bộ UI
 
 Quy tắc MathExpr không chỉ áp dụng trong prose. Nó áp dụng cho headings, cards, tables, interactive components, chart/readout labels và roadmap. Nếu ký hiệu là biến/toán học thì render bằng KaTeX; chỉ acronym/tên công nghệ được giữ như text thường.
+- SVG/chart không được chứa plain-text math như `x(t)`, `f₀`, `θ`, `I`, `Q`; dùng `MathExpr` qua `foreignObject` hoặc `SvgMathExpr`.
+- CSS không được dùng selector rộng làm `span` của `MathExpr` thành block. Với readout/card, ưu tiên direct-child selector (`> span`, `> strong`) để giữ inline math liền câu.
+- Khi audit, phải quét toàn bộ page và component, không chỉ phần prose hoặc display equations.
