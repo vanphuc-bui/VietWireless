@@ -89,7 +89,7 @@ export default function NoiseEVMExplorer() {
       </div>
       <p className="noise-lab-note">
         SNR và EVM ở demo này được tính từ cùng reference symbols. Khi chỉ có additive error và normalization nhất quán,
-        chúng liên hệ gần như <MathExpr tex="\\mathrm{EVM}\\approx1/\\sqrt{\\mathrm{SNR}}" /> theo dạng linear. Hệ đo thực tế có thể còn channel, equalizer, filtering,
+        chúng liên hệ gần như <MathExpr tex={String.raw`\\mathrm{EVM}\\approx1/\\sqrt{\\mathrm{SNR}}`} /> theo dạng linear. Hệ đo thực tế có thể còn channel, equalizer, filtering,
         synchronization và convention chuẩn hóa khác.
       </p>
     </div>
