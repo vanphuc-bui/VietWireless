@@ -48,11 +48,11 @@ import MathExpr from '../../components/Math.astro';
       <h2>Một RE tương ứng một subcarrier tại một OFDM-symbol position.</h2>
 
       <div class="grid-coordinate-story">
-        <div><small>FREQUENCY INDEX</small><strong>k</strong><span>subcarrier nào?</span></div>
+        <div><small>FREQUENCY INDEX</small><strong><MathExpr tex="k" /></strong><span>subcarrier nào?</span></div>
         <b>+</b>
-        <div><small>TIME INDEX</small><strong>l</strong><span>OFDM symbol nào?</span></div>
+        <div><small>TIME INDEX</small><strong><MathExpr tex={String.raw`\ell`} /></strong><span>OFDM symbol nào?</span></div>
         <b>→</b>
-        <div><small>RESOURCE ELEMENT</small><strong>(k,l)</strong><span>một complex value</span></div>
+        <div><small>RESOURCE ELEMENT</small><strong><MathExpr tex={String.raw`(k,\ell)`} /></strong><span>một complex value</span></div>
       </div>
 
       <p>
@@ -69,7 +69,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="grid-lab">
       <p class="concept-kicker">02 · INTERACTIVE GRID</p>
-      <h2>Click một ô để xem subcarrier k, OFDM-symbol index l và resource block chứa nó.</h2>
+      <h2>Click một ô để xem subcarrier <MathExpr tex="k" />, OFDM-symbol index <MathExpr tex={String.raw`\ell`} /> và resource block chứa nó.</h2>
       <p>
         Demo chỉ có 24 subcarriers, tức hai groups 12-subcarrier, để nhìn geometry cho rõ.
         Carrier thực tế có thể có rất nhiều RBs.
@@ -146,7 +146,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="column">
       <p class="concept-kicker">06 · MỘT COLUMN THEO TIME SẼ TRỞ THÀNH MỘT OFDM SYMBOL</p>
-      <h2>Giữ l cố định, lấy toàn bộ frequency-domain values rồi map chúng vào IFFT bins.</h2>
+      <h2>Giữ <MathExpr tex={String.raw`\ell`} /> cố định, lấy toàn bộ frequency-domain values rồi map chúng vào IFFT bins.</h2>
 
       <div class="grid-column-flow">
         <div><small>GRID COLUMN</small><strong><MathExpr tex="X[k,l]" /></strong><span>occupied subcarriers</span></div>
@@ -184,7 +184,7 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="coordinates">
-      <p class="concept-kicker">08 · “K = 10” CHỈ CÓ Ý NGHĨA KHI BIẾT REFERENCE</p>
+      <p class="concept-kicker">08 · “<MathExpr tex="K=10" />” CHỈ CÓ Ý NGHĨA KHI BIẾT REFERENCE</p>
       <h2>Subcarrier index có thể là local index trong hình minh họa, trong resource grid, trong RB hoặc trong FFT array.</h2>
 
       <p>
@@ -218,7 +218,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap">
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Resource element:</strong> một frequency-time position (k,l) chứa một complex value khi được sử dụng.</li>
+        <li><strong>Resource element:</strong> một frequency-time position <MathExpr tex={String.raw`(k,\ell)`} /> chứa một complex value khi được sử dụng.</li>
         <li><strong>Resource block:</strong> 12 consecutive subcarriers, không phải bản thân một 12×14 rectangle.</li>
         <li><strong>Slot:</strong> cung cấp time span để ta thường vẽ RB resources thành rectangle.</li>
         <li><strong>Data/reference/control:</strong> cùng chia sẻ grid theo mapping rules khác nhau.</li>
