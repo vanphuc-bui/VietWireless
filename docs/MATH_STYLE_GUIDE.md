@@ -427,37 +427,19 @@ Project có hai lớp bảo vệ:
 
 Không merge bằng cách bỏ qua guard. Nếu guard báo false positive, sửa validator cùng regression case thay vì disable check cho riêng page.
 
-## Typography toán: STIX Two Math + native MathML
+## Typography toán: classic TeX / KaTeX
 
-VietWireless dùng một cặp font khoa học thống nhất:
+VietWireless bám gần cách trình bày của Machine Learning Cơ Bản:
 
-- prose/article text: `STIX Two Text`;
-- mathematical output: `STIX Two Math`;
-- UI/navigation/control metadata: sans-serif system font.
+- prose/article text: `"Times New Roman", Times, serif`;
+- mathematical output: KaTeX mặc định, giữ kiểu Computer-Modern/TeX;
+- metadata/UI: `Arial, Helvetica, sans-serif`.
 
-TeX vẫn được parse và validate bằng KaTeX ở build time, nhưng visible output phải là **MathML** (`output: 'mathml'`). Browser render MathML bằng `STIX Two Math`, vì vậy công thức không được phụ thuộc vào KaTeX HTML font stack hoặc font cài sẵn trên Windows/Linux.
+KaTeX render `htmlAndMathml` để giữ visual TeX ổn định. Không ép KaTeX sang STIX hoặc đổi font-family của các span nội bộ.
 
-Quy tắc bắt buộc:
-
-- Không đặt `font-family` riêng cho công thức ở từng page/component.
-- Inline math phải có optical size bằng prose xung quanh: wrapper `.math-inline .katex` dùng `1em`.
-- Display equation dùng cùng optical size với prose (`18 px`). Hierarchy đến từ spacing, alignment và vị trí, không đến từ việc phóng công thức.
-- Math trong formula card, readout, flow, table và box tiếp tục lấy size từ shared `--lesson-box-math-*` / `--lesson-*-size` tokens.
-- SVG math tiếp tục dùng role token riêng vì viewBox scaling; font family vẫn là `STIX Two Math`.
-- Không re-enable `htmlAndMathml` chỉ để sửa visual; nếu có lỗi layout, sửa shared CSS/token hoặc MathML styling.
-- Font source được pin trong `BaseLayout.astro`; không thêm Google/system-font override ở page riêng.
-
-
-
-## Thang chữ kiểu tài liệu kỹ thuật
-
-Lesson không được dùng một “font-size riêng cho mỗi component”. Toàn bộ bài chỉ có bốn cấp đọc chính:
-
-- page title: `2rem` (32 px desktop);
-- section title: `1.5rem` (24 px desktop);
-- body / formula / table body / callout body / card content: `1.125rem` (18 px);
-- metadata / eyebrow / card label / table header: `1rem` (16 px).
-
-Subheading trong nội dung không tự phóng lớn; mặc định cùng cỡ body và tạo hierarchy bằng weight/spacing.
-
-Không tạo thêm cỡ chữ 10, 11, 12, 13, 14 hoặc 15 px cho lesson content. Nếu một layout không đủ chỗ, sửa layout thay vì thu chữ.
+Quy tắc:
+- inline math bám cỡ chữ của câu xung quanh;
+- display math chỉ nhỉnh hơn prose nhẹ;
+- math trong box/card/readout vẫn dùng shared size token;
+- không hard-code font math theo từng page;
+- nếu công thức nhìn không cân, sửa shared spacing/size trước, không thay font engine.
