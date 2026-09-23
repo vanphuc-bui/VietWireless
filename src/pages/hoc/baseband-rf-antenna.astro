@@ -59,15 +59,41 @@ import MathExpr from '../../components/Math.astro';
         Nó là representation mà DSP dùng vì filtering, modulation, FFT, channel estimation và nhiều phép toán khác trở nên gọn hơn trên số phức.
       </p>
 
-      <div class="rf-chain-overview">
-        <div><small>MEMORY</small><strong><MathExpr tex="I[n],\,Q[n]" /></strong><span>hai dãy số rời rạc</span></div>
-        <b>→</b>
-        <div><small>DAC</small><strong><MathExpr tex="I(t),\,Q(t)" /></strong><span>hai waveform analog</span></div>
-        <b>→</b>
-        <div><small>UPCONVERSION</small><strong><MathExpr tex="f_c" /></strong><span>dịch spectrum lên RF</span></div>
-        <b>→</b>
-        <div><small>RF PORT</small><strong><MathExpr tex="s(t)" /></strong><span>một waveform thực</span></div>
+      <div class="rf-chain-overview process-flow" aria-label="Từ digital baseband samples tới RF waveform thực">
+        <article class="process-card">
+          <small class="process-card-step">01 · DIGITAL BASEBAND</small>
+          <strong><MathExpr tex="I[n],\,Q[n]" /></strong>
+          <p>Complex samples đang nằm trong DSP / memory.</p>
+        </article>
+
+        <b class="process-arrow" aria-label="Qua DAC">
+          <span class="process-op">DAC</span>
+          <span class="process-arrow-glyph" aria-hidden="true">→</span>
+        </b>
+
+        <article class="process-card">
+          <small class="process-card-step">02 · ANALOG BASEBAND</small>
+          <strong><MathExpr tex="I(t),\,Q(t)" /></strong>
+          <p>Hai waveform điện analog sau DAC và reconstruction filter.</p>
+        </article>
+
+        <b class="process-arrow" aria-label="Qua quadrature mixer và local oscillator">
+          <span class="process-op">MIXER + LO</span>
+          <span class="process-op-math"><MathExpr tex="f_c" /></span>
+          <span class="process-arrow-glyph" aria-hidden="true">→</span>
+        </b>
+
+        <article class="process-card process-card-rf">
+          <small class="process-card-step">03 · RF WAVEFORM</small>
+          <strong><MathExpr tex={String.raw`s_{\mathrm{RF}}(t)`} /></strong>
+          <p>Một waveform thực có spectrum nằm quanh carrier <MathExpr tex="f_c" />.</p>
+        </article>
       </div>
+
+      <p class="process-takeaway">
+        Tóm lại: <strong>DAC đổi samples rời rạc thành analog baseband</strong>; sau đó <strong>mixer + local oscillator mới dịch signal lên RF</strong>.
+        Carrier <MathExpr tex="f_c" /> là tham số của bước upconversion, không phải một “sample” khác nằm trong memory.
+      </p>
     </section>
 
     <section class="concept-block" id="dac">
