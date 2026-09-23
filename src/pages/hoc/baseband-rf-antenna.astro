@@ -60,13 +60,13 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="rf-chain-overview">
-        <div><small>MEMORY</small><strong>I[n], Q[n]</strong><span>hai dãy số rời rạc</span></div>
+        <div><small>MEMORY</small><strong><MathExpr tex="I[n],\,Q[n]" /></strong><span>hai dãy số rời rạc</span></div>
         <b>→</b>
-        <div><small>DAC</small><strong>I(t), Q(t)</strong><span>hai waveform analog</span></div>
+        <div><small>DAC</small><strong><MathExpr tex="I(t),\,Q(t)" /></strong><span>hai waveform analog</span></div>
         <b>→</b>
         <div><small>UPCONVERSION</small><strong><MathExpr tex="f_c" /></strong><span>dịch spectrum lên RF</span></div>
         <b>→</b>
-        <div><small>RF PORT</small><strong>s(t)</strong><span>một waveform thực</span></div>
+        <div><small>RF PORT</small><strong><MathExpr tex="s(t)" /></strong><span>một waveform thực</span></div>
       </div>
     </section>
 
@@ -89,13 +89,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="dac-story">
         <div>
           <span class="card-label">DIGITAL</span>
-          <strong>I[n], Q[n]</strong>
+          <strong><MathExpr tex="I[n],\,Q[n]" /></strong>
           <p>Các giá trị theo sample index.</p>
         </div>
         <b>→ DAC →</b>
         <div>
           <span class="card-label">ANALOG BASEBAND</span>
-          <strong>I(t), Q(t)</strong>
+          <strong><MathExpr tex="I(t),\,Q(t)" /></strong>
           <p>Hai tín hiệu điện analog quanh baseband.</p>
         </div>
         <b>→ FILTER →</b>
@@ -227,7 +227,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="antenna-story">
-        <div><small>RF PORT</small><strong>s(t)</strong><span>voltage/current có modulation</span></div>
+        <div><small>RF PORT</small><strong><MathExpr tex="s(t)" /></strong><span>voltage/current có modulation</span></div>
         <b>→</b>
         <div><small>ANTENNA</small><strong>current distribution</strong><span>geometry + matching</span></div>
         <b>→</b>
@@ -262,7 +262,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Một sample trong code liên quan tới sóng ngoài antenna qua một chuỗi biến đổi có ý nghĩa vật lý rõ ràng.</h2>
       <ol class="recap-list">
         <li><strong><MathExpr tex="I/Q" /> samples:</strong> representation số của complex baseband.</li>
-        <li><strong>DAC:</strong> tạo hai analog baseband waveforms I(t) và Q(t).</li>
+        <li><strong>DAC:</strong> tạo hai analog baseband waveforms <MathExpr tex="I(t)" /> và <MathExpr tex="Q(t)" />.</li>
         <li><strong>Quadrature upconversion:</strong> đặt <MathExpr tex="I/Q" /> lên hai carrier vuông pha rồi cộng thành RF waveform thực.</li>
         <li><strong>Local oscillator:</strong> quyết định signal được frequency-translate lên quanh carrier nào.</li>
         <li><strong>Filter và PA:</strong> làm sạch spectrum và đưa waveform tới mức power cần thiết.</li>
