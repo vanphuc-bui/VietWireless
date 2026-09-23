@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  alternateHref="/"
+  title="VietWireless | Visual notes on wireless communications"
+  description="Visual explanations of signals, wireless communications, OFDM, 5G NR, NTN and 6G, with engineering intuition and interactive examples."
+>
+  <article class="home-essay shell">
+    <header class="essay-hero">
+      <p class="chapter-label">VIETWIRELESS · CHAPTER 0</p>
+      <h1>
+        Before 5G, start with a simpler question:
+        <br />
+        <em>how do we send information over distance?</em>
+      </h1>
+      <p class="essay-lead">
+        Wireless communications is easier to understand when the ideas are connected:
+        a physical waveform, sampling, frequency, complex baseband, modulation, OFDM,
+        the radio channel and finally the structures used by 4G, 5G NR and NTN.
+      </p>
+
+      <div class="hero-note">
+        <span class="note-mark">ABOUT THIS SITE</span>
+        <p>
+          VietWireless is an engineering notebook built around visual intuition.
+          The goal is not to replace textbooks or standards, but to make the path
+          from first principles to real PHY systems easier to see.
+        </p>
+      </div>
+    </header>
+
+    <section class="essay-section" id="history">
+      <div class="section-number">01</div>
+      <div class="essay-content">
+        <p class="section-kicker">THE LONG VIEW</p>
+        <h2>Different generations of communication systems keep solving the same core problem.</h2>
+        <p>
+          Information must be represented by a signal, transported through a physical channel,
+          observed in noise and reconstructed at the receiver. Radio technology changes quickly;
+          these foundations do not.
+        </p>
+
+        <div class="history-overview" aria-label="A compact history of communications">
+          <div class="history-overview-track" aria-hidden="true"></div>
+          <div class="history-overview-item"><time>1864</time><i></i><strong>Theory</strong><span>Electromagnetic waves</span></div>
+          <div class="history-overview-item"><time>1901</time><i></i><strong>Wireless</strong><span>Radio telegraphy</span></div>
+          <div class="history-overview-item"><time>1948</time><i></i><strong>Information</strong><span>Bits · noise · capacity</span></div>
+          <div class="history-overview-item"><time>1979</time><i></i><strong>Cellular</strong><span>Spectrum reuse</span></div>
+          <div class="history-overview-item"><time>Today</time><i></i><strong>5G / NTN</strong><span>Modern radio networks</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="essay-section" id="big-picture">
+      <div class="section-number">02</div>
+      <div class="essay-content">
+        <p class="section-kicker">THE BIG PICTURE</p>
+        <h2>Follow one signal from information to RF, through the channel, and back again.</h2>
+        <p>
+          The learning path starts with what a signal is, then moves through sampling,
+          amplitude/frequency/phase, complex numbers, I/Q, Fourier analysis, modulation,
+          the wireless channel, OFDM, resource grids and 5G NR.
+        </p>
+
+        <div class="teaching-steps">
+          <article><span>01</span><h3>Signal foundations</h3><p>Time, frequency, samples, phase, complex numbers and I/Q.</p></article>
+          <article><span>02</span><h3>Wireless link</h3><p>RF, antennas, noise, multipath, fading and synchronization.</p></article>
+          <article><span>03</span><h3>OFDM</h3><p>Subcarriers, FFT/IFFT, cyclic prefix and the resource grid.</p></article>
+          <article><span>04</span><h3>5G NR & NTN</h3><p>Initial access, channels, reference signals, timing and satellite effects.</p></article>
+        </div>
+
+        <a class="text-button" href="/en/learn/">Open the learning path →</a>
+      </div>
+    </section>
+
+    <section class="essay-section" id="about">
+      <div class="section-number">03</div>
+      <div class="essay-content">
+        <p class="section-kicker">WHY VIETWIRELESS</p>
+        <h2>Build the mental model first. Add the standard details afterwards.</h2>
+        <p>
+          Many communications topics become difficult because equations, diagrams and protocol
+          names arrive before the reader has a connected picture. VietWireless tries to reverse
+          that order: intuition first, then mathematics, then the engineering details.
+        </p>
+
+        <div class="author-strip">
+          <div class="author-monogram">VP</div>
+          <div>
+            <strong>Van-Phuc Bui</strong>
+            <p>Wireless communications engineer working with 5G NR PHY and satellite communications.</p>
+            <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">Author profile ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="start-card">
+      <p class="chapter-label">START HERE</p>
+      <h2>Learn the system in the order the concepts depend on one another.</h2>
+      <p>
+        The English edition is being introduced progressively. The bilingual structure is now in place,
+        with the full Vietnamese lessons remaining available while English lesson translations are added.
+      </p>
+      <a class="text-button" href="/en/learn/">View the syllabus →</a>
+    </section>
+  </article>
+</BaseLayout>
