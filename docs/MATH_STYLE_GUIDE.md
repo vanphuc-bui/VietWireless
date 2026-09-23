@@ -177,25 +177,32 @@ Không bọc công thức đơn lẻ trong card chỉ để tạo nền hoặc v
 
 Card chỉ dùng khi block đó thực sự là một đơn vị giải thích gồm label + formula + prose.
 
-## Rule math cards: cùng grid phải cùng visual scale
+## Rule math cards: dùng một visual system trên toàn website
 
-Các math cards trong cùng một cụm phải dùng cùng:
-- min-height;
-- padding;
-- label size;
-- formula size;
-- body size;
-- spacing label → formula → prose.
+Math card cùng cấp độ giải thích phải dùng **một shared visual scale trên toàn site**, không chỉ đồng nhất trong cùng một grid. Không được tạo một page dùng card công thức cao 170 px, page khác 190 px, hoặc đổi formula size/padding chỉ vì dùng class khác.
 
-Không dùng một kiểu card nhỏ cho hàng trên rồi một kiểu card lớn cho hàng dưới nếu chúng đang giải thích các phép biến đổi ngang hàng.
+Nguồn chuẩn là các CSS tokens:
+- `--lesson-math-card-min-height`;
+- `--lesson-math-card-padding`;
+- `--lesson-math-card-gap`;
+- `--lesson-math-card-label-size`;
+- `--lesson-math-card-formula-min-height`;
+- `--lesson-math-card-formula-size`;
+- `--lesson-math-card-body-size`;
+- `--lesson-math-card-label-gap`;
+- `--lesson-math-card-formula-gap`.
 
-Shared classes ưu tiên:
+Shared classes bắt buộc cho card có cấu trúc **label + formula + prose**:
 - `.math-card-grid` hoặc `.math-grid-2`;
 - `.math-card`;
 - `.math-card-formula`;
 - `.math-card-secondary`.
 
-Nếu một công thức dài hơn, cho nó wrap/scroll hợp lý; không tăng riêng font-size của card đó.
+Các box so sánh hai representation, ví dụ `x(t)` với `X(f)`, cũng phải dùng `.math-card`; nếu cần dấu `=` ở giữa thì dùng layout wrapper như `.math-equivalence-grid`, không tạo một loại card mới.
+
+Visual card có plot/SVG lớn có thể cao hơn vì nội dung, nhưng vẫn phải dùng cùng card padding, label scale và body scale. Không ép visual xuống cùng chiều cao nếu làm hình khó đọc.
+
+Nếu một công thức dài hơn, cho nó wrap/scroll hợp lý; không tăng riêng font-size của card đó. Không hard-code một `font-size`, `padding` hoặc `min-height` mới cho math card nếu shared token đã tồn tại.
 
 
 ## Inline math phải hòa vào dòng chữ
