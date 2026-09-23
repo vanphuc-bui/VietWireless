@@ -6,20 +6,28 @@ VietWireless không phải blog tin tức. Đây là knowledge platform giúp ng
 
 ## Anatomy bắt buộc của một bài kỹ thuật
 
+Lesson contract chi tiết nằm trong `docs/LESSON_CONTRACT.md`. Một bài đầy đủ phải có các lớp sau nếu khái niệm cho phép:
+
 1. **Problem first:** bắt đầu bằng câu hỏi hoặc vấn đề thực tế.
-2. **Visual intuition:** sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
-3. **Plain-language explanation:** giải thích bằng tiếng Việt, giữ thuật ngữ kỹ thuật chuẩn bằng tiếng Anh.
-4. **Math layer:** công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
-5. **Implementation layer:** nối khái niệm với samples, buffers, resource grid, transmitter/receiver hoặc code.
-6. **Specification layer:** khi liên quan 3GPP, dẫn đúng TS/section và phân biệt rõ điều spec nói với cách diễn giải của VietWireless.
-7. **Recap + next concept:** cuối bài phải cho người học biết họ vừa xây được mental model gì và nên học gì tiếp.
+2. **System context:** người đọc phải biết đang ở đâu trong transmitter/receiver/procedure, input hiện có và điều còn thiếu.
+3. **Visual intuition:** sơ đồ, plot, animation hoặc interactive element trước phần toán nặng.
+4. **Concrete example:** ít nhất một numerical example, waveform, timeline hoặc scenario cụ thể.
+5. **Plain-language explanation:** giải thích bằng tiếng Việt tự nhiên; terminology theo `docs/TERMINOLOGY.md`.
+6. **Math layer:** công thức chỉ xuất hiện khi người đọc đã biết mỗi đại lượng có ý nghĩa gì.
+7. **Boundary / misconception:** nói rõ ít nhất một điều khái niệm không làm được hoặc chỗ dễ hiểu sai.
+8. **Implementation layer:** nối khái niệm với samples, buffers, FFT bins, resource grid, estimator, state machine hoặc code.
+9. **Specification layer:** khi liên quan standard, theo `docs/SOURCE_POLICY.md`.
+10. **Recap + navigation:** nối lại mental model và chỉ ra bước tiếp theo trong learning graph.
 
 ## Quy tắc thuật ngữ
 
-- Lần đầu: “DMRS (Demodulation Reference Signal)”.
-- Sau đó dùng “DMRS”; không dịch cứng thành thuật ngữ tiếng Việt dài và xa lạ với môi trường kỹ sư.
-- Các từ nên giữ nguyên khi hợp lý: signal, sample, sampling, FFT, IFFT, I/Q, waveform, spectrum, subcarrier, resource grid, channel, equalization, timing, frequency offset.
-- Tiếng Việt dùng để giải thích ý nghĩa, không dùng để che mất thuật ngữ ngành.
+Source of truth là `docs/TERMINOLOGY.md`.
+
+- Ưu tiên tiếng Việt khi tự nhiên và chính xác: tín hiệu, thời gian, tần số, miền thời gian, miền tần số, dữ liệu, thông tin hệ thống, liên kết vô tuyến.
+- Giữ acronym, tên 3GPP channel/signal/procedure và các thuật ngữ ngành khi bản dịch làm mất precision.
+- Lần đầu: “DMRS (Demodulation Reference Signal)”. Sau đó dùng “DMRS”.
+- Không dùng một từ tiếng Anh chỉ vì code hoặc paper dùng từ đó nếu câu tiếng Việt có cách diễn đạt rõ hơn.
+- Không đổi thuật ngữ giữa các bài. Nếu cần đổi site-wide, sửa `docs/TERMINOLOGY.md` trước.
 
 ## Quy tắc trực quan
 
@@ -76,12 +84,18 @@ Không viết theo giọng ra lệnh, phán xét hoặc đứng trên người �
 ## QA trước khi merge
 
 - Có trả lời “tại sao cần khái niệm này?” không?
+- Có nói rõ system context, input hiện có và output của bước này không?
+- Có ít nhất một ví dụ cụ thể thay vì chỉ định nghĩa không?
+- Có chỉ ra một boundary hoặc chỗ dễ hiểu sai không?
 - Visual có thật sự liên quan nội dung không?
-- Mobile có overflow không?
+- Mobile có overflow hoặc text/axis quá nhỏ không?
 - Interactive component có fallback text không?
 - Công thức và notation có nhất quán không?
+- Standard claim có trace được về source/release/TS không?
+- Previous/next/map navigation có khớp learning graph không?
 - Có câu nào dễ khiến người mới xây mental model sai không?
 - Có nội dung nào dựa trên thông tin nội bộ không?
+- `npm run check:all` có pass không?
 
 
 ## Historical media
@@ -184,3 +198,51 @@ Khi thiết kế một box kỹ thuật, phải xác định math bên trong là
 Mỗi loại dùng shared `--lesson-box-math-*` token. Không đặt một cỡ riêng chỉ cho một bài hoặc một component.
 
 Các process diagram phải phân biệt rõ **state** và **operation**: state là card, operation (DAC, mixer, FFT, filter...) nằm trên arrow giữa hai state. Không xếp operation thành một card ngang hàng với state nếu điều đó làm người đọc hiểu nhầm chuỗi xử lý.
+
+
+## Rule hierarchy
+
+Entry point của toàn bộ rules là `docs/RULES.md`.
+
+Khi có xung đột, ưu tiên:
+1. technical correctness;
+2. standard/source correctness;
+3. lesson contract và learning graph;
+4. readability/visual consistency;
+5. SEO.
+
+Không sửa technical truth chỉ để giữ một visual đẹp hoặc một keyword.
+
+## System-state rule cho Part III–VIII
+
+Mỗi bài procedure/PHY từ Bài 19 trở đi phải trả lời được năm câu:
+1. trước bước này UE/gNB/receiver đang có thông tin gì?
+2. còn thiếu gì?
+3. nó quan sát, correlate, decode, estimate hoặc transmit cái gì?
+4. output cụ thể là gì?
+5. output đó mở khóa bước nào tiếp theo?
+
+Nếu prose không trả lời được năm câu này, bài chưa đủ system context.
+
+## Source discipline
+
+Nguồn chuẩn chi tiết nằm trong `docs/SOURCE_POLICY.md`.
+
+- Claim phụ thuộc 3GPP phải trace được về Release + TS/TR + section/table/figure khi phù hợp.
+- Không dùng vendor tutorial thay source normative.
+- Numerical example phải được hiểu rõ là spec value, derived value hay illustrative value.
+- Với NTN phải kiểm tra điều khoản Release 17/18 liên quan, không suy trực tiếp từ terrestrial NR.
+
+## Navigation và curriculum sync
+
+- `src/data/curriculum.js` là source of truth machine-readable cho part, lesson number, slug, status và kind.
+- Không tự hard-code một slug mới rồi cập nhật registry sau.
+- Page mới xuất hiện khi status đổi từ planned sang published.
+- Homepage, /hoc/ và docs/CURRICULUM.md phải dùng cùng tên part.
+- Từ Bài 19 trở đi, CI kiểm tra metadata, lesson roles, visual, spec layer và navigation.
+
+## Bilingual content
+
+- Bản dịch tiếng Anh không được index như translation pair cho tới khi có page tương ứng thật sự.
+- English page phải giữ technical meaning, notation, figure semantics và source layer tương đương bản tiếng Việt.
+- Không dùng machine translation thô cho caption, spec claim hoặc formula explanation rồi publish trực tiếp.
