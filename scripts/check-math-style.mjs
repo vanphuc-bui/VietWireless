@@ -439,12 +439,24 @@ const typographyChecks = [
   [/--font-ui:/u, 'missing shared UI font token'],
   [/--article-prose-size:\s*1\.125rem/u, 'article prose must remain 18px (1.125rem)'],
   [/--lesson-prose-size:\s*var\(--article-prose-size\)/u, 'lesson prose must inherit the shared 18px article scale'],
+  [/--lesson-meta-size:\s*1rem/u, 'lesson metadata must use the shared 16px scale'],
+  [/--lesson-section-title-size:\s*1\.5rem/u, 'lesson section headings must use the shared 24px scale'],
+  [/--lesson-page-title-size:\s*2rem/u, 'lesson page titles must use the shared 32px desktop scale'],
   [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use STIX Two Text'],
+  [/\.lesson \.math-display \.katex,[\s\S]*?font-size:\s*1em/u, 'lesson display math must stay at body optical size'],
+  [/\.lesson \.math-data-table th\s*\{[\s\S]*?font-size:\s*var\(--lesson-meta-size\)/u, 'lesson table headers must use the shared metadata size'],
+  [/\.lesson \.math-data-table td\s*\{[\s\S]*?font-size:\s*var\(--lesson-prose-size\)/u, 'lesson table body must use the shared prose size'],
   [/\.katex math\s*\{[\s\S]*?font-size:\s*1em/u, 'MathML must inherit the surrounding purpose scale'],
 ];
 
 for (const [regex, message] of typographyChecks) {
   if (!regex.test(css)) report(cssFile, message);
+}
+
+// The lesson type scale is intentionally tiny: metadata, body, section title and page title.
+// New pages/components must not create their own typographic hierarchy.
+if (!css.includes('/* --- Technical-document typography scale: deliberately small number of sizes --- */')) {
+  report(cssFile, 'missing technical-document type scale block.');
 }
 
 const mathRendererFiles = [
