@@ -121,7 +121,8 @@ button, input { font: inherit; }
 .two-column, .domain-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin: 32px 0; }
 .explain-card, .domain-grid article { padding: 22px; border: 1px solid var(--line); background: #fff; }
 .card-label { color: var(--accent); font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
-.explain-card h3 { margin: 16px 0 8px; font-family: var(--font-serif); font-size: 1.9rem; }
+.explain-card h3 { margin: 16px 0 8px; font-family: var(--font-serif); font-size: 1.9rem; line-height:1.15; }
+.explain-card h3 .math-inline { display:inline; vertical-align:baseline; }
 .explain-card p, .domain-grid p { margin: 0; color: var(--muted); }
 
 .perspective { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; margin: 36px 0; }
@@ -154,8 +155,10 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .spectrum-bar { fill: var(--violet); opacity: .82; }
 .plot-label { fill: #858078; font-size: 11px; }
 .lab-readout { min-height: 62px; padding: 14px 2px 0; }
-.lab-readout strong, .lab-readout span { display:block; }
-.lab-readout span { margin-top: 3px; color: var(--muted); font-size:.88rem; }
+.lab-readout > strong, .lab-readout > span { display:block; }
+.lab-readout > span { margin-top: 3px; color: var(--muted); font-size:.88rem; }
+.lab-readout .math-inline { display:inline; margin:0; vertical-align:baseline; white-space:nowrap; line-height:inherit; }
+.lab-readout .math-inline .katex { font-size:1em; line-height:inherit; }
 
 .iq-grid { display:grid; grid-template-columns:minmax(260px,1fr) .8fr; gap:26px; align-items:center; }
 .iq-grid svg { width:100%; max-height:360px; }
@@ -8195,6 +8198,14 @@ main,
   font-size: 12px;
   line-height: 1;
   pointer-events: none;
+}
+
+.svg-math .math-inline {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .svg-math .math-inline .katex {
