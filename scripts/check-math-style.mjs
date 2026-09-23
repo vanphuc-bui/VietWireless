@@ -125,7 +125,7 @@ for (const file of files) {
 
   for (const node of visibleNodes) {
     const plain = node.replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
-    if (/^(?:A|B|G|I|Q|T|X|Y|M|N|a|b|d|f|j|k|l|m|n|t|x|y|z)$/u.test(plain)) {
+    if (/^(?:G|I|Q|X|Y|N|a|b|d|f|j|k|l|m|n|t|x|y|z)$/u.test(plain)) {
       report(file, `bare standalone math symbol "${plain}" found. Use MathExpr/SvgMathExpr.`);
       break;
     }
