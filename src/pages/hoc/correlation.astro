@@ -53,7 +53,7 @@ import MathExpr from '../../components/Math.astro';
         Nếu r có pattern khác, một số tích dương và âm sẽ cancel nhau.
       </p>
 
-      <MathExpr tex="C = \sum_n r[n]s[n]" display />
+      <MathExpr tex={String.raw`C = \sum_n r[n]s[n]`} display />
 
       <p>
         Đó là intuition cốt lõi:
@@ -72,23 +72,23 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="sliding">
       <p class="concept-kicker">02 · KHÔNG BIẾT TIMING THÌ TRƯỢT REFERENCE QUA BUFFER</p>
-      <h2>Mỗi candidate offset <MathExpr tex="\ell" /> cho một correlation value <MathExpr tex="C[\ell]" />.</h2>
+      <h2>Mỗi candidate offset <MathExpr tex={String.raw`\ell`} /> cho một correlation value <MathExpr tex={String.raw`C[\ell]`} />.</h2>
 
-      <MathExpr tex="C[\ell] = \sum_n r[n+\ell]s[n]" display />
+      <MathExpr tex={String.raw`C[\ell] = \sum_n r[n+\ell]s[n]`} display />
 
       <p>
-        Nếu sequence bắt đầu thật ở sample 37, khi <MathExpr tex="\ell=37" /> reference và received segment align đúng nhất.
+        Nếu sequence bắt đầu thật ở sample 37, khi <MathExpr tex={String.raw`\ell=37`} /> reference và received segment align đúng nhất.
         Correlation curve thường có một peak quanh đó.
         Vì vậy timing search đơn giản có thể được hiểu như:
-        thử <MathExpr tex="\ell=0,1,2,\ldots" /> rồi tìm nơi metric lớn.
+        thử <MathExpr tex={String.raw`\ell=0,1,2,\ldots`} /> rồi tìm nơi metric lớn.
       </p>
 
       <div class="correlation-story">
-        <div><small><MathExpr tex="\ell" /> NHỎ</small><strong>reference chưa align</strong><span>tích dương/âm cancel nhiều</span></div>
+        <div><small><MathExpr tex={String.raw`\ell`} /> NHỎ</small><strong>reference chưa align</strong><span>tích dương/âm cancel nhiều</span></div>
         <b>→ slide →</b>
-        <div><small><MathExpr tex="\ell" /> GẦN ĐÚNG</small><strong>pattern bắt đầu khớp</strong><span>metric tăng</span></div>
+        <div><small><MathExpr tex={String.raw`\ell`} /> GẦN ĐÚNG</small><strong>pattern bắt đầu khớp</strong><span>metric tăng</span></div>
         <b>→</b>
-        <div><small><MathExpr tex="\ell=\hat{\tau}" /></small><strong>correlation peak</strong><span>candidate timing</span></div>
+        <div><small><MathExpr tex={String.raw`\ell=\hat{\tau}`} /></small><strong>correlation peak</strong><span>candidate timing</span></div>
       </div>
     </section>
 
@@ -108,12 +108,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">04 · VỚI <MathExpr tex="I/Q" />, CORRELATION DÙNG COMPLEX CONJUGATE</p>
       <h2>Complex inner product cần conjugate reference để giữ đúng geometry amplitude/phase.</h2>
 
-      <MathExpr tex="C[\ell] = \sum_n r[n+\ell]s^*[n]" display />
+      <MathExpr tex={String.raw`C[\ell] = \sum_n r[n+\ell]s^*[n]`} display />
 
       <p>
         Giả sử received sequence chỉ là một rotated/scaled copy:
-        <MathExpr tex="r[n]=h\,s[n]" />.
-        Khi align đúng, correlation trở thành gần <MathExpr tex="h\sum_n |s[n]|^2" />.
+        <MathExpr tex={String.raw`r[n]=h\,s[n]`} />.
+        Khi align đúng, correlation trở thành gần <MathExpr tex={String.raw`h\sum_n |s[n]|^2`} />.
         Magnitude của C lớn cho biết match mạnh; angle của C còn chứa phase của complex gain h.
       </p>
 
@@ -175,7 +175,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Nếu phase quay dần trong observation window, các contribution không còn cộng cùng hướng.</h2>
 
       <p>
-        Với CFO <MathExpr tex="\Delta f" />, received complex samples có thêm factor <MathExpr tex="e^{j2\pi\Delta f\,nT_s}" />.
+        Với CFO <MathExpr tex={String.raw`\Delta f`} />, received complex samples có thêm factor <MathExpr tex={String.raw`e^{j2\pi\Delta f\,nT_s}`} />.
         Đầu sequence và cuối sequence vì vậy có phase khác nhau.
         Correlator coherent dùng một reference “không quay” sẽ mất gain khi accumulated phase rotation lớn.
       </p>
