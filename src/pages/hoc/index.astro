@@ -5,93 +5,108 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   alternateHref="/en/learn/"
-  title="Lộ trình học viễn thông từ signal tới 5G NR và NTN | VietWireless"
-  description="Lộ trình học VietWireless đi từ signal, sampling, I/Q, FFT, OFDM tới 5G NR synchronization, SSB, PBCH, MIB, SIB1, PRACH, data transmission và NTN."
+  title="Bản đồ học viễn thông: từ tín hiệu tới 5G NR và NTN | VietWireless"
+  description="Bản đồ học VietWireless nối các bài từ tín hiệu, sampling, Fourier/FFT và OFDM tới 5G NR initial access, data transmission, receiver thực tế và NTN."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
       <a class="back-link" href="/">← Về trang đầu</a>
-      <p class="eyebrow">LỘ TRÌNH HỌC · VIETWIRELESS</p>
-      <h1>Từ signal tới 5G NR và NTN.</h1>
+      <p class="eyebrow">BẢN ĐỒ HỌC VIỄN THÔNG · VIETWIRELESS</p>
+      <h1>Từ tín hiệu tới 5G NR và NTN.</h1>
       <p class="lesson-deck">
         Tôi muốn các chủ đề trên VietWireless nối với nhau như một câu chuyện.
         Ta bắt đầu từ signal và cách máy tính biểu diễn nó, rồi đi qua OFDM. Câu hỏi sau đó rất thực tế: <strong>một UE vừa bật lên thì làm cách nào tìm được gNB và bắt đầu kết nối?</strong>
       </p>
     </header>
 
-    <section class="concept-block">
+    <section class="concept-block" id="ban-do-tong-the">
       <p class="concept-kicker">BỨC TRANH TỔNG THỂ</p>
-      <h2>Mỗi phần lớn bắt đầu bằng một bức tranh chung, sau đó mới zoom vào từng khối.</h2>
+      <h2>Chọn một phần để nhảy thẳng tới danh sách bài chi tiết bên dưới.</h2>
       <p>
-        Bài đầu tiên hiện tại, <a class="inline-cta" href="/hoc/tin-hieu-la-gi/">Signal là gì?</a>,
-        đã chạm qua sampling, miền thời gian, miền tần số, FFT, <MathExpr tex="I/Q" /> và resource grid.
-        Tôi xem bài đó như một bản đồ nền tảng. Các bài sau sẽ không viết lại từ đầu mà đi sâu vào từng mắt xích.
+        Bản đồ này chỉ giữ vai trò định hướng: nó cho thấy các nhóm kiến thức nối với nhau như thế nào.
+        Khi chọn một phần, trang sẽ cuộn tới đúng cụm bài tương ứng; từ đó bạn mới chọn bài cụ thể muốn đọc.
       </p>
 
-      <ol class="course-list">
-        <li class="available">
-          <span class="course-no">PHẦN I</span>
-          <div>
-            <h3>Nền tảng signal</h3>
-            <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → Fourier/FFT → modulation.</p>
-          </div>
-          <span class="course-status">Bắt đầu ở đây</span>
+      <ol class="course-list learning-map-list" aria-label="Bản đồ học viễn thông">
+        <li>
+          <a class="learning-map-link" href="#phan-1">
+            <span class="course-no">PHẦN I</span>
+            <div>
+              <h3>Nền tảng tín hiệu</h3>
+              <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → Fourier/FFT → modulation.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN II</span>
-          <div>
-            <h3>Từ signal tới wireless link</h3>
-            <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-2">
+            <span class="course-no">PHẦN II</span>
+            <div>
+              <h3>Từ tín hiệu tới liên kết vô tuyến</h3>
+              <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN III</span>
-          <div>
-            <h3>UE tìm mạng 5G như thế nào?</h3>
-            <p>Power on → synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-3">
+            <span class="course-no">PHẦN III</span>
+            <div>
+              <h3>UE bật lên và tìm cell 5G</h3>
+              <p>Power on → synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN IV</span>
-          <div>
-            <h3>Từ MIB tới system information</h3>
-            <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-4">
+            <span class="course-no">PHẦN IV</span>
+            <div>
+              <h3>Từ MIB tới thông tin hệ thống</h3>
+              <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN V</span>
-          <div>
-            <h3>UE bắt đầu nói với gNB</h3>
-            <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-5">
+            <span class="course-no">PHẦN V</span>
+            <div>
+              <h3>UE bắt đầu truy nhập mạng</h3>
+              <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN VI</span>
-          <div>
-            <h3>Truyền data khi đã connected</h3>
-            <p>PDCCH, PDSCH, PUSCH, PUCCH, DMRS, channel estimation, HARQ và MIMO.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-6">
+            <span class="course-no">PHẦN VI</span>
+            <div>
+              <h3>Truyền dữ liệu sau khi kết nối</h3>
+              <p>PDCCH → PDSCH → PUSCH → PUCCH → DMRS → channel estimation → equalization → HARQ → MIMO.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN VII</span>
-          <div>
-            <h3>Receiver thực tế</h3>
-            <p>Timing offset, CFO, sampling offset, phase noise và EVM.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-7">
+            <span class="course-no">PHẦN VII</span>
+            <div>
+              <h3>Receiver trong thực tế</h3>
+              <p>Timing offset → CFO → SFO → phase noise → EVM.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
         <li>
-          <span class="course-no">PHẦN VIII</span>
-          <div>
-            <h3>5G NTN</h3>
-            <p>Delay, Doppler, synchronization, SIB19, Timing Advance, PRACH và satellite mobility.</p>
-          </div>
-          <span class="course-status">Roadmap</span>
+          <a class="learning-map-link" href="#phan-8">
+            <span class="course-no">PHẦN VIII</span>
+            <div>
+              <h3>5G NR qua vệ tinh (NTN)</h3>
+              <p>Propagation delay → Doppler → synchronization → Timing Advance → SIB19 → ephemeris → PRACH → mobility.</p>
+            </div>
+            <span class="learning-map-cta">Xem các bài ↓</span>
+          </a>
         </li>
       </ol>
     </section>
@@ -151,9 +166,9 @@ import MathExpr from '../../components/Math.astro';
       </aside>
     </section>
 
-    <section class="concept-block" id="phan-1">
-      <p class="concept-kicker">PHẦN I · NỀN TẢNG SIGNAL</p>
-      <h2>Từ một đại lượng thay đổi theo thời gian tới complex symbols.</h2>
+    <section class="concept-block learning-map-target" id="phan-1">
+      <p class="concept-kicker">PHẦN I · NỀN TẢNG TÍN HIỆU</p>
+      <h2>Từ một đại lượng biến thiên theo thời gian tới các symbol phức.</h2>
       <ol class="course-list">
         <li class="available">
           <span class="course-no">Bài 01</span>
@@ -222,8 +237,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-2">
-      <p class="concept-kicker">PHẦN II · TỪ SIGNAL TỚI WIRELESS LINK</p>
+    <section class="concept-block learning-map-target" id="phan-2">
+      <p class="concept-kicker">PHẦN II · TỪ TÍN HIỆU TỚI LIÊN KẾT VÔ TUYẾN</p>
       <h2>Từ complex baseband tới một waveform đi qua không gian và quay lại receiver.</h2>
       <ol class="course-list">
         <li class="available"><span class="course-no">Bài 09</span><div><h3>Baseband → RF → antenna</h3><p><MathExpr tex="I/Q" /> samples trở thành tín hiệu RF vật lý như thế nào?</p></div><a href="/hoc/baseband-rf-antenna/">Đọc bài →</a></li>
@@ -239,8 +254,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-3">
-      <p class="concept-kicker">PHẦN III · UE BẬT LÊN VÀ TÌM MẠNG 5G</p>
+    <section class="concept-block learning-map-target" id="phan-3">
+      <p class="concept-kicker">PHẦN III · UE BẬT LÊN VÀ TÌM CELL 5G</p>
       <h2>Từ một receiver chưa biết timing, frequency hay cell ID tới việc đọc được MIB.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 19</span><div><h3>UE bật nguồn thì chuyện gì xảy ra?</h3><p>Bài tổng quan về toàn bộ initial access trước khi zoom vào từng signal.</p></div><span class="course-status">Ưu tiên sớm</span></li>
@@ -255,8 +270,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-4">
-      <p class="concept-kicker">PHẦN IV · TỪ MIB TỚI SYSTEM INFORMATION</p>
+    <section class="concept-block learning-map-target" id="phan-4">
+      <p class="concept-kicker">PHẦN IV · TỪ MIB TỚI THÔNG TIN HỆ THỐNG</p>
       <h2>Biết cell tồn tại chưa đủ. UE còn phải tìm nơi gNB gửi control và cấu hình chung.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 28</span><div><h3>CORESET#0 và SearchSpace#0</h3><p>Từ thông tin trong MIB, UE tìm vùng control ban đầu như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
@@ -268,8 +283,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-5">
-      <p class="concept-kicker">PHẦN V · UE BẮT ĐẦU NÓI VỚI gNB</p>
+    <section class="concept-block learning-map-target" id="phan-5">
+      <p class="concept-kicker">PHẦN V · UE BẮT ĐẦU TRUY NHẬP MẠNG</p>
       <h2>Downlink đã nghe được. Bây giờ UE cần tạo một uplink mà gNB có thể phát hiện và align.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 34</span><div><h3>Random Access tổng quan</h3><p>Từ PRACH tới khi UE có thể gửi uplink có scheduling.</p></div><span class="course-status">Sắp tới</span></li>
@@ -283,8 +298,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-6">
-      <p class="concept-kicker">PHẦN VI · TRUYỀN DATA SAU KHI CONNECTED</p>
+    <section class="concept-block learning-map-target" id="phan-6">
+      <p class="concept-kicker">PHẦN VI · TRUYỀN DỮ LIỆU SAU KHI KẾT NỐI</p>
       <h2>Khi UE đã vào mạng, các physical channels bắt đầu phối hợp để truyền control và data.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 42</span><div><h3>Bức tranh PHY khi UE đã connected</h3><p>PDCCH, PDSCH, PUSCH và PUCCH nằm ở đâu trong một scheduling cycle?</p></div><span class="course-status">Sắp tới</span></li>
@@ -300,8 +315,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-7">
-      <p class="concept-kicker">PHẦN VII · RECEIVER THỰC TẾ</p>
+    <section class="concept-block learning-map-target" id="phan-7">
+      <p class="concept-kicker">PHẦN VII · RECEIVER TRONG THỰC TẾ</p>
       <h2>Receiver ngoài đời không nhận một signal hoàn hảo đúng sample và đúng carrier.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 52</span><div><h3>Timing offset</h3><p>FFT window đặt sai vị trí ảnh hưởng OFDM như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
@@ -313,8 +328,8 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <section class="concept-block" id="phan-8">
-      <p class="concept-kicker">PHẦN VIII · 5G NTN</p>
+    <section class="concept-block learning-map-target" id="phan-8">
+      <p class="concept-kicker">PHẦN VIII · 5G NR QUA VỆ TINH (NTN)</p>
       <h2>Khi cùng NR PHY đi qua satellite, delay và Doppler làm nhiều giả định quen thuộc thay đổi.</h2>
       <ol class="course-list">
         <li><span class="course-no">Bài 58</span><div><h3>Từ terrestrial NR tới NTN</h3><p>Bài tổng quan về những vấn đề mới khi đường truyền đi qua satellite.</p></div><span class="course-status">Sắp tới</span></li>
@@ -329,13 +344,13 @@ import MathExpr from '../../components/Math.astro';
       </ol>
     </section>
 
-    <nav class="next-lesson" aria-label="Bắt đầu học">
-      <span>BẮT ĐẦU TỪ ĐÂY</span>
+    <nav class="next-lesson" aria-label="Quay lại bản đồ học">
+      <span>BẢN ĐỒ TỔNG THỂ</span>
       <div>
-        <h2>Signal là gì?</h2>
-        <p>Bài mở đầu để xây mental model trước khi đi sâu vào sampling, <MathExpr tex="I/Q" />, FFT và OFDM.</p>
+        <h2>Muốn đổi sang một nhóm kiến thức khác?</h2>
+        <p>Quay lại bản đồ phía trên rồi chọn đúng phần bạn muốn tiếp tục.</p>
       </div>
-      <a class="text-button" href="/hoc/tin-hieu-la-gi/">Đọc bài →</a>
+      <a class="text-button" href="#ban-do-tong-the">Quay lại bản đồ ↑</a>
     </nav>
   </article>
 </BaseLayout>
