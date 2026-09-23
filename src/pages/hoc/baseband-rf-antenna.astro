@@ -24,7 +24,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Giả sử trong code tôi đang có một buffer:
         <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex="\mathrm{GHz}" />?
+        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex={String.raw`\mathrm{GHz}`} />?
       </p>
 
       <div class="system-position">
@@ -46,7 +46,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="complex-samples">
       <p class="concept-kicker">01 · DIGITAL BASEBAND CHƯA CÓ CARRIER RF</p>
-      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex="0\,\mathrm{Hz}" /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
+      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
 
       <p>
         Một sample complex có dạng <MathExpr tex="x[n] = I[n] + jQ[n]" />.
@@ -113,7 +113,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>Với một convention thường gặp:</p>
 
-      <MathExpr tex="s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)" display />
+      <MathExpr tex={String.raw`s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
 
       <p>
         Nhánh I nhân với cosine. Nhánh Q nhân với sine lệch 90°. Sau đó hai nhánh được cộng lại.
@@ -121,8 +121,8 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Lấy ví dụ đơn giản <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex="\phi\approx36.9^\circ" />.
-        Công thức phía trên trở thành một sinusoid có cùng magnitude <MathExpr tex="A" /> và phase <MathExpr tex="\phi" /> quanh carrier <MathExpr tex="f_c" />.
+        Lấy ví dụ đơn giản <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex={String.raw`\phi\approx36.9^\circ`} />.
+        Công thức phía trên trở thành một sinusoid có cùng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} /> quanh carrier <MathExpr tex="f_c" />.
         Nói cách khác, <strong>tọa độ <MathExpr tex="I/Q" /> ở baseband quyết định amplitude và phase của RF carrier</strong>.
       </p>
 
@@ -148,17 +148,17 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="frequency-translation">
       <p class="concept-kicker">05 · UPCONVERSION LÀ DỊCH SPECTRUM LÊN QUANH CARRIER</p>
-      <h2>Baseband mô tả nội dung quanh <MathExpr tex="0\,\mathrm{Hz}" />; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
+      <h2>Baseband mô tả nội dung quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
 
       <p>
-        Nếu complex baseband chiếm một bandwidth <MathExpr tex="B" /> quanh <MathExpr tex="0\,\mathrm{Hz}" />, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
+        Nếu complex baseband chiếm một bandwidth <MathExpr tex="B" /> quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
         Carrier không tạo thêm information. Nó chuyển vị trí của spectrum tới band mà antenna và wireless channel sử dụng.
       </p>
 
       <div class="frequency-translation">
         <div>
           <span class="card-label">COMPLEX BASEBAND</span>
-          <strong>quanh <MathExpr tex="0\,\mathrm{Hz}" /></strong>
+          <strong>quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /></strong>
           <p>DSP xử lý modulation và filtering ở frequency thấp tương đối.</p>
         </div>
         <b>dịch lên <MathExpr tex="f_c" /> →</b>
