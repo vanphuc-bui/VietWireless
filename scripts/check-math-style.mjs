@@ -213,6 +213,39 @@ for (const token of mathCardTokens) {
   }
 }
 
+
+const proseScaleTokens = [
+  '--lesson-technical-card-body-size',
+  '--lesson-formula-card-main-size',
+  '--lesson-formula-card-detail-size',
+  '--lesson-metric-card-value-size',
+  '--lesson-metric-card-formula-size',
+  '--lesson-box-math-formula-main',
+  '--lesson-box-math-formula-secondary',
+  '--lesson-box-math-flow',
+  '--lesson-box-math-readout-primary',
+  '--lesson-box-math-readout-secondary',
+];
+
+if (!css.includes('--lesson-prose-size:')) {
+  report(cssFile, 'missing --lesson-prose-size. Lesson prose is the optical size source for box content.');
+}
+
+if (!/--lesson-box-content-size:\s*var\(--lesson-prose-size\)/u.test(css)) {
+  report(cssFile, 'lesson box content size must inherit --lesson-prose-size.');
+}
+
+if (!/\.concept-block > p\s*\{[\s\S]*?font-size:\s*var\(--lesson-prose-size\)/u.test(css)) {
+  report(cssFile, 'lesson prose must use --lesson-prose-size.');
+}
+
+for (const token of proseScaleTokens) {
+  const regex = new RegExp(token.replace(/[.*+?^$()|[\]\\]/g, '\\$&') + ':\\s*var\\(--lesson-prose-size\\)', 'u');
+  if (!regex.test(css)) {
+    report(cssFile, `shared box token "${token}" must equal var(--lesson-prose-size) so box content matches surrounding prose.`);
+  }
+}
+
 const boxMathRoleTokens = [
   '--lesson-box-math-formula-main',
   '--lesson-box-math-formula-secondary',
