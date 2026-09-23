@@ -357,3 +357,41 @@ Không dùng một cỡ duy nhất cho mọi math nằm trong SVG.
 Không giảm font-size riêng trong từng page. Nếu công thức chính trong một SVG vẫn nhỏ hơn prose xung quanh, sửa shared role token thay vì hard-code page-specific size.
 
 ForeignObject phải đủ width/height cho cỡ math role tương ứng; không để KaTeX bị clip sau khi tăng kích thước.
+
+
+## Rule bắt buộc: nội dung trong box phải cùng optical size với prose ngoài box
+
+Text và mathematical content bên trong technical box không được tự ý nhỏ hơn hoặc lớn hơn body text của bài.
+
+Source of truth:
+- body prose: `--lesson-prose-size`;
+- box content: `--lesson-box-content-size: var(--lesson-prose-size)`.
+
+Áp dụng cho:
+- formula card body;
+- visual card caption/body;
+- explain/mental-model/system-position boxes;
+- metric/readout value và formula;
+- process-flow math;
+- math-card formula chính và phụ.
+
+Hierarchy trong box phải đến từ:
+- font weight;
+- màu;
+- spacing;
+- border/background;
+- vị trí/layout;
+
+không đến từ việc phóng to hoặc thu nhỏ công thức/text tùy từng page.
+
+Ngoại lệ:
+- eyebrow/card label/UI metadata có thể nhỏ hơn prose vì chúng không phải nội dung giải thích chính;
+- heading có thể lớn hơn prose theo heading hierarchy;
+- SVG dùng px token riêng vì viewBox scaling. Tuy nhiên optical size sau khi render phải xấp xỉ prose ngoài box.
+
+Đối với SVG:
+- natural-language annotation phải dùng cỡ đủ đọc như prose;
+- math label và math equation dùng shared SVG role tokens;
+- nếu KaTeX trong SVG nhìn nhỏ hơn prose dù CSS px lớn hơn, phải hiệu chỉnh shared SVG token, không hard-code page-specific font-size.
+
+CI phải chặn việc đổi shared box-math/body tokens ra khỏi `var(--lesson-prose-size)`.
