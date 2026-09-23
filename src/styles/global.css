@@ -10343,6 +10343,22 @@ textarea,
 .lesson {
   font-size: var(--lesson-prose-size);
   line-height: 1.65;
+  --lesson-math-card-label-size: var(--lesson-meta-size);
+  --lesson-math-card-body-size: var(--lesson-prose-size);
+  --lesson-math-card-formula-size: var(--lesson-prose-size);
+  --lesson-technical-card-label-size: var(--lesson-meta-size);
+  --lesson-technical-card-body-size: var(--lesson-prose-size);
+  --lesson-formula-card-main-size: var(--lesson-prose-size);
+  --lesson-formula-card-detail-size: var(--lesson-prose-size);
+  --lesson-metric-card-label-size: var(--lesson-meta-size);
+  --lesson-metric-card-value-size: var(--lesson-prose-size);
+  --lesson-metric-card-formula-size: var(--lesson-prose-size);
+  --lesson-box-math-formula-main: var(--lesson-prose-size);
+  --lesson-box-math-formula-secondary: var(--lesson-prose-size);
+  --lesson-box-math-flow: var(--lesson-prose-size);
+  --lesson-box-math-readout-primary: var(--lesson-prose-size);
+  --lesson-box-math-readout-secondary: var(--lesson-prose-size);
+  --lesson-box-math-label: var(--lesson-meta-size);
 }
 
 /* Only the page title and section title are meaningfully larger than body copy. */
