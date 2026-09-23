@@ -68,7 +68,7 @@ const lessonMeta = {
       <div class="initial-access-flow" data-lesson-visual>
         <div class="ia-flow-card state-start">
           <small>STATE 0</small>
-          <strong>RF + I/Q samples</strong>
+          <strong>RF + <MathExpr tex="I/Q" /> samples</strong>
           <span>chưa có cell timing</span>
         </div>
         <div class="ia-flow-arrow"><span>search + correlation</span><b>→</b></div>
@@ -116,7 +116,7 @@ const lessonMeta = {
 
       <div class="sample-search-visual" data-lesson-visual>
         <div class="sample-search-row">
-          <span>incoming I/Q</span>
+          <span>incoming <MathExpr tex="I/Q" /></span>
           <div class="sample-strip">
             <i></i><i></i><i></i><i class="candidate"></i><i class="candidate"></i><i class="candidate"></i><i class="candidate"></i><i></i><i></i><i></i><i></i><i></i>
           </div>
@@ -345,7 +345,7 @@ const lessonMeta = {
       <h2>PHY implementation thường biến cùng một progression thành buffers, hypotheses, metrics và decoder states.</h2>
 
       <div class="implementation-layers">
-        <article><span>RF / ADC</span><p>Chọn candidate carrier, thu I/Q và tạo sample buffer.</p></article>
+        <article><span>RF / ADC</span><p>Chọn candidate carrier, thu <MathExpr tex="I/Q" /> và tạo sample buffer.</p></article>
         <article><span>PSS detector</span><p>Chạy correlation hoặc matched-filter style metric cho các PSS hypotheses; lấy candidate sample timing và identity subset.</p></article>
         <article><span>Sync refinement</span><p>Ước lượng/correct residual frequency error và căn FFT window đủ tốt để extract SSB.</p></article>
         <article><span>SSS detector</span><p>So sánh SSS hypotheses phù hợp với candidate PSS; hoàn thiện physical cell ID.</p></article>
@@ -407,8 +407,12 @@ const lessonMeta = {
 
       <div class="spec-source-list">
         <p class="spec-source">
-          3GPP TS 38.213 Release 18, clause 4.1: cell search, PSS/SSS và SS/PBCH block assumptions ·
-          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.05.00_60/ts_138213v180500p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+          3GPP TS 38.300 Release 18, ETSI TS 138 300 V18.8.0, clause 5.2.4 và 5.2.5.3: SSB overview, PBCH characteristics và cell-search system view ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138300/18.08.00_60/ts_138300v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 4.1: cell search, PSS/SSS và SS/PBCH block assumptions ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
         </p>
         <p class="spec-source">
           3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.3.1: resource mapping cho PSS, SSS, PBCH và PBCH DM-RS ·
