@@ -8086,3 +8086,221 @@ main,
     font-size: 1.18rem;
   }
 }
+
+
+/* --- Math polish: natural inline baseline, readable flow formulas, real data tables --- */
+.math-inline {
+  display: inline-block;
+  max-width: 100%;
+  margin-inline: .015em;
+  vertical-align: -0.04em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.math-inline .katex {
+  font-size: 1.04em;
+  line-height: 1;
+}
+
+.iq-operation-flow strong .math-inline .katex,
+.iq-carrier-flow strong .math-inline .katex,
+.frame-structure-flow strong .math-inline .katex,
+.numerology-symbol-story strong .math-inline .katex {
+  font-size: 1.28rem;
+}
+
+.iq-operation-flow > b {
+  font-size: 1.05rem;
+}
+
+.math-data-table-wrap {
+  max-width: 760px;
+  margin: 28px 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.math-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.math-data-table th,
+.math-data-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.math-data-table th {
+  color: var(--muted);
+  background: var(--paper-2);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.math-data-table td {
+  color: var(--ink);
+  font-size: .94rem;
+}
+
+.math-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.math-data-table td .katex {
+  font-size: 1.05em;
+}
+
+@media (max-width: 720px) {
+  .math-inline {
+    vertical-align: -0.035em;
+  }
+
+  .math-inline .katex {
+    font-size: 1.02em;
+  }
+
+  .iq-operation-flow strong .math-inline .katex,
+  .iq-carrier-flow strong .math-inline .katex,
+  .frame-structure-flow strong .math-inline .katex,
+  .numerology-symbol-story strong .math-inline .katex {
+    font-size: 1.18rem;
+  }
+
+  .math-data-table {
+    min-width: 430px;
+  }
+
+  .math-data-table th,
+  .math-data-table td {
+    padding: 12px 14px;
+  }
+}
+
+
+.svg-math {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.svg-math .math-inline .katex {
+  font-size: 1em;
+}
+
+
+/* --- Final math polish: inline rhythm, flow emphasis, robust math tables --- */
+.lesson p .math-inline,
+.lesson li .math-inline,
+.lesson h1 .math-inline,
+.lesson h2 .math-inline,
+.lesson h3 .math-inline,
+.lesson small .math-inline,
+.lesson strong .math-inline,
+.lesson span .math-inline {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  line-height: inherit;
+}
+
+.lesson p .math-inline .katex,
+.lesson li .math-inline .katex,
+.lesson h1 .math-inline .katex,
+.lesson h2 .math-inline .katex,
+.lesson h3 .math-inline .katex,
+.lesson small .math-inline .katex,
+.lesson strong .math-inline .katex,
+.lesson span .math-inline .katex {
+  font-size: 1em;
+  line-height: inherit;
+}
+
+.iq-operation-flow strong .katex,
+.iq-carrier-flow strong .katex,
+.system-position-flow strong .katex,
+.grid-column-flow strong .katex,
+.measurement-chain strong .katex,
+.receiver-chain strong .katex {
+  font-size: clamp(1.28rem, 1.9vw, 1.55rem);
+}
+
+.iq-operation-flow > div,
+.iq-carrier-flow > div {
+  min-height: 138px;
+}
+
+.math-data-table-wrap {
+  width: 100%;
+  max-width: 900px;
+  overflow-x: auto;
+}
+
+.math-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.math-data-table th,
+.math-data-table td {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.math-data-table th {
+  background: var(--paper-2);
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 700;
+}
+
+.math-data-table td {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.math-data-table th .math-inline,
+.math-data-table td .math-inline {
+  display: inline;
+  vertical-align: baseline;
+}
+
+.math-data-table th .katex {
+  font-size: 1.04rem;
+}
+
+.math-data-table td .katex {
+  font-size: 1rem;
+}
+
+@media (max-width: 720px) {
+  .iq-operation-flow strong .katex,
+  .iq-carrier-flow strong .katex,
+  .system-position-flow strong .katex,
+  .grid-column-flow strong .katex,
+  .measurement-chain strong .katex,
+  .receiver-chain strong .katex {
+    font-size: 1.18rem;
+  }
+
+  .math-data-table {
+    min-width: 520px;
+  }
+}

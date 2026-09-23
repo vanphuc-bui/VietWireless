@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const W = 760;
 const H = 210;
@@ -40,27 +41,27 @@ export default function OFDMOrthogonalityExplorer() {
     <div className="ofdm-orthogonality-lab">
       <div className="ofdm-orth-controls">
         <label>
-          <span>Subcarrier k₁ <strong>{k1}</strong></span>
+          <span>Subcarrier <MathExpr tex="k_1" /> <strong>{k1}</strong></span>
           <input type="range" min="1" max="5" step="1" value={k1}
             onChange={(e) => setK1(Number(e.target.value))} />
         </label>
         <label>
-          <span>Subcarrier k₂ <strong>{k2}</strong></span>
+          <span>Subcarrier <MathExpr tex="k_2" /> <strong>{k2}</strong></span>
           <input type="range" min="1" max="5" step="1" value={k2}
             onChange={(e) => setK2(Number(e.target.value))} />
         </label>
         <label>
-          <span>Spacing / (1/Tᵤ) <strong>{spacingScale.toFixed(2)}</strong></span>
+          <span>Spacing / <MathExpr tex="(1/T_u)" /> <strong>{spacingScale.toFixed(2)}</strong></span>
           <input type="range" min="0.75" max="1.25" step="0.01" value={spacingScale}
             onChange={(e) => setSpacingScale(Number(e.target.value))} />
         </label>
       </div>
 
       <div className="ofdm-orth-readout">
-        <div><small>USEFUL DURATION</small><strong>Tᵤ = 1</strong><span>normalized</span></div>
-        <div><small>IDEAL SPACING</small><strong>Δf = 1/Tᵤ</strong><span>orthogonal grid</span></div>
+        <div><small>USEFUL DURATION</small><strong><MathExpr tex="T_u=1" /></strong><span>normalized</span></div>
+        <div><small>IDEAL SPACING</small><strong><MathExpr tex={`\\Delta f=1/T_u`} /></strong><span>orthogonal grid</span></div>
         <div><small>|INNER PRODUCT|</small><strong>{inner.toFixed(3)}</strong><span>0 là orthogonal</span></div>
-        <div className={inner < 0.03 ? 'ok' : 'warning'}><small>STATUS</small><strong>{inner < 0.03 ? 'Gần trực giao' : 'Mất trực giao'}</strong><span>trên interval Tᵤ</span></div>
+        <div className={inner < 0.03 ? 'ok' : 'warning'}><small>STATUS</small><strong>{inner < 0.03 ? 'Gần trực giao' : 'Mất trực giao'}</strong><span>trên interval <MathExpr tex="T_u" /></span></div>
       </div>
 
       <div className="ofdm-orth-wave">
@@ -71,8 +72,8 @@ export default function OFDMOrthogonalityExplorer() {
           <path className="ofdm-orth-wave-b" d={p2} />
         </svg>
         <div className="ofdm-orth-legend">
-          <span><i className="a"></i> k₁ = {k1}</span>
-          <span><i className="b"></i> k₂ = {k2}</span>
+          <span><i className="a"></i> <MathExpr tex={`k_1=${k1}`} /></span>
+          <span><i className="b"></i> <MathExpr tex={`k_2=${k2}`} /></span>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 760;
 const H = 210;
@@ -51,12 +52,12 @@ export default function RFChainExplorer() {
     <div className="rf-chain-lab">
       <div className="rf-chain-controls">
         <label>
-          <span>Amplitude <strong>A = {amplitude.toFixed(2)}</strong></span>
+          <span>Amplitude <strong><MathExpr tex={`A=${amplitude.toFixed(2)}`} /></strong></span>
           <input type="range" min="0.2" max="1" step="0.05" value={amplitude}
             onChange={(e) => setAmplitude(Number(e.target.value))} />
         </label>
         <label>
-          <span>Phase <strong>φ = {phase.toFixed(0)}°</strong></span>
+          <span>Phase <strong><MathExpr tex={`\\phi=${phase.toFixed(0)}^\\circ`} /></strong></span>
           <input type="range" min="-180" max="180" step="5" value={phase}
             onChange={(e) => setPhase(Number(e.target.value))} />
         </label>
@@ -68,15 +69,15 @@ export default function RFChainExplorer() {
       </div>
 
       <div className="rf-chain-readout">
-        <div><small>I</small><strong>{i.toFixed(3)}</strong><span>A cosφ</span></div>
-        <div><small>Q</small><strong>{q.toFixed(3)}</strong><span>A sinφ</span></div>
+        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex={`A\\cos\\phi`} /></span></div>
+        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex={`A\\sin\\phi`} /></span></div>
         <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span>baseband symbol</span></div>
-        <div><small>PHASE</small><strong>{phase.toFixed(0)}°</strong><span>baseband phase</span></div>
+        <div><small>PHASE</small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span>baseband phase</span></div>
       </div>
 
       <div className="rf-chain-grid">
         <div className="rf-symbol-plane">
-          <div className="visual-caption"><span>COMPLEX BASEBAND</span><strong>I + jQ</strong></div>
+          <div className="visual-caption"><span>COMPLEX BASEBAND</span><strong><MathExpr tex="I+jQ" /></strong></div>
           <svg viewBox="0 0 330 305" role="img" aria-label="Complex baseband symbol on I Q plane">
             <line className="rfc-axis" x1="35" y1={cy} x2="300" y2={cy} />
             <line className="rfc-axis" x1={cx} y1="25" x2={cx} y2="280" />
@@ -85,23 +86,23 @@ export default function RFChainExplorer() {
             <line className="rfc-proj" x1={px} y1={py} x2={cx} y2={py} />
             <line className="rfc-vector" x1={cx} y1={cy} x2={px} y2={py} />
             <circle className="rfc-dot" cx={px} cy={py} r="6" />
-            <text className="rfc-label" x="285" y={cy - 8}>I</text>
-            <text className="rfc-label" x={cx + 8} y="38">Q</text>
+            <SvgMathExpr tex="I" x={285} y={cy - 8} width={24} />
+            <SvgMathExpr tex="Q" x={cx + 8} y={38} width={24} />
           </svg>
         </div>
 
         <div className="rf-mixer-panel">
-          <div className="visual-caption"><span>QUADRATURE UPCONVERSION</span><strong>I·cos - Q·sin</strong></div>
+          <div className="visual-caption"><span>QUADRATURE UPCONVERSION</span><strong><MathExpr tex={`I\\cos(\\omega_ct)-Q\\sin(\\omega_ct)`} /></strong></div>
           <div className="rf-wave-stack">
             <article>
-              <small>I branch</small>
+              <small><MathExpr tex="I" /> branch</small>
               <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="I branch multiplied by cosine carrier">
                 <line className="rfc-axis" x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} />
                 <path className="rfc-wave i-wave" d={iPath} />
               </svg>
             </article>
             <article>
-              <small>Q branch</small>
+              <small><MathExpr tex="Q" /> branch</small>
               <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Q branch multiplied by negative sine carrier">
                 <line className="rfc-axis" x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} />
                 <path className="rfc-wave q-wave" d={qPath} />

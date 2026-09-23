@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 760;
 const H = 220;
@@ -50,7 +51,7 @@ export default function WirelessChannelExplorer() {
     <div className="wireless-channel-lab">
       <div className="channel-controls">
         <label>
-          <span>Attenuation <strong>{gainDb.toFixed(0)} dB</strong></span>
+          <span>Attenuation <strong><MathExpr tex={`${gainDb.toFixed(0)}\\,\\mathrm{dB}`} /></strong></span>
           <input type="range" min="-24" max="0" step="1" value={gainDb}
             onChange={(e) => setGainDb(Number(e.target.value))} />
         </label>
@@ -60,17 +61,17 @@ export default function WirelessChannelExplorer() {
             onChange={(e) => setDelay(Number(e.target.value))} />
         </label>
         <label>
-          <span>Phase rotation <strong>{phase.toFixed(0)}°</strong></span>
+          <span>Phase rotation <strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong></span>
           <input type="range" min="-180" max="180" step="5" value={phase}
             onChange={(e) => setPhase(Number(e.target.value))} />
         </label>
       </div>
 
       <div className="channel-readout">
-        <div><small>|h|</small><strong>{gain.toFixed(3)}</strong><span>linear voltage gain</span></div>
-        <div><small>∠h</small><strong>{phase.toFixed(0)}°</strong><span>phase rotation</span></div>
+        <div><small><MathExpr tex="|h|" /></small><strong>{gain.toFixed(3)}</strong><span>linear voltage gain</span></div>
+        <div><small><MathExpr tex={`\\angle h`} /></small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span>phase rotation</span></div>
         <div><small>DELAY</small><strong>{delay}</strong><span>sample shift</span></div>
-        <div><small>MODEL</small><strong>y = hx</strong><span>+ delay, no noise</span></div>
+        <div><small>MODEL</small><strong><MathExpr tex="y=hx" /></strong><span>+ delay, no noise</span></div>
       </div>
 
       <div className="channel-lab-grid">
@@ -88,7 +89,7 @@ export default function WirelessChannelExplorer() {
         </div>
 
         <div className="channel-plane-panel">
-          <div className="visual-caption"><span>COMPLEX PLANE</span><strong>h rotates and scales</strong></div>
+          <div className="visual-caption"><span>COMPLEX PLANE</span><strong><MathExpr tex="h" /> rotates and scales</strong></div>
           <svg viewBox="0 0 360 325" role="img" aria-label="Transmitted and received symbol after channel rotation and attenuation">
             <line className="channel-axis" x1="38" y1={cy} x2="326" y2={cy} />
             <line className="channel-axis" x1={cx} y1="26" x2={cx} y2="296" />
@@ -96,12 +97,12 @@ export default function WirelessChannelExplorer() {
             <circle className="channel-tx-dot" cx={cx + scale * txI} cy={cy - scale * txQ} r="6" />
             <line className="channel-rx-vector" x1={cx} y1={cy} x2={cx + scale * rxI} y2={cy - scale * rxQ} />
             <circle className="channel-rx-dot" cx={cx + scale * rxI} cy={cy - scale * rxQ} r="6" />
-            <text className="channel-label" x="309" y={cy - 8}>I</text>
-            <text className="channel-label" x={cx + 8} y="40">Q</text>
+            <SvgMathExpr tex="I" x={309} y={cy - 8} width={24} />
+            <SvgMathExpr tex="Q" x={cx + 8} y={40} width={24} />
           </svg>
           <div className="channel-legend">
-            <span><i className="channel-tx-key"></i> X</span>
-            <span><i className="channel-rx-key"></i> Y = hX</span>
+            <span><i className="channel-tx-key"></i> <MathExpr tex="X" /></span>
+            <span><i className="channel-rx-key"></i> <MathExpr tex="Y=hX" /></span>
           </div>
         </div>
       </div>

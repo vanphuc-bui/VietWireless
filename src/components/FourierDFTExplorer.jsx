@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const W = 760;
 const H = 250;
@@ -59,7 +60,7 @@ export default function FourierDFTExplorer() {
     <div className="fourier-dft-lab">
       <div className="fourier-controls">
         <label>
-          <span>Tone <strong>{tone.toFixed(1)} Hz</strong></span>
+          <span>Tone <strong><MathExpr tex={`${tone.toFixed(1)}\\,\\mathrm{Hz}`} /></strong></span>
           <input
             type="range"
             min="2"
@@ -70,7 +71,7 @@ export default function FourierDFTExplorer() {
           />
         </label>
         <label>
-          <span>Số sample <strong>N = {N}</strong></span>
+          <span>Số sample <strong><MathExpr tex={`N=${N}`} /></strong></span>
           <select value={N} onChange={(event) => setN(Number(event.target.value))}>
             <option value="32">32</option>
             <option value="64">64</option>
@@ -87,15 +88,15 @@ export default function FourierDFTExplorer() {
       </div>
 
       <div className="fourier-readout">
-        <div><small>fₛ</small><strong>{fs} Hz</strong><span>sampling rate</span></div>
-        <div><small>Δf</small><strong>{binSpacing.toFixed(2)} Hz</strong><span>fₛ/N</span></div>
-        <div><small>BIN GẦN NHẤT</small><strong>k = {closestBin}</strong><span>{closestFrequency.toFixed(2)} Hz</span></div>
+        <div><small><MathExpr tex="f_s" /></small><strong><MathExpr tex={`${fs}\\,\\mathrm{Hz}`} /></strong><span>sampling rate</span></div>
+        <div><small><MathExpr tex={`\\Delta f`} /></small><strong><MathExpr tex={`${binSpacing.toFixed(2)}\\,\\mathrm{Hz}`} /></strong><span><MathExpr tex="f_s/N" /></span></div>
+        <div><small>BIN GẦN NHẤT</small><strong><MathExpr tex={`k=${closestBin}`} /></strong><span><MathExpr tex={`${closestFrequency.toFixed(2)}\\,\\mathrm{Hz}`} /></span></div>
         <div className={onBin ? 'ok' : 'warning'}><small>BIN ALIGNMENT</small><strong>{onBin ? 'Đúng bin' : 'Lệch bin'}</strong><span>{onBin ? 'ít leakage lý tưởng' : 'energy trải sang bins khác'}</span></div>
       </div>
 
       <div className="fourier-panels">
         <div>
-          <div className="visual-caption"><span>TIME DOMAIN</span><strong>{N} samples</strong></div>
+          <div className="visual-caption"><span>TIME DOMAIN</span><strong><MathExpr tex={`N=${N}`} /> samples</strong></div>
           <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Các sample time domain dùng cho DFT">
             <line className="fourier-axis" x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} />
             <path className="fourier-time-wave" d={timePoints} />
@@ -108,7 +109,7 @@ export default function FourierDFTExplorer() {
         </div>
 
         <div>
-          <div className="visual-caption"><span>DFT MAGNITUDE</span><strong>X[k]</strong></div>
+          <div className="visual-caption"><span>DFT MAGNITUDE</span><strong><MathExpr tex="X[k]" /></strong></div>
           <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Magnitude DFT theo các frequency bins">
             <line className="fourier-axis" x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} />
             {visibleBins.map((bin, index) => {
@@ -135,7 +136,7 @@ export default function FourierDFTExplorer() {
       </div>
 
       <p className="fourier-caption">
-        DFT chỉ kiểm tra một tập frequency bins rời rạc k·fₛ/N. Khi tone không rơi đúng bin, một record hữu hạn
+        DFT chỉ kiểm tra một tập frequency bins rời rạc <MathExpr tex="k f_s/N" />. Khi tone không rơi đúng bin, một record hữu hạn
         bị cắt ở biên và energy trải sang nhiều bins. Window thay đổi cách leakage phân bố, nhưng không tạo thêm thông tin mới.
       </p>
     </div>

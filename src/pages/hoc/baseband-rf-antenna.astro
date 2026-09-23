@@ -15,7 +15,7 @@ import MathExpr from '../../components/Math.astro';
       <h1>Baseband → RF → antenna</h1>
       <p class="lesson-deck">
         Sau Bài 08, ta đã có bits → complex symbols → complex samples. Nhưng antenna không phát một mảng số phức trong RAM.{" "}
-        <strong>Bài này theo cùng một tín hiệu từ I/Q samples trong DSP cho tới điện áp RF thực ở cổng antenna.</strong>
+        <strong>Bài này theo cùng một tín hiệu từ <MathExpr tex="I/Q" /> samples trong DSP cho tới điện áp RF thực ở cổng antenna.</strong>
       </p>
     </header>
 
@@ -24,15 +24,15 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Giả sử trong code tôi đang có một buffer:
         <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex="\\mathrm{GHz}" />?
+        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex={String.raw`\mathrm{GHz}`} />?
       </p>
 
       <div class="system-position">
         <span>TỪ MEMORY TỚI ANTENNA</span>
         <div class="system-position-flow" aria-label="Chuỗi từ complex samples tới antenna">
-          <strong>I/Q samples</strong><b>→</b>
+          <strong><MathExpr tex="I/Q" /> samples</strong><b>→</b>
           <span>DAC</span><b>→</b>
-          <span>analog I/Q</span><b>→</b>
+          <span>analog <MathExpr tex="I/Q" /></span><b>→</b>
           <span>quadrature mixer</span><b>→</b>
           <span>RF filter + PA</span><b>→</b>
           <span>antenna</span>
@@ -46,12 +46,12 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="complex-samples">
       <p class="concept-kicker">01 · DIGITAL BASEBAND CHƯA CÓ CARRIER RF</p>
-      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex="0\\,\\mathrm{Hz}" /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
+      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
 
       <p>
         Một sample complex có dạng <MathExpr tex="x[n] = I[n] + jQ[n]" />.
         Nếu tại một thời điểm <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
-        Hai con số I và Q đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
+        Hai con số <MathExpr tex="I" /> và <MathExpr tex="Q" /> đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
       </p>
 
       <p>
@@ -75,7 +75,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>DAC không “vẽ một đường cong” từ công thức; nó cập nhật output theo sample clock rồi analog filter xử lý phần ngoài dải.</h2>
 
       <p>
-        Với mỗi nhánh I và Q, DAC nhận một chuỗi số theo thời gian.
+        Với mỗi nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" />, DAC nhận một chuỗi số theo thời gian.
         Nếu sample rate là <MathExpr tex="f_s" />, mỗi <MathExpr tex="T_s = 1/f_s" /> giây DAC nhận một giá trị mới.
         Output analog thô vì vậy liên quan trực tiếp tới các mức sample và cơ chế hold/update của DAC.
       </p>
@@ -113,7 +113,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>Với một convention thường gặp:</p>
 
-      <MathExpr tex="s(t) = I(t)\\cos(2\\pi f_c t) - Q(t)\\sin(2\\pi f_c t)" display />
+      <MathExpr tex={String.raw`s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
 
       <p>
         Nhánh I nhân với cosine. Nhánh Q nhân với sine lệch 90°. Sau đó hai nhánh được cộng lại.
@@ -121,9 +121,9 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Lấy ví dụ đơn giản I = 0.8 và Q = 0.6 trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex="\\phi\\approx36.9^\\circ" />.
-        Công thức phía trên trở thành một sinusoid có cùng magnitude <MathExpr tex="A" /> và phase <MathExpr tex="\\phi" /> quanh carrier <MathExpr tex="f_c" />.
-        Nói cách khác, <strong>tọa độ I/Q ở baseband quyết định amplitude và phase của RF carrier</strong>.
+        Lấy ví dụ đơn giản <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex={String.raw`\phi\approx36.9^\circ`} />.
+        Công thức phía trên trở thành một sinusoid có cùng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} /> quanh carrier <MathExpr tex="f_c" />.
+        Nói cách khác, <strong>tọa độ <MathExpr tex="I/Q" /> ở baseband quyết định amplitude và phase của RF carrier</strong>.
       </p>
 
       <aside class="precision-note">
@@ -140,7 +140,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Thay amplitude và phase của một complex symbol rồi nhìn I·cos và -Q·sin cộng thành RF waveform.</h2>
       <p>
         Carrier trong demo chỉ là một số chu kỳ minh họa trên màn hình.
-        Điều cần quan sát là khi phase của điểm I+jQ thay đổi, cách hai nhánh I và Q phối hợp cũng thay đổi,
+        Điều cần quan sát là khi phase của điểm <MathExpr tex="I+jQ" /> thay đổi, cách hai nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" /> phối hợp cũng thay đổi,
         nhưng tổng cuối cùng vẫn là một waveform thực.
       </p>
       <RFChainExplorer client:load />
@@ -148,17 +148,17 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="frequency-translation">
       <p class="concept-kicker">05 · UPCONVERSION LÀ DỊCH SPECTRUM LÊN QUANH CARRIER</p>
-      <h2>Baseband mô tả nội dung quanh 0 Hz; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
+      <h2>Baseband mô tả nội dung quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
 
       <p>
-        Nếu complex baseband chiếm một bandwidth B quanh 0 Hz, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
+        Nếu complex baseband chiếm một bandwidth <MathExpr tex="B" /> quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
         Carrier không tạo thêm information. Nó chuyển vị trí của spectrum tới band mà antenna và wireless channel sử dụng.
       </p>
 
       <div class="frequency-translation">
         <div>
           <span class="card-label">COMPLEX BASEBAND</span>
-          <strong>quanh 0 Hz</strong>
+          <strong>quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /></strong>
           <p>DSP xử lý modulation và filtering ở frequency thấp tương đối.</p>
         </div>
         <b>dịch lên <MathExpr tex="f_c" /> →</b>
@@ -171,7 +171,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Receiver làm chiều ngược lại. RF front-end chọn band cần thu, mixer đưa channel đó về complex baseband,
-        rồi ADC tạo lại các I/Q samples để DSP xử lý.
+        rồi ADC tạo lại các <MathExpr tex="I/Q" /> samples để DSP xử lý.
       </p>
     </section>
 
@@ -237,14 +237,14 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="receiver">
       <p class="concept-kicker">08 · RECEIVER ĐI NGƯỢC LẠI, NHƯNG KHÔNG HOÀN HẢO</p>
-      <h2>Antenna thu một RF waveform đã bị channel và noise làm thay đổi, rồi radio đưa nó trở lại I/Q samples.</h2>
+      <h2>Antenna thu một RF waveform đã bị channel và noise làm thay đổi, rồi radio đưa nó trở lại <MathExpr tex="I/Q" /> samples.</h2>
 
       <div class="receiver-chain">
         <div><strong>Antenna</strong><span>EM field → RF signal</span></div>
         <b>→</b>
         <div><strong>Filter / LNA</strong><span>chọn band, low-noise gain</span></div>
         <b>→</b>
-        <div><strong>Downconversion</strong><span>RF → analog I/Q</span></div>
+        <div><strong>Downconversion</strong><span>RF → analog <MathExpr tex="I/Q" /></span></div>
         <b>→</b>
         <div><strong>ADC</strong><span>I[n], Q[n]</span></div>
         <b>→</b>
@@ -261,13 +261,13 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
       <h2>Một sample trong code liên quan tới sóng ngoài antenna qua một chuỗi biến đổi có ý nghĩa vật lý rõ ràng.</h2>
       <ol class="recap-list">
-        <li><strong>I/Q samples:</strong> representation số của complex baseband.</li>
+        <li><strong><MathExpr tex="I/Q" /> samples:</strong> representation số của complex baseband.</li>
         <li><strong>DAC:</strong> tạo hai analog baseband waveforms I(t) và Q(t).</li>
-        <li><strong>Quadrature upconversion:</strong> đặt I/Q lên hai carrier vuông pha rồi cộng thành RF waveform thực.</li>
+        <li><strong>Quadrature upconversion:</strong> đặt <MathExpr tex="I/Q" /> lên hai carrier vuông pha rồi cộng thành RF waveform thực.</li>
         <li><strong>Local oscillator:</strong> quyết định signal được frequency-translate lên quanh carrier nào.</li>
         <li><strong>Filter và PA:</strong> làm sạch spectrum và đưa waveform tới mức power cần thiết.</li>
         <li><strong>Antenna:</strong> nối RF circuit với electromagnetic wave trong không gian.</li>
-        <li><strong>Receiver:</strong> làm chuỗi gần như ngược lại để quay về I/Q samples.</li>
+        <li><strong>Receiver:</strong> làm chuỗi gần như ngược lại để quay về <MathExpr tex="I/Q" /> samples.</li>
       </ol>
     </section>
 

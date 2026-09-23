@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const N = 8;
 const qpsk = [
@@ -49,13 +50,13 @@ export default function IFFTFFTExplorer() {
   return (
     <div className="ifft-fft-lab">
       <div className="ifft-bin-editor">
-        <div className="visual-caption"><span>FREQUENCY DOMAIN</span><strong>click mỗi X[k] để đổi OFF/QPSK</strong></div>
+        <div className="visual-caption"><span>FREQUENCY DOMAIN</span><strong>click mỗi <MathExpr tex="X[k]" /> để đổi OFF/QPSK</strong></div>
         <div className="ifft-bin-row">
           {bins.map((idx, k) => (
             <button key={k} className={idx >= 0 ? 'active' : ''} onClick={() => cycleBin(k)}>
-              <small>k={k}</small>
+              <small><MathExpr tex={`k=${k}`} /></small>
               <strong>{idx < 0 ? 'OFF' : qpsk[idx].name}</strong>
-              <span>{idx < 0 ? '0' : `${qpsk[idx].re.toFixed(2)} ${qpsk[idx].im >= 0 ? '+' : '-'} j${Math.abs(qpsk[idx].im).toFixed(2)}`}</span>
+              <span><MathExpr tex={idx < 0 ? '0' : `${qpsk[idx].re.toFixed(2)}${qpsk[idx].im >= 0 ? '+' : '-'}j${Math.abs(qpsk[idx].im).toFixed(2)}`} /></span>
             </button>
           ))}
         </div>
@@ -63,19 +64,19 @@ export default function IFFTFFTExplorer() {
 
       <div className="ifft-transform-arrow">
         <strong>IFFT / IDFT</strong>
-        <span>X[k] → x[n]</span>
+        <span><MathExpr tex={`X[k]\\to x[n]`} /></span>
         <b>↓</b>
       </div>
 
       <div className="ifft-time-panel">
-        <div className="visual-caption"><span>TIME DOMAIN</span><strong>N = {N} complex samples</strong></div>
+        <div className="visual-caption"><span>TIME DOMAIN</span><strong><MathExpr tex={`N=${N}`} /> complex samples</strong></div>
         <div className="ifft-sample-grid">
           {x.map((v, n) => (
             <div key={n}>
-              <small>n={n}</small>
+              <small><MathExpr tex={`n=${n}`} /></small>
               <i className="real" style={{ height: `${Math.abs(v.re) / maxTime * 46}%`, transform: v.re >= 0 ? 'translateY(-50%)' : 'translateY(50%)' }}></i>
               <i className="imag" style={{ height: `${Math.abs(v.im) / maxTime * 46}%`, transform: v.im >= 0 ? 'translateY(-50%)' : 'translateY(50%)' }}></i>
-              <span>{v.re.toFixed(2)} {v.im >= 0 ? '+' : '-'} j{Math.abs(v.im).toFixed(2)}</span>
+              <span><MathExpr tex={`${v.re.toFixed(2)}${v.im >= 0 ? '+' : '-'}j${Math.abs(v.im).toFixed(2)}`} /></span>
             </div>
           ))}
         </div>
@@ -84,7 +85,7 @@ export default function IFFTFFTExplorer() {
       <div className="ifft-transform-arrow return">
         <b>↓</b>
         <strong>FFT / DFT</strong>
-        <span>x[n] → Y[k]</span>
+        <span><MathExpr tex={`x[n]\\to Y[k]`} /></span>
       </div>
 
       <div className="ifft-recovered">
@@ -92,9 +93,9 @@ export default function IFFTFFTExplorer() {
           const err = Math.hypot(v.re - X[k].re, v.im - X[k].im);
           return (
             <div key={k}>
-              <small>k={k}</small>
-              <strong>|Y|={Math.hypot(v.re, v.im).toFixed(2)}</strong>
-              <span>error {err.toExponential(1)}</span>
+              <small><MathExpr tex={`k=${k}`} /></small>
+              <strong><MathExpr tex={`|Y|=${Math.hypot(v.re, v.im).toFixed(2)}`} /></strong>
+              <span><MathExpr tex={`\\varepsilon=${err.toExponential(1)}`} /></span>
             </div>
           );
         })}

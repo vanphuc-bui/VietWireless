@@ -51,7 +51,7 @@ import MathExpr from '../../components/Math.astro';
         <b>đổi basis →</b>
         <div>
           <small>COMPLEX SINUSOIDS</small>
-          <strong><MathExpr tex="e^{j\\omega n}" /></strong>
+          <strong><MathExpr tex={String.raw`e^{j\omega n}`} /></strong>
           <span>các “hướng” dao động khác nhau</span>
         </div>
         <b>→</b>
@@ -80,7 +80,7 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article>
           <span class="card-label">DTFT</span>
-          <h3><MathExpr tex="x[n] \\leftrightarrow X(e^{j\\omega})" /></h3>
+          <h3><MathExpr tex={String.raw`x[n] \leftrightarrow X(e^{j\omega})`} /></h3>
           <p>Đầu vào rời rạc theo thời gian; frequency vẫn liên tục nhưng tuần hoàn theo normalized frequency.</p>
         </article>
         <article>
@@ -99,7 +99,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · DFT ĐANG TÍNH GÌ?</p>
       <h2>Mỗi bin k hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
 
-      <MathExpr tex="X[k] = \\sum_{n=0}^{N-1} x[n]e^{-j2\\pi kn/N}" display />
+      <MathExpr tex={String.raw`X[k] = \sum_{n=0}^{N-1} x[n]e^{-j2\pi kn/N}`} display />
 
       <div class="dft-symbols">
         <div><strong>N</strong><span>số samples trong record</span></div>
@@ -109,7 +109,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Có thể đọc phép nhân với <MathExpr tex="e^{-j2\\pi kn/N}" /> như việc “de-rotate” một candidate frequency.
+        Có thể đọc phép nhân với <MathExpr tex={String.raw`e^{-j2\pi kn/N}`} /> như việc “de-rotate” một candidate frequency.
         Nếu candidate khớp với thành phần trong <MathExpr tex="x[n]" />, các contribution cộng cùng hướng và magnitude của <MathExpr tex="X[k]" /> lớn.
         Nếu không khớp, các vector có xu hướng triệt tiêu nhau.
       </p>
@@ -129,28 +129,28 @@ import MathExpr from '../../components/Math.astro';
       <div class="bin-equations">
         <div>
           <span class="card-label">BIN SPACING</span>
-          <strong><MathExpr tex="\\Delta f = f_s/N" /></strong>
+          <strong><MathExpr tex={String.raw`\Delta f = f_s/N`} /></strong>
         </div>
         <div>
           <span class="card-label">RECORD DURATION</span>
-          <strong><MathExpr tex="T_{\\mathrm{obs}} = N/f_s" /></strong>
+          <strong><MathExpr tex={String.raw`T_{\mathrm{obs}} = N/f_s`} /></strong>
         </div>
         <div>
           <span class="card-label">CÙNG MỘT QUAN HỆ</span>
-          <strong><MathExpr tex="\\Delta f = 1/T_{\\mathrm{obs}}" /></strong>
+          <strong><MathExpr tex={String.raw`\Delta f = 1/T_{\mathrm{obs}}`} /></strong>
         </div>
       </div>
 
       <p>
-        Ví dụ <MathExpr tex="f_s=64\\,\\mathrm{Hz}" /> và <MathExpr tex="N=64" /> cho <MathExpr tex="\\Delta f=1\\,\\mathrm{Hz}" />.
-        Tăng <MathExpr tex="N" /> lên 128 trong khi giữ <MathExpr tex="f_s" /> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn 0,5 Hz.
+        Ví dụ <MathExpr tex={String.raw`f_s=64\,\mathrm{Hz}`} /> và <MathExpr tex="N=64" /> cho <MathExpr tex={String.raw`\Delta f=1\,\mathrm{Hz}`} />.
+        Tăng <MathExpr tex="N" /> lên 128 trong khi giữ <MathExpr tex="f_s" /> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn <MathExpr tex={String.raw`0.5\,\mathrm{Hz}`} />.
       </p>
 
       <aside class="precision-note">
         <strong>Bin spacing và khả năng phân giải hai tone không hoàn toàn đồng nghĩa trong mọi tình huống</strong>
         <p>
           Window shape, SNR và độ dài quan sát đều ảnh hưởng việc hai spectral components có tách được hay không.
-          <MathExpr tex="\\Delta f=f_s/N" /> là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
+          <MathExpr tex={String.raw`\Delta f=f_s/N`} /> là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
         </p>
       </aside>
     </section>
@@ -166,7 +166,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="leakage-story">
         <div>
           <small>BIN-CENTERED TONE</small>
-          <strong><MathExpr tex="7.0\\,\\mathrm{Hz}" /></strong>
+          <strong><MathExpr tex={String.raw`7.0\,\mathrm{Hz}`} /></strong>
           <span>record chứa số chu kỳ nguyên</span>
         </div>
         <b>→</b>
@@ -175,7 +175,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <div>
           <small>OFF-BIN TONE</small>
-          <strong><MathExpr tex="7.5\\,\\mathrm{Hz}" /></strong>
+          <strong><MathExpr tex={String.raw`7.5\,\mathrm{Hz}`} /></strong>
           <span>biên record không nối trơn</span>
         </div>
         <b>→</b>
@@ -189,7 +189,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">06 · INTERACTIVE LAB</p>
       <h2>Thử đổi tone, N và window để thấy bin spacing và leakage thay đổi.</h2>
       <p>
-        Chọn tone nguyên Hz khi <MathExpr tex="\\Delta f=1\\,\\mathrm{Hz}" /> để thấy energy tập trung vào một bin, rồi chọn <MathExpr tex="7.5\\,\\mathrm{Hz}" />.
+        Chọn tone nguyên Hz khi <MathExpr tex={String.raw`\Delta f=1\,\mathrm{Hz}`} /> để thấy energy tập trung vào một bin, rồi chọn <MathExpr tex={String.raw`7.5\,\mathrm{Hz}`} />.
         Sau đó đổi Rectangular sang Hann để quan sát tradeoff giữa sidelobes và main-lobe width.
       </p>
       <FourierDFTExplorer client:load />
@@ -282,7 +282,7 @@ import MathExpr from '../../components/Math.astro';
       <ol class="recap-list">
         <li><strong>Fourier:</strong> mô tả signal bằng các thành phần sinusoid/complex exponential.</li>
         <li><strong>DFT:</strong> biến <MathExpr tex="N" /> samples thành <MathExpr tex="N" /> complex frequency bins.</li>
-        <li><strong><MathExpr tex="\\Delta f=f_s/N" />:</strong> sampling rate và record length xác định bin spacing.</li>
+        <li><strong><MathExpr tex={String.raw`\Delta f=f_s/N`} />:</strong> sampling rate và record length xác định bin spacing.</li>
         <li><strong>Leakage:</strong> xuất hiện khi finite record không khớp tuần hoàn với DFT basis.</li>
         <li><strong>Window:</strong> thay leakage tradeoff bằng cách taper record.</li>
         <li><strong>FFT:</strong> thuật toán tính DFT hiệu quả, không phải transform khác.</li>

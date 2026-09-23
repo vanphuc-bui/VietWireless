@@ -32,7 +32,7 @@ import MathExpr from '../../components/Math.astro';
         <div class="system-position-flow">
           <span>high-rate symbols</span><b>→</b>
           <strong>parallelize</strong><b>→</b>
-          <span><MathExpr tex="X[0],\\,X[1],\\,\\ldots" /></span><b>→</b>
+          <span><MathExpr tex={String.raw`X[0],\,X[1],\,\ldots`} /></span><b>→</b>
           <span>IFFT</span><b>→</b>
           <span>one time waveform</span>
         </div>
@@ -75,7 +75,7 @@ import MathExpr from '../../components/Math.astro';
         <article><span><MathExpr tex="k=0" /></span><strong><MathExpr tex="X[0]" /></strong><p>một complex symbol</p></article>
         <article><span><MathExpr tex="k=1" /></span><strong><MathExpr tex="X[1]" /></strong><p>một complex symbol</p></article>
         <article><span><MathExpr tex="k=2" /></span><strong><MathExpr tex="X[2]" /></strong><p>một complex symbol</p></article>
-        <article><span><MathExpr tex="\\ldots" /></span><strong><MathExpr tex="X[k]" /></strong><p>nhiều carriers song song</p></article>
+        <article><span><MathExpr tex={String.raw`\ldots`} /></span><strong><MathExpr tex="X[k]" /></strong><p>nhiều carriers song song</p></article>
       </div>
 
       <p>
@@ -86,9 +86,9 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="orthogonality">
       <p class="concept-kicker">03 · “NHIỀU SUBCARRIERS” CHƯA ĐỦ, CHÚNG PHẢI ĐƯỢC ĐẶT ĐÚNG SPACING</p>
-      <h2>Trong basic CP-OFDM construction, subcarrier spacing và useful symbol duration liên hệ bởi <MathExpr tex="\\Delta f = 1/T_u" />.</h2>
+      <h2>Trong basic CP-OFDM construction, subcarrier spacing và useful symbol duration liên hệ bởi <MathExpr tex={String.raw`\Delta f = 1/T_u`} />.</h2>
 
-      <MathExpr tex="\\Delta f = \\frac{1}{T_u}" display />
+      <MathExpr tex={String.raw`\Delta f = \frac{1}{T_u}`} display />
 
       <p>
         Trong useful interval <MathExpr tex="T_u" />, subcarrier k hoàn thành một số nguyên chu kỳ tương đối với basis.
@@ -147,7 +147,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Tất nhiên channel vẫn khác nhau giữa k=10 và k=200.
+        Tất nhiên channel vẫn khác nhau giữa <MathExpr tex="k=10" /> và <MathExpr tex="k=200" />.
         OFDM không làm <MathExpr tex="H[k]" /> phẳng trên toàn carrier.
         Nó chỉ chia carrier thành các pieces đủ hẹp để từng piece dễ xử lý hơn.
       </p>
@@ -170,11 +170,11 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="numbers">
-      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN <MathExpr tex="\\Delta f" /> VỚI <MathExpr tex="T_u" /></p>
-      <h2><MathExpr tex="15\\,\\mathrm{kHz}" /> spacing cho useful symbol khoảng <MathExpr tex="66.67\\,\\mu\\mathrm{s}" />; <MathExpr tex="120\\,\\mathrm{kHz}" /> spacing chỉ còn khoảng <MathExpr tex="8.33\\,\\mu\\mathrm{s}" />.</h2>
+      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN <MathExpr tex={String.raw`\Delta f`} /> VỚI <MathExpr tex="T_u" /></p>
+      <h2><MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> spacing cho useful symbol khoảng <MathExpr tex={String.raw`66.67\,\mu\mathrm{s}`} />; <MathExpr tex={String.raw`120\,\mathrm{kHz}`} /> spacing chỉ còn khoảng <MathExpr tex={String.raw`8.33\,\mu\mathrm{s}`} />.</h2>
 
       <p>
-        Vì <MathExpr tex="T_u=1/\\Delta f" />, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
+        Vì <MathExpr tex={String.raw`T_u=1/\Delta f`} />, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
         Đây chính là nền tảng của 5G NR numerology ở Bài 18.
         Nó cũng cho thấy tradeoff:
         symbol ngắn hơn có lợi cho một số timing/latency và relative-CFO conditions,
@@ -215,7 +215,7 @@ import MathExpr from '../../components/Math.astro';
       <ol class="recap-list">
         <li><strong>Parallelization:</strong> chia data qua nhiều narrowband subcarriers.</li>
         <li><strong>Longer symbol duration:</strong> làm channel memory nhỏ hơn tương đối so với useful interval.</li>
-        <li><strong>Orthogonality:</strong> <MathExpr tex="\\Delta f = 1/T_u" /> trong ideal basis construction.</li>
+        <li><strong>Orthogonality:</strong> <MathExpr tex={String.raw`\Delta f = 1/T_u`} /> trong ideal basis construction.</li>
         <li><strong>IFFT:</strong> tổng hợp all subcarrier coefficients thành one time-domain block.</li>
         <li><strong>FFT:</strong> project received block trở lại từng frequency basis.</li>
         <li><strong><MathExpr tex="H[k]" />:</strong> wideband selective channel trở thành per-subcarrier complex gains.</li>

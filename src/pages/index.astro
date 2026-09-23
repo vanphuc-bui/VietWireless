@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CommunicationJourney from '../components/CommunicationJourney.astro';
+import MathExpr from '../components/Math.astro';
 ---
 
 <BaseLayout
@@ -24,7 +25,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
       <div class="hero-note">
         <span class="note-mark">Ghi chú mở đầu</span>
         <p>
-          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, I/Q, OFDM hay resource grid
+          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, <MathExpr tex="I/Q" />, OFDM hay resource grid
           hơi rời rạc, tôi cũng từng có cảm giác như vậy. VietWireless là nơi tôi thử nối chúng lại bằng hình ảnh và những ví dụ dễ nhìn hơn.
         </p>
       </div>
@@ -329,9 +330,9 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
                   <circle class="cell c1" cx="92" cy="73" r="48"></circle>
                   <circle class="cell c2" cx="180" cy="73" r="48"></circle>
                   <circle class="cell c3" cx="268" cy="73" r="48"></circle>
-                  <text x="74" y="78">f₁</text>
-                  <text x="162" y="78">f₂</text>
-                  <text x="250" y="78">f₁</text>
+                  <foreignObject x="62" y="61" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_1" /></div></foreignObject>
+                  <foreignObject x="150" y="61" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_2" /></div></foreignObject>
+                  <foreignObject x="238" y="61" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_1" /></div></foreignObject>
                   <path class="mobility-path" d="M45 118 C105 96 139 110 181 91 S255 63 316 48"></path>
                   <circle class="ue-dot" cx="181" cy="91" r="6"></circle>
                   <text class="ue-label" x="190" y="108">UE</text>
@@ -361,12 +362,12 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
         <p>
           Khi học viễn thông, tôi từng gặp chính những câu hỏi rất cơ bản mà giáo trình thường đi qua quá nhanh:{" "}
           <strong>FFT thực sự để làm gì? Tại sao lúc thì tín hiệu ở miền thời gian, lúc lại ở miền tần số?
-          I và Q là gì? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
+          <MathExpr tex="I" /> và <MathExpr tex="Q" /> là gì? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
         </p>
 
         <p>
           Sau này, khi học, nghiên cứu và làm việc sâu hơn với wireless, tôi nhận ra cảm giác này khá phổ biến.
-          Ta có thể dùng FFT, OFDM, channel estimation hay I/Q rất thường xuyên nhưng đôi khi vẫn phải dừng lại một chút để hỏi:{" "}
+          Ta có thể dùng FFT, OFDM, channel estimation hay <MathExpr tex="I/Q" /> rất thường xuyên nhưng đôi khi vẫn phải dừng lại một chút để hỏi:{" "}
           <em>ở bước này tín hiệu đang được biểu diễn theo cách nào?</em>
         </p>
 
@@ -443,7 +444,7 @@ import CommunicationJourney from '../components/CommunicationJourney.astro';
             <span class="course-no">PHẦN I</span>
             <div>
               <h3>Nền tảng signal</h3>
-              <p>Signal → sampling → phase → số phức → I/Q → FFT → modulation.</p>
+              <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → FFT → modulation.</p>
             </div>
             <a href="/hoc/tin-hieu-la-gi/">Bắt đầu →</a>
           </li>

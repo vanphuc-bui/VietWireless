@@ -22,20 +22,20 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Một sinusoid có amplitude <MathExpr tex="A" /> và phase <MathExpr tex="\\phi" />. Số phức cho ta một cách biểu diễn hai đại lượng đó rất gọn,
+        Một sinusoid có amplitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />. Số phức cho ta một cách biểu diễn hai đại lượng đó rất gọn,
         còn complex exponential cho ta một hình ảnh đặc biệt hữu ích: một vector quay.
       </p>
       <div class="system-position">
         <span>TỪ SINUSOID TỚI MẶT PHẲNG PHỨC</span>
         <div class="system-position-flow" aria-label="Sinusoid được nối sang số phức, complex exponential và phasor">
-          <span><MathExpr tex="A\\cos(\\omega t+\\phi)" /></span><b>→</b>
-          <strong><MathExpr tex="Ae^{j(\\omega t+\\phi)}" /></strong><b>→</b>
+          <span><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></span><b>→</b>
+          <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong><b>→</b>
           <span>vector quay</span><b>→</b>
           <span>phasor</span>
         </div>
         <p>
           Mục tiêu không phải học số phức như một chương toán tách biệt. Ta chỉ lấy đúng những gì cần
-          để hiểu signal processing, I/Q, modulation và channel ở các bài sau.
+          để hiểu signal processing, <MathExpr tex="I/Q" />, modulation và channel ở các bài sau.
         </p>
       </div>
     </section>
@@ -95,17 +95,17 @@ import MathExpr from '../../components/Math.astro';
           <h3>z = a + jb</h3>
           <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
           <div class="math-pair">
-            <MathExpr tex="\\operatorname{Re}\\{z\\} = a" display class="math-compact" />
-            <MathExpr tex="\\operatorname{Im}\\{z\\} = b" display class="math-compact" />
+            <MathExpr tex={String.raw`\operatorname{Re}\{z\} = a`} display class="math-compact" />
+            <MathExpr tex={String.raw`\operatorname{Im}\{z\} = b`} display class="math-compact" />
           </div>
         </article>
         <article>
           <span class="card-label">POLAR</span>
-          <h3><MathExpr tex="z=A\\angle\\phi" /></h3>
+          <h3><MathExpr tex={String.raw`z=A\angle\phi`} /></h3>
           <p>Ta hỏi: vector dài bao nhiêu và tạo góc bao nhiêu so với trục thực?</p>
           <div class="math-pair">
-            <MathExpr tex="A = \\sqrt{a^2+b^2}" display class="math-compact" />
-            <MathExpr tex="\\phi = \\operatorname{atan2}(b,a)" display class="math-compact" />
+            <MathExpr tex={String.raw`A = \sqrt{a^2+b^2}`} display class="math-compact" />
+            <MathExpr tex={String.raw`\phi = \operatorname{atan2}(b,a)`} display class="math-compact" />
           </div>
         </article>
       </div>
@@ -120,17 +120,17 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · CÔNG THỨC EULER</p>
       <h2>Euler nối một góc quay trên mặt phẳng phức với cosine và sine.</h2>
 
-      <MathExpr tex="e^{j\\theta} = \\cos\\theta + j\\sin\\theta" display />
+      <MathExpr tex={String.raw`e^{j\theta} = \cos\theta + j\sin\theta`} display />
 
       <p>
         Nếu nhân thêm amplitude A:
       </p>
 
-      <MathExpr tex="Ae^{j\\theta} = A\\cos\\theta + jA\\sin\\theta" display />
+      <MathExpr tex={String.raw`Ae^{j\theta} = A\cos\theta + jA\sin\theta`} display />
 
       <p>
-        Đây là chiếc cầu quan trọng. Một vector có magnitude <MathExpr tex="A" /> và góc <MathExpr tex="\\theta" /> có phần thực bằng <MathExpr tex="A\\cos\\theta" />,
-        còn phần ảo bằng <MathExpr tex="A\\sin\\theta" />.
+        Đây là chiếc cầu quan trọng. Một vector có magnitude <MathExpr tex="A" /> và góc <MathExpr tex={String.raw`\theta`} /> có phần thực bằng <MathExpr tex={String.raw`A\cos\theta`} />,
+        còn phần ảo bằng <MathExpr tex={String.raw`A\sin\theta`} />.
       </p>
 
       <div class="euler-geometry">
@@ -157,23 +157,23 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">04 · TỪ MỘT ĐIỂM TỚI MỘT VECTOR QUAY</p>
       <h2>Nếu góc tăng tuyến tính theo thời gian, điểm trên mặt phẳng phức sẽ quay đều.</h2>
 
-      <MathExpr tex="z(t) = Ae^{j(\\omega t + \\phi)}" display />
+      <MathExpr tex={String.raw`z(t) = Ae^{j(\omega t + \phi)}`} display />
 
       <p>
-        Magnitude <MathExpr tex="A" /> giữ nguyên. Góc của vector là <MathExpr tex="\\omega t+\\phi" />. Khi thời gian tăng, góc tăng và vector quay quanh gốc.
-        Tốc độ quay chính là angular frequency <MathExpr tex="\\omega" />.
+        Magnitude <MathExpr tex="A" /> giữ nguyên. Góc của vector là <MathExpr tex={String.raw`\omega t+\phi`} />. Khi thời gian tăng, góc tăng và vector quay quanh gốc.
+        Tốc độ quay chính là angular frequency <MathExpr tex={String.raw`\omega`} />.
       </p>
 
       <div class="projection-story">
         <div>
           <small>VECTOR PHỨC</small>
-          <strong><MathExpr tex="Ae^{j(\\omega t+\\phi)}" /></strong>
+          <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
           <span>quay trên mặt phẳng</span>
         </div>
         <b>→ lấy phần thực →</b>
         <div>
           <small>PROJECTION</small>
-          <strong><MathExpr tex="A\\cos(\\omega t+\\phi)" /></strong>
+          <strong><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></strong>
           <span>sinusoid trên trục thực</span>
         </div>
       </div>
@@ -191,15 +191,15 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">05 · INTERACTIVE LAB</p>
       <h2>Thay magnitude, phase và góc quay để nhìn số phức thay đổi trực tiếp trên mặt phẳng.</h2>
       <p>
-        Lab dưới đây tách phase ban đầu <MathExpr tex="\\phi" /> khỏi phần quay do thời gian <MathExpr tex="\\omega t" />.
-        Tổng góc của complex exponential tại một thời điểm là <MathExpr tex="\\omega t+\\phi" />.
+        Lab dưới đây tách phase ban đầu <MathExpr tex={String.raw`\phi`} /> khỏi phần quay do thời gian <MathExpr tex={String.raw`\omega t`} />.
+        Tổng góc của complex exponential tại một thời điểm là <MathExpr tex={String.raw`\omega t+\phi`} />.
       </p>
       <ComplexPhasorExplorer client:load />
     </section>
 
     <section class="concept-block" id="phasor">
       <p class="concept-kicker">06 · PHASOR THỰC SỰ LÀ GÌ?</p>
-      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor <MathExpr tex="e^{j\\omega t}" />.</h2>
+      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor <MathExpr tex={String.raw`e^{j\omega t}`} />.</h2>
       <p>
         Giả sử:
       </p>
@@ -207,31 +207,31 @@ import MathExpr from '../../components/Math.astro';
       <div class="phasor-definition">
         <div>
           <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
-          <strong>z(t) = <MathExpr tex="Ae^{j(\\omega t+\\phi)}" /></strong>
+          <strong>z(t) = <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
         </div>
         <b>=</b>
         <div>
           <small>PHASOR</small>
-          <strong><MathExpr tex="Ae^{j\\phi}" /></strong>
+          <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
         <b>×</b>
         <div>
           <small>COMMON ROTATION</small>
-          <strong><MathExpr tex="e^{j\\omega t}" /></strong>
+          <strong><MathExpr tex={String.raw`e^{j\omega t}`} /></strong>
         </div>
       </div>
 
       <p>
-        Khi nhiều sinusoid cùng frequency <MathExpr tex="\\omega" /> được xử lý trong một bài toán steady-state,
-        factor <MathExpr tex="e^{j\\omega t}" /> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với{" "}
-        <strong><MathExpr tex="Ae^{j\\phi}" /></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
+        Khi nhiều sinusoid cùng frequency <MathExpr tex={String.raw`\omega`} /> được xử lý trong một bài toán steady-state,
+        factor <MathExpr tex={String.raw`e^{j\omega t}`} /> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với{" "}
+        <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
       </p>
 
       <aside class="precision-note">
         <strong>Đừng đồng nhất phasor với complex exponential theo thời gian</strong>
         <p>
           Hình vector quay rất hữu ích để xây trực giác, nhưng về mặt notation,
-          <MathExpr tex="Ae^{j(\\omega t+\\phi)}" /> vẫn còn phụ thuộc thời gian. Phasor <MathExpr tex="Ae^{j\\phi}" /> là complex amplitude sau khi common time factor được tách ra.
+          <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /> vẫn còn phụ thuộc thời gian. Phasor <MathExpr tex={String.raw`Ae^{j\phi}`} /> là complex amplitude sau khi common time factor được tách ra.
           Tùy convention, magnitude của phasor có thể dùng peak hoặc RMS, nên khi đọc tài liệu cần xem tác giả đang dùng convention nào.
         </p>
       </aside>
@@ -244,17 +244,17 @@ import MathExpr from '../../components/Math.astro';
       <div class="complex-multiply">
         <div>
           <small>SIGNAL</small>
-          <strong><MathExpr tex="Ae^{j\\phi}" /></strong>
+          <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
         <b>×</b>
         <div>
           <small>HỆ SỐ</small>
-          <strong><MathExpr tex="Ge^{j\\theta}" /></strong>
+          <strong><MathExpr tex={String.raw`Ge^{j\theta}`} /></strong>
         </div>
         <b>=</b>
         <div>
           <small>KẾT QUẢ</small>
-          <strong><MathExpr tex="AGe^{j(\\phi+\\theta)}" /></strong>
+          <strong><MathExpr tex={String.raw`AGe^{j(\phi+\theta)}`} /></strong>
         </div>
       </div>
 
@@ -266,8 +266,8 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="noi-sang-iq">
-      <p class="concept-kicker">08 · NỐI SANG I/Q</p>
-      <h2>Ở bài tiếp theo, hai tọa độ trên mặt phẳng phức sẽ có tên cụ thể: I và Q.</h2>
+      <p class="concept-kicker">08 · NỐI SANG <MathExpr tex="I/Q" /></p>
+      <h2>Ở bài tiếp theo, hai tọa độ trên mặt phẳng phức sẽ có tên cụ thể: <MathExpr tex="I" /> và <MathExpr tex="Q" />.</h2>
 
       <div class="iq-preview">
         <div>
@@ -291,7 +291,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Bài này mới chỉ xây nền toán và hình học. Bài 05 sẽ trả lời câu hỏi thực tế hơn:
-        I và Q xuất hiện ở transmitter/receiver như thế nào, và tại sao một sample trong code thường có hai thành phần này.
+        <MathExpr tex="I" /> và <MathExpr tex="Q" /> xuất hiện ở transmitter/receiver như thế nào, và tại sao một sample trong code thường có hai thành phần này.
       </p>
     </section>
 
@@ -300,11 +300,11 @@ import MathExpr from '../../components/Math.astro';
       <h2>Tới đây, số phức có thể được nhìn như hình học chứ không chỉ là ký hiệu j.</h2>
       <ol class="recap-list">
         <li><strong>z = a + jb:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
-        <li><strong>Magnitude:</strong> <MathExpr tex="A=\\sqrt{a^2+b^2}" /> là độ dài vector từ gốc tới điểm z.</li>
-        <li><strong>Phase:</strong> <MathExpr tex="\\phi" /> là góc của vector so với trục thực.</li>
-        <li><strong>Euler:</strong> <MathExpr tex="e^{j\\theta}=\\cos\\theta+j\\sin\\theta" /> nối số phức với sinusoid.</li>
-        <li><strong>Complex exponential:</strong> <MathExpr tex="Ae^{j(\\omega t+\\phi)}" /> có thể được hình dung như một vector quay.</li>
-        <li><strong>Phasor:</strong> <MathExpr tex="Ae^{j\\phi}" /> là complex amplitude khi common factor <MathExpr tex="e^{j\\omega t}" /> được tách ra.</li>
+        <li><strong>Magnitude:</strong> <MathExpr tex={String.raw`A=\sqrt{a^2+b^2}`} /> là độ dài vector từ gốc tới điểm z.</li>
+        <li><strong>Phase:</strong> <MathExpr tex={String.raw`\phi`} /> là góc của vector so với trục thực.</li>
+        <li><strong>Euler:</strong> <MathExpr tex={String.raw`e^{j\theta}=\cos\theta+j\sin\theta`} /> nối số phức với sinusoid.</li>
+        <li><strong>Complex exponential:</strong> <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /> có thể được hình dung như một vector quay.</li>
+        <li><strong>Phasor:</strong> <MathExpr tex={String.raw`Ae^{j\phi}`} /> là complex amplitude khi common factor <MathExpr tex={String.raw`e^{j\omega t}`} /> được tách ra.</li>
         <li><strong>Complex multiplication:</strong> magnitude nhân nhau, phase cộng nhau.</li>
       </ol>
     </section>
@@ -313,11 +313,11 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card previous" href="/hoc/amplitude-frequency-phase/">
         <span>← BÀI TRƯỚC</span>
         <strong>Amplitude, frequency và phase</strong>
-        <small>Một sinusoid được mô tả bởi <MathExpr tex="A" />, <MathExpr tex="f" /> và <MathExpr tex="\\phi" /> như thế nào?</small>
+        <small>Một sinusoid được mô tả bởi <MathExpr tex="A" />, <MathExpr tex="f" /> và <MathExpr tex={String.raw`\phi`} /> như thế nào?</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/iq-va-complex-baseband/">
         <span>BÀI TIẾP THEO →</span>
-        <strong>I/Q và complex baseband</strong>
+        <strong><MathExpr tex="I/Q" /> và complex baseband</strong>
         <small>Từ mặt phẳng phức tới samples mà transmitter và receiver thực sự xử lý.</small>
       </a>
     </nav>

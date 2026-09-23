@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const W = 760;
 const H = 230;
@@ -66,7 +67,7 @@ export default function SamplingAliasExplorer() {
       <div className="sampling-lab-toolbar">
         <div className="sampling-lab-controls">
           <label>
-            <span>Tần số signal <strong>{frequency.toFixed(1)} Hz</strong></span>
+            <span>Tần số signal <strong><MathExpr tex={`${frequency.toFixed(1)}\\,\\mathrm{Hz}`} /></strong></span>
             <input
               type="range"
               min="1"
@@ -77,7 +78,7 @@ export default function SamplingAliasExplorer() {
             />
           </label>
           <label>
-            <span>Sampling rate <strong>{sampleRate.toFixed(0)} Hz</strong></span>
+            <span>Sampling rate <strong><MathExpr tex={`${sampleRate.toFixed(0)}\\,\\mathrm{Hz}`} /></strong></span>
             <input
               type="range"
               min="4"
@@ -89,25 +90,25 @@ export default function SamplingAliasExplorer() {
           </label>
         </div>
         <div className="sampling-presets" aria-label="Ví dụ nhanh">
-          <button type="button" onClick={setSafePreset}>3 Hz @ 16 Hz</button>
-          <button type="button" onClick={setAliasPreset}>7 Hz @ 10 Hz</button>
+          <button type="button" onClick={setSafePreset}><MathExpr tex={`3\\,\\mathrm{Hz}`} /> @ <MathExpr tex={`16\\,\\mathrm{Hz}`} /></button>
+          <button type="button" onClick={setAliasPreset}><MathExpr tex={`7\\,\\mathrm{Hz}`} /> @ <MathExpr tex={`10\\,\\mathrm{Hz}`} /></button>
         </div>
       </div>
 
       <div className="sampling-lab-readout">
         <div>
           <small>NYQUIST FREQUENCY</small>
-          <strong>{nyquistFrequency.toFixed(1)} Hz</strong>
-          <span>f<sub>s</sub>/2</span>
+          <strong><MathExpr tex={`${nyquistFrequency.toFixed(1)}\\,\\mathrm{Hz}`} /></strong>
+          <span><MathExpr tex="f_s/2" /></span>
         </div>
         <div>
           <small>INPUT TONE</small>
-          <strong>{frequency.toFixed(1)} Hz</strong>
-          <span>cos(2πft)</span>
+          <strong><MathExpr tex={`${frequency.toFixed(1)}\\,\\mathrm{Hz}`} /></strong>
+          <span><MathExpr tex={`\\cos(2\\pi f t)`} /></span>
         </div>
         <div className={isAliasing ? 'warning' : 'ok'}>
           <small>SAU SAMPLING</small>
-          <strong>{aliasFrequency.toFixed(1)} Hz</strong>
+          <strong><MathExpr tex={`${aliasFrequency.toFixed(1)}\\,\\mathrm{Hz}`} /></strong>
           <span>{isAliasing ? 'alias xuất hiện' : 'không bị fold'}</span>
         </div>
       </div>
@@ -137,9 +138,18 @@ export default function SamplingAliasExplorer() {
       </div>
 
       <p className="sampling-lab-caption">
-        {isAliasing
-          ? `Ở các thời điểm lấy mẫu, tone ${frequency.toFixed(1)} Hz và tone ${aliasFrequency.toFixed(1)} Hz tạo ra cùng các giá trị sample. Sau khi đã lấy mẫu, receiver không còn đủ thông tin để phân biệt hai waveform này chỉ từ dãy sample.`
-          : `Tần số signal đang nằm dưới fₛ/2. Các spectral replica chưa fold phần tone này về một tần số thấp hơn trong dải quan sát.`}
+        {isAliasing ? (
+          <>
+            Ở các thời điểm lấy mẫu, tone <MathExpr tex={`${frequency.toFixed(1)}\\,\\mathrm{Hz}`} /> và tone{' '}
+            <MathExpr tex={`${aliasFrequency.toFixed(1)}\\,\\mathrm{Hz}`} /> tạo ra cùng các giá trị sample.
+            Sau khi đã lấy mẫu, receiver không còn đủ thông tin để phân biệt hai waveform này chỉ từ dãy sample.
+          </>
+        ) : (
+          <>
+            Tần số signal đang nằm dưới <MathExpr tex="f_s/2" />. Các spectral replica chưa fold phần tone này
+            về một tần số thấp hơn trong dải quan sát.
+          </>
+        )}
       </p>
     </div>
   );

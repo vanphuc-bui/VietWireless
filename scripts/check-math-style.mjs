@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 
 const files = [];
-const allowed = new Set(['.astro']);
+const allowed = new Set(['.astro', '.jsx', '.tsx']);
 
 function walk(dir) {
   for (const name of readdirSync(dir)) {
@@ -13,7 +13,8 @@ function walk(dir) {
   }
 }
 
-walk('src/pages/hoc');
+walk('src/pages');
+walk('src/components');
 
 const legacyClasses = [
   'sampling-equation',
@@ -48,52 +49,74 @@ const legacyClasses = [
 
 let failed = false;
 
+function report(file, message) {
+  failed = true;
+  console.error(`${relative('.', file)}: ${message}`);
+}
+
 for (const file of files) {
   const content = readFileSync(file, 'utf8');
+  const extension = extname(file);
 
   for (const className of legacyClasses) {
-    const regex = new RegExp('class=["\\\'][^"\\\']*\\b' + className + '\\b');
+    const regex = new RegExp('class(?:Name)?=["\\\'][^"\\\']*\\b' + className + '\\b');
     if (regex.test(content)) {
-      failed = true;
-      console.error(`${relative('.', file)}: legacy math wrapper "${className}". Use <MathExpr />.`);
+      report(file, `legacy math wrapper "${className}". Use MathExpr.`);
     }
   }
 
-  if (/import\s+Math\s+from\s+['"][^'"]*components\/Math\.astro['"]/.test(content)) {
-    failed = true;
-    console.error(`${relative('.', file)}: do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.`);
+  if (/import\s+Math\s+from\s+['"][^'"]*(?:Math\.astro|MathExpr\.jsx)['"]/.test(content)) {
+    report(file, 'do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.');
   }
 
   if (/<\/?(?:sub|sup)>/i.test(content)) {
-    failed = true;
-    console.error(`${relative('.', file)}: raw <sub>/<sup> math markup found. Use <MathExpr />.`);
+    report(file, 'raw <sub>/<sup> math markup found. Use MathExpr.');
   }
 
   if (/[Σ√]/u.test(content)) {
-    failed = true;
-    console.error(`${relative('.', file)}: raw Σ/√ formula glyph found. Use TeX inside <MathExpr />.`);
+    report(file, 'raw Σ/√ formula glyph found. Use TeX inside MathExpr.');
   }
 
-  const visibleSource = content
-    .replace(/^---[\s\S]*?---/m, '')
-    .replace(/\b(?:title|description)="[^"]*"/g, '')
-    .replace(/<svg\b[\s\S]*?<\/svg>/gi, '')
-    .replace(/<MathExpr\b[^>]*\/>/gs, '')
-    .replace(/tex=(?:"[^"]*"|'[^']*')/gs, '');
+  let visibleSource = '';
+
+  if (extension === '.astro') {
+    visibleSource = content
+      .replace(/^---[\s\S]*?---/m, '')
+      .replace(/\b(?:title|description|aria-label)="[^"]*"/g, '')
+      .replace(/<svg\b[\s\S]*?<\/svg>/gi, '')
+      .replace(/<MathExpr\b[^>]*\/>/gs, '')
+      .replace(/tex=(?:"[^"]*"|'[^']*')/gs, '');
+  } else {
+    const withoutMath = content
+      .replace(/<MathExpr\b[^>]*\/>/gs, '')
+      .replace(/<SvgMathExpr\b[^>]*\/>/gs, '');
+    visibleSource = [...withoutMath.matchAll(/>([^<>{\n]+)</g)]
+      .map((match) => match[1])
+      .join(' ');
+  }
 
   if (/\bN\s+samples?\b/u.test(visibleSource)) {
-    failed = true;
-    console.error(`${relative('.', file)}: bare "N sample(s)" found. Render N with <MathExpr />.`);
+    report(file, 'bare "N sample(s)" found. Render N with MathExpr.');
   }
 
   if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C|r|s)\[[^\]<>]+\]/u.test(visibleSource)) {
-    failed = true;
-    console.error(`${relative('.', file)}: bare indexed math notation found. Use <MathExpr />.`);
+    report(file, 'bare indexed math notation found. Use MathExpr.');
+  }
+
+  if (/\bI\s*(?:\/|và|,|hoặc)\s*Q\b/u.test(visibleSource)) {
+    report(file, 'bare I/Q notation found in visible content. Use MathExpr.');
   }
 
   if (/[Δτθφμσωλπℓ]|[₀₁₂₃₄₅₆₇₈₉ᵤₛ]/u.test(visibleSource)) {
-    failed = true;
-    console.error(`${relative('.', file)}: bare mathematical Unicode notation found. Use <MathExpr />.`);
+    report(file, 'bare mathematical Unicode notation found. Use MathExpr.');
+  }
+
+  if (/\b(?:k|n|t|f|N|A|I|Q)\s*=\s*(?:[-+]?\d|$)/u.test(visibleSource)) {
+    report(file, 'bare scalar equation found in visible content. Use MathExpr.');
+  }
+
+  if (/\b\d+(?:\.\d+)?\s*(?:Hz|kHz|MHz|GHz|µs|ms|dB|dBm)\b/u.test(visibleSource)) {
+    report(file, 'bare numeric value with technical unit found. Use MathExpr.');
   }
 }
 

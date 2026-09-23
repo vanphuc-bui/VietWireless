@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 720;
 const H = 260;
@@ -76,11 +77,11 @@ function TimeFrequencyLab() {
         </div>
         <div className="tone-controls">
           <label>
-            Tone A <strong>{f1} Hz</strong>
+            Tone A <strong><MathExpr tex={`${f1}\\,\\mathrm{Hz}`} /></strong>
             <input type="range" min="2" max="10" value={f1} onChange={(e) => setF1(Number(e.target.value))} />
           </label>
           <label>
-            Tone B <strong>{f2} Hz</strong>
+            Tone B <strong><MathExpr tex={`${f2}\\,\\mathrm{Hz}`} /></strong>
             <input type="range" min="11" max="22" value={f2} onChange={(e) => setF2(Number(e.target.value))} />
           </label>
         </div>
@@ -96,8 +97,8 @@ function TimeFrequencyLab() {
               const y = PAD + ((2 - v) / 4) * (H - PAD * 2);
               return <circle key={i} cx={x} cy={y} r="2.6" className="sample-dot" />;
             })}
-            <text x={PAD} y={H - 7} className="plot-label">0 s</text>
-            <text x={W - PAD - 26} y={H - 7} className="plot-label">1 s</text>
+            <SvgMathExpr tex={`0\\,\\mathrm{s}`} x={PAD} y={H - 13} width={38} />
+            <SvgMathExpr tex={`1\\,\\mathrm{s}`} x={W - PAD - 26} y={H - 13} width={38} />
           </svg>
         ) : (
           <svg viewBox={"0 0 " + W + " " + H} role="img" aria-label="Magnitude spectrum trong frequency domain">
@@ -124,7 +125,7 @@ function TimeFrequencyLab() {
                 </g>
               );
             })}
-            <text x={W - 62} y={20} className="plot-label">Hz</text>
+            <SvgMathExpr tex={`\\mathrm{Hz}`} x={W - 62} y={18} width={34} />
           </svg>
         )}
       </div>
@@ -133,12 +134,12 @@ function TimeFrequencyLab() {
         {view === 'time' ? (
           <>
             <strong>Ở time domain, ta đang nhìn waveform tổng.</strong>
-            <span>Hai tone đã cộng vào nhau nên khó đoán bằng mắt rằng bên trong có {f1} Hz và {f2} Hz.</span>
+            <span>Hai tone đã cộng vào nhau nên khó đoán bằng mắt rằng bên trong có <MathExpr tex={`${f1}\\,\\mathrm{Hz}`} /> và <MathExpr tex={`${f2}\\,\\mathrm{Hz}`} />.</span>
           </>
         ) : (
           <>
             <strong>Sang frequency domain, hai thành phần tách ra rõ hơn.</strong>
-            <span>Hai peak chính xuất hiện quanh {f1} Hz và {f2} Hz.</span>
+            <span>Hai peak chính xuất hiện quanh <MathExpr tex={`${f1}\\,\\mathrm{Hz}`} /> và <MathExpr tex={`${f2}\\,\\mathrm{Hz}`} />.</span>
           </>
         )}
       </div>
@@ -178,16 +179,16 @@ function IQLab() {
           <line x1={px} y1={py} x2={px} y2={cy} className="projection" />
           <line x1={px} y1={py} x2={cx} y2={py} className="projection" />
           <circle cx={px} cy={py} r="7" className="phasor-dot" />
-          <text x="300" y={cy - 7} className="plot-label">I</text>
-          <text x={cx + 8} y="20" className="plot-label">Q</text>
+          <SvgMathExpr tex="I" x={300} y={cy - 7} width={24} />
+          <SvgMathExpr tex="Q" x={cx + 8} y={20} width={24} />
         </svg>
 
         <div className="iq-readout">
-          <p className="formula">s = I + jQ</p>
-          <div><span>I</span><strong>{i.toFixed(3)}</strong></div>
-          <div><span>Q</span><strong>{q.toFixed(3)}</strong></div>
-          <div><span>Amplitude</span><strong>1.000</strong></div>
-          <div><span>Phase</span><strong>{Math.round(phase)}°</strong></div>
+          <p className="formula"><MathExpr tex="s=I+jQ" /></p>
+          <div><span><MathExpr tex="I" /></span><strong>{i.toFixed(3)}</strong></div>
+          <div><span><MathExpr tex="Q" /></span><strong>{q.toFixed(3)}</strong></div>
+          <div><span>Amplitude</span><strong><MathExpr tex="A=1.000" /></strong></div>
+          <div><span>Phase</span><strong><MathExpr tex={`${Math.round(phase)}^\\circ`} /></strong></div>
           <button className="play-button" onClick={() => setPlaying((v) => !v)}>
             {playing ? 'Tạm dừng phasor' : 'Cho phasor quay'}
           </button>
@@ -207,7 +208,7 @@ function IQLab() {
         />
       </label>
       <p className="lab-caption">
-        Điểm quay trên complex plane có amplitude không đổi nhưng phase thay đổi. I và Q chỉ là hai projection
+        Điểm quay trên complex plane có amplitude không đổi nhưng phase thay đổi. <MathExpr tex="I" /> và <MathExpr tex="Q" /> chỉ là hai projection
         vuông góc của cùng một phasor.
       </p>
     </div>
@@ -224,7 +225,7 @@ export default function SignalExplorer() {
           Time ↔ Frequency
         </button>
         <button className={lab === 'iq' ? 'selected' : ''} onClick={() => setLab('iq')}>
-          I/Q phasor
+          <MathExpr tex="I/Q" /> phasor
         </button>
       </div>
       {lab === 'fft' ? <TimeFrequencyLab /> : <IQLab />}

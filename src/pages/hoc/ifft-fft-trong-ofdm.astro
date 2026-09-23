@@ -24,10 +24,10 @@ import MathExpr from '../../components/Math.astro';
       <div class="system-position">
         <span>ONE OFDM SYMBOL</span>
         <div class="system-position-flow">
-          <strong><MathExpr tex="X[0],\\ldots,X[N-1]" /></strong><b>→ IFFT →</b>
-          <span><MathExpr tex="x[0],\\ldots,x[N-1]" /></span><b>→ channel →</b>
-          <span><MathExpr tex="y[0],\\ldots,y[N-1]" /></span><b>→ FFT →</b>
-          <strong><MathExpr tex="Y[0],\\ldots,Y[N-1]" /></strong>
+          <strong><MathExpr tex={String.raw`X[0],\ldots,X[N-1]`} /></strong><b>→ IFFT →</b>
+          <span><MathExpr tex={String.raw`x[0],\ldots,x[N-1]`} /></span><b>→ channel →</b>
+          <span><MathExpr tex={String.raw`y[0],\ldots,y[N-1]`} /></span><b>→ FFT →</b>
+          <strong><MathExpr tex={String.raw`Y[0],\ldots,Y[N-1]`} /></strong>
         </div>
         <p>
           <MathExpr tex="X[k]" /> và <MathExpr tex="x[n]" /> không phải hai bộ data khác nhau.
@@ -40,12 +40,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">01 · IFFT ĐANG CỘNG CÁC SUBCARRIERS NHƯ THẾ NÀO?</p>
       <h2>Mỗi <MathExpr tex="X[k]" /> là amplitude/phase của một complex exponential có frequency index <MathExpr tex="k" />.</h2>
 
-      <MathExpr tex="x[n] = \\frac{1}{N}\\sum_{k=0}^{N-1}X[k]e^{j2\\pi kn/N}" display />
+      <MathExpr tex={String.raw`x[n] = \frac{1}{N}\sum_{k=0}^{N-1}X[k]e^{j2\pi kn/N}`} display />
 
       <p>
         Nhìn từng term:
         <MathExpr tex="X[k]" /> quyết định complex amplitude của subcarrier <MathExpr tex="k" />.
-        <MathExpr tex="e^{j2\\pi kn/N}" /> là basis waveform của subcarrier đó tại sample n.
+        <MathExpr tex={String.raw`e^{j2\pi kn/N}`} /> là basis waveform của subcarrier đó tại sample n.
         IFFT lấy tất cả các basis waveforms, scale chúng bằng <MathExpr tex="X[k]" />, rồi cộng lại.
       </p>
 
@@ -57,7 +57,7 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="simple-example">
-      <p class="concept-kicker">02 · MỘT VÍ DỤ N=4 ĐỂ THẤY IFFT KHÔNG HỀ BÍ ẨN</p>
+      <p class="concept-kicker">02 · MỘT VÍ DỤ <MathExpr tex="N=4" /> ĐỂ THẤY IFFT KHÔNG HỀ BÍ ẨN</p>
       <h2>Nếu chỉ bật một bin, time-domain samples chính là các điểm của một complex sinusoid.</h2>
 
       <p>
@@ -65,7 +65,7 @@ import MathExpr from '../../components/Math.astro';
         Khi đó:
       </p>
 
-      <MathExpr tex="x[n] = \\frac{1}{4}e^{j2\\pi n/4}" display />
+      <MathExpr tex={String.raw`x[n] = \frac{1}{4}e^{j2\pi n/4}`} display />
 
       <p>
         Bốn samples lần lượt là:
@@ -74,7 +74,7 @@ import MathExpr from '../../components/Math.astro';
         -0.25,
         -j0.25.
         Trên complex plane, vector quay 90° sau mỗi sample.
-        Đó chính là subcarrier k=1.
+        Đó chính là subcarrier <MathExpr tex="k=1" />.
       </p>
 
       <p>
@@ -126,9 +126,9 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="fft">
       <p class="concept-kicker">05 · FFT Ở RECEIVER LÀ PHÉP PROJECT NGƯỢC</p>
-      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis <MathExpr tex="e^{j2\\pi kn/N}" />.</h2>
+      <h2>Mỗi output bin hỏi received block chứa bao nhiêu basis <MathExpr tex={String.raw`e^{j2\pi kn/N}`} />.</h2>
 
-      <MathExpr tex="Y[k] = \\sum_{n=0}^{N-1}y[n]e^{-j2\\pi kn/N}" display />
+      <MathExpr tex={String.raw`Y[k] = \sum_{n=0}^{N-1}y[n]e^{-j2\pi kn/N}`} display />
 
       <p>
         Nếu <MathExpr tex="y[n]=x[n]" /> và không có channel/noise, orthogonality làm contribution của các basis khác cancel,
@@ -148,7 +148,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Khi vẽ spectrum, ta hay dùng fftshift để đưa negative frequencies sang trái, DC vào giữa và positive frequencies sang phải.
         Nhưng FFT library thường trả array theo raw order:
-        k=0 trước, rồi positive bins, rồi negative bins wrap ở cuối.
+        <MathExpr tex="k=0" /> trước, rồi positive bins, rồi negative bins wrap ở cuối.
       </p>
 
       <aside class="precision-note">
@@ -204,7 +204,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Receiver cũng làm chiều ngược lại:
         xác định symbol timing,
-        bỏ <MathExpr tex="N_{\\mathrm{CP}}" /> samples,
+        bỏ <MathExpr tex={String.raw`N_{\mathrm{CP}}`} /> samples,
         lấy đúng N useful samples,
         rồi mới chạy N-point FFT.
         Nếu đưa CP vào FFT window như data thông thường, orthogonal basis assumption không còn đúng như thiết kế.

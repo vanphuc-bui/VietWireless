@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const refs = [
   { i: 1 / Math.sqrt(2), q: 1 / Math.sqrt(2) },
@@ -58,7 +59,7 @@ export default function NoiseEVMExplorer() {
             onChange={(e) => setNoiseLevel(Number(e.target.value))} />
         </label>
         <label>
-          <span>Common phase error <strong>{phaseError.toFixed(0)}°</strong></span>
+          <span>Common phase error <strong><MathExpr tex={`${phaseError.toFixed(0)}^\\circ`} /></strong></span>
           <input type="range" min="-30" max="30" step="1" value={phaseError}
             onChange={(e) => setPhaseError(Number(e.target.value))} />
         </label>
@@ -67,7 +68,7 @@ export default function NoiseEVMExplorer() {
       <div className="noise-readout">
         <div><small>SIGNAL POWER</small><strong>{metrics.signalPower.toFixed(3)}</strong><span>normalized</span></div>
         <div><small>ERROR POWER</small><strong>{metrics.errorPower.toFixed(4)}</strong><span>noise + phase error</span></div>
-        <div><small>SNR-LIKE RATIO</small><strong>{metrics.snr.toFixed(1)} dB</strong><span>from total error power</span></div>
+        <div><small>SNR-LIKE RATIO</small><strong><MathExpr tex={`${metrics.snr.toFixed(1)}\\,\\mathrm{dB}`} /></strong><span>from total error power</span></div>
         <div><small>EVM RMS</small><strong>{(metrics.evm * 100).toFixed(1)}%</strong><span>normalized to reference power</span></div>
       </div>
 
@@ -82,13 +83,13 @@ export default function NoiseEVMExplorer() {
           {samples.map((p, idx) => (
             <circle key={idx} className="noise-rx-point" cx={cx + p.i * scale} cy={cy - p.q * scale} r="2.5" />
           ))}
-          <text className="noise-label" x="330" y={cy - 8}>I</text>
-          <text className="noise-label" x={cx + 8} y="40">Q</text>
+          <SvgMathExpr tex="I" x={330} y={cy - 8} width={24} />
+          <SvgMathExpr tex="Q" x={cx + 8} y={40} width={24} />
         </svg>
       </div>
       <p className="noise-lab-note">
         SNR và EVM ở demo này được tính từ cùng reference symbols. Khi chỉ có additive error và normalization nhất quán,
-        chúng liên hệ gần như EVM ≈ 1/√SNR theo dạng linear. Hệ đo thực tế có thể còn channel, equalizer, filtering,
+        chúng liên hệ gần như <MathExpr tex={`\\mathrm{EVM}\\approx1/\\sqrt{\\mathrm{SNR}}`} /> theo dạng linear. Hệ đo thực tế có thể còn channel, equalizer, filtering,
         synchronization và convention chuẩn hóa khác.
       </p>
     </div>

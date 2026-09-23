@@ -149,3 +149,8 @@ Nguồn chuẩn chi tiết: `docs/MATH_STYLE_GUIDE.md`.
 - Display equation mặc định không có box, border hay background.
 - Các card công thức ngang hàng phải dùng cùng shared card system và cùng visual scale. Không được có hàng trên nhỏ, hàng dưới lớn chỉ vì dùng class khác nhau.
 - Khi review một bài, kiểm tra consistency của notation, không chỉ correctness của công thức.
+
+
+### Math notation áp dụng cho toàn bộ UI
+
+Quy tắc MathExpr không chỉ áp dụng trong prose. Nó áp dụng cho headings, cards, tables, interactive components, chart/readout labels và roadmap. Nếu ký hiệu là biến/toán học thì render bằng KaTeX; chỉ acronym/tên công nghệ được giữ như text thường.

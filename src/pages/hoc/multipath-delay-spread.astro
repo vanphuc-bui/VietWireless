@@ -22,7 +22,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">TỪ MỘT PATH TỚI MỘT CHANNEL CÓ MEMORY</p>
       <p class="map-intro">
-        Bài 10 dùng <MathExpr tex="y(t)=h\\,x(t-\\tau)" /> để xây trực giác.
+        Bài 10 dùng <MathExpr tex={String.raw`y(t)=h\,x(t-\tau)`} /> để xây trực giác.
         Bây giờ thay vì một path, giả sử có direct path và vài reflected paths.
         Mỗi path mang một copy của x(t), nhưng copy đó tới muộn và có complex gain riêng.
       </p>
@@ -72,28 +72,28 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">02 · MỖI PATH TRỞ THÀNH MỘT CHANNEL TAP</p>
       <h2>Impulse response ghi lại “copy mạnh bao nhiêu” và “copy tới lúc nào”.</h2>
 
-      <MathExpr tex="h(\\tau) = \\sum_{\\ell} \\alpha_{\\ell}\\,\\delta(\\tau-\\tau_{\\ell})" display />
+      <MathExpr tex={String.raw`h(\tau) = \sum_{\ell} \alpha_{\ell}\,\delta(\tau-\tau_{\ell})`} display />
 
       <div class="multipath-tap-grid">
         <article>
-          <span class="card-label"><MathExpr tex="\\alpha_{\\ell}" /></span>
+          <span class="card-label"><MathExpr tex={String.raw`\alpha_{\ell}`} /></span>
           <h3>complex path gain</h3>
-          <p>Magnitude cho attenuation; angle cho phase rotation của path <MathExpr tex="\\ell" />.</p>
+          <p>Magnitude cho attenuation; angle cho phase rotation của path <MathExpr tex={String.raw`\ell`} />.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex="\\tau_{\\ell}" /></span>
+          <span class="card-label"><MathExpr tex={String.raw`\tau_{\ell}`} /></span>
           <h3>path delay</h3>
-          <p>Copy <MathExpr tex="\\ell" /> xuất hiện muộn bao nhiêu so với reference timing.</p>
+          <p>Copy <MathExpr tex={String.raw`\ell`} /> xuất hiện muộn bao nhiêu so với reference timing.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex="\\delta(\\tau-\\tau_{\\ell})" /></span>
+          <span class="card-label"><MathExpr tex={String.raw`\delta(\tau-\tau_{\ell})`} /></span>
           <h3>tap location</h3>
           <p>Đặt complex coefficient đúng vị trí trên delay axis.</p>
         </article>
       </div>
 
       <p>
-        Trong discrete-time implementation, ta thường xấp xỉ <MathExpr tex="h(\\tau)" /> bằng taps <MathExpr tex="h[m]" />.
+        Trong discrete-time implementation, ta thường xấp xỉ <MathExpr tex={String.raw`h(\tau)`} /> bằng taps <MathExpr tex="h[m]" />.
         Sample rate càng cao thì một sample tương ứng khoảng thời gian càng nhỏ, nên delay resolution của simple sampled representation cũng mịn hơn.
       </p>
     </section>
@@ -102,12 +102,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · CHANNEL ÁP DỤNG CÙNG MỘT FILTER LÊN TOÀN WAVEFORM</p>
       <h2>Received signal là tổng các copies bị scale và delay, tức convolution.</h2>
 
-      <MathExpr tex="y(t) = (x*h)(t) = \\sum_{\\ell} \\alpha_{\\ell}x(t-\\tau_{\\ell})" display />
+      <MathExpr tex={String.raw`y(t) = (x*h)(t) = \sum_{\ell} \alpha_{\ell}x(t-\tau_{\ell})`} display />
 
       <div class="copy-sum-story">
-        <div><small>PATH 0</small><strong><MathExpr tex="\\alpha_0x(t)" /></strong><span>direct / earliest</span></div>
+        <div><small>PATH 0</small><strong><MathExpr tex={String.raw`\alpha_0x(t)`} /></strong><span>direct / earliest</span></div>
         <b>+</b>
-        <div><small>PATH 1</small><strong><MathExpr tex="\\alpha_1 x(t-\\tau_1)" /></strong><span>delayed echo</span></div>
+        <div><small>PATH 1</small><strong><MathExpr tex={String.raw`\alpha_1 x(t-\tau_1)`} /></strong><span>delayed echo</span></div>
         <b>+</b>
         <div><small>PATH 2…</small><strong>...</strong><span>more copies</span></div>
         <b>→</b>
@@ -124,11 +124,11 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH H(f)</p>
       <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi f.</h2>
 
-      <MathExpr tex="H(f) = \\sum_{\\ell} \\alpha_{\\ell}e^{-j2\\pi f\\tau_{\\ell}}" display />
+      <MathExpr tex={String.raw`H(f) = \sum_{\ell} \alpha_{\ell}e^{-j2\pi f\tau_{\ell}}`} display />
 
       <p>
         Đây là một kết quả rất quan trọng.
-        Một path delay <MathExpr tex="\\tau" /> tạo phase <MathExpr tex="-2\\pi f\\tau" />, tức phase thay đổi theo <MathExpr tex="f" />.
+        Một path delay <MathExpr tex={String.raw`\tau`} /> tạo phase <MathExpr tex={String.raw`-2\pi f\tau`} />, tức phase thay đổi theo <MathExpr tex="f" />.
         Vì vậy hai paths có thể cộng constructive ở frequency này nhưng destructive ở frequency khác.
         Khi vẽ |H(f)|, ta có thể thấy peaks và notches.
       </p>
@@ -154,7 +154,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>PDP giúp tóm tắt channel energy trải rộng bao xa theo thời gian.</h2>
 
       <div class="pdp-visual">
-        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong><MathExpr tex="P(\\tau)" /></strong></div>
+        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong><MathExpr tex={String.raw`P(\tau)`} /></strong></div>
         <svg viewBox="0 0 760 270" role="img" aria-label="Power delay profile với nhiều paths">
           <line class="pdp-axis" x1="55" y1="220" x2="720" y2="220" />
           <line class="pdp-axis" x1="55" y1="35" x2="55" y2="220" />
@@ -172,7 +172,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Nếu path coefficient là <MathExpr tex="\\alpha_{\\ell}" />, power weight thường tỉ lệ với <MathExpr tex="|\\alpha_{\\ell}|^2" />.
+        Nếu path coefficient là <MathExpr tex={String.raw`\alpha_{\ell}`} />, power weight thường tỉ lệ với <MathExpr tex={String.raw`|\alpha_{\ell}|^2`} />.
         PDP không giữ phase của path, nhưng rất hữu ích để định nghĩa mean delay và RMS delay spread.
       </p>
     </section>
@@ -184,12 +184,12 @@ import MathExpr from '../../components/Math.astro';
       <div class="delay-metric-grid">
         <article>
           <span class="card-label">MEAN DELAY</span>
-          <h3><MathExpr tex="\\bar{\\tau} = \\frac{\\sum_{\\ell}P_{\\ell}\\tau_{\\ell}}{\\sum_{\\ell}P_{\\ell}}" /></h3>
+          <h3><MathExpr tex={String.raw`\bar{\tau} = \frac{\sum_{\ell}P_{\ell}\tau_{\ell}}{\sum_{\ell}P_{\ell}}`} /></h3>
           <p>Center of mass của PDP trên delay axis.</p>
         </article>
         <article>
           <span class="card-label">RMS DELAY SPREAD</span>
-          <h3><MathExpr tex="\\sigma_{\\tau}" /></h3>
+          <h3><MathExpr tex={String.raw`\sigma_{\tau}`} /></h3>
           <p>Power-weighted spread của delays quanh mean delay.</p>
         </article>
         <article>
@@ -199,11 +199,11 @@ import MathExpr from '../../components/Math.astro';
         </article>
       </div>
 
-      <MathExpr tex="\\sigma_{\\tau} = \\sqrt{\\frac{\\sum_{\\ell} P_{\\ell}(\\tau_{\\ell}-\\bar{\\tau})^2}{\\sum_{\\ell}P_{\\ell}}}" display />
+      <MathExpr tex={String.raw`\sigma_{\tau} = \sqrt{\frac{\sum_{\ell} P_{\ell}(\tau_{\ell}-\bar{\tau})^2}{\sum_{\ell}P_{\ell}}}`} display />
 
       <p>
-        Ví dụ có hai paths tại <MathExpr tex="0\\,\\mu\\mathrm{s}" /> và <MathExpr tex="2\\,\\mu\\mathrm{s}" />, với power tương ứng 1 và 0.25.
-        Mean delay là <MathExpr tex="0.4\\,\\mu\\mathrm{s}" /> và RMS delay spread là <MathExpr tex="0.8\\,\\mu\\mathrm{s}" />.
+        Ví dụ có hai paths tại <MathExpr tex={String.raw`0\,\mu\mathrm{s}`} /> và <MathExpr tex={String.raw`2\,\mu\mathrm{s}`} />, với power tương ứng 1 và 0.25.
+        Mean delay là <MathExpr tex={String.raw`0.4\,\mu\mathrm{s}`} /> và RMS delay spread là <MathExpr tex={String.raw`0.8\,\mu\mathrm{s}`} />.
         Điểm quan trọng là path yếu hơn vẫn ảnh hưởng metric, nhưng ảnh hưởng theo power chứ không theo amplitude trực tiếp.
       </p>
     </section>
@@ -264,7 +264,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Multipath:</strong> nhiều delayed/scaled/rotated copies của cùng signal.</li>
-        <li><strong>Impulse response:</strong> mô tả channel bằng complex taps <MathExpr tex="\\alpha_{\\ell}" /> tại delays <MathExpr tex="\\tau_{\\ell}" />.</li>
+        <li><strong>Impulse response:</strong> mô tả channel bằng complex taps <MathExpr tex={String.raw`\alpha_{\ell}`} /> tại delays <MathExpr tex={String.raw`\tau_{\ell}`} />.</li>
         <li><strong>Convolution:</strong> received waveform là tổng các delayed copies.</li>
         <li><strong>H(f):</strong> các path delays tạo phase khác nhau theo frequency, dẫn tới peaks/notches.</li>
         <li><strong>PDP:</strong> giữ path power theo delay và bỏ phase.</li>
