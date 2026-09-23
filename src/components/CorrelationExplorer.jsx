@@ -86,7 +86,7 @@ export default function CorrelationExplorer() {
         </div>
 
         <div>
-          <div className="visual-caption"><span>SLIDING CORRELATION</span><strong><MathExpr tex={String.raw`C[\ell]`} /></strong></div>
+          <div className="visual-caption"><span>SLIDING CORRELATION</span><strong><MathExpr tex={`C[\ell]`} /></strong></div>
           <div className="correlation-bars" aria-label="Correlation value for every candidate lag">
             {corr.map((value, lag) => (
               <i
