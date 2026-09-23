@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import MathExpr from './MathExpr.jsx';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 780;
 const H = 250;
@@ -118,7 +118,7 @@ export default function SinusoidExplorer() {
       <div className="sinusoid-presets" aria-label="Ví dụ nhanh">
         <button type="button" onClick={useAmplitudePreset}>Tăng amplitude</button>
         <button type="button" onClick={useFrequencyPreset}>Tăng frequency</button>
-        <button type="button" onClick={usePhasePreset}>Phase +90°</button>
+        <button type="button" onClick={usePhasePreset}>Phase <MathExpr tex="+90^\\circ" /></button>
       </div>
 
       <div className="sinusoid-readout">
@@ -154,7 +154,7 @@ export default function SinusoidExplorer() {
           <line className="sinusoid-axis" x1={LEFT} y1={MID} x2={W - RIGHT} y2={MID} />
           <line className="sinusoid-axis" x1={zeroX} y1={TOP} x2={zeroX} y2={H - BOTTOM} />
           <text className="sinusoid-svg-label" x={W - RIGHT - 26} y={MID - 9}>thời gian</text>
-          <text className="sinusoid-svg-label" x={zeroX + 5} y={H - BOTTOM + 18}>t = 0</text>
+          <SvgMathExpr tex="t=0" x={zeroX + 5} y={H - BOTTOM + 13} width={46} />
 
           <path className="sinusoid-reference" d={referencePath} />
           <path className="sinusoid-current" d={currentPath} />
