@@ -19,7 +19,7 @@ export default function ResourceGridExplorer() {
       <div className="resource-grid-readout">
         <div><small>SELECTED RE</small><strong><MathExpr tex={`(k,\\ell)=(${selectedK},${selectedL})`} /></strong><span>frequency, time</span></div>
         <div><small>RB INDEX</small><strong><MathExpr tex={`n_{\\mathrm{RB}}=${rb}`} /></strong><span>demo has 2 RBs</span></div>
-        <div><small><MathExpr tex="k" /> WITHIN RB</small><strong><MathExpr tex={`${kInRb}`} /></strong><span><MathExpr tex={String.raw`0,\\ldots,11`} /></span></div>
+        <div><small><MathExpr tex="k" /> WITHIN RB</small><strong><MathExpr tex={`${kInRb}`} /></strong><span><MathExpr tex={`0,\\ldots,11`} /></span></div>
         <div><small>VALUE</small><strong><MathExpr tex={`X[${selectedK},${selectedL}]`} /></strong><span>one complex modulation symbol</span></div>
       </div>
 
@@ -49,7 +49,7 @@ export default function ResourceGridExplorer() {
               </div>
             ))}
           </div>
-          <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex={String.raw`\\ell`} /> →</div>
+          <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex={`\\ell`} /> →</div>
         </div>
       </div>
 
