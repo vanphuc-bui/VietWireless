@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
+import { findStrippedTexCommand } from '../src/utils/validateTex.js';
 
 const files = [];
 const allowed = new Set(['.astro', '.jsx', '.tsx']);
@@ -69,15 +70,48 @@ for (const file of files) {
     report(file, 'do not import the math component as "Math"; use "MathExpr" so JavaScript global Math remains available.');
   }
 
-  if (extension === '.jsx' || extension === '.tsx') {
-    for (const match of content.matchAll(/tex=\{\s*(?:`([^`]*)`|"([^"]*)"|'([^']*)')\s*\}/gs)) {
-      const body = match[1] ?? match[2] ?? match[3] ?? '';
-      if (/(^|[^\\])\\[A-Za-z]/u.test(body)) {
-        report(file, `single-backslash TeX found inside a JavaScript string/template: "${match[0]}". Use String.raw or double escaping.`);
-      }
+  // Direct quoted TeX props are safe only for command-free expressions.
+  // Any TeX command must go through String.raw or a double-escaped JavaScript string.
+  for (const match of content.matchAll(/<(?:MathExpr|SvgMathExpr)\\b[^>]*\\btex=(["'])(.*?)\\1/gs)) {
+    const body = match[2] ?? '';
+    if (body.includes('\\\\')) {
+      report(file, `backslash found inside direct quoted TeX prop: "${match[0]}". Use tex={String.raw\`...\`} or a double-escaped JavaScript string.`);
     }
 
-    if (/<text\b[^>]*>\s*(?:Re|Im)\s*<\/text>/u.test(content)) {
+    const stripped = findStrippedTexCommand(body);
+    if (stripped) {
+      report(file, `TeX command "${stripped}" appears without a backslash in "${match[0]}". A JavaScript/Astro string likely swallowed the escape.`);
+    }
+  }
+
+  // JavaScript string/template expressions are checked in Astro, JSX and TSX alike.
+  for (const match of content.matchAll(/tex=\\{\\s*(?:`([^`]*)`|"([^"]*)"|'([^']*)')\\s*\\}/gs)) {
+    const body = match[1] ?? match[2] ?? match[3] ?? '';
+    if (/(^|[^\\\\])\\\\[A-Za-z]/u.test(body)) {
+      report(file, `single-backslash TeX found inside a JavaScript string/template: "${match[0]}". Use String.raw or double escaping.`);
+    }
+
+    const stripped = findStrippedTexCommand(body);
+    if (stripped) {
+      report(file, `TeX command "${stripped}" appears without a backslash in "${match[0]}". The escape was probably stripped before KaTeX received it.`);
+    }
+  }
+
+  // String.raw preserves backslashes, so source must contain exactly one before a TeX command.
+  for (const match of content.matchAll(/tex=\\{\\s*String\\.raw`([^`]*)`\\s*\\}/gs)) {
+    const body = match[1] ?? '';
+    if (/\\\\\\\\[A-Za-z]/u.test(body)) {
+      report(file, `double backslash found inside String.raw TeX: "${match[0]}". String.raw must contain one source backslash per TeX command.`);
+    }
+
+    const stripped = findStrippedTexCommand(body);
+    if (stripped) {
+      report(file, `TeX command "${stripped}" appears without a backslash inside String.raw: "${match[0]}".`);
+    }
+  }
+
+  if (extension === '.jsx' || extension === '.tsx') {
+    if (/<text\\b[^>]*>\\s*(?:Re|Im)\\s*<\\/text>/u.test(content)) {
       report(file, 'raw Re/Im SVG text found. Use SvgMathExpr for mathematical axis labels.');
     }
   }
