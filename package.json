@@ -11,7 +11,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:writing": "node scripts/check-writing-style.mjs",
-    "check:math": "node scripts/check-math-style.mjs"
+    "check:math": "node scripts/check-math-style.mjs",
+    "check:lesson": "node scripts/check-lesson-structure.mjs",
+    "check:all": "npm run check:writing && npm run check:math && npm run check:lesson && npm run build"
   },
   "dependencies": {
     "@astrojs/react": "6.0.6",
