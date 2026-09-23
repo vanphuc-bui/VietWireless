@@ -9898,13 +9898,13 @@ main,
 }
 
 .ia-flow-card strong,
-.ia-flow-card span,
+.ia-flow-card > span,
 .receiver-chain-mini strong,
-.receiver-chain-mini span,
+.receiver-chain-mini > div > span,
 .pbch-decode-pipeline strong,
 .pbch-decode-pipeline small,
 .ssb-symbol strong,
-.ssb-symbol span {
+.ssb-symbol > span {
   font-size: var(--lesson-prose-size);
 }
 
@@ -9913,7 +9913,7 @@ main,
   font-family: var(--font-serif);
 }
 
-.ia-flow-card span {
+.ia-flow-card > span {
   color: var(--muted);
   line-height: 1.5;
 }
@@ -9929,7 +9929,7 @@ main,
   text-align: center;
 }
 
-.ia-flow-arrow span {
+.ia-flow-arrow > span {
   font-size: .72rem;
   line-height: 1.25;
 }
@@ -10075,7 +10075,7 @@ main,
   font-family: var(--font-serif);
 }
 
-.ssb-symbol span {
+.ssb-symbol > span {
   color: var(--muted);
   line-height: 1.5;
 }
@@ -10148,7 +10148,7 @@ main,
   font-family: var(--font-serif);
 }
 
-.receiver-chain-mini span,
+.receiver-chain-mini > div > span,
 .pbch-decode-pipeline small {
   color: var(--muted);
   line-height: 1.5;
@@ -10219,7 +10219,7 @@ main,
     transform: rotate(90deg);
   }
 
-  .ia-flow-arrow span {
+  .ia-flow-arrow > span {
     display: none;
   }
 
