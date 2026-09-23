@@ -89,7 +89,7 @@ export default function FourierDFTExplorer() {
 
       <div className="fourier-readout">
         <div><small><MathExpr tex="f_s" /></small><strong><MathExpr tex={`${fs}\\,\\mathrm{Hz}`} /></strong><span>sampling rate</span></div>
-        <div><small><MathExpr tex={String.raw`\\Delta f`} /></small><strong><MathExpr tex={`${binSpacing.toFixed(2)}\\,\\mathrm{Hz}`} /></strong><span><MathExpr tex="f_s/N" /></span></div>
+        <div><small><MathExpr tex={`\\Delta f`} /></small><strong><MathExpr tex={`${binSpacing.toFixed(2)}\\,\\mathrm{Hz}`} /></strong><span><MathExpr tex="f_s/N" /></span></div>
         <div><small>BIN GẦN NHẤT</small><strong><MathExpr tex={`k=${closestBin}`} /></strong><span><MathExpr tex={`${closestFrequency.toFixed(2)}\\,\\mathrm{Hz}`} /></span></div>
         <div className={onBin ? 'ok' : 'warning'}><small>BIN ALIGNMENT</small><strong>{onBin ? 'Đúng bin' : 'Lệch bin'}</strong><span>{onBin ? 'ít leakage lý tưởng' : 'energy trải sang bins khác'}</span></div>
       </div>
