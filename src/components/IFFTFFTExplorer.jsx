@@ -64,7 +64,7 @@ export default function IFFTFFTExplorer() {
 
       <div className="ifft-transform-arrow">
         <strong>IFFT / IDFT</strong>
-        <span><MathExpr tex="X[k]\\to x[n]" /></span>
+        <span><MathExpr tex={String.raw`X[k]\\to x[n]`} /></span>
         <b>↓</b>
       </div>
 
@@ -85,7 +85,7 @@ export default function IFFTFFTExplorer() {
       <div className="ifft-transform-arrow return">
         <b>↓</b>
         <strong>FFT / DFT</strong>
-        <span><MathExpr tex="x[n]\\to Y[k]" /></span>
+        <span><MathExpr tex={String.raw`x[n]\\to Y[k]`} /></span>
       </div>
 
       <div className="ifft-recovered">
