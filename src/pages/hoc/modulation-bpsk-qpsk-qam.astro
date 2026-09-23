@@ -50,18 +50,18 @@ import MathExpr from '../../components/Math.astro';
         <b>→ group →</b>
         <div><small>BIT GROUP</small><strong>10</strong><span>ví dụ 2 bits</span></div>
         <b>→ map →</b>
-        <div><small>COMPLEX SYMBOL</small><strong>I + jQ</strong><span>một điểm constellation</span></div>
+        <div><small>COMPLEX SYMBOL</small><strong><MathExpr tex="I+jQ" /></strong><span>một điểm constellation</span></div>
       </div>
 
       <p>
-        Nếu constellation có M điểm, mỗi symbol có thể đại diện tối đa <MathExpr tex={String.raw`\log_2(M)`} /> bits khi M là lũy thừa của 2.
+        Nếu constellation có <MathExpr tex="M" /> điểm, mỗi symbol có thể đại diện tối đa <MathExpr tex={String.raw`\log_2(M)`} /> bits khi <MathExpr tex="M" /> là lũy thừa của 2.
       </p>
 
       <div class="bits-per-symbol-grid">
-        <article><span>BPSK</span><strong>M = 2</strong><p>1 bit / symbol</p></article>
-        <article><span>QPSK</span><strong>M = 4</strong><p>2 bits / symbol</p></article>
-        <article><span>16QAM</span><strong>M = 16</strong><p>4 bits / symbol</p></article>
-        <article><span>64QAM</span><strong>M = 64</strong><p>6 bits / symbol</p></article>
+        <article><span>BPSK</span><strong><MathExpr tex="M=2" /></strong><p>1 bit / symbol</p></article>
+        <article><span>QPSK</span><strong><MathExpr tex="M=4" /></strong><p>2 bits / symbol</p></article>
+        <article><span>16QAM</span><strong><MathExpr tex="M=16" /></strong><p>4 bits / symbol</p></article>
+        <article><span>64QAM</span><strong><MathExpr tex="M=64" /></strong><p>6 bits / symbol</p></article>
       </div>
     </section>
 
@@ -78,13 +78,13 @@ import MathExpr from '../../components/Math.astro';
             <circle class="mod-point" cx="265" cy="130" r="7" />
             <text class="mod-bit-label" x="78" y="113">0</text>
             <text class="mod-bit-label" x="272" y="113">1</text>
-            <text class="mod-label" x="311" y="119">I</text>
-            <text class="mod-label" x="188" y="43">Q</text>
+            <foreignObject x="299" y="103" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="I" /></div></foreignObject>
+            <foreignObject x="176" y="27" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="Q" /></div></foreignObject>
           </svg>
         </div>
         <div>
           <p>
-            Một mapping đơn giản có thể dùng 0 → -1 và 1 → +1 trên trục I. Q bằng 0.
+            Một mapping đơn giản có thể dùng 0 → -1 và 1 → +1 trên trục <MathExpr tex="I" />. <MathExpr tex="Q=0" />.
             Hai điểm cách nhau tối đa trên một vòng tròn magnitude cố định, nên BPSK khá robust với noise.
           </p>
           <MathExpr tex={String.raw`b\in\{0,1\} \;\longrightarrow\; x\in\{-1,+1\}`} display class="math-compact" />
@@ -109,8 +109,8 @@ import MathExpr from '../../components/Math.astro';
             <text class="mod-bit-label" x="264" y="64">00</text>
             <text class="mod-bit-label" x="82" y="246">11</text>
             <text class="mod-bit-label" x="264" y="246">10</text>
-            <text class="mod-label" x="311" y="139">I</text>
-            <text class="mod-label" x="188" y="43">Q</text>
+            <foreignObject x="299" y="123" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="I" /></div></foreignObject>
+            <foreignObject x="176" y="27" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="Q" /></div></foreignObject>
           </svg>
         </div>
         <div>
@@ -187,12 +187,12 @@ import MathExpr from '../../components/Math.astro';
         <div>
           <small>RAW 16QAM LEVELS</small>
           <strong><MathExpr tex={String.raw`I,Q\in\{\pm1,\pm3\}`} /></strong>
-          <span>average |x|² = 10</span>
+          <span>average <MathExpr tex="|x|^2=10" /></span>
         </div>
         <b><MathExpr tex={String.raw`\div\sqrt{10}`} /> →</b>
         <div>
           <small>NORMALIZED</small>
-          <strong>E[|x|²] = 1</strong>
+          <strong><MathExpr tex={String.raw`\mathbb{E}[|x|^2]=1`} /></strong>
           <span>dễ so sánh giữa modulation orders</span>
         </div>
       </div>
@@ -210,19 +210,19 @@ import MathExpr from '../../components/Math.astro';
       <div class="decision-story">
         <div>
           <small>IDEAL SYMBOL</small>
-          <strong>X</strong>
+          <strong><MathExpr tex="X" /></strong>
           <span>điểm transmitter muốn gửi</span>
         </div>
         <b>→ channel + noise →</b>
         <div>
           <small>RECEIVED</small>
-          <strong>Y</strong>
+          <strong><MathExpr tex="Y" /></strong>
           <span>điểm bị dịch khỏi vị trí lý tưởng</span>
         </div>
         <b>→ decision →</b>
         <div>
           <small>DETECTED</small>
-          <strong>X̂</strong>
+          <strong><MathExpr tex={String.raw`\hat{X}`} /></strong>
           <span>nearest valid point</span>
         </div>
       </div>
@@ -254,7 +254,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="modulation-ofdm-flow">
         <div><small>BITS</small><strong>1011...</strong></div>
         <b>→</b>
-        <div><small>QAM MAPPER</small><strong>I + jQ</strong></div>
+        <div><small>QAM MAPPER</small><strong><MathExpr tex="I+jQ" /></strong></div>
         <b>→</b>
         <div><small>RESOURCE GRID</small><strong><MathExpr tex="X[k,m]" /></strong></div>
         <b>→ IFFT →</b>
