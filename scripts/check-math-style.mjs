@@ -87,8 +87,16 @@ for (const file of files) {
     .filter(Boolean);
   const visibleSource = visibleNodes.join(' ');
 
-  if (/\bN\s+samples?\b/u.test(visibleSource)) {
-    report(file, 'bare "N sample(s)" found. Render N with MathExpr.');
+  if (/\bN(?:\s+(?:useful\s+)?)?samples?\b|\bN-(?:point|sample)\b/u.test(visibleSource)) {
+    report(file, 'bare N-based sample/FFT notation found. Render N with MathExpr.');
+  }
+
+  if (/\b(?:subcarrier|bin|frequency|sample(?:\s+index)?|time(?:\s+index)?|delay|phase|amplitude|gain)\s+(?:A|G|I|Q|N|f|k|l|m|n|t)\b/u.test(visibleSource)) {
+    report(file, 'bare named mathematical variable found after a technical label. Use MathExpr.');
+  }
+
+  if (/\b[IQ]\s*·\s*(?:cos|sin)\b/u.test(visibleSource)) {
+    report(file, 'plain-text I/Q trigonometric product found. Use MathExpr.');
   }
 
   if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C|r|s)\[[^\]<>]+\]/u.test(visibleSource)) {
