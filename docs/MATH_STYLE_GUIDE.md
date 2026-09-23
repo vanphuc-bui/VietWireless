@@ -441,9 +441,23 @@ Quy tắc bắt buộc:
 
 - Không đặt `font-family` riêng cho công thức ở từng page/component.
 - Inline math phải có optical size bằng prose xung quanh: wrapper `.math-inline .katex` dùng `1em`.
-- Display equation chỉ lớn hơn prose nhẹ, khoảng 8%; hierarchy chủ yếu đến từ spacing/layout chứ không phóng công thức quá lớn.
+- Display equation dùng cùng optical size với prose (`18 px`). Hierarchy đến từ spacing, alignment và vị trí, không đến từ việc phóng công thức.
 - Math trong formula card, readout, flow, table và box tiếp tục lấy size từ shared `--lesson-box-math-*` / `--lesson-*-size` tokens.
 - SVG math tiếp tục dùng role token riêng vì viewBox scaling; font family vẫn là `STIX Two Math`.
 - Không re-enable `htmlAndMathml` chỉ để sửa visual; nếu có lỗi layout, sửa shared CSS/token hoặc MathML styling.
 - Font source được pin trong `BaseLayout.astro`; không thêm Google/system-font override ở page riêng.
 
+
+
+## Thang chữ kiểu tài liệu kỹ thuật
+
+Lesson không được dùng một “font-size riêng cho mỗi component”. Toàn bộ bài chỉ có bốn cấp đọc chính:
+
+- page title: `2rem` (32 px desktop);
+- section title: `1.5rem` (24 px desktop);
+- body / formula / table body / callout body / card content: `1.125rem` (18 px);
+- metadata / eyebrow / card label / table header: `1rem` (16 px).
+
+Subheading trong nội dung không tự phóng lớn; mặc định cùng cỡ body và tạo hierarchy bằng weight/spacing.
+
+Không tạo thêm cỡ chữ 10, 11, 12, 13, 14 hoặc 15 px cho lesson content. Nếu một layout không đủ chỗ, sửa layout thay vì thu chữ.
