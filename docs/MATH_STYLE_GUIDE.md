@@ -214,3 +214,18 @@ Khi công thức là nội dung chính của một flow card, không dùng size 
 ## Bảng số liệu kỹ thuật
 
 Khi dữ liệu có quan hệ hàng/cột thực sự, dùng HTML `<table>` thay vì một grid card giả-table. Header và data columns phải thẳng hàng. Mathematical values trong cell vẫn dùng `MathExpr`.
+
+
+## Phạm vi áp dụng: toàn bộ website
+
+Math rules áp dụng cho toàn bộ UI có nội dung kỹ thuật, không chỉ lesson prose:
+- page titles và headings hiển thị;
+- card labels/captions;
+- tables;
+- interactive React components;
+- readouts, controls và chart labels;
+- roadmap/curriculum text.
+
+Acronym/tên công nghệ như FFT, OFDM, ADC, PBCH, 5G NR có thể là text thường. Mathematical notation như I, Q, I/Q, x[n], X[k], H[k], N, k, n, μ, Δf, φ, θ, τ, T_u, f_s, f_c phải dùng MathExpr hoặc SvgMathExpr nếu nằm trong SVG.
+
+Math trong table phải dùng HTML table thật khi dữ liệu có quan hệ hàng/cột. Không dựng bảng bằng CSS grid nếu header và data cần alignment chính xác.
