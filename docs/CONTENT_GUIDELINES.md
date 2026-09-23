@@ -246,3 +246,17 @@ Nguồn chuẩn chi tiết nằm trong `docs/SOURCE_POLICY.md`.
 - Bản dịch tiếng Anh không được index như translation pair cho tới khi có page tương ứng thật sự.
 - English page phải giữ technical meaning, notation, figure semantics và source layer tương đương bản tiếng Việt.
 - Không dùng machine translation thô cho caption, spec claim hoặc formula explanation rồi publish trực tiếp.
+
+
+## Box readability và visual consistency
+
+Mọi content text và mathematical content bên trong technical box phải có optical size tương đương prose ngay bên ngoài box.
+
+- Không thu nhỏ caption/body/formula chỉ để “vừa box”.
+- Không phóng to riêng một formula để tạo hierarchy nếu có thể dùng weight, spacing hoặc layout.
+- Card label/eyebrow là metadata nên có thể nhỏ hơn; heading vẫn theo heading hierarchy.
+- Diagram annotation phải đủ lớn để đọc ở kích thước hiển thị thực tế trên desktop và mobile.
+- Với SVG, viewBox có thể làm KaTeX nhìn nhỏ hơn CSS px; phải đánh giá optical size sau render.
+- Nếu một box cần nhiều nội dung hơn, tăng diện tích box hoặc đổi layout, không giảm font-size.
+
+Shared size source nằm trong `src/styles/global.css` qua `--lesson-prose-size` và `--lesson-box-content-size`.
