@@ -277,7 +277,20 @@ Shared source of truth nằm trong `src/styles/global.css`:
 - `--article-prose-size`;
 - `--lesson-prose-size`.
 
-Body prose chuẩn là **18 px** (`1.125rem`). Inline math phải cùng optical size với prose. Display math chỉ nhỉnh hơn prose khoảng 8%. Nội dung giải thích và mathematical content trong box không được co nhỏ để vừa layout; nếu thiếu chỗ thì tăng box, đổi grid hoặc cho phép wrap/scroll phù hợp.
+Body prose chuẩn là **18 px** (`1.125rem`). Inline math và display math dùng cùng optical size với prose. Nội dung giải thích, table body, callout body, card content và mathematical content trong box không được co nhỏ để vừa layout; nếu thiếu chỗ thì tăng box, đổi grid hoặc cho phép wrap/scroll phù hợp.
 
 Không dùng `Times New Roman`, `Cambria`, `Georgia` hoặc font math cục bộ như một quyết định page-specific. Chỉ được giữ chúng ở fallback stack của shared token khi thật sự cần compatibility.
 
+
+
+### Chỉ dùng một thang chữ nhỏ cho lesson
+
+Coi mỗi lesson như một tài liệu kỹ thuật thống nhất, không như một dashboard gồm nhiều card.
+
+Chỉ dùng bốn cấp chính:
+- 32 px: title của bài;
+- 24 px: section heading;
+- 18 px: prose, equation, table body, callout body, card body, readout chính;
+- 16 px: metadata như eyebrow, card label và table header.
+
+H3/subheading mặc định 18 px + weight/spacing. Không tạo page-specific font-size. Không thu chữ trong card để “fit”. Ưu tiên whitespace, border, weight và layout để phân cấp.
