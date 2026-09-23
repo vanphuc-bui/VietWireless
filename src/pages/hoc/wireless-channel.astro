@@ -48,11 +48,11 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">01 · MÔ HÌNH MỘT PATH</p>
       <h2>Với một path trội và signal đủ hẹp băng, channel có thể được tóm tắt bằng delay và một complex gain.</h2>
 
-      <MathExpr tex="y(t) = h\\,x(t-\\tau) + n(t)" display />
+      <MathExpr tex="y(t) = h\,x(t-\tau) + n(t)" display />
 
       <p>
-        <MathExpr tex="\\tau" /> nói signal tới muộn bao nhiêu.
-        <MathExpr tex="h" /> là một complex number, thường viết <MathExpr tex="h = Ge^{j\\theta}" />, mô tả amplitude scaling <MathExpr tex="G" /> và phase rotation <MathExpr tex="\\theta" />.
+        <MathExpr tex="\tau" /> nói signal tới muộn bao nhiêu.
+        <MathExpr tex="h" /> là một complex number, thường viết <MathExpr tex="h = Ge^{j\theta}" />, mô tả amplitude scaling <MathExpr tex="G" /> và phase rotation <MathExpr tex="\theta" />.
         n(t) đại diện cho noise, sẽ được tách riêng ở Bài 11.
       </p>
 
@@ -63,12 +63,12 @@ import MathExpr from '../../components/Math.astro';
           <p>Nếu G &lt; 1, signal bị attenuate. Power scaling tương ứng là G² nếu G là voltage/amplitude ratio.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex="\\theta" /></span>
+          <span class="card-label"><MathExpr tex="\theta" /></span>
           <h3>Phase rotation</h3>
-          <p>Trên complex plane, constellation bị quay một góc <MathExpr tex="\\theta" /> nếu chưa equalize.</p>
+          <p>Trên complex plane, constellation bị quay một góc <MathExpr tex="\theta" /> nếu chưa equalize.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex="\\tau" /></span>
+          <span class="card-label"><MathExpr tex="\tau" /></span>
           <h3>Propagation delay</h3>
           <p>Receiver nhìn thấy waveform muộn hơn vì electromagnetic wave cần thời gian để đi hết path.</p>
         </article>
@@ -84,7 +84,7 @@ import MathExpr from '../../components/Math.astro';
         Friis equation cho một link lý tưởng có thể viết dưới dạng:
       </p>
 
-      <MathExpr tex="\\frac{P_r}{P_t} = G_tG_r\\left(\\frac{\\lambda}{4\\pi d}\\right)^2" display />
+      <MathExpr tex="\frac{P_r}{P_t} = G_tG_r\left(\frac{\lambda}{4\pi d}\right)^2" display />
 
       <p>
         Nếu giữ antenna gains và wavelength cố định, received power có xu hướng giảm theo 1/d².
@@ -108,28 +108,28 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · CÙNG MỘT PATH LENGTH TẠO RA CẢ DELAY LẪN PHASE</p>
       <h2>Delay là hiện tượng theo thời gian; phase là cách một sinusoid ở frequency cụ thể nhìn delay đó.</h2>
 
-      <MathExpr tex="\\tau \\approx \\frac{d}{c}" display />
+      <MathExpr tex="\tau \approx \frac{d}{c}" display />
       <p class="math-caption">Trong free space.</p>
 
       <p>
         Một mét propagation tương ứng khoảng 3.33 ns.
-        Với một pure sinusoid ở frequency <MathExpr tex="f" />, delay <MathExpr tex="\\tau" /> tạo phase shift <MathExpr tex="-2\\pi f\\tau" />:
+        Với một pure sinusoid ở frequency <MathExpr tex="f" />, delay <MathExpr tex="\tau" /> tạo phase shift <MathExpr tex="-2\pi f\tau" />:
       </p>
 
-      <MathExpr tex="\\cos\\!\\left[2\\pi f(t-\\tau)\\right] = \\cos(2\\pi f t - 2\\pi f\\tau)" display />
+      <MathExpr tex="\cos\!\left[2\pi f(t-\tau)\right] = \cos(2\pi f t - 2\pi f\tau)" display />
 
       <p>
         Vì carrier frequency cao, phase có thể đổi rất mạnh chỉ với thay đổi position nhỏ.
-        Ví dụ ở <MathExpr tex="3.5\\,\\mathrm{GHz}" />, wavelength trong free space chỉ khoảng <MathExpr tex="8.6\\,\\mathrm{cm}" />.
+        Ví dụ ở <MathExpr tex="3.5\,\mathrm{GHz}" />, wavelength trong free space chỉ khoảng <MathExpr tex="8.6\,\mathrm{cm}" />.
         Di chuyển vài centimet đã là một phần đáng kể của một wavelength, nên relative phase giữa các paths có thể đổi rõ rệt.
       </p>
 
       <div class="phase-distance-story">
         <div><small>DISTANCE</small><strong>d</strong><span>path length</span></div>
         <b>→</b>
-        <div><small>DELAY</small><strong><MathExpr tex="\\tau=d/c" /></strong><span>arrival time</span></div>
+        <div><small>DELAY</small><strong><MathExpr tex="\tau=d/c" /></strong><span>arrival time</span></div>
         <b>→</b>
-        <div><small>PHASE AT f</small><strong><MathExpr tex="-2\\pi f\\tau" /></strong><span>frequency dependent</span></div>
+        <div><small>PHASE AT f</small><strong><MathExpr tex="-2\pi f\tau" /></strong><span>frequency dependent</span></div>
       </div>
     </section>
 
@@ -228,10 +228,10 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <h2>Wireless channel làm nhiều hơn việc “giảm signal strength”.</h2>
       <ol class="recap-list">
-        <li><strong>Single-path model:</strong> delay <MathExpr tex="\\tau" /> và complex gain <MathExpr tex="h" /> là điểm bắt đầu hữu ích.</li>
+        <li><strong>Single-path model:</strong> delay <MathExpr tex="\tau" /> và complex gain <MathExpr tex="h" /> là điểm bắt đầu hữu ích.</li>
         <li><strong>Path loss:</strong> mô tả xu hướng attenuation lớn theo distance/environment.</li>
         <li><strong>Delay:</strong> xuất phát từ propagation time hữu hạn.</li>
-        <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift <MathExpr tex="-2\\pi f\\tau" />.</li>
+        <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift <MathExpr tex="-2\pi f\tau" />.</li>
         <li><strong>Shadowing:</strong> variation do blockage và vật cản lớn.</li>
         <li><strong>Small-scale fading:</strong> multipath phases thay đổi khi geometry thay đổi.</li>
         <li><strong>Flat vs selective:</strong> phụ thuộc relation giữa channel variation theo frequency và signal bandwidth.</li>
