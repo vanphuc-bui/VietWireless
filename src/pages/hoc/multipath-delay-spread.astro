@@ -122,7 +122,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="frequency-selective">
       <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH <MathExpr tex="H(f)" /></p>
-      <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi f.</h2>
+      <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi <MathExpr tex="f" />.</h2>
 
       <MathExpr tex={String.raw`H(f) = \sum_{\ell} \alpha_{\ell}e^{-j2\pi f\tau_{\ell}}`} display />
 
