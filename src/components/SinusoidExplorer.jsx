@@ -118,7 +118,7 @@ export default function SinusoidExplorer() {
       <div className="sinusoid-presets" aria-label="Ví dụ nhanh">
         <button type="button" onClick={useAmplitudePreset}>Tăng amplitude</button>
         <button type="button" onClick={useFrequencyPreset}>Tăng frequency</button>
-        <button type="button" onClick={usePhasePreset}>Phase <MathExpr tex="+90^\\circ" /></button>
+        <button type="button" onClick={usePhasePreset}>Phase <MathExpr tex={String.raw`+90^\\circ`} /></button>
       </div>
 
       <div className="sinusoid-readout">
@@ -130,24 +130,24 @@ export default function SinusoidExplorer() {
         <div>
           <small>ANGULAR FREQUENCY</small>
           <strong><MathExpr tex={`\\omega=${angularFrequency.toFixed(2)}\\,\\mathrm{rad/s}`} /></strong>
-          <span><MathExpr tex="\\omega=2\\pi f" /></span>
+          <span><MathExpr tex={String.raw`\\omega=2\\pi f`} /></span>
         </div>
         <div>
           <small>GIÁ TRỊ TẠI <MathExpr tex="t=0" /></small>
           <strong><MathExpr tex={`x(0)=${initialValue.toFixed(2)}`} /></strong>
-          <span><MathExpr tex="A\\cos\\phi" /></span>
+          <span><MathExpr tex={String.raw`A\\cos\\phi`} /></span>
         </div>
         <div>
           <small>TIME SHIFT TƯƠNG ĐƯƠNG</small>
           <strong><MathExpr tex={`${timeShift >= 0 ? '+' : ''}${timeShift.toFixed(3)}\\,\\mathrm{s}`} /></strong>
-          <span><MathExpr tex="\\Delta t=-\\phi/(360f)" /></span>
+          <span><MathExpr tex={String.raw`\\Delta t=-\\phi/(360f)`} /></span>
         </div>
       </div>
 
       <div className="sinusoid-plot-wrap">
         <div className="sinusoid-legend">
           <span><i className="sinusoid-current-key"></i> <MathExpr tex="x(t)" /> hiện tại</span>
-          <span><i className="sinusoid-reference-key"></i> cùng <MathExpr tex="A,f" /> nhưng <MathExpr tex="\\phi=0^\\circ" /></span>
+          <span><i className="sinusoid-reference-key"></i> cùng <MathExpr tex="A,f" /> nhưng <MathExpr tex={String.raw`\\phi=0^\\circ`} /></span>
         </div>
 
         <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Waveform sinusoid thay đổi theo amplitude, frequency và phase">
@@ -174,7 +174,7 @@ export default function SinusoidExplorer() {
         </svg>
 
         <p className="sinusoid-caption">
-          Đường nét đứt giữ cùng amplitude và frequency nhưng đặt <MathExpr tex="\\phi=0^\\circ" />. Vì vậy khi chỉ thay phase,
+          Đường nét đứt giữ cùng amplitude và frequency nhưng đặt <MathExpr tex={String.raw`\\phi=0^\\circ`} />. Vì vậy khi chỉ thay phase,
           hình dạng và chu kỳ không đổi; waveform chỉ thay đổi vị trí tương đối theo trục thời gian.
         </p>
       </div>
