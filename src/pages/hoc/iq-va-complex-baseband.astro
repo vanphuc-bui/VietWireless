@@ -51,20 +51,20 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article class="math-card">
           <span class="card-label">POLAR</span>
-          <div class="math-card-formula"><MathExpr tex="x = Ae^{j\phi}" /></div>
-          <p>Ta đọc cùng điểm đó bằng magnitude <MathExpr tex="A" /> và phase <MathExpr tex="\phi" />.</p>
+          <div class="math-card-formula"><MathExpr tex={String.raw`x = Ae^{j\phi}`} /></div>
+          <p>Ta đọc cùng điểm đó bằng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />.</p>
         </article>
         <article class="math-card">
-          <span class="card-label">TỪ <MathExpr tex="I,Q" /> → <MathExpr tex="A,\phi" /></span>
-          <div class="math-card-formula"><MathExpr tex="A = \sqrt{I^2+Q^2}" /></div>
+          <span class="card-label">TỪ <MathExpr tex="I,Q" /> → <MathExpr tex={String.raw`A,\phi`} /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`A = \sqrt{I^2+Q^2}`} /></div>
           <p>Magnitude là khoảng cách từ gốc tới điểm <MathExpr tex="(I,Q)" />.</p>
-          <div class="math-card-secondary"><MathExpr tex="\phi = \operatorname{atan2}(Q,I)" /></div>
+          <div class="math-card-secondary"><MathExpr tex={String.raw`\phi = \operatorname{atan2}(Q,I)`} /></div>
         </article>
         <article class="math-card">
-          <span class="card-label">TỪ <MathExpr tex="A,\phi" /> → <MathExpr tex="I,Q" /></span>
-          <div class="math-card-formula"><MathExpr tex="I = A\cos\phi" /></div>
+          <span class="card-label">TỪ <MathExpr tex={String.raw`A,\phi`} /> → <MathExpr tex="I,Q" /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`I = A\cos\phi`} /></div>
           <p><MathExpr tex="Q" /> là projection vuông góc còn lại.</p>
-          <div class="math-card-secondary"><MathExpr tex="Q = A\sin\phi" /></div>
+          <div class="math-card-secondary"><MathExpr tex={String.raw`Q = A\sin\phi`} /></div>
         </article>
       </div>
 
@@ -78,7 +78,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">02 · TẠI SAO KHÔNG CHỈ LƯU AMPLITUDE VÀ PHASE?</p>
       <h2><MathExpr tex="I/Q" /> làm nhiều phép xử lý trở thành các phép toán rất gọn trên số phức.</h2>
       <p>
-        Phase có điểm bất tiện là nó wrap tại <MathExpr tex="\pm\pi" /> hoặc <MathExpr tex="0^\circ/360^\circ" />. <MathExpr tex="I" /> và <MathExpr tex="Q" /> thì biến thiên liên tục trên hai trục.
+        Phase có điểm bất tiện là nó wrap tại <MathExpr tex={String.raw`\pm\pi`} /> hoặc <MathExpr tex={String.raw`0^\circ/360^\circ`} />. <MathExpr tex="I" /> và <MathExpr tex="Q" /> thì biến thiên liên tục trên hai trục.
         Khi channel gây scale và rotation, hoặc khi receiver cần bù phase, phép nhân complex xử lý hai hiệu ứng này cùng lúc.
       </p>
 
@@ -90,7 +90,7 @@ import MathExpr from '../../components/Math.astro';
         <b>×</b>
         <div>
           <small>CHANNEL</small>
-          <strong><MathExpr tex="h = Ge^{j\theta}" /></strong>
+          <strong><MathExpr tex={String.raw`h = Ge^{j\theta}`} /></strong>
         </div>
         <b>=</b>
         <div>
@@ -100,7 +100,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Nếu bỏ noise để nhìn trực giác, magnitude của <MathExpr tex="x" /> bị nhân với <MathExpr tex="G" /> và phase bị cộng thêm <MathExpr tex="\theta" />.
+        Nếu bỏ noise để nhìn trực giác, magnitude của <MathExpr tex="x" /> bị nhân với <MathExpr tex="G" /> và phase bị cộng thêm <MathExpr tex={String.raw`\theta`} />.
         Đây là mental model sẽ quay lại khi học channel estimation và equalization.
       </p>
     </section>
@@ -112,17 +112,17 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Gọi complex baseband là:
       </p>
-      <MathExpr tex="x_{\mathrm{bb}}(t) = I(t) + jQ(t)" display />
+      <MathExpr tex={String.raw`x_{\mathrm{bb}}(t) = I(t) + jQ(t)`} display />
 
       <p>
         Một cách tổng hợp waveform real passband thường viết:
       </p>
-      <MathExpr tex="s_{\mathrm{RF}}(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)" display />
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
 
       <div class="iq-carrier-flow">
-        <div><small>I PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex="\times\cos(2\pi f_ct)" /></span></div>
+        <div><small>I PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex={String.raw`\times\cos(2\pi f_ct)`} /></span></div>
         <b>+</b>
-        <div><small>Q PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex="-\sin(2\pi f_ct)" /></span></div>
+        <div><small>Q PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex={String.raw`-\sin(2\pi f_ct)`} /></span></div>
         <b>→</b>
         <div><small>RF</small><strong><MathExpr tex="s(t)" /></strong><span>real waveform</span></div>
       </div>
@@ -201,7 +201,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Với signal real, spectrum có conjugate symmetry: thành phần ở <MathExpr tex="+f" /> đi kèm một mirror ở <MathExpr tex="-f" />.
         Complex baseband không bị bắt buộc bởi symmetry đó. Vì vậy nó rất tự nhiên khi ta muốn biểu diễn bandwidth quanh carrier
-        sau khi đã dịch carrier về <MathExpr tex="0\,\mathrm{Hz}" />.
+        sau khi đã dịch carrier về <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />.
       </p>
 
       <div class="iq-spectrum-shift">
@@ -213,7 +213,7 @@ import MathExpr from '../../components/Math.astro';
         <b>→ downconvert →</b>
         <div>
           <small>COMPLEX BASEBAND</small>
-          <strong>quanh <MathExpr tex="0\,\mathrm{Hz}" /></strong>
+          <strong>quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /></strong>
           <span>negative frequency ← <MathExpr tex="0" /> → positive frequency</span>
         </div>
       </div>
@@ -221,7 +221,7 @@ import MathExpr from '../../components/Math.astro';
       <aside class="mental-model">
         <strong>Baseband ở đây không có nghĩa “chỉ còn DC”</strong>
         <p>
-          Carrier được chuyển về quanh <MathExpr tex="0\,\mathrm{Hz}" />, nhưng information vẫn nằm trong một dải frequency quanh <MathExpr tex="0" />.
+          Carrier được chuyển về quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, nhưng information vẫn nằm trong một dải frequency quanh <MathExpr tex="0" />.
           Bandwidth của signal không tự biến mất.
         </p>
       </aside>
@@ -232,9 +232,9 @@ import MathExpr from '../../components/Math.astro';
       <h2><MathExpr tex="I/Q" /> là nơi hình học số phức bắt đầu trở thành dữ liệu mà DSP thực sự xử lý.</h2>
       <ol class="recap-list">
         <li><strong><MathExpr tex="x=I+jQ" />:</strong> một complex sample có hai thành phần trực giao.</li>
-        <li><strong><MathExpr tex="A=\sqrt{I^2+Q^2}" />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
-        <li><strong><MathExpr tex="\phi=\operatorname{atan2}(Q,I)" />:</strong> phase là góc của điểm <MathExpr tex="I/Q" />.</li>
-        <li><strong>Complex baseband:</strong> representation quanh <MathExpr tex="0\,\mathrm{Hz}" />, không phải waveform RF vật lý.</li>
+        <li><strong><MathExpr tex={String.raw`A=\sqrt{I^2+Q^2}`} />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
+        <li><strong><MathExpr tex={String.raw`\phi=\operatorname{atan2}(Q,I)`} />:</strong> phase là góc của điểm <MathExpr tex="I/Q" />.</li>
+        <li><strong>Complex baseband:</strong> representation quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, không phải waveform RF vật lý.</li>
         <li><strong>RF reconstruction:</strong> <MathExpr tex="I" /> và <MathExpr tex="Q" /> điều khiển hai carrier trực giao cos và sin.</li>
         <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples <MathExpr tex="x[n]" />.</li>
       </ol>
