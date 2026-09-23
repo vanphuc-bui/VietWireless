@@ -161,7 +161,7 @@ import MathExpr from '../../components/Math.astro';
             <text class="sample-svg-label" x="34" y="24">x[n]</text>
           </svg>
           <strong>Một dãy số</strong>
-          <p><MathExpr tex="x[0],\,x[1],\,x[2],\ldots" /> là thứ phần mềm DSP thực sự xử lý.</p>
+          <p><MathExpr tex={String.raw`x[0],\,x[1],\,x[2],\ldots`} /> là thứ phần mềm DSP thực sự xử lý.</p>
         </article>
       </div>
 
@@ -177,12 +177,12 @@ import MathExpr from '../../components/Math.astro';
         <div class="explain-card">
           <span class="card-label">Discrete-time</span>
           <h3><MathExpr tex="x[n]" /></h3>
-          <p>Ta chỉ giữ giá trị tại các sample index <MathExpr tex="n=0,1,2,\ldots" /></p>
+          <p>Ta chỉ giữ giá trị tại các sample index <MathExpr tex={String.raw`n=0,1,2,\ldots`} /></p>
         </div>
       </div>
 
       <p>
-        Sampling rate là <MathExpr tex="f_s = 1/T_s" />. Ví dụ <MathExpr tex="f_s = 48\,\mathrm{kHz}" /> nghĩa là ADC đo waveform
+        Sampling rate là <MathExpr tex="f_s = 1/T_s" />. Ví dụ <MathExpr tex={String.raw`f_s = 48\,\mathrm{kHz}`} /> nghĩa là ADC đo waveform
         48.000 lần mỗi giây. Đây chưa phải toàn bộ câu chuyện của ADC. Vẫn còn quantization, dynamic range và
         anti-alias filtering. Ở đây tôi chỉ muốn giữ lại một hình dung:{" "}
         <strong>sampling biến waveform liên tục theo thời gian thành một dãy giá trị rời rạc theo thời gian.</strong>
