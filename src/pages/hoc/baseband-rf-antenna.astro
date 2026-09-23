@@ -137,7 +137,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="rf-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thay amplitude và phase của một complex symbol rồi nhìn I·cos và -Q·sin cộng thành RF waveform.</h2>
+      <h2>Thay amplitude và phase của một complex symbol rồi nhìn <MathExpr tex={String.raw`I\cos(\cdot)`} /> và <MathExpr tex={String.raw`-Q\sin(\cdot)`} /> cộng thành RF waveform.</h2>
       <p>
         Carrier trong demo chỉ là một số chu kỳ minh họa trên màn hình.
         Điều cần quan sát là khi phase của điểm <MathExpr tex="I+jQ" /> thay đổi, cách hai nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" /> phối hợp cũng thay đổi,
@@ -246,7 +246,7 @@ import MathExpr from '../../components/Math.astro';
         <b>→</b>
         <div><strong>Downconversion</strong><span>RF → analog <MathExpr tex="I/Q" /></span></div>
         <b>→</b>
-        <div><strong>ADC</strong><span>I[n], Q[n]</span></div>
+        <div><strong>ADC</strong><span><MathExpr tex="I[n],\,Q[n]" /></span></div>
         <b>→</b>
         <div><strong>DSP</strong><span>sync, FFT, equalization, decode</span></div>
       </div>
