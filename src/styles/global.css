@@ -10441,3 +10441,91 @@ textarea,
     --lesson-subheading-size: 1.2rem;
   }
 }
+
+
+/* --- Compact formula rows: article-like, not dashboard cards --- */
+.lesson .formula-card-compact {
+  min-height: 0 !important;
+  padding: 14px 16px !important;
+  justify-content: flex-start;
+}
+
+.lesson .formula-card-compact strong {
+  margin: 4px 0 0;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) > div {
+  min-height: 0;
+  padding: 14px 16px;
+}
+
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) strong {
+  margin: 4px 0 0;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.35;
+}
+
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) > b {
+  font-size: var(--lesson-prose-size);
+  line-height: 1;
+}
+
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) small {
+  font-size: var(--lesson-meta-size);
+  line-height: 1.25;
+}
+
+/* Compact technical sequences should hug their content vertically. */
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) {
+  align-items: center;
+}
+
+.lesson :is(
+  .projection-story,
+  .phasor-definition,
+  .complex-multiply,
+  .iq-preview
+) > div {
+  width: 100%;
+  align-self: stretch;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .lesson :is(
+    .projection-story,
+    .phasor-definition,
+    .complex-multiply,
+    .iq-preview
+  ) > b {
+    min-height: 16px;
+  }
+}
