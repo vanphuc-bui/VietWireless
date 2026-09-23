@@ -159,3 +159,13 @@ Quy tắc MathExpr không chỉ áp dụng trong prose. Nó áp dụng cho headi
 - SVG/chart không được chứa plain-text math như `x(t)`, `f₀`, `θ`, `I`, `Q`; dùng `MathExpr` qua `foreignObject` hoặc `SvgMathExpr`.
 - CSS không được dùng selector rộng làm `span` của `MathExpr` thành block. Với readout/card, ưu tiên direct-child selector (`> span`, `> strong`) để giữ inline math liền câu.
 - Khi audit, phải quét toàn bộ page và component, không chỉ phần prose hoặc display equations.
+
+
+### Card taxonomy cho nội dung kỹ thuật
+
+- Formula card, visual card và metric/readout card là ba loại khác nhau; không dùng một min-height/font-size chung cho cả ba.
+- Formula card dùng shared `.formula-card`; visual có SVG/plot dùng `.visual-card` + `.visual-card-figure`; readout dùng `.metric-card`.
+- Card cùng loại và cùng cấp phải có cùng padding, label scale, body scale và hierarchy.
+- Visual area phải đủ lớn để đọc axis/label mà không zoom. Không để một card có nhiều khoảng trắng chỉ vì figure quá nhỏ.
+- Metric/readout formula phải đi qua `MathExpr`; trong JSX có TeX command phải dùng `String.raw` hoặc double escaping.
+- Khi review interactive lab, kiểm tra cả ba trạng thái: desktop rộng, tablet/2-column và mobile/1-column. Không chấp nhận raw TeX, clipped formula hoặc text nhỏ khó đọc.
