@@ -1,6 +1,9 @@
 import katex from 'katex';
+import { assertValidTex } from '../utils/validateTex.js';
 
 export default function MathExpr({ tex, display = false, className = '' }) {
+  assertValidTex(tex, 'MathExpr.jsx');
+
   const html = katex.renderToString(tex, {
     displayMode: display,
     throwOnError: true,

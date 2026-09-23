@@ -179,10 +179,10 @@ const lessonMeta = {
       <div class="pci-example technical-card formula-card" data-lesson-role="example">
         <span class="card-label">VÍ DỤ MINH HỌA</span>
         <div class="formula-card-main">
-          <MathExpr tex="N_{ID}^{(1)}=217,qquad N_{ID}^{(2)}=1" />
+          <MathExpr tex={String.raw`N_{ID}^{(1)}=217,\qquad N_{ID}^{(2)}=1`} />
         </div>
         <div class="formula-card-details">
-          <MathExpr tex="N_{ID}^{cell}=3cdot217+1=652" />
+          <MathExpr tex={String.raw`N_{ID}^{cell}=3\cdot217+1=652`} />
         </div>
         <p>
           Đây là giá trị minh họa để thấy cách hai synchronization signals ghép lại thành một identity.

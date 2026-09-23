@@ -49,3 +49,13 @@ Có thể chạy tất cả bằng:
 5. SEO.
 
 Không hy sinh technical correctness để giữ một câu văn, một visual hoặc một keyword.
+
+
+## TeX escape safety
+
+Math content có TeX command phải dùng `String.raw` hoặc double escaping. Direct quoted `tex="..."` chỉ dành cho notation không cần backslash command.
+
+`check:math` và runtime `assertValidTex()` đều phải chặn:
+- command mất backslash, ví dụ `3cdot217`, `qquad`;
+- single-backslash trong JavaScript string/template;
+- double-backslash runtime do dùng sai `String.raw`.

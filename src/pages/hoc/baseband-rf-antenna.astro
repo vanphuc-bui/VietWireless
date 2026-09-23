@@ -62,7 +62,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="rf-chain-overview process-flow" aria-label="Từ digital baseband samples tới RF waveform thực">
         <article class="process-card">
           <small class="process-card-step">01 · DIGITAL BASEBAND</small>
-          <strong><MathExpr tex="I[n],\,Q[n]" /></strong>
+          <strong><MathExpr tex={String.raw`I[n],\,Q[n]`} /></strong>
           <p>Complex samples đang nằm trong DSP / memory.</p>
         </article>
 
@@ -73,7 +73,7 @@ import MathExpr from '../../components/Math.astro';
 
         <article class="process-card">
           <small class="process-card-step">02 · ANALOG BASEBAND</small>
-          <strong><MathExpr tex="I(t),\,Q(t)" /></strong>
+          <strong><MathExpr tex={String.raw`I(t),\,Q(t)`} /></strong>
           <p>Hai waveform điện analog sau DAC và reconstruction filter.</p>
         </article>
 
@@ -115,13 +115,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="dac-story">
         <div>
           <span class="card-label">DIGITAL</span>
-          <strong><MathExpr tex="I[n],\,Q[n]" /></strong>
+          <strong><MathExpr tex={String.raw`I[n],\,Q[n]`} /></strong>
           <p>Các giá trị theo sample index.</p>
         </div>
         <b>→ DAC →</b>
         <div>
           <span class="card-label">ANALOG BASEBAND</span>
-          <strong><MathExpr tex="I(t),\,Q(t)" /></strong>
+          <strong><MathExpr tex={String.raw`I(t),\,Q(t)`} /></strong>
           <p>Hai tín hiệu điện analog quanh baseband.</p>
         </div>
         <b>→ FILTER →</b>
@@ -272,7 +272,7 @@ import MathExpr from '../../components/Math.astro';
         <b>→</b>
         <div><strong>Downconversion</strong><span>RF → analog <MathExpr tex="I/Q" /></span></div>
         <b>→</b>
-        <div><strong>ADC</strong><span><MathExpr tex="I[n],\,Q[n]" /></span></div>
+        <div><strong>ADC</strong><span><MathExpr tex={String.raw`I[n],\,Q[n]`} /></span></div>
         <b>→</b>
         <div><strong>DSP</strong><span>sync, FFT, equalization, decode</span></div>
       </div>

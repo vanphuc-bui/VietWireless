@@ -251,7 +251,7 @@ const { compact = false } = Astro.props;
 
             <div class="journey-step">
               <div class="step-visual equalize-visual compact-eq">
-                <span><MathExpr tex="Y[k]" /></span><b><MathExpr tex="\\div\\hat{H}[k]" /></b><span><MathExpr tex="\\approx X[k]" /></span>
+                <span><MathExpr tex="Y[k]" /></span><b><MathExpr tex={String.raw`\div\hat{H}[k]`} /></b><span><MathExpr tex={String.raw`\approx X[k]`} /></span>
               </div>
               <strong>Equalize + decode</strong>
               <span>Sửa channel, demap, decode rồi dựng lại bits.</span>
