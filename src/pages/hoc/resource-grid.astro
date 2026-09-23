@@ -20,7 +20,7 @@ import MathExpr from '../../components/Math.astro';
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT SYMBOL TỚI <MathExpr tex="X[k,\ell]" /> CỦA NHIỀU SYMBOLS</p>
+      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT SYMBOL TỚI <MathExpr tex={String.raw`X[k,\ell]`} /> CỦA NHIỀU SYMBOLS</p>
       <p class="map-intro">
         Ở Bài 15, một OFDM symbol được mô tả bằng một vector <MathExpr tex="X[k]" />.
         Nhưng một transmission kéo dài nhiều OFDM symbols.
@@ -34,7 +34,7 @@ import MathExpr from '../../components/Math.astro';
           <span>subcarrier k</span><b>×</b>
           <span>OFDM-symbol position l</span><b>→</b>
           <strong>resource element (k,l)</strong><b>→</b>
-          <span>complex value <MathExpr tex="a_{k,\ell}" /></span>
+          <span>complex value <MathExpr tex={String.raw`a_{k,\ell}`} /></span>
         </div>
         <p>
           Grid không phải waveform.
@@ -81,7 +81,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · RESOURCE BLOCK CHỈ ĐƯỢC ĐỊNH NGHĨA THEO FREQUENCY</p>
       <h2>Trong NR, một resource block là 12 consecutive subcarriers.</h2>
 
-      <MathExpr tex="N_{\mathrm{sc}}^{\mathrm{RB}} = 12" display />
+      <MathExpr tex={String.raw`N_{\mathrm{sc}}^{\mathrm{RB}} = 12`} display />
       <p class="math-caption">Một resource block gồm 12 consecutive subcarriers trong frequency domain.</p>
 
       <p>
@@ -93,9 +93,9 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Bandwidth tương ứng của 12 subcarriers phụ thuộc numerology:
-        với <MathExpr tex="15\,\mathrm{kHz}" /> SCS là <MathExpr tex="180\,\mathrm{kHz}" />,
-        <MathExpr tex="30\,\mathrm{kHz}" /> là <MathExpr tex="360\,\mathrm{kHz}" />,
-        <MathExpr tex="60\,\mathrm{kHz}" /> là <MathExpr tex="720\,\mathrm{kHz}" />,
+        với <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> SCS là <MathExpr tex={String.raw`180\,\mathrm{kHz}`} />,
+        <MathExpr tex={String.raw`30\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`360\,\mathrm{kHz}`} />,
+        <MathExpr tex={String.raw`60\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`720\,\mathrm{kHz}`} />,
         trước khi nói tới guard bands hoặc occupied-carrier edges.
       </p>
     </section>
@@ -151,7 +151,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="grid-column-flow">
         <div><small>GRID COLUMN</small><strong><MathExpr tex="X[k,l]" /></strong><span>occupied subcarriers</span></div>
         <b>→ bin map →</b>
-        <div><small>IFFT ARRAY</small><strong><MathExpr tex="X[0],\ldots,X[N-1]" /></strong><span>includes zeros/guards/DC as configured</span></div>
+        <div><small>IFFT ARRAY</small><strong><MathExpr tex={String.raw`X[0],\ldots,X[N-1]`} /></strong><span>includes zeros/guards/DC as configured</span></div>
         <b>→ IFFT →</b>
         <div><small>TIME</small><strong><MathExpr tex="x[n]" /></strong><span><MathExpr tex="N" /> useful samples</span></div>
         <b>→ CP →</b>
@@ -238,7 +238,7 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card next" href="/hoc/numerology-5g-nr/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Numerology trong 5G NR</strong>
-        <small>SCS và time structure của grid thay đổi với <MathExpr tex="\mu" /> ra sao?</small>
+        <small>SCS và time structure của grid thay đổi với <MathExpr tex={String.raw`\mu`} /> ra sao?</small>
       </a>
     </nav>
   </article>
