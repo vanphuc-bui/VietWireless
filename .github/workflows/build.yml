@@ -26,5 +26,8 @@ jobs:
       - name: Check math style
         run: npm run check:math
 
+      - name: Check lesson contract
+        run: npm run check:lesson
+
       - name: Build
         run: npm run build

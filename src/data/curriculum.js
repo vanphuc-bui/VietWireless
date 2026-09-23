@@ -1,0 +1,131 @@
+export const curriculum = [
+  {
+    id: 1,
+    title: 'Nền tảng tín hiệu',
+    anchor: 'phan-1',
+    lessons: [
+      { number: 1, title: 'Signal là gì?', slug: 'tin-hieu-la-gi', status: 'published', kind: 'overview' },
+      { number: 2, title: 'Sampling, aliasing và Nyquist', slug: 'sampling-aliasing-nyquist', status: 'published', kind: 'deep-dive' },
+      { number: 3, title: 'Amplitude, frequency và phase', slug: 'amplitude-frequency-phase', status: 'published', kind: 'deep-dive' },
+      { number: 4, title: 'Số phức và phasor', slug: 'so-phuc-va-phasor', status: 'published', kind: 'deep-dive' },
+      { number: 5, title: 'I/Q và complex baseband', slug: 'iq-va-complex-baseband', status: 'published', kind: 'deep-dive' },
+      { number: 6, title: 'Miền thời gian và miền tần số', slug: 'mien-thoi-gian-va-mien-tan-so', status: 'published', kind: 'deep-dive' },
+      { number: 7, title: 'Fourier, DFT và FFT', slug: 'fourier-dft-fft', status: 'published', kind: 'deep-dive' },
+      { number: 8, title: 'Modulation: BPSK → QPSK → QAM', slug: 'modulation-bpsk-qpsk-qam', status: 'published', kind: 'deep-dive' },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Từ tín hiệu tới liên kết vô tuyến',
+    anchor: 'phan-2',
+    lessons: [
+      { number: 9, title: 'Baseband → RF → antenna', slug: 'baseband-rf-antenna', status: 'published', kind: 'system-transition' },
+      { number: 10, title: 'Wireless channel', slug: 'wireless-channel', status: 'published', kind: 'deep-dive' },
+      { number: 11, title: 'Noise, SNR và EVM', slug: 'noise-snr-evm', status: 'published', kind: 'deep-dive' },
+      { number: 12, title: 'Multipath và delay spread', slug: 'multipath-delay-spread', status: 'published', kind: 'deep-dive' },
+      { number: 13, title: 'Correlation', slug: 'correlation', status: 'published', kind: 'deep-dive' },
+      { number: 14, title: 'OFDM: bức tranh tổng thể', slug: 'ofdm-buc-tranh-tong-the', status: 'published', kind: 'overview' },
+      { number: 15, title: 'IFFT/FFT trong OFDM', slug: 'ifft-fft-trong-ofdm', status: 'published', kind: 'deep-dive' },
+      { number: 16, title: 'Cyclic Prefix', slug: 'cyclic-prefix', status: 'published', kind: 'deep-dive' },
+      { number: 17, title: 'Resource grid', slug: 'resource-grid', status: 'published', kind: 'deep-dive' },
+      { number: 18, title: 'Numerology trong 5G NR', slug: 'numerology-5g-nr', status: 'published', kind: 'deep-dive' },
+    ],
+  },
+  {
+    id: 3,
+    title: 'UE bật lên và tìm cell 5G',
+    anchor: 'phan-3',
+    lessons: [
+      { number: 19, title: 'UE bật nguồn thì chuyện gì xảy ra?', slug: 'ue-bat-nguon', status: 'planned', kind: 'overview', specRequired: true },
+      { number: 20, title: 'Synchronization là gì?', slug: 'synchronization', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 21, title: 'SSB là gì?', slug: 'ssb', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 22, title: 'PSS', slug: 'pss', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 23, title: 'SSS và Physical Cell ID', slug: 'sss-physical-cell-id', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 24, title: 'Fine timing và frequency synchronization', slug: 'fine-timing-frequency-synchronization', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 25, title: 'PBCH DM-RS', slug: 'pbch-dmrs', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 26, title: 'PBCH', slug: 'pbch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 27, title: 'MIB', slug: 'mib', status: 'planned', kind: 'deep-dive', specRequired: true },
+    ],
+  },
+  {
+    id: 4,
+    title: 'Từ MIB tới thông tin hệ thống',
+    anchor: 'phan-4',
+    lessons: [
+      { number: 28, title: 'CORESET#0 và SearchSpace#0', slug: 'coreset0-searchspace0', status: 'planned', kind: 'system-transition', specRequired: true },
+      { number: 29, title: 'PDCCH là gì?', slug: 'pdcch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 30, title: 'DCI cơ bản', slug: 'dci-co-ban', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 31, title: 'SIB1 nằm ở đâu?', slug: 'sib1-nam-o-dau', status: 'planned', kind: 'system-transition', specRequired: true },
+      { number: 32, title: 'SIB1', slug: 'sib1', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 33, title: 'Cell selection và camping', slug: 'cell-selection-camping', status: 'planned', kind: 'deep-dive', specRequired: true },
+    ],
+  },
+  {
+    id: 5,
+    title: 'UE bắt đầu truy nhập mạng',
+    anchor: 'phan-5',
+    lessons: [
+      { number: 34, title: 'Random Access tổng quan', slug: 'random-access-tong-quan', status: 'planned', kind: 'overview', specRequired: true },
+      { number: 35, title: 'PRACH là gì?', slug: 'prach', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 36, title: 'PRACH preamble', slug: 'prach-preamble', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 37, title: 'SSB ↔ PRACH occasion', slug: 'ssb-prach-occasion', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 38, title: 'Random Access Response', slug: 'random-access-response', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 39, title: 'Timing Advance', slug: 'timing-advance', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 40, title: 'Msg3 và Msg4', slug: 'msg3-msg4', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 41, title: 'RRC Setup', slug: 'rrc-setup', status: 'planned', kind: 'deep-dive', specRequired: true },
+    ],
+  },
+  {
+    id: 6,
+    title: 'Truyền dữ liệu sau khi kết nối',
+    anchor: 'phan-6',
+    lessons: [
+      { number: 42, title: 'Bức tranh PHY khi UE đã connected', slug: 'connected-phy-tong-quan', status: 'planned', kind: 'overview', specRequired: true },
+      { number: 43, title: 'PDSCH', slug: 'pdsch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 44, title: 'PUSCH', slug: 'pusch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 45, title: 'PUCCH', slug: 'pucch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 46, title: 'DMRS', slug: 'dmrs', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 47, title: 'Channel estimation', slug: 'channel-estimation', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 48, title: 'Equalization', slug: 'equalization', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 49, title: 'HARQ', slug: 'harq', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 50, title: 'MCS và link adaptation', slug: 'mcs-link-adaptation', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 51, title: 'MIMO và beamforming', slug: 'mimo-beamforming', status: 'planned', kind: 'deep-dive', specRequired: true },
+    ],
+  },
+  {
+    id: 7,
+    title: 'Receiver trong thực tế',
+    anchor: 'phan-7',
+    lessons: [
+      { number: 52, title: 'Timing offset', slug: 'timing-offset', status: 'planned', kind: 'system-transition' },
+      { number: 53, title: 'Carrier Frequency Offset', slug: 'carrier-frequency-offset', status: 'planned', kind: 'deep-dive' },
+      { number: 54, title: 'CFO estimation và correction', slug: 'cfo-estimation-correction', status: 'planned', kind: 'deep-dive' },
+      { number: 55, title: 'Sampling Frequency Offset', slug: 'sampling-frequency-offset', status: 'planned', kind: 'deep-dive' },
+      { number: 56, title: 'Phase noise', slug: 'phase-noise', status: 'planned', kind: 'deep-dive' },
+      { number: 57, title: 'EVM', slug: 'evm', status: 'planned', kind: 'deep-dive' },
+    ],
+  },
+  {
+    id: 8,
+    title: '5G NR qua vệ tinh (NTN)',
+    anchor: 'phan-8',
+    lessons: [
+      { number: 58, title: 'Từ terrestrial NR tới NTN', slug: 'terrestrial-nr-to-ntn', status: 'planned', kind: 'overview', specRequired: true },
+      { number: 59, title: 'Propagation delay', slug: 'propagation-delay', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 60, title: 'Doppler trong NTN', slug: 'doppler-ntn', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 61, title: 'NTN synchronization', slug: 'ntn-synchronization', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 62, title: 'NTN Timing Advance', slug: 'ntn-timing-advance', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 63, title: 'SIB19', slug: 'sib19', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 64, title: 'Ephemeris và satellite position', slug: 'ephemeris-satellite-position', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 65, title: 'NTN Random Access', slug: 'ntn-random-access', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 66, title: 'Moving satellite, beam và handover', slug: 'satellite-beam-handover', status: 'planned', kind: 'deep-dive', specRequired: true },
+    ],
+  },
+];
+
+export const lessons = curriculum.flatMap((part) =>
+  part.lessons.map((lesson) => ({ ...lesson, part: part.id, partTitle: part.title, anchor: part.anchor }))
+);
+
+export const lessonByNumber = new Map(lessons.map((lesson) => [lesson.number, lesson]));
+export const lessonBySlug = new Map(lessons.map((lesson) => [lesson.slug, lesson]));

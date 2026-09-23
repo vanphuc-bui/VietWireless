@@ -1,20 +1,21 @@
 # VietWireless Curriculum
 
-Đây là source of truth cho learning graph của VietWireless.
+Đây là source of truth mô tả learning graph. Số bài, part, slug và trạng thái machine-readable nằm trong src/data/curriculum.js.
 
 ## Nguyên tắc tổ chức
 
 - Đi từ tổng quan tới cụ thể.
-- Mỗi phần lớn nên bắt đầu bằng một bài overview giải thích vấn đề hệ thống đang cố giải quyết.
-- Chỉ sau khi người đọc có mental model tổng thể mới zoom vào signal, channel, procedure hoặc công thức cụ thể.
-- Không mở một chủ đề 5G NR bằng định nghĩa rời rạc kiểu “PSS là gì?” nếu người đọc chưa biết PSS xuất hiện ở bước nào trong hành trình của UE.
-- Các bài foundation có thể chạm qua nhiều khái niệm để tạo bản đồ. Những bài sau phải zoom sâu, không viết lại cùng nội dung.
+- Mỗi phần lớn phải cho người đọc biết hệ thống đang cố giải quyết vấn đề gì trước khi zoom vào channel, signal, procedure hoặc formula.
+- Không mở một chủ đề 5G NR bằng định nghĩa rời rạc nếu người đọc chưa biết khái niệm đó xuất hiện ở bước nào trong hành trình của UE.
+- Các bài foundation có thể chạm qua nhiều khái niệm để tạo bản đồ. Bài sau phải zoom sâu, không viết lại cùng nội dung.
 - Internal links phải đi theo learning graph này.
+- Từ Bài 19 trở đi phải tuân thủ docs/LESSON_CONTRACT.md.
+- Tên part trên homepage, /hoc/ và file này phải khớp src/data/curriculum.js.
 
 ## Trục kể chuyện chính
 
 Information
-→ signal
+→ tín hiệu
 → sampling
 → amplitude / frequency / phase
 → complex number
@@ -42,7 +43,7 @@ Information
 → receiver impairments
 → NTN.
 
-## Phần I: Nền tảng signal
+## Phần I: Nền tảng tín hiệu
 
 1. Signal là gì?
 2. Sampling, aliasing và Nyquist
@@ -55,7 +56,7 @@ Information
 
 Bài 01 là bản đồ nền tảng. Các bài 02 đến 08 zoom sâu vào từng khái niệm đã được chạm qua.
 
-## Phần II: Từ signal tới wireless link
+## Phần II: Từ tín hiệu tới liên kết vô tuyến
 
 9. Baseband → RF → antenna
 10. Wireless channel
@@ -68,7 +69,9 @@ Bài 01 là bản đồ nền tảng. Các bài 02 đến 08 zoom sâu vào từ
 17. Resource grid
 18. Numerology trong 5G NR
 
-## Phần III: UE bật lên và tìm mạng 5G
+Bài 14 là overview của OFDM. Các bài 15–18 tách từng cơ chế quan trọng.
+
+## Phần III: UE bật lên và tìm cell 5G
 
 19. UE bật nguồn thì chuyện gì xảy ra?
 20. Synchronization là gì?
@@ -80,9 +83,16 @@ Bài 01 là bản đồ nền tảng. Các bài 02 đến 08 zoom sâu vào từ
 26. PBCH
 27. MIB
 
-Bài 19 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE đọc được MIB, chưa đi sâu sequence hay bit field.
+Bài 19 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE đọc được MIB, chưa đi sâu sequence, bit field hay mapping chi tiết.
 
-## Phần IV: Từ MIB tới system information
+Mỗi bài deep-dive ở Part III phải trả lời:
+- UE đang biết gì trước bước này?
+- UE đang tìm/đo/giải mã cái gì?
+- output của bước này là gì?
+- output đó được dùng ở bước tiếp theo như thế nào?
+- bước này chưa giải quyết được điều gì?
+
+## Phần IV: Từ MIB tới thông tin hệ thống
 
 28. CORESET#0 và SearchSpace#0
 29. PDCCH là gì?
@@ -91,7 +101,9 @@ Bài 19 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE
 32. SIB1
 33. Cell selection và camping
 
-## Phần V: UE bắt đầu nói với gNB
+Bài 28 phải mở bằng system transition MIB → CORESET#0/SearchSpace#0 → PDCCH → PDSCH → SIB1 trước khi đi sâu cấu trúc CORESET.
+
+## Phần V: UE bắt đầu truy nhập mạng
 
 34. Random Access tổng quan
 35. PRACH là gì?
@@ -103,11 +115,12 @@ Bài 19 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE
 41. RRC Setup
 
 Phải phân biệt rõ:
+- downlink synchronization: UE align receiver của mình với downlink của gNB;
+- uplink timing alignment: gNB đo uplink timing và dùng Timing Advance để điều chỉnh thời điểm UE phát.
 
-- Downlink synchronization: UE align receiver của mình với downlink của gNB.
-- Uplink timing alignment: gNB đo timing của uplink và dùng Timing Advance để điều chỉnh thời điểm UE phát.
+Bài 34 là overview của random access.
 
-## Phần VI: Truyền data sau khi connected
+## Phần VI: Truyền dữ liệu sau khi kết nối
 
 42. Bức tranh PHY khi UE đã connected
 43. PDSCH
@@ -120,7 +133,9 @@ Phải phân biệt rõ:
 50. MCS và link adaptation
 51. MIMO và beamforming
 
-## Phần VII: Receiver thực tế
+Bài 42 là overview. Nó phải cho thấy scheduling/control/data/reference-signal loop trước khi tách từng channel.
+
+## Phần VII: Receiver trong thực tế
 
 52. Timing offset
 53. Carrier Frequency Offset
@@ -129,7 +144,9 @@ Phải phân biệt rõ:
 56. Phase noise
 57. EVM
 
-## Phần VIII: 5G NTN
+Bài 52 phải mở bằng một receiver không lý tưởng: timing, carrier, sampling clock và phase đều có thể lệch. Không trình bày từng impairment như các hiện tượng độc lập hoàn toàn.
+
+## Phần VIII: 5G NR qua vệ tinh (NTN)
 
 58. Từ terrestrial NR tới NTN
 59. Propagation delay
@@ -141,31 +158,35 @@ Phải phân biệt rõ:
 65. NTN Random Access
 66. Moving satellite, beam và handover
 
+Bài 58 là overview. Phải chỉ rõ giả định nào của terrestrial NR bị stress khi link đi qua satellite: propagation delay, Doppler, moving geometry, timing và mobility.
+
+Với NTN, source discipline theo docs/SOURCE_POLICY.md là bắt buộc; phải kiểm tra Release 17/18 phù hợp trước khi publish.
+
 ## Template cho một phần mới
 
-Khi bắt đầu một phần lớn:
-
-1. Viết bài overview trước.
-2. Đặt một flow end-to-end hoặc state progression ở đầu bài.
-3. Giải thích vấn đề trước khi giới thiệu tên channel/signal/procedure.
-4. Chỉ ra input mà receiver đang có và điều nó chưa biết.
-5. Sau đó mới tách thành các bài chuyên sâu.
-6. Mỗi bài chuyên sâu phải link ngược về overview và link tới bước tiếp theo.
-7. Khi liên quan 3GPP, thêm specification layer theo `docs/CONTENT_GUIDELINES.md`.
+Khi bắt đầu một part:
+1. xác định system transition của part;
+2. viết overview hoặc ít nhất một opening section cho thấy end-to-end flow;
+3. giải thích problem trước tên channel/signal/procedure;
+4. chỉ ra input hiện có và điều receiver/UE chưa biết;
+5. tách các bài chuyên sâu theo operation hoặc state transition;
+6. mỗi bài phải link về bản đồ/overview và tới bước tiếp theo;
+7. nếu liên quan 3GPP, thêm specification layer;
+8. dùng docs/LESSON_TEMPLATE.md khi tạo page mới.
 
 ## Ưu tiên triển khai tiếp
 
-Thứ tự ưu tiên gần nhất:
+Foundation 1–18 đã có page. Ưu tiên tiếp theo:
 
-1. Sampling, aliasing và Nyquist.
-2. Amplitude, frequency và phase.
-3. Số phức, phasor và I/Q.
-4. Fourier / DFT / FFT.
-5. Modulation.
-6. OFDM overview và resource grid.
-7. 5G numerology.
-8. UE bật nguồn thì chuyện gì xảy ra?
-9. Synchronization.
-10. SSB → PSS → SSS → PBCH → MIB.
+1. Bài 19 · UE bật nguồn thì chuyện gì xảy ra?
+2. Bài 20 · Synchronization là gì?
+3. Bài 21 · SSB là gì?
+4. Bài 22 · PSS
+5. Bài 23 · SSS và Physical Cell ID
+6. Bài 24 · Fine timing và frequency synchronization
+7. Bài 25 · PBCH DM-RS
+8. Bài 26 · PBCH
+9. Bài 27 · MIB
+10. Sau đó mới đi tiếp MIB → SIB1 → Random Access.
 
-Không nên bỏ qua các foundation chỉ để tới 5G sớm hơn. Tuy nhiên overview 5G initial access có thể xuất hiện trước để người đọc biết các kiến thức nền tảng sau này sẽ được dùng ở đâu.
+Không viết batch dài mà giảm dần độ sâu. Sau mỗi 2–3 bài, so lại depth, terminology, source quality và visual consistency trước khi tiếp tục.
