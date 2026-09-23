@@ -8859,3 +8859,107 @@ main,
     transform: rotate(90deg);
   }
 }
+
+
+/* --- Site-wide box math roles: fixed size by purpose --- */
+:root {
+  --lesson-box-math-formula-main: 1.5rem;
+  --lesson-box-math-formula-secondary: 1.05rem;
+  --lesson-box-math-flow: 1.28rem;
+  --lesson-box-math-readout-primary: 1.16rem;
+  --lesson-box-math-readout-secondary: .94rem;
+  --lesson-box-math-label: .78rem;
+  --lesson-box-math-svg: 13px;
+}
+
+/* Main equation inside a formula/explanation card. */
+.math-card .math-card-formula .katex,
+.formula-card-main .katex {
+  font-size: var(--lesson-box-math-formula-main);
+}
+
+/* Supporting equation inside the same card. */
+.math-card .math-card-secondary .katex,
+.formula-card-details .katex {
+  font-size: var(--lesson-box-math-formula-secondary);
+}
+
+/* State/value shown inside process, flow, story, chain and step boxes. */
+.lesson :is(
+  [class*="-flow"],
+  [class*="-story"],
+  [class*="-chain"],
+  [class*="-overview"],
+  [class*="-step"],
+  .concept-bridge,
+  .phase-comparison,
+  .frequency-period-visual,
+  .sinusoid-three-grid,
+  .domain-question-grid,
+  .bits-per-symbol-grid,
+  .parallel-subcarriers,
+  .nr-slot-equations,
+  .numerology-simple-table,
+  .dft-symbols,
+  .bin-equations
+) strong .katex,
+.lesson :is(
+  [class*="-flow"],
+  [class*="-story"],
+  [class*="-chain"],
+  [class*="-overview"],
+  [class*="-step"]
+) > div > strong .katex {
+  font-size: var(--lesson-box-math-flow);
+}
+
+/* Readouts: the current value is larger; explanatory math below it is smaller. */
+.lesson [class*="-readout"] strong .katex,
+.metric-card-value .katex {
+  font-size: var(--lesson-box-math-readout-primary);
+}
+
+.lesson [class*="-readout"] > div > span .katex,
+.lesson [class*="-readout"] > span .katex,
+.metric-card-formula .katex,
+.lab-readout .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
+
+/* Math embedded in a box label follows label scale, never the main-equation scale. */
+.lesson :is(.card-label, .process-card-step, .metric-card-label, small) .katex {
+  font-size: 1em;
+}
+
+/* SVG math has its own fixed visual scale because it lives in a viewBox. */
+.svg-math .katex {
+  font-size: var(--lesson-box-math-svg);
+}
+
+/* Explicit role overrides must win over generic flow/readout selectors above. */
+.formula-card .formula-card-main .katex,
+.math-card .math-card-formula .katex {
+  font-size: var(--lesson-box-math-formula-main);
+}
+
+.formula-card .formula-card-details .katex,
+.math-card .math-card-secondary .katex {
+  font-size: var(--lesson-box-math-formula-secondary);
+}
+
+.metric-card .metric-card-formula .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
+
+/* The RF process flow is a flow box, so it uses the same site-wide role size. */
+.rf-chain-overview.process-flow > .process-card > strong {
+  font-size: var(--lesson-box-math-flow);
+}
+
+.rf-chain-overview.process-flow > .process-card > strong .katex {
+  font-size: 1em;
+}
+
+.process-op-math .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
