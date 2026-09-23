@@ -429,96 +429,111 @@ import MathExpr from '../components/Math.astro';
       </div>
     </section>
 
-    <section class="essay-section" id="lo-trinh">
+    <section class="essay-section" id="ban-do-hoc">
       <div class="section-number">05</div>
       <div class="essay-content">
-        <p class="section-kicker">LỘ TRÌNH HỌC</p>
-        <h2>Từ signal tới một UE tìm được mạng 5G, kết nối và truyền data.</h2>
+        <p class="section-kicker">BẢN ĐỒ HỌC VIỄN THÔNG</p>
+        <h2>Từ nền tảng tín hiệu tới một UE kết nối 5G NR, truyền dữ liệu và đi tiếp tới NTN.</h2>
         <p>
-          Tôi muốn các chủ đề nối với nhau theo một trục rõ ràng. Ta đi từ cách biểu diễn signal,
-          qua wireless link và OFDM, rồi mới theo chân một UE từ lúc bật nguồn tới synchronization,
-          PBCH, random access, connected mode và cuối cùng là NTN.
+          Đây là bản đồ tổng thể của VietWireless. Mỗi phần gom các bài có cùng một câu hỏi lớn.
+          Chọn một phần để mở đúng cụm bài chi tiết, thay vì bị đưa thẳng vào một bài riêng lẻ.
         </p>
 
-        <ol class="course-list">
-          <li class="available">
-            <span class="course-no">PHẦN I</span>
-            <div>
-              <h3>Nền tảng signal</h3>
-              <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → FFT → modulation.</p>
-            </div>
-            <a href="/hoc/tin-hieu-la-gi/">Bắt đầu →</a>
+        <ol class="course-list learning-map-list" aria-label="Bản đồ học viễn thông">
+          <li>
+            <a class="learning-map-link" href="/hoc/#phan-1">
+              <span class="course-no">PHẦN I</span>
+              <div>
+                <h3>Nền tảng tín hiệu</h3>
+                <p>Signal → sampling → phase → số phức → <MathExpr tex="I/Q" /> → Fourier/FFT → modulation.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN II</span>
-            <div>
-              <h3>Từ signal tới wireless link</h3>
-              <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-2">
+              <span class="course-no">PHẦN II</span>
+              <div>
+                <h3>Từ tín hiệu tới liên kết vô tuyến</h3>
+                <p>RF → channel → noise → multipath → correlation → OFDM → resource grid.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN III</span>
-            <div>
-              <h3>UE bật lên và tìm mạng 5G</h3>
-              <p>Synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-3">
+              <span class="course-no">PHẦN III</span>
+              <div>
+                <h3>UE bật lên và tìm cell 5G</h3>
+                <p>Power on → synchronization → SSB → PSS → SSS → PBCH → MIB.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN IV</span>
-            <div>
-              <h3>Từ MIB tới system information</h3>
-              <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-4">
+              <span class="course-no">PHẦN IV</span>
+              <div>
+                <h3>Từ MIB tới thông tin hệ thống</h3>
+                <p>CORESET#0 → SearchSpace#0 → PDCCH → PDSCH → SIB1.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN V</span>
-            <div>
-              <h3>UE bắt đầu nói với gNB</h3>
-              <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-5">
+              <span class="course-no">PHẦN V</span>
+              <div>
+                <h3>UE bắt đầu truy nhập mạng</h3>
+                <p>PRACH → RAR → Timing Advance → Msg3 → Msg4 → RRC connection.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN VI</span>
-            <div>
-              <h3>Truyền data khi đã connected</h3>
-              <p>PDCCH, PDSCH, PUSCH, PUCCH, DMRS, equalization, HARQ và MIMO.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-6">
+              <span class="course-no">PHẦN VI</span>
+              <div>
+                <h3>Truyền dữ liệu sau khi kết nối</h3>
+                <p>PDCCH → PDSCH → PUSCH → PUCCH → DMRS → channel estimation → equalization → HARQ → MIMO.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN VII</span>
-            <div>
-              <h3>Receiver thực tế</h3>
-              <p>Timing offset, CFO, sampling offset, phase noise và EVM.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-7">
+              <span class="course-no">PHẦN VII</span>
+              <div>
+                <h3>Receiver trong thực tế</h3>
+                <p>Timing offset → CFO → SFO → phase noise → EVM.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
           <li>
-            <span class="course-no">PHẦN VIII</span>
-            <div>
-              <h3>5G NTN</h3>
-              <p>Delay, Doppler, synchronization, SIB19, Timing Advance, PRACH và satellite mobility.</p>
-            </div>
-            <span class="course-status">Roadmap</span>
+            <a class="learning-map-link" href="/hoc/#phan-8">
+              <span class="course-no">PHẦN VIII</span>
+              <div>
+                <h3>5G NR qua vệ tinh (NTN)</h3>
+                <p>Propagation delay → Doppler → synchronization → Timing Advance → SIB19 → ephemeris → PRACH → mobility.</p>
+              </div>
+              <span class="learning-map-cta">Xem các bài ↓</span>
+            </a>
           </li>
         </ol>
 
-        <a class="text-button" href="/hoc/">Xem toàn bộ lộ trình 66 bài →</a>
+        <a class="text-button" href="/hoc/">Mở bản đồ đầy đủ 66 bài →</a>
       </div>
     </section>
 
     <section class="start-card">
-      <p class="chapter-label">BÀI 01 · SIGNAL FOUNDATIONS</p>
-      <h2>Từ đây tôi muốn zoom vào thứ chạy xuyên suốt gần như toàn bộ sơ đồ phía trên: signal.</h2>
+      <p class="chapter-label">BẮT ĐẦU THEO BẢN ĐỒ</p>
+      <h2>Nếu bạn học từ đầu, hãy mở Phần I rồi chọn bài phù hợp với kiến thức hiện tại.</h2>
       <p>
-        Tôi sẽ bắt đầu bằng giọng nói, một microphone và một câu hỏi rất cơ bản:
-        máy tính thực sự “nhìn thấy” tín hiệu như thế nào?
+        Bản đồ giúp bạn thấy bài nào đứng trước bài nào. Nếu đã biết sampling hoặc Fourier,
+        bạn không cần quay lại từ đầu — chỉ cần nhảy tới đúng mắt xích còn thiếu.
       </p>
-      <a class="text-button" href="/hoc/tin-hieu-la-gi/">Đọc phần Signal là gì? →</a>
+      <a class="text-button" href="/hoc/#phan-1">Mở Phần I · Nền tảng tín hiệu →</a>
     </section>
   </article>
 </BaseLayout>
