@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const sequence = [1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1];
 const RX_LEN = 64;
@@ -47,7 +48,7 @@ export default function CorrelationExplorer() {
     <div className="correlation-lab">
       <div className="correlation-controls">
         <label>
-          <span>Sequence bắt đầu tại <strong>n = {delay}</strong></span>
+          <span>Sequence bắt đầu tại <strong><MathExpr tex={`n=${delay}`} /></strong></span>
           <input type="range" min="4" max="45" step="1" value={delay}
             onChange={(e) => setDelay(Number(e.target.value))} />
         </label>
@@ -67,7 +68,7 @@ export default function CorrelationExplorer() {
 
       <div className="correlation-panels">
         <div>
-          <div className="visual-caption"><span>RECEIVED BUFFER</span><strong>r[n]</strong></div>
+          <div className="visual-caption"><span>RECEIVED BUFFER</span><strong><MathExpr tex="r[n]" /></strong></div>
           <div className="stem-plot correlation-rx-plot" aria-label="Received samples containing a known sequence in noise">
             {rx.map((value, n) => (
               <i
@@ -85,7 +86,7 @@ export default function CorrelationExplorer() {
         </div>
 
         <div>
-          <div className="visual-caption"><span>SLIDING CORRELATION</span><strong>C[ℓ]</strong></div>
+          <div className="visual-caption"><span>SLIDING CORRELATION</span><strong><MathExpr tex="C[\\ell]" /></strong></div>
           <div className="correlation-bars" aria-label="Correlation value for every candidate lag">
             {corr.map((value, lag) => (
               <i
