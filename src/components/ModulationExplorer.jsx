@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const schemes = {
   BPSK: [
@@ -54,9 +55,9 @@ export default function ModulationExplorer() {
       </div>
 
       <div className="modulation-readout">
-        <div><small>BITS / SYMBOL</small><strong>{bitsPerSymbol}</strong><span>log₂(M)</span></div>
+        <div><small>BITS / SYMBOL</small><strong>{bitsPerSymbol}</strong><span><MathExpr tex="\\log_2(M)" /></span></div>
         <div><small>BITS ĐANG CHỌN</small><strong>{active.bits}</strong><span>một mapping Gray minh họa</span></div>
-        <div><small>I + jQ</small><strong>{active.i.toFixed(3)} {active.q >= 0 ? '+' : '-'} j{Math.abs(active.q).toFixed(3)}</strong><span>normalized symbol</span></div>
+        <div><small><MathExpr tex="I+jQ" /></small><strong><MathExpr tex={`${active.i.toFixed(3)}${active.q >= 0 ? '+' : '-'}j${Math.abs(active.q).toFixed(3)}`} /></strong><span>normalized symbol</span></div>
         <div><small>MAG / PHASE</small><strong>{magnitude.toFixed(3)} · {phase.toFixed(1)}°</strong><span>polar view</span></div>
       </div>
 
@@ -66,8 +67,8 @@ export default function ModulationExplorer() {
           <svg viewBox="0 0 380 360" role="img" aria-label={`Constellation ${scheme} với một symbol được chọn`}>
             <line className="mod-axis" x1="35" y1={cy} x2="345" y2={cy} />
             <line className="mod-axis" x1={cx} y1="25" x2={cx} y2="335" />
-            <text className="mod-label" x="330" y={cy - 8}>I</text>
-            <text className="mod-label" x={cx + 8} y="38">Q</text>
+            <SvgMathExpr tex="I" x={330} y={cy - 8} width={24} />
+            <SvgMathExpr tex="Q" x={cx + 8} y={38} width={24} />
             {points.map((point, idx) => {
               const x = cx + point.i * scale;
               const y = cy - point.q * scale;
@@ -96,7 +97,7 @@ export default function ModulationExplorer() {
             <b>→</b>
             <div><small>MAPPER</small><strong>{scheme}</strong></div>
             <b>→</b>
-            <div><small>SYMBOL</small><strong>X[k]</strong></div>
+            <div><small>SYMBOL</small><strong><MathExpr tex="X[k]" /></strong></div>
           </div>
 
           <p>
