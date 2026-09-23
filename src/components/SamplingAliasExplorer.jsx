@@ -90,8 +90,8 @@ export default function SamplingAliasExplorer() {
           </label>
         </div>
         <div className="sampling-presets" aria-label="Ví dụ nhanh">
-          <button type="button" onClick={setSafePreset}><MathExpr tex="3\\,\\mathrm{Hz}" /> @ <MathExpr tex="16\\,\\mathrm{Hz}" /></button>
-          <button type="button" onClick={setAliasPreset}><MathExpr tex="7\\,\\mathrm{Hz}" /> @ <MathExpr tex="10\\,\\mathrm{Hz}" /></button>
+          <button type="button" onClick={setSafePreset}><MathExpr tex={String.raw`3\\,\\mathrm{Hz}`} /> @ <MathExpr tex={String.raw`16\\,\\mathrm{Hz}`} /></button>
+          <button type="button" onClick={setAliasPreset}><MathExpr tex={String.raw`7\\,\\mathrm{Hz}`} /> @ <MathExpr tex={String.raw`10\\,\\mathrm{Hz}`} /></button>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ export default function SamplingAliasExplorer() {
         <div>
           <small>INPUT TONE</small>
           <strong><MathExpr tex={`${frequency.toFixed(1)}\\,\\mathrm{Hz}`} /></strong>
-          <span><MathExpr tex="\\cos(2\\pi f t)" /></span>
+          <span><MathExpr tex={String.raw`\\cos(2\\pi f t)`} /></span>
         </div>
         <div className={isAliasing ? 'warning' : 'ok'}>
           <small>SAU SAMPLING</small>
