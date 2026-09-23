@@ -69,7 +69,7 @@ export default function WirelessChannelExplorer() {
 
       <div className="channel-readout">
         <div><small><MathExpr tex="|h|" /></small><strong>{gain.toFixed(3)}</strong><span>linear voltage gain</span></div>
-        <div><small><MathExpr tex={String.raw`\\angle h`} /></small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span>phase rotation</span></div>
+        <div><small><MathExpr tex={`\\angle h`} /></small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span>phase rotation</span></div>
         <div><small>DELAY</small><strong>{delay}</strong><span>sample shift</span></div>
         <div><small>MODEL</small><strong><MathExpr tex="y=hx" /></strong><span>+ delay, no noise</span></div>
       </div>
