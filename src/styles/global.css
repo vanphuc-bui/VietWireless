@@ -8200,3 +8200,107 @@ main,
 .svg-math .math-inline .katex {
   font-size: 1em;
 }
+
+
+/* --- Final math polish: inline rhythm, flow emphasis, robust math tables --- */
+.lesson p .math-inline,
+.lesson li .math-inline,
+.lesson h1 .math-inline,
+.lesson h2 .math-inline,
+.lesson h3 .math-inline,
+.lesson small .math-inline,
+.lesson strong .math-inline,
+.lesson span .math-inline {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  line-height: inherit;
+}
+
+.lesson p .math-inline .katex,
+.lesson li .math-inline .katex,
+.lesson h1 .math-inline .katex,
+.lesson h2 .math-inline .katex,
+.lesson h3 .math-inline .katex,
+.lesson small .math-inline .katex,
+.lesson strong .math-inline .katex,
+.lesson span .math-inline .katex {
+  font-size: 1em;
+  line-height: inherit;
+}
+
+.iq-operation-flow strong .katex,
+.iq-carrier-flow strong .katex,
+.system-position-flow strong .katex,
+.grid-column-flow strong .katex,
+.measurement-chain strong .katex,
+.receiver-chain strong .katex {
+  font-size: clamp(1.28rem, 1.9vw, 1.55rem);
+}
+
+.iq-operation-flow > div,
+.iq-carrier-flow > div {
+  min-height: 138px;
+}
+
+.math-data-table-wrap {
+  width: 100%;
+  max-width: 900px;
+  overflow-x: auto;
+}
+
+.math-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.math-data-table th,
+.math-data-table td {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.math-data-table th {
+  background: var(--paper-2);
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 700;
+}
+
+.math-data-table td {
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.math-data-table th .math-inline,
+.math-data-table td .math-inline {
+  display: inline;
+  vertical-align: baseline;
+}
+
+.math-data-table th .katex {
+  font-size: 1.04rem;
+}
+
+.math-data-table td .katex {
+  font-size: 1rem;
+}
+
+@media (max-width: 720px) {
+  .iq-operation-flow strong .katex,
+  .iq-carrier-flow strong .katex,
+  .system-position-flow strong .katex,
+  .grid-column-flow strong .katex,
+  .measurement-chain strong .katex,
+  .receiver-chain strong .katex {
+    font-size: 1.18rem;
+  }
+
+  .math-data-table {
+    min-width: 520px;
+  }
+}
