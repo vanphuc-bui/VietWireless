@@ -111,7 +111,7 @@ import MathExpr from '../../components/Math.astro';
         <article>
           <span class="card-label">ADDITIVE NOISE</span>
           <h3>cloud rộng ra</h3>
-          <p>Random I/Q perturbations làm samples rải quanh ideal point.</p>
+          <p>Random <MathExpr tex="I/Q" /> perturbations làm samples rải quanh ideal point.</p>
         </article>
         <article>
           <span class="card-label">COMMON PHASE ERROR</span>
@@ -193,7 +193,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Raw ADC samples và equalized constellation không phải cùng một measurement point.</h2>
 
       <div class="measurement-chain">
-        <div><small>ADC</small><strong>raw I/Q</strong><span>channel + noise + sync error</span></div>
+        <div><small>ADC</small><strong>raw <MathExpr tex="I/Q" /></strong><span>channel + noise + sync error</span></div>
         <b>→ sync / FFT →</b>
         <div><small>SUBCARRIER</small><strong><MathExpr tex="Y[k]" /></strong><span>channel vẫn còn</span></div>
         <b>→ equalize →</b>
