@@ -152,5 +152,33 @@ for (const file of files) {
   }
 }
 
+
+// CSS safety: descendant span selectors can accidentally style KaTeX's internal spans.
+// Content wrappers that may contain MathExpr must target their own direct child spans.
+const cssFile = 'src/styles/global.css';
+const css = readFileSync(cssFile, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+for (const match of css.matchAll(/([^{}]+)\{/g)) {
+  const selectorList = match[1]
+    .split(',')
+    .map((selector) => selector.trim())
+    .filter(Boolean);
+
+  for (const selector of selectorList) {
+    if (!/\bspan\b/.test(selector)) continue;
+    if (/\.math-inline|\.katex|\.svg-math/.test(selector)) continue;
+    if (legacyClasses.some((className) => selector.includes(`.${className}`))) continue;
+
+    const spanTargets = [...selector.matchAll(/\bspan\b/g)];
+    const unsafe = spanTargets.some(({ index }) => {
+      const prefix = selector.slice(0, index).trimEnd();
+      return !prefix.endsWith('>');
+    });
+
+    if (unsafe) {
+      report(cssFile, `unsafe descendant span selector "${selector}". Use a direct-child selector so KaTeX internals are not restyled.`);
+    }
+  }
+}
+
 if (failed) process.exit(1);
 console.log('Math style check passed.');
