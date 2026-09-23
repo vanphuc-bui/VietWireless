@@ -25,7 +25,7 @@ import MathExpr from '../../components/Math.astro';
         Một sinusoid có amplitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />. Số phức cho ta một cách biểu diễn hai đại lượng đó rất gọn,
         còn complex exponential cho ta một hình ảnh đặc biệt hữu ích: một vector quay.
       </p>
-      <div class="system-position">
+      <div class="system-position technical-card concept-flow-card">
         <span>TỪ SINUSOID TỚI MẶT PHẲNG PHỨC</span>
         <div class="system-position-flow" aria-label="Sinusoid được nối sang số phức, complex exponential và phasor">
           <span><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></span><b>→</b>
@@ -49,17 +49,20 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="complex-plane-intro">
-        <article>
+        <article class="technical-card visual-card">
           <span class="card-label">SỐ THỰC</span>
-          <div class="real-number-line" aria-label="Một số thực nằm trên trục một chiều">
+          <div class="visual-card-figure">
+            <div class="real-number-line" aria-label="Một số thực nằm trên trục một chiều">
             <span>-2</span><span>-1</span><b>0</b><span>1</span><span>2</span>
-            <i></i>
+              <i></i>
+            </div>
           </div>
           <p>Một tọa độ trên một trục.</p>
         </article>
 
-        <article>
+        <article class="technical-card visual-card">
           <span class="card-label">SỐ PHỨC</span>
+          <div class="visual-card-figure">
           <svg viewBox="0 0 320 210" role="img" aria-label="Một số phức nằm trên mặt phẳng với trục thực và trục ảo">
             <line class="complex-axis" x1="34" y1="130" x2="292" y2="130" />
             <line class="complex-axis" x1="150" y1="28" x2="150" y2="190" />
@@ -73,6 +76,7 @@ import MathExpr from '../../components/Math.astro';
             <foreignObject x="148" y="61" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="b" /></div></foreignObject>
             <foreignObject x="232" y="50" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="z" /></div></foreignObject>
           </svg>
+          </div>
           <p>Hai tọa độ, nhưng cũng có thể đọc thành magnitude và phase.</p>
         </article>
       </div>
@@ -90,22 +94,22 @@ import MathExpr from '../../components/Math.astro';
       <h2>Cartesian tiện để nhìn thành phần. Polar tiện để nhìn magnitude và phase.</h2>
 
       <div class="complex-two-views">
-        <article>
+        <article class="technical-card formula-card">
           <span class="card-label">CARTESIAN</span>
-          <h3><MathExpr tex="z=a+jb" /></h3>
+          <div class="formula-card-main"><MathExpr tex="z=a+jb" /></div>
           <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
-          <div class="math-pair">
-            <MathExpr tex={String.raw`\operatorname{Re}\{z\} = a`} display class="math-compact" />
-            <MathExpr tex={String.raw`\operatorname{Im}\{z\} = b`} display class="math-compact" />
+          <div class="formula-card-details math-pair">
+            <MathExpr tex={String.raw`\operatorname{Re}\{z\}=a`} display class="math-compact" />
+            <MathExpr tex={String.raw`\operatorname{Im}\{z\}=b`} display class="math-compact" />
           </div>
         </article>
-        <article>
+        <article class="technical-card formula-card">
           <span class="card-label">POLAR</span>
-          <h3><MathExpr tex={String.raw`z=A\angle\phi`} /></h3>
+          <div class="formula-card-main"><MathExpr tex={String.raw`z=A\angle\phi`} /></div>
           <p>Ta hỏi: vector dài bao nhiêu và tạo góc bao nhiêu so với trục thực?</p>
-          <div class="math-pair">
-            <MathExpr tex={String.raw`A = \sqrt{a^2+b^2}`} display class="math-compact" />
-            <MathExpr tex={String.raw`\phi = \operatorname{atan2}(b,a)`} display class="math-compact" />
+          <div class="formula-card-details math-pair">
+            <MathExpr tex={String.raw`A=\sqrt{a^2+b^2}`} display class="math-compact" />
+            <MathExpr tex={String.raw`\phi=\operatorname{atan2}(b,a)`} display class="math-compact" />
           </div>
         </article>
       </div>
@@ -133,7 +137,7 @@ import MathExpr from '../../components/Math.astro';
         còn phần ảo bằng <MathExpr tex={String.raw`A\sin\theta`} />.
       </p>
 
-      <div class="euler-geometry">
+      <div class="euler-geometry technical-card visual-card visual-card-wide">
         <svg viewBox="0 0 700 310" role="img" aria-label="Vector phức với projection cosine và sine">
           <line class="complex-axis" x1="70" y1="220" x2="620" y2="220" />
           <line class="complex-axis" x1="270" y1="45" x2="270" y2="275" />
@@ -165,13 +169,13 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="projection-story">
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>VECTOR PHỨC</small>
           <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
           <span>quay trên mặt phẳng</span>
         </div>
         <b>→ lấy phần thực →</b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>PROJECTION</small>
           <strong><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></strong>
           <span>sinusoid trên trục thực</span>
@@ -205,17 +209,17 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="phasor-definition">
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
           <strong><MathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} /></strong>
         </div>
         <b><MathExpr tex="=" /></b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>PHASOR</small>
           <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
         <b><MathExpr tex={String.raw`\times`} /></b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>COMMON ROTATION</small>
           <strong><MathExpr tex={String.raw`e^{j\omega t}`} /></strong>
         </div>
@@ -242,17 +246,17 @@ import MathExpr from '../../components/Math.astro';
       <h2>Nhân hai số phức tương ứng với nhân magnitude và cộng phase.</h2>
 
       <div class="complex-multiply">
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>SIGNAL</small>
           <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
         <b><MathExpr tex={String.raw`\times`} /></b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>HỆ SỐ</small>
           <strong><MathExpr tex={String.raw`Ge^{j\theta}`} /></strong>
         </div>
         <b><MathExpr tex="=" /></b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>KẾT QUẢ</small>
           <strong><MathExpr tex={String.raw`AGe^{j(\phi+\theta)}`} /></strong>
         </div>
@@ -270,19 +274,19 @@ import MathExpr from '../../components/Math.astro';
       <h2>Ở bài tiếp theo, hai tọa độ trên mặt phẳng phức sẽ có tên cụ thể: <MathExpr tex="I" /> và <MathExpr tex="Q" />.</h2>
 
       <div class="iq-preview">
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>PHẦN THỰC</small>
           <strong><MathExpr tex="a" /></strong>
           <span>sẽ trở thành <MathExpr tex="I" /></span>
         </div>
         <b><MathExpr tex="+" /></b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>PHẦN ẢO</small>
           <strong><MathExpr tex="jb" /></strong>
           <span><MathExpr tex="b" /> sẽ trở thành <MathExpr tex="Q" /></span>
         </div>
         <b>→</b>
-        <div>
+        <div class="technical-card formula-card formula-card-compact">
           <small>COMPLEX BASEBAND</small>
           <strong><MathExpr tex="I+jQ" /></strong>
           <span>magnitude + phase trong một sample</span>
