@@ -22,7 +22,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block">
       <p class="concept-kicker">BẮT ĐẦU TỪ CÂU HỎI ĐƠN GIẢN</p>
       <p class="map-intro">
-        Nếu transmitter phát x(t), receiver có nhận đúng x(t) chỉ nhỏ hơn một chút không?
+        Nếu transmitter phát <MathExpr tex="x(t)" />, receiver có nhận đúng <MathExpr tex="x(t)" /> chỉ nhỏ hơn một chút không?
         Trong một số trường hợp hẹp băng và một path trội, gần đúng đó khá hữu ích.
         Nhưng wireless thực tế thường phức tạp hơn vì signal có thể đi qua nhiều đường và môi trường thay đổi theo vị trí.
       </p>
@@ -30,13 +30,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="system-position">
         <span>TX → CHANNEL → RX</span>
         <div class="system-position-flow">
-          <span>x(t)</span><b>→</b>
+          <span><MathExpr tex="x(t)" /></span><b>→</b>
           <strong>wireless propagation</strong><b>→</b>
           <span>attenuation</span><b>+</b>
           <span>delay</span><b>+</b>
           <span>phase</span><b>+</b>
           <span>multipath</span><b>→</b>
-          <span>y(t)</span>
+          <span><MathExpr tex="y(t)" /></span>
         </div>
         <p>
           Bài này xây từ single-path model trước. Bài 12 mới mở rộng thành nhiều delayed paths để thấy delay spread và frequency selectivity xuất hiện ra sao.
@@ -53,14 +53,14 @@ import MathExpr from '../../components/Math.astro';
       <p>
         <MathExpr tex={String.raw`\tau`} /> nói signal tới muộn bao nhiêu.
         <MathExpr tex="h" /> là một complex number, thường viết <MathExpr tex={String.raw`h = Ge^{j\theta}`} />, mô tả amplitude scaling <MathExpr tex="G" /> và phase rotation <MathExpr tex={String.raw`\theta`} />.
-        n(t) đại diện cho noise, sẽ được tách riêng ở Bài 11.
+        <MathExpr tex="n(t)" /> đại diện cho noise, sẽ được tách riêng ở Bài 11.
       </p>
 
       <div class="channel-parameter-grid">
         <article>
-          <span class="card-label">G</span>
+          <span class="card-label"><MathExpr tex="G" /></span>
           <h3>Amplitude gain</h3>
-          <p>Nếu G &lt; 1, signal bị attenuate. Power scaling tương ứng là G² nếu G là voltage/amplitude ratio.</p>
+          <p>Nếu <MathExpr tex="G<1" />, signal bị attenuate. Power scaling tương ứng là <MathExpr tex="G^2" /> nếu <MathExpr tex="G" /> là voltage/amplitude ratio.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\theta`} /></span>
@@ -125,11 +125,11 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="phase-distance-story">
-        <div><small>DISTANCE</small><strong>d</strong><span>path length</span></div>
+        <div><small>DISTANCE</small><strong><MathExpr tex="d" /></strong><span>path length</span></div>
         <b>→</b>
         <div><small>DELAY</small><strong><MathExpr tex={String.raw`\tau=d/c`} /></strong><span>arrival time</span></div>
         <b>→</b>
-        <div><small>PHASE AT f</small><strong><MathExpr tex={String.raw`-2\pi f\tau`} /></strong><span>frequency dependent</span></div>
+        <div><small>PHASE AT <MathExpr tex="f" /></small><strong><MathExpr tex={String.raw`-2\pi f\tau`} /></strong><span>frequency dependent</span></div>
       </div>
     </section>
 
@@ -175,29 +175,29 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="flat-selective">
-      <p class="concept-kicker">06 · KHI NÀO MỘT COMPLEX NUMBER h LÀ ĐỦ?</p>
+      <p class="concept-kicker">06 · KHI NÀO MỘT COMPLEX NUMBER <MathExpr tex="h" /> LÀ ĐỦ?</p>
       <h2>Nếu channel gần như không đổi trong signal bandwidth, ta gọi gần đúng đó là flat fading.</h2>
 
       <p>
-        Khi bandwidth của signal nhỏ so với scale frequency mà channel thay đổi, mọi frequency component trong wanted band nhìn gần như cùng h.
-        Khi bandwidth rộng hơn, các frequency components có thể thấy gain/phase khác nhau, và ta phải viết H(f) thay vì một scalar h.
+        Khi bandwidth của signal nhỏ so với scale frequency mà channel thay đổi, mọi frequency component trong wanted band nhìn gần như cùng <MathExpr tex="h" />.
+        Khi bandwidth rộng hơn, các frequency components có thể thấy gain/phase khác nhau, và ta phải viết <MathExpr tex="H(f)" /> thay vì một scalar <MathExpr tex="h" />.
       </p>
 
       <div class="channel-model-compare">
         <article>
           <span class="card-label">FLAT</span>
-          <h3>Y(f) ≈ hX(f)</h3>
+          <h3><MathExpr tex={String.raw`Y(f)\approx hX(f)`} /></h3>
           <p>Một complex coefficient có thể đại diện cho cả band ở thời điểm đang xét.</p>
         </article>
         <article>
           <span class="card-label">FREQUENCY SELECTIVE</span>
-          <h3>Y(f) = H(f)X(f)</h3>
+          <h3><MathExpr tex="Y(f)=H(f)X(f)" /></h3>
           <p>Channel response thay đổi đáng kể trong wanted bandwidth.</p>
         </article>
       </div>
 
       <p>
-        Multipath delay spread là một nguyên nhân cốt lõi tạo H(f) gợn theo frequency.
+        Multipath delay spread là một nguyên nhân cốt lõi tạo <MathExpr tex="H(f)" /> gợn theo frequency.
         Đây là lý do Bài 12 cần đi từ “một path” tới một channel có nhiều taps.
       </p>
     </section>
@@ -213,13 +213,13 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <div class="fading-story">
-        <div><small>TRANSMITTED</small><strong>X</strong><span>known/reference symbol</span></div>
+        <div><small>TRANSMITTED</small><strong><MathExpr tex="X" /></strong><span>known/reference symbol</span></div>
         <b>→ channel →</b>
-        <div><small>RECEIVED</small><strong>Y</strong><span>scale + rotate + noise</span></div>
+        <div><small>RECEIVED</small><strong><MathExpr tex="Y" /></strong><span>scale + rotate + noise</span></div>
       </div>
 
       <p>
-        Nếu X đã biết, ratio Y/X là trực giác đơn giản nhất cho một complex channel estimate trong flat, noise-free case.
+        Nếu <MathExpr tex="X" /> đã biết, ratio <MathExpr tex="Y/X" /> là trực giác đơn giản nhất cho một complex channel estimate trong flat, noise-free case.
         Bài 47 sau này sẽ mở rộng chính ý tưởng này thành channel estimation thực tế.
       </p>
     </section>
@@ -231,7 +231,7 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>Single-path model:</strong> delay <MathExpr tex={String.raw`\tau`} /> và complex gain <MathExpr tex="h" /> là điểm bắt đầu hữu ích.</li>
         <li><strong>Path loss:</strong> mô tả xu hướng attenuation lớn theo distance/environment.</li>
         <li><strong>Delay:</strong> xuất phát từ propagation time hữu hạn.</li>
-        <li><strong>Phase:</strong> một delay nhìn ở frequency f trở thành phase shift <MathExpr tex={String.raw`-2\pi f\tau`} />.</li>
+        <li><strong>Phase:</strong> một delay nhìn ở frequency <MathExpr tex="f" /> trở thành phase shift <MathExpr tex={String.raw`-2\pi f\tau`} />.</li>
         <li><strong>Shadowing:</strong> variation do blockage và vật cản lớn.</li>
         <li><strong>Small-scale fading:</strong> multipath phases thay đổi khi geometry thay đổi.</li>
         <li><strong>Flat vs selective:</strong> phụ thuộc relation giữa channel variation theo frequency và signal bandwidth.</li>
