@@ -145,7 +145,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
       <p>
         Sampling rate là số lần đo trong một giây: <MathExpr tex="f_s = 1/T_s" />.
-        Nếu <MathExpr tex="f_s" /> = 48 kHz, khoảng cách giữa hai sample là khoảng 20,83 µs.
+        Nếu <MathExpr tex="f_s=48\,\mathrm{kHz}" />, khoảng cách giữa hai sample là khoảng <MathExpr tex="20.83\,\mu\mathrm{s}" />.
       </p>
     </section>
 
@@ -173,9 +173,9 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           </g>
         </svg>
         <div class="alias-story-legend">
-          <span><i class="legend-fast"></i> waveform nhanh 7 Hz</span>
-          <span><i class="legend-slow"></i> waveform chậm 3 Hz</span>
-          <span><i class="legend-dot"></i> samples ở 10 Hz</span>
+          <span><i class="legend-fast"></i> waveform nhanh <MathExpr tex="7\,\mathrm{Hz}" /></span>
+          <span><i class="legend-slow"></i> waveform chậm <MathExpr tex="3\,\mathrm{Hz}" /></span>
+          <span><i class="legend-dot"></i> samples ở <MathExpr tex="10\,\mathrm{Hz}" /></span>
         </div>
       </div>
 
@@ -350,7 +350,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
       <p>
         Trong bài này, điều kiện Nyquist được minh họa bằng signal real, low-pass để giữ trực giác đơn giản.
-        Khi tới complex baseband và I/Q, cách nói về positive/negative frequency và bandwidth cần chính xác hơn.
+        Khi tới complex baseband và <MathExpr tex="I/Q" />, cách nói về positive/negative frequency và bandwidth cần chính xác hơn.
         Ta sẽ quay lại điểm này sau khi đã có phasor và số phức.
       </p>
     </section>
@@ -372,7 +372,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <a class="lesson-nav-card previous" href="/hoc/tin-hieu-la-gi/">
         <span>← BÀI TRƯỚC</span>
         <strong>Signal là gì?</strong>
-        <small>Từ thế giới thật tới samples, FFT và I/Q.</small>
+        <small>Từ thế giới thật tới samples, FFT và <MathExpr tex="I/Q" />.</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/amplitude-frequency-phase/">
         <span>BÀI TIẾP THEO →</span>
