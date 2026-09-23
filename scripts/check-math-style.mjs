@@ -455,8 +455,8 @@ for (const [regex, message] of typographyChecks) {
 
 // The lesson type scale is intentionally tiny: metadata, body, section title and page title.
 // New pages/components must not create their own typographic hierarchy.
-if (!css.includes('/* --- Technical-document typography scale: deliberately small number of sizes --- */')) {
-  report(cssFile, 'missing technical-document type scale block.');
+if (!/\.lesson\s*\{[\s\S]*?--lesson-math-card-label-size:\s*var\(--lesson-meta-size\)/u.test(css)) {
+  report(cssFile, 'missing centralized technical-document lesson type scale.');
 }
 
 const mathRendererFiles = [
