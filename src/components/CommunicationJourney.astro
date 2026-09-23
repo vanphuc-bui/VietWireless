@@ -229,7 +229,7 @@ const { compact = false } = Astro.props;
                 </svg>
               </div>
               <strong><MathExpr tex="y[n]" /></strong>
-              <span>Received time-domain complex I/Q samples.</span>
+              <span>Received time-domain complex <MathExpr tex="I/Q" /> samples.</span>
             </div>
 
             <div class="transform-block">
@@ -279,7 +279,7 @@ const { compact = false } = Astro.props;
         <strong>Một chỗ tôi từng hay nhầm</strong>
         <p>
           Trước IFFT, <strong><MathExpr tex="X[k]" /></strong> là các <em>complex modulation symbols ở frequency domain</em>.
-          Sau IFFT, <strong><MathExpr tex="x[n]" /></strong> mới là <em>time-domain complex I/Q samples</em>.
+          Sau IFFT, <strong><MathExpr tex="x[n]" /></strong> mới là <em>time-domain complex <MathExpr tex="I/Q" /> samples</em>.
           Theo kinh nghiệm của tôi, đây là một trong những chỗ giúp OFDM bớt “mơ hồ” hẳn.
         </p>
       </aside>
