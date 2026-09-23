@@ -168,17 +168,17 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="x[n] = x(nT_s)" display />
       <p class="math-caption">Sample thứ n chính là giá trị của waveform tại thời điểm <MathExpr tex="nT_s" />.</p>
 
-      <div class="two-column sampling-summary">
-        <div class="explain-card">
+      <div class="math-card-grid sampling-summary">
+        <article class="math-card">
           <span class="card-label">Continuous-time</span>
-          <h3><MathExpr tex="x(t)" /></h3>
+          <div class="math-card-formula"><MathExpr tex="x(t)" /></div>
           <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm <MathExpr tex="t" />.</p>
-        </div>
-        <div class="explain-card">
+        </article>
+        <article class="math-card">
           <span class="card-label">Discrete-time</span>
-          <h3><MathExpr tex="x[n]" /></h3>
+          <div class="math-card-formula"><MathExpr tex="x[n]" /></div>
           <p>Ta chỉ giữ giá trị tại các sample index <MathExpr tex={String.raw`n=0,1,2,\ldots`} /></p>
-        </div>
+        </article>
       </div>
 
       <p>
@@ -202,18 +202,18 @@ import MathExpr from '../../components/Math.astro';
         ta hỏi <strong>những thành phần tần số nào đang tạo nên tín hiệu, với biên độ và pha bao nhiêu?</strong>
       </p>
 
-      <div class="perspective">
-        <div>
-          <small>MIỀN THỜI GIAN</small>
-          <strong><MathExpr tex="x(t)" /></strong>
-          <span>“Tín hiệu thay đổi như thế nào theo thời gian?”</span>
-        </div>
-        <div class="perspective-equals">=</div>
-        <div>
-          <small>MIỀN TẦN SỐ</small>
-          <strong><MathExpr tex="X(f)" /></strong>
-          <span>“Tín hiệu gồm những thành phần tần số nào?”</span>
-        </div>
+      <div class="math-equivalence-grid">
+        <article class="math-card">
+          <span class="card-label">MIỀN THỜI GIAN</span>
+          <div class="math-card-formula"><MathExpr tex="x(t)" /></div>
+          <p>“Tín hiệu thay đổi như thế nào theo thời gian?”</p>
+        </article>
+        <div class="math-equivalence-mark" aria-hidden="true">=</div>
+        <article class="math-card">
+          <span class="card-label">MIỀN TẦN SỐ</span>
+          <div class="math-card-formula"><MathExpr tex="X(f)" /></div>
+          <p>“Tín hiệu gồm những thành phần tần số nào?”</p>
+        </article>
       </div>
 
       <aside class="mental-model">
