@@ -87,16 +87,24 @@ for (const file of files) {
     .filter(Boolean);
   const visibleSource = visibleNodes.join(' ');
 
-  if (/\bN(?:\s+(?:useful\s+)?)?samples?\b|\bN-(?:point|sample)\b/u.test(visibleSource)) {
-    report(file, 'bare N-based sample/FFT notation found. Render N with MathExpr.');
+  const decodedNodes = visibleNodes.map((node) =>
+    node.replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim()
+  );
+  const firstNodeMatch = (regex) => decodedNodes.find((node) => regex.test(node));
+
+  const nBasedMatch = firstNodeMatch(/\bN(?:\s+(?:useful\s+)?)?samples?\b|\bN-(?:point|sample)\b/u);
+  if (nBasedMatch) {
+    report(file, `bare N-based sample/FFT notation found in "${nBasedMatch}". Render N with MathExpr.`);
   }
 
-  if (/\b(?:subcarrier|bin|frequency|sample(?:\s+index)?|time(?:\s+index)?|delay|phase|amplitude|gain)\s+(?:A|G|I|Q|N|f|k|l|m|n|t)\b/u.test(visibleSource)) {
-    report(file, 'bare named mathematical variable found after a technical label. Use MathExpr.');
+  const namedVariableMatch = firstNodeMatch(/\b(?:subcarrier|bin|frequency|sample(?:\s+index)?|time(?:\s+index)?|delay|phase|amplitude|gain)\s+(?:A|G|I|Q|N|f|k|l|m|n|t)\b/u);
+  if (namedVariableMatch) {
+    report(file, `bare named mathematical variable found in "${namedVariableMatch}". Use MathExpr.`);
   }
 
-  if (/\b[IQ]\s*·\s*(?:cos|sin)\b/u.test(visibleSource)) {
-    report(file, 'plain-text I/Q trigonometric product found. Use MathExpr.');
+  const trigProductMatch = firstNodeMatch(/\b[IQ]\s*·\s*(?:cos|sin)\b/u);
+  if (trigProductMatch) {
+    report(file, `plain-text I/Q trigonometric product found in "${trigProductMatch}". Use MathExpr.`);
   }
 
   if (/(?:^|[^A-Za-z0-9_])(?:x|X|Y|H|h|y|C|r|s)\[[^\]<>]+\]/u.test(visibleSource)) {
