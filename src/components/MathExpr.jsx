@@ -9,7 +9,7 @@ export default function MathExpr({ tex, display = false, className = '' }) {
     throwOnError: true,
     strict: 'warn',
     trust: false,
-    output: 'htmlAndMathml',
+    output: 'mathml',
   });
 
   if (display) {
