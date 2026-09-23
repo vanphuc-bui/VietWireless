@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const rows = [
   { mu: 0, scs: 15, slots: 1 },
@@ -24,21 +25,21 @@ export default function NumerologyExplorer() {
     <div className="numerology-lab">
       <div className="numerology-controls">
         <label>
-          <span>Numerology <strong>μ = {mu}</strong></span>
+          <span>Numerology <strong><MathExpr tex={`\\mu=${mu}`} /></strong></span>
           <input type="range" min="0" max="6" step="1" value={mu}
             onChange={(e) => setMu(Number(e.target.value))} />
         </label>
       </div>
 
       <div className="numerology-readout">
-        <div><small>SCS</small><strong>{row.scs} kHz</strong><span>15·2^μ</span></div>
-        <div><small>USEFUL Tᵤ</small><strong>{usefulUs.toFixed(3)} µs</strong><span>1/Δf, excludes CP</span></div>
-        <div><small>SLOTS / 1 ms</small><strong>{row.slots}</strong><span>normal CP</span></div>
-        <div><small>SLOT DURATION</small><strong>{slotMs.toFixed(5)} ms</strong><span>1 ms / 2^μ</span></div>
+        <div><small>SCS</small><strong><MathExpr tex={`${row.scs}\\,\\mathrm{kHz}`} /></strong><span><MathExpr tex="15\\cdot2^{\\mu}" /></span></div>
+        <div><small>USEFUL <MathExpr tex="T_u" /></small><strong><MathExpr tex={`${usefulUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></strong><span><MathExpr tex="1/\\Delta f" />, excludes CP</span></div>
+        <div><small>SLOTS / <MathExpr tex="1\\,\\mathrm{ms}" /></small><strong>{row.slots}</strong><span>normal CP</span></div>
+        <div><small>SLOT DURATION</small><strong><MathExpr tex={`${slotMs.toFixed(5)}\\,\\mathrm{ms}`} /></strong><span><MathExpr tex="1\\,\\mathrm{ms}/2^{\\mu}" /></span></div>
       </div>
 
       <div className="numerology-subframe">
-        <div className="visual-caption"><span>ONE 1 ms SUBFRAME</span><strong>{row.slots} slot{row.slots > 1 ? 's' : ''}</strong></div>
+        <div className="visual-caption"><span>ONE <MathExpr tex="1\\,\\mathrm{ms}" /> SUBFRAME</span><strong>{row.slots} slot{row.slots > 1 ? 's' : ''}</strong></div>
         <div className={`numerology-slot-strip ${row.slots > 16 ? 'dense' : ''}`}>
           {displaySlots.map((slot) => (
             <i key={slot}><small>{row.slots <= 16 ? slot : ''}</small></i>
@@ -50,8 +51,8 @@ export default function NumerologyExplorer() {
       <div className="numerology-symbol-story">
         <div>
           <small>USEFUL PART</small>
-          <strong>Tᵤ = 1/Δf</strong>
-          <span>{usefulUs.toFixed(3)} µs</span>
+          <strong><MathExpr tex="T_u=1/\\Delta f" /></strong>
+          <span><MathExpr tex={`${usefulUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></span>
         </div>
         <b>+</b>
         <div>
@@ -63,7 +64,7 @@ export default function NumerologyExplorer() {
         <div>
           <small>NORMAL-CP SLOT</small>
           <strong>14 OFDM symbols</strong>
-          <span>average symbol interval ≈ {averageSymbolUs.toFixed(3)} µs</span>
+          <span>average symbol interval <MathExpr tex={`\\approx${averageSymbolUs.toFixed(3)}\\,\\mu\\mathrm{s}`} /></span>
         </div>
       </div>
     </div>
