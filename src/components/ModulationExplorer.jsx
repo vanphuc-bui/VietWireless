@@ -55,7 +55,7 @@ export default function ModulationExplorer() {
       </div>
 
       <div className="modulation-readout">
-        <div><small>BITS / SYMBOL</small><strong>{bitsPerSymbol}</strong><span><MathExpr tex="\\log_2(M)" /></span></div>
+        <div><small>BITS / SYMBOL</small><strong>{bitsPerSymbol}</strong><span><MathExpr tex={String.raw`\\log_2(M)`} /></span></div>
         <div><small>BITS ĐANG CHỌN</small><strong>{active.bits}</strong><span>một mapping Gray minh họa</span></div>
         <div><small><MathExpr tex="I+jQ" /></small><strong><MathExpr tex={`${active.i.toFixed(3)}${active.q >= 0 ? '+' : '-'}j${Math.abs(active.q).toFixed(3)}`} /></strong><span>normalized symbol</span></div>
         <div><small>MAG / PHASE</small><strong>{magnitude.toFixed(3)} · {phase.toFixed(1)}°</strong><span>polar view</span></div>
