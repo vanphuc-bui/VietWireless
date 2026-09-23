@@ -147,8 +147,10 @@ Nguồn chuẩn chi tiết: `docs/MATH_STYLE_GUIDE.md`.
 - Mọi biến/ký hiệu toán trong prose phải dùng `MathExpr`, kể cả một ký hiệu đơn như `N`, `I`, `Q`, `\\mu`, `\\Delta f` khi chúng mang nghĩa toán học.
 - Viết `<MathExpr tex="N" /> samples`, không viết `N samples`.
 - Display equation mặc định không có box, border hay background.
-- Các card công thức ngang hàng phải dùng cùng shared card system và cùng visual scale. Không được có hàng trên nhỏ, hàng dưới lớn chỉ vì dùng class khác nhau.
-- Khi review một bài, kiểm tra consistency của notation, không chỉ correctness của công thức.
+- Tất cả card có cấu trúc label + formula + prose phải dùng shared `.math-card` system và các `--lesson-math-card-*` tokens; không tạo kích thước card riêng theo từng page.
+- Các card công thức ngang hàng phải có cùng min-height, padding, label size, formula size, body size và spacing. Box so sánh hai representation cũng dùng cùng system.
+- Visual card có SVG/plot được phép cao hơn vì nội dung, nhưng padding/label/body scale phải theo shared tokens.
+- Khi review một bài, kiểm tra consistency của notation **và** visual scale của math cards, không chỉ correctness của công thức.
 
 
 ### Math notation áp dụng cho toàn bộ UI

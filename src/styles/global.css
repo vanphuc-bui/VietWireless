@@ -8315,3 +8315,107 @@ main,
     min-width: 520px;
   }
 }
+
+
+/* --- Unified math-card scale: one visual system across lesson cards --- */
+:root {
+  --lesson-math-card-min-height: 190px;
+  --lesson-math-card-padding: 22px;
+  --lesson-math-card-gap: 14px;
+  --lesson-math-card-label-size: .7rem;
+  --lesson-math-card-formula-min-height: 58px;
+  --lesson-math-card-formula-size: clamp(1.22rem, 1.9vw, 1.48rem);
+  --lesson-math-card-body-size: .9rem;
+  --lesson-math-card-label-gap: 18px;
+  --lesson-math-card-formula-gap: 14px;
+}
+
+.math-card-grid,
+.math-grid-2,
+.math-equivalence-grid {
+  gap: var(--lesson-math-card-gap);
+  align-items: stretch;
+}
+
+.math-card {
+  min-height: var(--lesson-math-card-min-height);
+  padding: var(--lesson-math-card-padding);
+}
+
+.math-card .card-label {
+  min-height: 1.1rem;
+  margin-bottom: var(--lesson-math-card-label-gap);
+  font-size: var(--lesson-math-card-label-size);
+  line-height: 1.2;
+}
+
+.math-card .math-card-formula {
+  min-height: var(--lesson-math-card-formula-min-height);
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--lesson-math-card-formula-gap);
+}
+
+.math-card .math-card-formula .katex {
+  font-size: var(--lesson-math-card-formula-size);
+}
+
+.math-card > p {
+  font-size: var(--lesson-math-card-body-size);
+  line-height: 1.6;
+}
+
+.math-equivalence-grid {
+  margin: 32px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.math-equivalence-mark {
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  color: #aaa39b;
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+}
+
+/* Visual explanation cards use the same shell rhythm, while their diagrams may need more height. */
+.sampling-stage,
+.resource-grid-panel,
+.re-zoom-panel,
+.ofdm-column-step {
+  padding: var(--lesson-math-card-padding);
+}
+
+.sampling-stage-label,
+.visual-caption > span,
+.zoom-label,
+.ofdm-column-step small {
+  font-size: var(--lesson-math-card-label-size);
+}
+
+.sampling-stage > p,
+.ofdm-column-step > span {
+  font-size: var(--lesson-math-card-body-size);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --lesson-math-card-min-height: 0px;
+    --lesson-math-card-padding: 19px;
+    --lesson-math-card-formula-min-height: 50px;
+    --lesson-math-card-formula-size: 1.18rem;
+    --lesson-math-card-label-gap: 14px;
+    --lesson-math-card-formula-gap: 11px;
+  }
+
+  .math-equivalence-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .math-equivalence-mark {
+    min-height: 20px;
+  }
+}
