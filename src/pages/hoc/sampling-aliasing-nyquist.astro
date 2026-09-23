@@ -71,7 +71,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <p class="concept-kicker">01 · LẤY MẪU THEO THỜI GIAN</p>
       <h2>Sampling không biến amplitude thành các mức rời rạc. Nó chọn những thời điểm để đo waveform.</h2>
       <p>
-        Giả sử một điện áp analog x(t) tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
+        Giả sử một điện áp analog <MathExpr tex="x(t)" /> tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
         <MathExpr tex={String.raw`0,\,T_s,\,2T_s,\,3T_s,\ldots`} /> Khi đó:
       </p>
 
@@ -86,7 +86,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
             <path class="analog-wave" d="M20 82 C44 22 69 24 92 78 S138 126 163 65 S210 18 232 79 S275 125 302 56" />
             <text class="sample-svg-label" x="278" y="68">thời gian</text>
           </svg>
-          <strong>x(t)</strong>
+          <strong><MathExpr tex="x(t)" /></strong>
           <p>Giá trị tồn tại ở mọi thời điểm.</p>
         </article>
 
