@@ -74,7 +74,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <div class="journey-arrow">→</div>
         <div class="journey-node">
-          <span class="journey-icon">I + jQ</span>
+          <span class="journey-icon"><MathExpr tex="I + jQ" /></span>
           <small>BASEBAND</small>
           <strong><MathExpr tex="I/Q" /></strong>
           <p>Mã hóa amplitude và phase.</p>
@@ -112,8 +112,8 @@ import MathExpr from '../../components/Math.astro';
             <line class="sample-axis" x1="18" y1="75" x2="304" y2="75" />
             <line class="sample-axis" x1="28" y1="16" x2="28" y2="134" />
             <path class="analog-wave" d="M28 75 C48 28 68 28 88 75 S128 122 148 75 S188 28 208 75 S248 122 268 75 S292 42 304 61" />
-            <text class="sample-svg-label" x="286" y="69">t</text>
-            <text class="sample-svg-label" x="34" y="24">x(t)</text>
+            <foreignObject x="274" y="55" width="36" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="t" /></div></foreignObject>
+            <foreignObject x="28" y="10" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="x(t)" /></div></foreignObject>
           </svg>
           <strong>Waveform liên tục</strong>
           <p>Điện áp tồn tại ở mọi thời điểm <MathExpr tex="t" />.</p>
@@ -135,7 +135,7 @@ import MathExpr from '../../components/Math.astro';
               <line x1="228" y1="75" x2="228" y2="110" /><circle cx="228" cy="110" r="4" />
               <line x1="268" y1="75" x2="268" y2="75" /><circle cx="268" cy="75" r="4" />
             </g>
-            <text class="sample-svg-label" x="54" y="137">Tₛ</text>
+            <foreignObject x="46" y="122" width="50" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="T_s" /></div></foreignObject>
             <path class="sample-bracket" d="M28 126 L28 132 L68 132 L68 126" />
           </svg>
           <strong>Đo tại từng thời điểm</strong>
@@ -157,8 +157,8 @@ import MathExpr from '../../components/Math.astro';
               <line x1="228" y1="75" x2="228" y2="110" /><circle cx="228" cy="110" r="4" />
               <line x1="268" y1="75" x2="268" y2="75" /><circle cx="268" cy="75" r="4" />
             </g>
-            <text class="sample-svg-label" x="286" y="69">n</text>
-            <text class="sample-svg-label" x="34" y="24">x[n]</text>
+            <foreignObject x="274" y="55" width="36" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="n" /></div></foreignObject>
+            <foreignObject x="28" y="10" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="x[n]" /></div></foreignObject>
           </svg>
           <strong>Một dãy số</strong>
           <p><MathExpr tex={String.raw`x[0],\,x[1],\,x[2],\ldots`} /> là thứ phần mềm DSP thực sự xử lý.</p>
@@ -171,7 +171,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="two-column sampling-summary">
         <div class="explain-card">
           <span class="card-label">Continuous-time</span>
-          <h3>x(t)</h3>
+          <h3><MathExpr tex="x(t)" /></h3>
           <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm <MathExpr tex="t" />.</p>
         </div>
         <div class="explain-card">
@@ -263,14 +263,14 @@ import MathExpr from '../../components/Math.astro';
               <span class="qpsk-axis horizontal"></span>
               <span class="qpsk-axis vertical"></span>
               <i class="q1 selected-point"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
-              <b>I</b><em>Q</em>
+              <b><MathExpr tex="I" /></b><em><MathExpr tex="Q" /></em>
             </div>
           </div>
           <span class="zoom-arrow" aria-hidden="true">→</span>
           <div class="zoom-step symbol-step">
             <small>complex modulation symbol</small>
             <strong><MathExpr tex="X[k,m]" /></strong>
-            <span>I + jQ</span>
+            <span><MathExpr tex="I + jQ" /></span>
           </div>
         </div>
         <p>
@@ -342,7 +342,7 @@ import MathExpr from '../../components/Math.astro';
 
             <div class="resource-grid-main">
               <div class="grid-symbol-labels" aria-hidden="true">
-                <span>m=0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+                <span><MathExpr tex="m=0" /></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
               </div>
 
               <div class="resource-grid-cells" role="img" aria-label="Resource grid đơn giản với 12 subcarriers và 7 OFDM symbols. Một resource element được chọn">
