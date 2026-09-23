@@ -8086,3 +8086,101 @@ main,
     font-size: 1.18rem;
   }
 }
+
+
+/* --- Math polish: natural inline baseline, readable flow formulas, real data tables --- */
+.math-inline {
+  display: inline-block;
+  max-width: 100%;
+  margin-inline: .015em;
+  vertical-align: -0.04em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.math-inline .katex {
+  font-size: 1.04em;
+  line-height: 1;
+}
+
+.iq-operation-flow strong .math-inline .katex,
+.iq-carrier-flow strong .math-inline .katex,
+.frame-structure-flow strong .math-inline .katex,
+.numerology-symbol-story strong .math-inline .katex {
+  font-size: 1.28rem;
+}
+
+.iq-operation-flow > b {
+  font-size: 1.05rem;
+}
+
+.math-data-table-wrap {
+  max-width: 760px;
+  margin: 28px 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.math-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.math-data-table th,
+.math-data-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.math-data-table th {
+  color: var(--muted);
+  background: var(--paper-2);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.math-data-table td {
+  color: var(--ink);
+  font-size: .94rem;
+}
+
+.math-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.math-data-table td .katex {
+  font-size: 1.05em;
+}
+
+@media (max-width: 720px) {
+  .math-inline {
+    vertical-align: -0.035em;
+  }
+
+  .math-inline .katex {
+    font-size: 1.02em;
+  }
+
+  .iq-operation-flow strong .math-inline .katex,
+  .iq-carrier-flow strong .math-inline .katex,
+  .frame-structure-flow strong .math-inline .katex,
+  .numerology-symbol-story strong .math-inline .katex {
+    font-size: 1.18rem;
+  }
+
+  .math-data-table {
+    min-width: 430px;
+  }
+
+  .math-data-table th,
+  .math-data-table td {
+    padding: 12px 14px;
+  }
+}
