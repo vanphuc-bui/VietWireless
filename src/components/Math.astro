@@ -1,5 +1,6 @@
 ---
 import katex from 'katex';
+import { assertValidTex } from '../utils/validateTex.js';
 
 interface Props {
   tex: string;
@@ -12,6 +13,8 @@ const {
   display = false,
   class: className = '',
 } = Astro.props;
+
+assertValidTex(tex, 'Math.astro');
 
 const html = katex.renderToString(tex, {
   displayMode: display,
