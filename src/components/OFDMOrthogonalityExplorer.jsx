@@ -59,7 +59,7 @@ export default function OFDMOrthogonalityExplorer() {
 
       <div className="ofdm-orth-readout">
         <div><small>USEFUL DURATION</small><strong><MathExpr tex="T_u=1" /></strong><span>normalized</span></div>
-        <div><small>IDEAL SPACING</small><strong><MathExpr tex="\\Delta f=1/T_u" /></strong><span>orthogonal grid</span></div>
+        <div><small>IDEAL SPACING</small><strong><MathExpr tex={String.raw`\\Delta f=1/T_u`} /></strong><span>orthogonal grid</span></div>
         <div><small>|INNER PRODUCT|</small><strong>{inner.toFixed(3)}</strong><span>0 là orthogonal</span></div>
         <div className={inner < 0.03 ? 'ok' : 'warning'}><small>STATUS</small><strong>{inner < 0.03 ? 'Gần trực giao' : 'Mất trực giao'}</strong><span>trên interval <MathExpr tex="T_u" /></span></div>
       </div>
