@@ -213,6 +213,36 @@ for (const token of mathCardTokens) {
   }
 }
 
+const boxMathRoleTokens = [
+  '--lesson-box-math-formula-main',
+  '--lesson-box-math-formula-secondary',
+  '--lesson-box-math-flow',
+  '--lesson-box-math-readout-primary',
+  '--lesson-box-math-readout-secondary',
+  '--lesson-box-math-label',
+  '--lesson-box-math-svg',
+];
+
+for (const token of boxMathRoleTokens) {
+  if (!css.includes(`${token}:`)) {
+    report(cssFile, `missing shared box-math role token "${token}". Keep math size fixed by purpose.`);
+  }
+}
+
+const requiredBoxMathRoleCss = [
+  [/\.math-card \.math-card-formula \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-formula-main\)/, 'formula-main math role'],
+  [/\.formula-card-details \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-formula-secondary\)/, 'formula-secondary math role'],
+  [/--lesson-box-math-flow[\s\S]*?\.rf-chain-overview\.process-flow[\s\S]*?font-size:\s*var\(--lesson-box-math-flow\)/, 'flow-state math role'],
+  [/\.metric-card \.metric-card-formula \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-readout-secondary\)/, 'readout-secondary math role'],
+  [/\.svg-math \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-svg\)/, 'SVG math role'],
+];
+
+for (const [regex, label] of requiredBoxMathRoleCss) {
+  if (!regex.test(css)) {
+    report(cssFile, `missing or token-bypassing ${label}. Box math size must come from the shared purpose token.`);
+  }
+}
+
 const technicalCardTokens = [
   '--lesson-technical-card-padding',
   '--lesson-technical-card-label-size',
@@ -293,6 +323,20 @@ for (const file of files) {
   if (normalized.endsWith('src/components/ComplexPhasorExplorer.jsx')) {
     if (!/className="phasor-readout metric-card-grid"/u.test(content) || !/className="metric-card"/u.test(content)) {
       report(file, 'phasor readout must use the shared metric-card system.');
+    }
+  }
+}
+
+for (const file of files) {
+  const content = readFileSync(file, 'utf8');
+  const normalized = relative('.', file).replaceAll('\\', '/');
+
+  if (normalized.endsWith('src/pages/hoc/baseband-rf-antenna.astro')) {
+    if (!/class="rf-chain-overview process-flow"/u.test(content)) {
+      report(file, 'RF baseband overview must use the shared process-flow layout.');
+    }
+    if (!/class="process-card"/u.test(content) || !/class="process-arrow"/u.test(content)) {
+      report(file, 'process flow must separate state cards from operations/arrows.');
     }
   }
 }
