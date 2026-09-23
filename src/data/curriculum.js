@@ -36,7 +36,7 @@ export const curriculum = [
     title: 'UE bật lên và tìm cell 5G',
     anchor: 'phan-3',
     lessons: [
-      { number: 19, title: 'UE bật nguồn thì chuyện gì xảy ra?', slug: 'ue-bat-nguon', status: 'planned', kind: 'overview', specRequired: true },
+      { number: 19, title: 'UE bật nguồn thì chuyện gì xảy ra?', slug: 'ue-bat-nguon', status: 'published', kind: 'overview', specRequired: true },
       { number: 20, title: 'Synchronization là gì?', slug: 'synchronization', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 21, title: 'SSB là gì?', slug: 'ssb', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 22, title: 'PSS', slug: 'pss', status: 'planned', kind: 'deep-dive', specRequired: true },
