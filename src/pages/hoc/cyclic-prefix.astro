@@ -44,7 +44,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="linear-convolution">
       <p class="concept-kicker">01 · MULTIPATH CHANNEL NHỚ CÁC SAMPLE TRƯỚC</p>
-      <h2>Một FIR channel dài <MathExpr tex="L" /> taps làm output <MathExpr tex="y[n]" /> phụ thuộc <MathExpr tex="x[n],x[n-1],\\ldots,x[n-L+1]" />.</h2>
+      <h2>Một FIR channel dài <MathExpr tex="L" /> taps làm output <MathExpr tex="y[n]" /> phụ thuộc <MathExpr tex="x[n],x[n-1],\ldots,x[n-L+1]" />.</h2>
 
       <p>
         Với channel hai taps, ví dụ <MathExpr tex="h[0]=1" /> và <MathExpr tex="h[2]=0.5" />,
@@ -61,17 +61,17 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="copy-tail">
       <p class="concept-kicker">02 · CP LÀ COPY CỦA CUỐI SYMBOL, KHÔNG PHẢI MỘT ĐOẠN ZERO</p>
-      <h2>Với useful block <MathExpr tex="x[0],\\ldots,x[N-1]" />, ta copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối lên trước.</h2>
+      <h2>Với useful block <MathExpr tex="x[0],\ldots,x[N-1]" />, ta copy <MathExpr tex="N_{\mathrm{CP}}" /> samples cuối lên trước.</h2>
 
       <div class="cp-concept-row">
         <div>
           <small>CYCLIC PREFIX</small>
-          <strong><MathExpr tex="x[N-N_{\\mathrm{CP}}],\\ldots,x[N-1]" /></strong>
+          <strong><MathExpr tex="x[N-N_{\mathrm{CP}}],\ldots,x[N-1]" /></strong>
         </div>
         <b>+</b>
         <div>
           <small>USEFUL SYMBOL</small>
-          <strong><MathExpr tex="x[0],\\ldots,x[N-1]" /></strong>
+          <strong><MathExpr tex="x[0],\ldots,x[N-1]" /></strong>
         </div>
       </div>
 
@@ -100,7 +100,7 @@ import MathExpr from '../../components/Math.astro';
         DFT được sinh ra để diagonalize đúng loại convolution này.
       </p>
 
-      <MathExpr tex="y[n] = x[n] \\circledast h[n] \\quad \\xrightarrow{\\mathrm{FFT}} \\quad Y[k]=X[k]H[k]" display />
+      <MathExpr tex="y[n] = x[n] \circledast h[n] \quad \xrightarrow{\mathrm{FFT}} \quad Y[k]=X[k]H[k]" display />
     </section>
 
     <section class="concept-block lab-section" id="cp-lab">
@@ -115,13 +115,13 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="condition">
-      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" /> ĐẾN TỪ ĐÂU?</p>
+      <p class="concept-kicker">05 · ĐIỀU KIỆN <MathExpr tex="N_{\mathrm{CP}}\ge L-1" /> ĐẾN TỪ ĐÂU?</p>
       <h2>Nếu FIR channel có <MathExpr tex="L" /> taps từ delay <MathExpr tex="0" /> tới <MathExpr tex="L-1" />, maximum discrete delay là <MathExpr tex="L-1" /> samples.</h2>
 
       <p>
         Để useful block không cần lấy samples từ previous symbol, cyclic extension phải cover maximum relevant channel delay.
         Vì vậy trong textbook discrete-time model thường viết:
-        <MathExpr tex="N_{\\mathrm{CP}}\\ge L-1" />.
+        <MathExpr tex="N_{\mathrm{CP}}\ge L-1" />.
       </p>
 
       <aside class="precision-note">
@@ -140,7 +140,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Sau FFT, ideal model là:
         <MathExpr tex="Y[k]=H[k]X[k]+W[k]" />.
-        Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là <MathExpr tex="\\hat{X}[k]=Y[k]/H[k]" />.
+        Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là <MathExpr tex="\hat{X}[k]=Y[k]/H[k]" />.
         Practical equalizers như MMSE xử lý noise amplification tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo FFT bins.
       </p>
 
@@ -154,11 +154,11 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">07 · CP DÀI HƠN KHÔNG PHẢI LÚC NÀO CŨNG TỐT HƠN</p>
       <h2>Mỗi sample CP tiêu tốn time và transmit energy nhưng không thêm một frequency-domain data coefficient mới.</h2>
 
-      <MathExpr tex="\\eta_{\\mathrm{useful}} = \\frac{N}{N+N_{\\mathrm{CP}}}" display />
+      <MathExpr tex="\eta_{\mathrm{useful}} = \frac{N}{N+N_{\mathrm{CP}}}" display />
       <p class="math-caption">Useful-time fraction của một CP-OFDM symbol trong simplified sample-count view.</p>
 
       <p>
-        Nếu N=1024 và <MathExpr tex="N_{\\mathrm{CP}}" />=72, useful fraction xấp xỉ 93.4%.
+        Nếu N=1024 và <MathExpr tex="N_{\mathrm{CP}}" />=72, useful fraction xấp xỉ 93.4%.
         Nếu tăng CP lên 256 samples, useful fraction chỉ còn 80%.
         CP lớn hơn chịu được channel memory dài hơn nhưng giảm time efficiency.
       </p>
@@ -196,11 +196,11 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Linear convolution:</strong> multipath làm current output phụ thuộc samples trước.</li>
-        <li><strong>Cyclic Prefix:</strong> copy <MathExpr tex="N_{\\mathrm{CP}}" /> samples cuối của current OFDM symbol lên đầu.</li>
+        <li><strong>Cyclic Prefix:</strong> copy <MathExpr tex="N_{\mathrm{CP}}" /> samples cuối của current OFDM symbol lên đầu.</li>
         <li><strong>Guard effect:</strong> delayed energy có thể rơi vào CP thay vì contaminating useful FFT window.</li>
         <li><strong>Circular convolution:</strong> useful block có wrap-around structure dưới assumptions phù hợp.</li>
         <li><strong>FFT diagonalization:</strong> biến channel filter thành <MathExpr tex="H[k]" /> trên từng bin.</li>
-        <li><strong>Simplified condition:</strong> <MathExpr tex="N_{\\mathrm{CP}}" /> ≥ maximum relevant discrete delay.</li>
+        <li><strong>Simplified condition:</strong> <MathExpr tex="N_{\mathrm{CP}}" /> ≥ maximum relevant discrete delay.</li>
         <li><strong>Overhead:</strong> CP dài hơn tăng tolerance nhưng giảm useful-time efficiency.</li>
         <li><strong>Không xóa fading:</strong> <MathExpr tex="H[k]" /> vẫn có thể rất nhỏ trên một số subcarriers.</li>
       </ol>
