@@ -61,16 +61,16 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Ở khoảng <MathExpr tex="290\\,\\mathrm{K}" />, thermal noise density thường được nhớ gần đúng là <MathExpr tex="-174\\,\\mathrm{dBm/Hz}" />.
-        Nếu receiver bandwidth là <MathExpr tex="20\\,\\mathrm{MHz}" />, integrated thermal noise lý tưởng vào khoảng
-        <MathExpr tex="-174 + 10\\log_{10}(20\\times10^6) \\approx -101\\,\\mathrm{dBm}" />, trước khi cộng noise figure của receiver.
+        Ở khoảng <MathExpr tex="290\,\mathrm{K}" />, thermal noise density thường được nhớ gần đúng là <MathExpr tex="-174\,\mathrm{dBm/Hz}" />.
+        Nếu receiver bandwidth là <MathExpr tex="20\,\mathrm{MHz}" />, integrated thermal noise lý tưởng vào khoảng
+        <MathExpr tex="-174 + 10\log_{10}(20\times10^6) \approx -101\,\mathrm{dBm}" />, trước khi cộng noise figure của receiver.
       </p>
 
       <aside class="precision-note">
         <strong>Bandwidth phải đi cùng con số noise</strong>
         <p>
           Noise density có đơn vị trên Hz. Khi bandwidth rộng hơn, receiver tích lũy nhiều noise power hơn.
-          Vì vậy nói “noise là <MathExpr tex="-100\\,\\mathrm{dBm}" />” mà không biết measurement bandwidth thường chưa đủ context.
+          Vì vậy nói “noise là <MathExpr tex="-100\,\mathrm{dBm}" />” mà không biết measurement bandwidth thường chưa đủ context.
         </p>
       </aside>
     </section>
@@ -82,23 +82,23 @@ import MathExpr from '../../components/Math.astro';
       <div class="snr-equations">
         <div>
           <span class="card-label">LINEAR</span>
-          <strong><MathExpr tex="\\mathrm{SNR}=P_s/P_n" /></strong>
+          <strong><MathExpr tex="\mathrm{SNR}=P_s/P_n" /></strong>
         </div>
         <div>
           <span class="card-label">dB</span>
-          <strong><MathExpr tex="\\mathrm{SNR}_{\\mathrm{dB}}=10\\log_{10}(P_s/P_n)" /></strong>
+          <strong><MathExpr tex="\mathrm{SNR}_{\mathrm{dB}}=10\log_{10}(P_s/P_n)" /></strong>
         </div>
       </div>
 
       <p>
-        <MathExpr tex="10\\,\\mathrm{dB}" /> nghĩa là signal power gấp 10 lần noise power.
-        <MathExpr tex="20\\,\\mathrm{dB}" /> nghĩa là gấp 100 lần.
-        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là <MathExpr tex="20\\log_{10}" />, vì power tỉ lệ với amplitude bình phương.
+        <MathExpr tex="10\,\mathrm{dB}" /> nghĩa là signal power gấp 10 lần noise power.
+        <MathExpr tex="20\,\mathrm{dB}" /> nghĩa là gấp 100 lần.
+        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là <MathExpr tex="20\log_{10}" />, vì power tỉ lệ với amplitude bình phương.
       </p>
 
       <p>
-        Ví dụ receiver đo wanted power <MathExpr tex="-80\\,\\mathrm{dBm}" /> và noise power <MathExpr tex="-100\\,\\mathrm{dBm}" /> trong cùng bandwidth.
-        Hiệu hai giá trị là <MathExpr tex="20\\,\\mathrm{dB}" />, nên <MathExpr tex="\\mathrm{SNR}=20\\,\\mathrm{dB}" />.
+        Ví dụ receiver đo wanted power <MathExpr tex="-80\,\mathrm{dBm}" /> và noise power <MathExpr tex="-100\,\mathrm{dBm}" /> trong cùng bandwidth.
+        Hiệu hai giá trị là <MathExpr tex="20\,\mathrm{dB}" />, nên <MathExpr tex="\mathrm{SNR}=20\,\mathrm{dB}" />.
         Đây là lợi ích của dB: phép chia power ratio trở thành phép trừ.
       </p>
     </section>
@@ -156,7 +156,7 @@ import MathExpr from '../../components/Math.astro';
         Với nhiều symbols, một RMS definition phổ biến là:
       </p>
 
-      <MathExpr tex="\\mathrm{EVM}_{\\mathrm{RMS}} = \\sqrt{\\frac{\\sum_k |Y_k-X_k|^2}{\\sum_k |X_k|^2}}" display />
+      <MathExpr tex="\mathrm{EVM}_{\mathrm{RMS}} = \sqrt{\frac{\sum_k |Y_k-X_k|^2}{\sum_k |X_k|^2}}" display />
 
       <p>
         Nếu EVM = 0.05, ta thường viết 5%.
@@ -177,13 +177,13 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="snr-evm">
       <p class="concept-kicker">06 · KHI NÀO CÓ THỂ NỐI EVM VỚI SNR?</p>
-      <h2>Trong model chỉ có additive error và normalization nhất quán, <MathExpr tex="\\mathrm{EVM}^2" /> gần bằng error power / signal power.</h2>
+      <h2>Trong model chỉ có additive error và normalization nhất quán, <MathExpr tex="\mathrm{EVM}^2" /> gần bằng error power / signal power.</h2>
 
-      <MathExpr tex="\\mathrm{EVM}_{\\mathrm{linear}} \\approx \\frac{1}{\\sqrt{\\mathrm{SNR}_{\\mathrm{linear}}}}" display />
+      <MathExpr tex="\mathrm{EVM}_{\mathrm{linear}} \approx \frac{1}{\sqrt{\mathrm{SNR}_{\mathrm{linear}}}}" display />
 
       <p>
-        Ví dụ <MathExpr tex="\\mathrm{SNR}=20\\,\\mathrm{dB}" /> nghĩa là <MathExpr tex="\\mathrm{SNR}_{\\mathrm{linear}}=100" />.
-        Khi assumptions phù hợp, EVM xấp xỉ <MathExpr tex="1/\\sqrt{100}=0.1" />, tức khoảng 10%.
+        Ví dụ <MathExpr tex="\mathrm{SNR}=20\,\mathrm{dB}" /> nghĩa là <MathExpr tex="\mathrm{SNR}_{\mathrm{linear}}=100" />.
+        Khi assumptions phù hợp, EVM xấp xỉ <MathExpr tex="1/\sqrt{100}=0.1" />, tức khoảng 10%.
         Nhưng nếu error đến từ phase rotation hoặc nonlinear distortion, gọi toàn bộ error đó là “noise SNR” sẽ che mất nguyên nhân thật.
       </p>
     </section>
@@ -213,7 +213,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Với mỗi k, tạo <MathExpr tex="e[k]=Y[k]-X[k]" />.
-        Cộng <MathExpr tex="|e[k]|^2" /> để lấy error energy, rồi normalize bằng <MathExpr tex="\\sum_k |X[k]|^2" /> theo definition đang dùng.
+        Cộng <MathExpr tex="|e[k]|^2" /> để lấy error energy, rồi normalize bằng <MathExpr tex="\sum_k |X[k]|^2" /> theo definition đang dùng.
         Phần khó trong receiver thực tế thường không phải phép trừ này, mà là đảm bảo timing, CFO, channel estimate và reference mapping đều đúng trước khi tính.
       </p>
 
@@ -233,7 +233,7 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>SNR:</strong> ratio giữa wanted-signal power và noise power tại cùng reference point.</li>
         <li><strong>dB:</strong> biến power ratio thành phép cộng/trừ thuận tiện.</li>
         <li><strong>EVM:</strong> normalized RMS complex error giữa measured và reference symbols.</li>
-        <li><strong>AWGN relation:</strong> <MathExpr tex="\\mathrm{EVM}\\approx1/\\sqrt{\\mathrm{SNR}}" /> chỉ dưới assumptions phù hợp.</li>
+        <li><strong>AWGN relation:</strong> <MathExpr tex="\mathrm{EVM}\approx1/\sqrt{\mathrm{SNR}}" /> chỉ dưới assumptions phù hợp.</li>
         <li><strong>Structured errors:</strong> CFO, phase noise, IQ imbalance và nonlinearity cũng làm EVM tăng.</li>
         <li><strong>Measurement point:</strong> quyết định những impairment nào còn xuất hiện trong metric.</li>
       </ol>
