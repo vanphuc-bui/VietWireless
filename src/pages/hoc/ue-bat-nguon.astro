@@ -222,3 +222,234 @@ const lessonMeta = {
         PSS nằm ở symbol đầu, SSS ở symbol thứ ba theo indexing tương đối của block, còn PBCH và PBCH DM-RS chiếm các resource còn lại theo mapping được định nghĩa.
       </p>
     </section>
+
+    <section class="concept-block" id="pbch-dmrs">
+      <p class="concept-kicker">05 · TRƯỚC KHI DECODE PBCH, RECEIVER CẦN BIẾT CHANNEL</p>
+      <h2>PBCH DM-RS cho receiver reference symbols đã biết để estimate channel trên SSB.</h2>
+
+      <div class="receiver-chain-mini">
+        <div><small>RX GRID</small><strong>PBCH REs</strong><span>bị channel làm scale/rotate</span></div>
+        <b>+</b>
+        <div><small>REFERENCE</small><strong>PBCH DM-RS</strong><span>known symbols</span></div>
+        <b>→</b>
+        <div><small>ESTIMATE</small><strong>channel</strong><span>magnitude + phase behavior</span></div>
+        <b>→</b>
+        <div><small>PBCH</small><strong>equalized symbols</strong><span>ready for demapping</span></div>
+      </div>
+
+      <p>
+        Đây là cùng một logic đã học ở channel estimation: nếu transmitter và receiver cùng biết một reference symbol,
+        receiver có thể quan sát symbol đó sau channel và suy ra một estimate đủ dùng để equalize data nằm gần nó.
+      </p>
+
+      <p>
+        PBCH DM-RS còn liên quan tới SSB index/hypothesis theo các rule physical-layer tương ứng.
+        Chi tiết sequence và index mapping sẽ được tách thành bài riêng, vì bài overview chỉ cần giữ mental model:
+        <strong>DM-RS giúp receiver biến “PBCH bị channel làm méo” thành “PBCH có thể equalize và decode”.</strong>
+      </p>
+    </section>
+
+    <section class="concept-block" id="pbch">
+      <p class="concept-kicker">06 · PBCH LÀ BROADCAST CHANNEL ĐẦU TIÊN UE CẦN DECODE</p>
+      <h2>Sau equalization, receiver đi qua demapping, descrambling, rate recovery và polar decoding để lấy broadcast payload.</h2>
+
+      <div class="pbch-decode-pipeline" data-lesson-visual>
+        <div><span>01</span><strong>Equalized PBCH symbols</strong><small>complex constellation estimates</small></div>
+        <b>→</b>
+        <div><span>02</span><strong>Soft bits</strong><small>demapping / LLRs</small></div>
+        <b>→</b>
+        <div><span>03</span><strong>Rate recovery</strong><small>undo rate matching structure</small></div>
+        <b>→</b>
+        <div><span>04</span><strong>Polar decode</strong><small>recover BCH payload bits</small></div>
+        <b>→</b>
+        <div><span>05</span><strong>CRC check</strong><small>accept or reject candidate</small></div>
+      </div>
+
+      <p>
+        TS 38.300 nêu PBCH dùng QPSK và polar coding.
+        TS 38.212 định nghĩa broadcast-channel coding chain chi tiết hơn, gồm payload generation, scrambling, CRC, channel coding và rate matching.
+      </p>
+
+      <aside class="precision-note">
+        <strong>CRC pass không có nghĩa receiver đã “vào mạng”</strong>
+        <p>
+          Nó chỉ cho biết candidate PBCH decode đã hợp lệ theo chain đang kiểm tra.
+          UE vẫn còn phải dùng MIB để tìm initial control, đọc SIB1, thực hiện cell selection/camping và sau đó mới tới random access.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="mib">
+      <p class="concept-kicker">07 · MIB LÀ CẦU NỐI TỪ SSB SANG INITIAL CONTROL</p>
+      <h2>MIB không chứa mọi cấu hình của cell. Nó chỉ đưa cho UE những mảnh thông tin tối thiểu để đi tiếp.</h2>
+
+      <div class="mib-fields-grid">
+        <article class="technical-card">
+          <span class="card-label">SYSTEM FRAME NUMBER</span>
+          <p>MIB mang các MSB của System Frame Number; các LSB còn lại được bổ sung qua PBCH processing.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">COMMON SCS</span>
+          <p>Cho biết subcarrier spacing dùng cho một số common/initial-access transmissions theo frequency range và rule tương ứng.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSB OFFSET</span>
+          <p><MathExpr tex="k_{SSB}" /> liên hệ SSB với overall resource-block grid theo rule physical layer.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PDCCH CONFIG FOR SIB1</span>
+          <p>Cho UE thông tin để xác định common CORESET và search space cần cho bước tìm SIB1.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CELL STATUS</span>
+          <p>MIB mang cellBarred và thông tin liên quan tới intra-frequency reselection.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">DM-RS TYPE-A POSITION</span>
+          <p>Cho biết vị trí reference-signal type-A theo định nghĩa RRC/physical-layer tương ứng.</p>
+        </article>
+      </div>
+
+      <p>
+        Đây chính là lý do bài tiếp theo của learning graph không phải PRACH.
+        Sau MIB, UE vẫn cần tìm CORESET#0 và SearchSpace#0, monitor PDCCH và đi tới SIB1.
+      </p>
+    </section>
+
+    <section class="concept-block" id="state-table">
+      <p class="concept-kicker">08 · MỖI BƯỚC LOẠI BỎ MỘT PHẦN “CHƯA BIẾT”</p>
+      <h2>Nhìn initial cell search như một quá trình giảm dần uncertainty.</h2>
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table initial-access-state-table">
+          <thead>
+            <tr>
+              <th>Checkpoint</th>
+              <th>UE có thêm gì?</th>
+              <th>Vẫn chưa có gì?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Power on</td><td>RF capability + search strategy</td><td>cell timing, PCI, MIB</td></tr>
+            <tr><td>PSS detected</td><td>timing candidate + <MathExpr tex="N_{ID}^{(2)}" /></td><td>full PCI, MIB</td></tr>
+            <tr><td>SSS detected</td><td>physical cell ID</td><td>PBCH payload</td></tr>
+            <tr><td>PBCH DM-RS processed</td><td>channel estimate for PBCH hypothesis</td><td>decoded broadcast payload</td></tr>
+            <tr><td>PBCH decoded</td><td>MIB + additional PBCH timing/index bits</td><td>SIB1 và RRC access context</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">09 · NẾU NHÌN TỪ CODE RECEIVER, FLOW NÀY TRÔNG RA SAO?</p>
+      <h2>PHY implementation thường biến cùng một progression thành buffers, hypotheses, metrics và decoder states.</h2>
+
+      <div class="implementation-layers">
+        <article><span>RF / ADC</span><p>Chọn candidate carrier, thu I/Q và tạo sample buffer.</p></article>
+        <article><span>PSS detector</span><p>Chạy correlation hoặc matched-filter style metric cho các PSS hypotheses; lấy candidate sample timing và identity subset.</p></article>
+        <article><span>Sync refinement</span><p>Ước lượng/correct residual frequency error và căn FFT window đủ tốt để extract SSB.</p></article>
+        <article><span>SSS detector</span><p>So sánh SSS hypotheses phù hợp với candidate PSS; hoàn thiện physical cell ID.</p></article>
+        <article><span>SSB resource extractor</span><p>Map received FFT bins về PSS, SSS, PBCH và PBCH DM-RS resource elements.</p></article>
+        <article><span>PBCH receiver</span><p>Estimate channel từ DM-RS, equalize, QPSK demap, descramble/rate-recover, polar decode và CRC check.</p></article>
+        <article><span>MIB parser</span><p>Parse higher-layer MIB fields và ghép các timing/index bits được physical layer mang thêm.</p></article>
+        <article><span>Next state</span><p>Dùng MIB để dựng initial control search cho bước tìm SIB1.</p></article>
+      </div>
+
+      <p>
+        Một implementation thật có thể parallelize nhiều bước, giữ nhiều candidates cùng lúc và retry với frequency/timing hypotheses khác.
+        Standard không bắt receiver phải có đúng state machine như diagram này.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">10 · BA CHỖ RẤT DỄ HIỂU NHẦM</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">PSS ≠ FULL CELL ID</span>
+          <p>PSS chỉ cho một phần identity. SSS mới cung cấp phần còn lại để hình thành physical cell ID.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">MIB ≠ ALL SYSTEM INFORMATION</span>
+          <p>MIB chỉ là bootstrap information. SIB1 và các system information khác nằm ở bước sau.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CELL SEARCH ≠ RANDOM ACCESS</span>
+          <p>Cell search là downlink acquisition. PRACH thuộc giai đoạn UE bắt đầu tạo uplink access sau khi đã có thêm system context.</p>
+        </article>
+      </div>
+
+      <p>
+        Một chỗ khác cũng dễ lẫn là từ “synchronization”.
+        Cell search bao gồm việc acquire time/frequency synchronization với cell theo TS 38.213,
+        nhưng exact estimator, loop, CFO correction strategy và threshold là implementation details.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">11 · SPECIFICATION LAYER</p>
+      <h2>Phần nào là 3GPP quy định, phần nào là cách VietWireless diễn giải?</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>PSS/SSS và cell-search purpose; SS/PBCH block resource mapping; PBCH coding; MIB fields và ý nghĩa.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Cách nhìn theo state transition: samples → PSS candidate → cell ID → channel estimate → PBCH → MIB.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Scan strategy, correlation implementation, threshold, estimator, parallel hypotheses và retry logic.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, clause 4.1: cell search, PSS/SSS và SS/PBCH block assumptions ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.05.00_60/ts_138213v180500p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.3.1: resource mapping cho PSS, SSS, PBCH và PBCH DM-RS ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.212 Release 18, ETSI TS 138 212 V18.8.0, clause 7.1: BCH/PBCH payload generation và channel coding ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.331 Release 18, ETSI TS 138 331 V18.8.0: MIB ASN.1 và field descriptions ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">12 · NỐI LẠI TOÀN BỘ FLOW</p>
+      <ol class="recap-list">
+        <li><strong>Power on:</strong> UE chưa có cell timing, physical cell ID hay MIB.</li>
+        <li><strong>PSS:</strong> tạo candidate timing và cung cấp <MathExpr tex="N_{ID}^{(2)}" />.</li>
+        <li><strong>SSS:</strong> cung cấp <MathExpr tex="N_{ID}^{(1)}" /> để hoàn thiện physical cell ID.</li>
+        <li><strong>SSB:</strong> gom PSS, SSS, PBCH và PBCH DM-RS vào một block chung.</li>
+        <li><strong>PBCH DM-RS:</strong> cho receiver reference để estimate channel phục vụ PBCH decoding.</li>
+        <li><strong>PBCH:</strong> qua QPSK demapping và polar-coded BCH processing để recover broadcast payload.</li>
+        <li><strong>MIB:</strong> cung cấp bootstrap information để UE đi tiếp tới common control và SIB1.</li>
+        <li><strong>Chưa xong initial access:</strong> sau MIB vẫn còn CORESET#0, SearchSpace#0, PDCCH, SIB1, cell selection và random access.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/numerology-5g-nr/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Numerology trong 5G NR</strong>
+        <small>Time-frequency lattice của NR được tổ chức như thế nào?</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Synchronization là gì?</strong>
+        <small>Bài 20 sẽ zoom sâu vào timing, frequency và receiver alignment.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
