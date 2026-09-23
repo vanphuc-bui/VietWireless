@@ -13,7 +13,8 @@ function walk(dir) {
   }
 }
 
-walk('src/pages/hoc');
+walk('src/pages');
+walk('src/components');
 
 const legacyClasses = [
   'sampling-equation',
