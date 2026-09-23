@@ -8597,6 +8597,16 @@ main,
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.metric-card {
+  min-width: 0;
+  min-height: var(--lesson-metric-card-min-height);
+  padding: 17px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #fff;
+}
+
 .phasor-readout > .metric-card {
   min-width: 0;
   min-height: var(--lesson-metric-card-min-height);
