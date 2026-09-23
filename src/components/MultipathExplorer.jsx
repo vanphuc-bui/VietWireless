@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import MathExpr from './MathExpr.jsx';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 760;
 const H = 220;
@@ -54,7 +54,7 @@ export default function MultipathExplorer() {
     <div className="multipath-lab">
       <div className="multipath-controls">
         <label>
-          <span>Echo magnitude <strong>{echoGain.toFixed(2)}</strong></span>
+          <span>Echo magnitude <strong><MathExpr tex={`|\\alpha_1|=${echoGain.toFixed(2)}`} /></strong></span>
           <input type="range" min="0" max="0.95" step="0.05" value={echoGain}
             onChange={(e) => setEchoGain(Number(e.target.value))} />
         </label>
@@ -87,7 +87,7 @@ export default function MultipathExplorer() {
             <line className="mp-tap echo-tap" x1={92 + delayUs * 12} y1="190" x2={92 + delayUs * 12} y2={190 - echoGain * 130} />
             <circle className="mp-dot echo-dot" cx={92 + delayUs * 12} cy={190 - echoGain * 130} r="6" />
             <text className="mp-label" x="72" y="215">0</text>
-            <text className="mp-label" x={82 + delayUs * 12} y="215">{delayUs.toFixed(1)} µs</text>
+            <SvgMathExpr tex={`${delayUs.toFixed(1)}\\,\\mu\\mathrm{s}`} x={82 + delayUs * 12} y={209} width={58} />
             <text className="mp-label" x="350" y="215">delay</text>
           </svg>
         </div>
