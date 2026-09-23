@@ -266,3 +266,48 @@ Không cần thêm:
 và cũng không cần lặp lại cùng ý bằng một H2 ngay bên dưới.
 
 Mục tiêu là giữ nhịp đọc liên tục. Chỉ tạo section mới khi thật sự có một khối nội dung độc lập.
+
+
+## 16. Tiếng Việt là ngôn ngữ dẫn chuyện
+
+Source of truth chi tiết nằm trong docs/TERMINOLOGY.md.
+
+Trong prose và heading, ưu tiên tiếng Việt khi cách viết tự nhiên và chính xác:
+- tín hiệu thay vì signal;
+- thời gian thay vì time;
+- tần số thay vì frequency;
+- miền thời gian / miền tần số thay vì time domain / frequency domain;
+- dữ liệu thay vì data;
+- thông tin hệ thống thay vì system information;
+- liên kết vô tuyến thay vì wireless link.
+
+Giữ tiếng Anh cho acronym, tên channel/signal/procedure, thuật ngữ chuẩn hoặc nơi bản dịch làm mất precision.
+
+Không viết một câu nửa Việt nửa Anh chỉ vì source gốc dùng tiếng Anh.
+
+## 17. Viết procedure theo state transition
+
+Đặc biệt từ Part III trở đi, prose phải cho người đọc thấy progression thay vì chỉ liệt kê tên block.
+
+Ưu tiên cấu trúc:
+- trước bước này hệ thống biết gì;
+- điều gì còn chưa biết;
+- operation/observation nào xảy ra;
+- output là gì;
+- bước tiếp theo dùng output đó như thế nào.
+
+Ví dụ tốt không chỉ nói “UE dùng PSS để synchronization”, mà phải nói synchronization nào, PSS giúp biết được phần nào và phần nào vẫn cần SSS/PBCH.
+
+## 18. Không dùng câu tuyệt đối khi model có boundary
+
+Tránh các câu quá tuyệt đối như:
+- “CP loại bỏ multipath”;
+- “PSS cho UE biết cell ID”;
+- “DMRS cho receiver biết channel”.
+
+Ưu tiên mô tả đúng phạm vi:
+- CP giúp tránh ISI giữa các OFDM symbols khi delay spread phù hợp với guard interval;
+- PSS cung cấp một phần thông tin cell identity và hỗ trợ timing detection;
+- DMRS cung cấp known reference symbols để receiver estimate channel trên resource liên quan.
+
+Nếu một câu ngắn dễ tạo mental model sai, viết dài hơn một chút để giữ đúng boundary.
