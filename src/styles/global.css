@@ -8184,3 +8184,19 @@ main,
     padding: 12px 14px;
   }
 }
+
+
+.svg-math {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.svg-math .math-inline .katex {
+  font-size: 1em;
+}
