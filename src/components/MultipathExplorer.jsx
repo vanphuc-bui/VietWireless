@@ -79,7 +79,7 @@ export default function MultipathExplorer() {
 
       <div className="multipath-grid">
         <div className="impulse-response-panel">
-          <div className="visual-caption"><span>CHANNEL IMPULSE RESPONSE</span><strong><MathExpr tex={String.raw`h(\\tau)`} /></strong></div>
+          <div className="visual-caption"><span>CHANNEL IMPULSE RESPONSE</span><strong><MathExpr tex={`h(\\tau)`} /></strong></div>
           <svg viewBox="0 0 420 240" role="img" aria-label="Two-tap multipath channel impulse response">
             <line className="mp-axis" x1="42" y1="190" x2="385" y2="190" />
             <line className="mp-tap direct-tap" x1="92" y1="190" x2="92" y2="60" />
