@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+
+const lessonMeta = {
+  number: 19,
+  part: 3,
+  slug: 'ue-bat-nguon',
+  kind: 'overview',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="UE bật nguồn thì chuyện gì xảy ra? | VietWireless"
+  description="Theo dõi initial cell search của một UE 5G NR: từ receiver chưa biết timing, frequency hay cell ID tới PSS, SSS, SSB, PBCH DM-RS, PBCH và MIB."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Bản đồ học viễn thông</a>
+      <p class="eyebrow">GHI CHÉP 19 · INITIAL ACCESS</p>
+      <h1>UE bật nguồn thì chuyện gì xảy ra?</h1>
+      <p class="lesson-deck">
+        Khi vừa mở receiver, UE chưa có timing của cell, chưa biết physical cell ID và cũng chưa đọc được cấu hình broadcast của gNB.{" "}
+        <strong>Nhiệm vụ đầu tiên là biến một dải RF chưa biết thành một SS/PBCH block có thể đồng bộ, nhận dạng và giải mã.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>Nếu UE chưa biết cell đang phát ở thời điểm nào, làm sao nó có thể decode bất cứ thứ gì?</h2>
+
+      <p>
+        Một receiver đã connected có rất nhiều context: carrier, bandwidth, timing, numerology, cell identity, control configuration và scheduling.
+        Nhưng ở bước đầu tiên, phần lớn context đó chưa tồn tại.
+        UE chỉ có RF capability, các band nó hỗ trợ và một chiến lược tìm kiếm do implementation hoặc higher layer quyết định.
+      </p>
+
+      <p>
+        Vì vậy gNB cần phát một cấu trúc mà UE có thể tìm thấy khi chưa có connection context.
+        Trong NR, cấu trúc trung tâm của bước này là <strong>SS/PBCH block</strong>, thường gọi ngắn là <strong>SSB</strong>.
+      </p>
+
+      <div class="initial-access-question-grid">
+        <article class="technical-card">
+          <span class="card-label">UE CHƯA BIẾT</span>
+          <p>Cell timing nằm ở đâu trong sample stream?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">UE CHƯA BIẾT</span>
+          <p>Physical cell ID của cell đang nghe là bao nhiêu?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">UE CHƯA BIẾT</span>
+          <p>PBCH nằm ở resource nào và channel hiện tại làm biến dạng nó ra sao?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">UE CẦN ĐẠT TỚI</span>
+          <p>MIB và thông tin timing đủ để tiếp tục tìm initial control cho SIB1.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">BỨC TRANH TỔNG THỂ</p>
+      <h2>Từ “tôi chỉ thấy samples” tới “tôi đã đọc được MIB” là một chuỗi state transition.</h2>
+
+      <div class="initial-access-flow" data-lesson-visual>
+        <div class="ia-flow-card state-start">
+          <small>STATE 0</small>
+          <strong>RF + I/Q samples</strong>
+          <span>chưa có cell timing</span>
+        </div>
+        <div class="ia-flow-arrow"><span>search + correlation</span><b>→</b></div>
+        <div class="ia-flow-card">
+          <small>STATE 1</small>
+          <strong>PSS candidate</strong>
+          <span>coarse timing + <MathExpr tex="N_{ID}^{(2)}" /></span>
+        </div>
+        <div class="ia-flow-arrow"><span>SSS detection</span><b>→</b></div>
+        <div class="ia-flow-card">
+          <small>STATE 2</small>
+          <strong>Cell identified</strong>
+          <span>physical cell ID</span>
+        </div>
+        <div class="ia-flow-arrow"><span>PBCH DM-RS</span><b>→</b></div>
+        <div class="ia-flow-card">
+          <small>STATE 3</small>
+          <strong>PBCH observable</strong>
+          <span>channel estimate + SSB hypothesis</span>
+        </div>
+        <div class="ia-flow-arrow"><span>equalize + decode</span><b>→</b></div>
+        <div class="ia-flow-card state-finish">
+          <small>STATE 4</small>
+          <strong>MIB acquired</strong>
+          <span>đủ để đi tiếp tới initial control</span>
+        </div>
+      </div>
+
+      <p>
+        Đây là mental model của bài này, không phải một thuật toán receiver bắt buộc.
+        3GPP định nghĩa signals, resource mapping và thông tin UE phải có được.
+        Cách scan frequency, cách correlate, estimator nào được dùng hoặc bao nhiêu hypothesis chạy song song là lựa chọn implementation.
+      </p>
+    </section>
+
+    <section class="concept-block" id="search-space">
+      <p class="concept-kicker">01 · TRƯỚC PSS, UE ĐANG TÌM CÁI GÌ?</p>
+      <h2>UE không thể FFT đúng một SSB nếu nó còn chưa biết SSB bắt đầu ở sample nào.</h2>
+
+      <p>
+        Ở góc nhìn baseband, receiver có một stream các complex samples.
+        Một đoạn trong stream đó có thể chứa SSB, nhưng biên OFDM symbol chưa chắc đã biết chính xác.
+        Carrier cũng có thể còn residual frequency error do oscillator và Doppler.
+      </p>
+
+      <div class="sample-search-visual" data-lesson-visual>
+        <div class="sample-search-row">
+          <span>incoming I/Q</span>
+          <div class="sample-strip">
+            <i></i><i></i><i></i><i class="candidate"></i><i class="candidate"></i><i class="candidate"></i><i class="candidate"></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="sample-search-row">
+          <span>correlation score</span>
+          <div class="corr-strip"><i></i><i></i><i></i><i class="peak"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <p>Một peak mạnh tạo ra một candidate timing để receiver kiểm tra tiếp, không phải bằng chứng cuối cùng rằng toàn bộ cell đã được nhận dạng.</p>
+      </div>
+
+      <p>
+        Trong thực tế UE có thể tận dụng band information, synchronization raster, cached information hoặc implementation-specific scan strategy để giảm search space.
+        Bài này tập trung vào PHY progression sau khi receiver đang kiểm tra một candidate NR synchronization signal.
+      </p>
+    </section>
+
+    <section class="concept-block" id="pss">
+      <p class="concept-kicker">02 · PSS TẠO ĐIỂM BÁM ĐẦU TIÊN</p>
+      <h2>Receiver biết trước cấu trúc PSS, nên correlation có thể biến một sample stream dài thành một timing candidate rõ ràng.</h2>
+
+      <p>
+        NR có ba PSS hypotheses tương ứng với ba giá trị <MathExpr tex="N_{ID}^{(2)}" />.
+        Receiver có thể correlate received samples với các hypotheses đã biết.
+        Khi một correlation metric tạo peak đủ thuyết phục, UE có một candidate vị trí của PSS và biết giá trị <MathExpr tex="N_{ID}^{(2)}" /> tương ứng.
+      </p>
+
+      <div class="pss-correlation-story">
+        <article class="technical-card">
+          <span class="card-label">HYPOTHESIS A</span>
+          <p>Correlation thấp, timing candidate không thuyết phục.</p>
+        </article>
+        <article class="technical-card active">
+          <span class="card-label">HYPOTHESIS B</span>
+          <p>Correlation peak xuất hiện tại một sample index cụ thể.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">HYPOTHESIS C</span>
+          <p>Correlation thấp hơn candidate tốt nhất.</p>
+        </article>
+      </div>
+
+      <p>
+        PSS thường được dùng để hỗ trợ coarse timing và frequency synchronization trong receiver implementation.
+        Tuy nhiên PSS một mình chưa cho UE toàn bộ physical cell ID và chưa cho phép đọc MIB.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sss">
+      <p class="concept-kicker">03 · SSS HOÀN THIỆN PHYSICAL CELL ID</p>
+      <h2>Sau khi PSS thu hẹp search space, SSS cho UE phần identity còn thiếu.</h2>
+
+      <p>
+        SSS cung cấp <MathExpr tex="N_{ID}^{(1)}" />.
+        Khi ghép với <MathExpr tex="N_{ID}^{(2)}" /> từ PSS, physical cell ID được xác định bằng:
+      </p>
+
+      <MathExpr tex="N_{ID}^{cell}=3N_{ID}^{(1)}+N_{ID}^{(2)}" display />
+
+      <div class="pci-example technical-card formula-card" data-lesson-role="example">
+        <span class="card-label">VÍ DỤ MINH HỌA</span>
+        <div class="formula-card-main">
+          <MathExpr tex="N_{ID}^{(1)}=217,qquad N_{ID}^{(2)}=1" />
+        </div>
+        <div class="formula-card-details">
+          <MathExpr tex="N_{ID}^{cell}=3cdot217+1=652" />
+        </div>
+        <p>
+          Đây là giá trị minh họa để thấy cách hai synchronization signals ghép lại thành một identity.
+          Nó không mô tả một cell cụ thể ngoài thực tế.
+        </p>
+      </div>
+
+      <p>
+        Tới đây UE đã đi từ “có một peak giống PSS” tới “tôi đang nghe một candidate cell có physical cell ID xác định”.
+        Nhưng nó vẫn chưa có MIB.
+      </p>
+    </section>
+
+    <section class="concept-block" id="ssb">
+      <p class="concept-kicker">04 · PSS VÀ SSS KHÔNG ĐỨNG RIÊNG, CHÚNG NẰM TRONG SSB</p>
+      <h2>Một SS/PBCH block gom synchronization signals và broadcast channel vào cùng một khối time-frequency.</h2>
+
+      <div class="ssb-grid-card technical-card visual-card" data-lesson-visual>
+        <div class="visual-card-figure">
+          <div class="ssb-grid">
+            <div class="ssb-axis freq">240 subcarriers</div>
+            <div class="ssb-symbol pss"><small>symbol 0</small><strong>PSS</strong><span>known synchronization sequence</span></div>
+            <div class="ssb-symbol pbch"><small>symbol 1</small><strong>PBCH + DM-RS</strong><span>broadcast data + reference</span></div>
+            <div class="ssb-symbol mixed"><small>symbol 2</small><strong>SSS + PBCH/DM-RS regions</strong><span>cell identity + broadcast resources</span></div>
+            <div class="ssb-symbol pbch"><small>symbol 3</small><strong>PBCH + DM-RS</strong><span>broadcast data + reference</span></div>
+            <div class="ssb-axis time">4 OFDM symbols →</div>
+          </div>
+        </div>
+        <p>
+          Diagram này chỉ thể hiện vai trò của bốn symbols.
+          Resource mapping chính xác theo subcarrier được định nghĩa trong TS 38.211.
+        </p>
+      </div>
+
+      <p>
+        Theo TS 38.211, SS/PBCH block dùng một vùng rộng 240 subcarriers và kéo dài bốn OFDM symbols.
+        PSS nằm ở symbol đầu, SSS ở symbol thứ ba theo indexing tương đối của block, còn PBCH và PBCH DM-RS chiếm các resource còn lại theo mapping được định nghĩa.
+      </p>
+    </section>
