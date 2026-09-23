@@ -432,31 +432,20 @@ for (const file of files) {
 }
 
 
-// Typography contract: STIX text + STIX math + MathML output.
+// Typography contract: classic Machine Learning Cơ Bản-inspired article stack.
 const typographyChecks = [
-  [/--font-text:\s*"STIX Two Text"/u, 'missing STIX Two Text shared font token'],
-  [/--font-math:\s*"STIX Two Math"/u, 'missing STIX Two Math shared font token'],
-  [/--font-ui:/u, 'missing shared UI font token'],
-  [/--article-prose-size:\s*1\.125rem/u, 'article prose must remain 18px (1.125rem)'],
-  [/--lesson-prose-size:\s*var\(--article-prose-size\)/u, 'lesson prose must inherit the shared 18px article scale'],
-  [/--lesson-meta-size:\s*1rem/u, 'lesson metadata must use the shared 16px scale'],
-  [/--lesson-section-title-size:\s*1\.5rem/u, 'lesson section headings must use the shared 24px scale'],
-  [/--lesson-page-title-size:\s*2rem/u, 'lesson page titles must use the shared 32px desktop scale'],
-  [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use STIX Two Text'],
-  [/\.lesson \.math-display \.katex,[\s\S]*?font-size:\s*1em/u, 'lesson display math must stay at body optical size'],
+  [/--font-text:\s*"Times New Roman",\s*Times/u, 'reading text must use the classic Times New Roman / Times stack'],
+  [/--font-ui:\s*Arial,\s*Helvetica,\s*sans-serif/u, 'UI metadata must use Arial / Helvetica'],
+  [/--article-prose-size:\s*1rem/u, 'article prose must remain 16px (1rem)'],
+  [/--lesson-prose-size:\s*var\(--article-prose-size\)/u, 'lesson prose must inherit the shared article scale'],
+  [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use the classic serif stack'],
+  [/\.lesson \.math-display \.katex\s*\{[\s\S]*?font-size:\s*1\.08em/u, 'display math should remain only slightly larger than prose'],
   [/\.lesson \.math-data-table th\s*\{[\s\S]*?font-size:\s*var\(--lesson-meta-size\)/u, 'lesson table headers must use the shared metadata size'],
   [/\.lesson \.math-data-table td\s*\{[\s\S]*?font-size:\s*var\(--lesson-prose-size\)/u, 'lesson table body must use the shared prose size'],
-  [/\.katex math\s*\{[\s\S]*?font-size:\s*1em/u, 'MathML must inherit the surrounding purpose scale'],
 ];
 
 for (const [regex, message] of typographyChecks) {
   if (!regex.test(css)) report(cssFile, message);
-}
-
-// The lesson type scale is intentionally tiny: metadata, body, section title and page title.
-// New pages/components must not create their own typographic hierarchy.
-if (!/\.lesson\s*\{[\s\S]*?--lesson-math-card-label-size:\s*var\(--lesson-meta-size\)/u.test(css)) {
-  report(cssFile, 'missing centralized technical-document lesson type scale.');
 }
 
 const mathRendererFiles = [
@@ -466,26 +455,18 @@ const mathRendererFiles = [
 
 for (const mathFile of mathRendererFiles) {
   const source = readFileSync(mathFile, 'utf8');
-  if (!/output:\s*['"]mathml['"]/u.test(source)) {
-    report(mathFile, 'visible math output must remain native MathML so STIX Two Math renders consistently across platforms.');
+  if (!/output:\s*['"]htmlAndMathml['"]/u.test(source)) {
+    report(mathFile, 'math output must remain htmlAndMathml to preserve the classic KaTeX/TeX visual.');
   }
-  if (/output:\s*['"]htmlAndMathml['"]/u.test(source)) {
-    report(mathFile, 'htmlAndMathml reintroduces KaTeX HTML fonts; use MathML-only output.');
+  if (/output:\s*['"]mathml['"]/u.test(source)) {
+    report(mathFile, 'MathML-only output is not allowed in the classic typography mode.');
   }
 }
 
 const baseLayoutFile = 'src/layouts/BaseLayout.astro';
 const baseLayout = readFileSync(baseLayoutFile, 'utf8');
-for (const fontAsset of [
-  '@fontsource/stix-two-text@5.3.0/400.css',
-  '@fontsource/stix-two-text@5.3.0/500.css',
-  '@fontsource/stix-two-text@5.3.0/600.css',
-  '@fontsource/stix-two-text@5.3.0/700.css',
-  '@fontsource/stix-two-math@5.3.0/400.css',
-]) {
-  if (!baseLayout.includes(fontAsset)) {
-    report(baseLayoutFile, `missing pinned typography asset "${fontAsset}".`);
-  }
+if (/stix-two-(?:text|math)/u.test(baseLayout)) {
+  report(baseLayoutFile, 'STIX webfont assets must not be loaded in the Machine Learning Cơ Bản typography mode.');
 }
 
 if (failed) process.exit(1);
