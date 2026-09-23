@@ -263,34 +263,19 @@ Shared size source nằm trong `src/styles/global.css` qua `--lesson-prose-size`
 
 ## Typography system
 
-Reading surface của VietWireless dùng typography kiểu giáo trình kỹ thuật, đồng nhất giữa chữ và toán:
+VietWireless dùng typography gần với Machine Learning Cơ Bản:
 
-- nội dung bài học/home essay: `STIX Two Text`;
-- công thức: `STIX Two Math` qua native MathML;
-- navigation, button, badge, eyebrow và UI metadata: sans-serif system font.
+- nội dung bài học/home essay: `"Times New Roman", Times, serif`;
+- công thức: KaTeX mặc định với `htmlAndMathml`, giữ kiểu TeX/Computer Modern;
+- navigation, button, badge, eyebrow và metadata: `Arial, Helvetica, sans-serif`.
 
 Shared source of truth nằm trong `src/styles/global.css`:
 
 - `--font-text`;
-- `--font-math`;
 - `--font-ui`;
 - `--article-prose-size`;
 - `--lesson-prose-size`.
 
-Body prose chuẩn là **18 px** (`1.125rem`). Inline math và display math dùng cùng optical size với prose. Nội dung giải thích, table body, callout body, card content và mathematical content trong box không được co nhỏ để vừa layout; nếu thiếu chỗ thì tăng box, đổi grid hoặc cho phép wrap/scroll phù hợp.
+Body prose chuẩn là **16 px**, line-height **1.5**, giống nhịp đọc của một bài kỹ thuật truyền thống. Table body, callout body và card body bám cùng cỡ prose. Metadata có thể nhỏ hơn nhưng phải dùng shared token, không tự đặt cỡ theo từng component.
 
-Không dùng `Times New Roman`, `Cambria`, `Georgia` hoặc font math cục bộ như một quyết định page-specific. Chỉ được giữ chúng ở fallback stack của shared token khi thật sự cần compatibility.
-
-
-
-### Chỉ dùng một thang chữ nhỏ cho lesson
-
-Coi mỗi lesson như một tài liệu kỹ thuật thống nhất, không như một dashboard gồm nhiều card.
-
-Chỉ dùng bốn cấp chính:
-- 32 px: title của bài;
-- 24 px: section heading;
-- 18 px: prose, equation, table body, callout body, card body, readout chính;
-- 16 px: metadata như eyebrow, card label và table header.
-
-H3/subheading mặc định 18 px + weight/spacing. Không tạo page-specific font-size. Không thu chữ trong card để “fit”. Ưu tiên whitespace, border, weight và layout để phân cấp.
+Không dùng STIX cho prose/math. Không thêm font-family riêng theo từng page.
