@@ -114,12 +114,12 @@ Không dùng word count làm tiêu chuẩn.
 ## 7. Navigation contract
 
 Mỗi bài mới phải có:
-- link về page /hoc/ hoặc overview của part;
-- link tới bài trước khi hợp lý;
-- link tới bài tiếp theo khi hợp lý;
+- link về page /hoc/ hoặc overview của part, đánh dấu data-lesson-nav="map";
+- link tới bài trước, đánh dấu data-lesson-nav="previous" khi có bài trước;
+- link tới bài tiếp theo, đánh dấu data-lesson-nav="next" khi có bài sau;
 - không tạo dead-end nếu learning graph còn tiếp.
 
-Anchor, số bài và slug phải khớp src/data/curriculum.js.
+Anchor, số bài và slug phải khớp src/data/curriculum.js. CI kiểm tra các marker navigation này.
 
 ## 8. Visual contract
 
