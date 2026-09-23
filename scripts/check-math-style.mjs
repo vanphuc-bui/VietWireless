@@ -180,5 +180,65 @@ for (const match of css.matchAll(/([^{}]+)\{/g)) {
   }
 }
 
+
+// Shared math-card visual system must exist and remain token-driven.
+const mathCardTokens = [
+  '--lesson-math-card-min-height',
+  '--lesson-math-card-padding',
+  '--lesson-math-card-gap',
+  '--lesson-math-card-label-size',
+  '--lesson-math-card-formula-min-height',
+  '--lesson-math-card-formula-size',
+  '--lesson-math-card-body-size',
+  '--lesson-math-card-label-gap',
+  '--lesson-math-card-formula-gap',
+];
+
+for (const token of mathCardTokens) {
+  if (!css.includes(`${token}:`)) {
+    report(cssFile, `missing shared math-card token "${token}". Keep math-card sizing centralized.`);
+  }
+}
+
+const mathCardScaleMarker = '/* --- Unified math-card scale: one visual system across lesson cards --- */';
+const mathCardScaleIndex = css.indexOf(mathCardScaleMarker);
+if (mathCardScaleIndex < 0) {
+  report(cssFile, 'missing unified math-card scale block.');
+} else {
+  const unifiedMathCardCss = css.slice(mathCardScaleIndex);
+  const requiredTokenUsage = [
+    [/\.math-card\s*\{[\s\S]*?min-height:\s*var\(--lesson-math-card-min-height\)/, 'math-card min-height'],
+    [/\.math-card\s*\{[\s\S]*?padding:\s*var\(--lesson-math-card-padding\)/, 'math-card padding'],
+    [/\.math-card \.math-card-formula \.katex\s*\{[\s\S]*?font-size:\s*var\(--lesson-math-card-formula-size\)/, 'math-card formula size'],
+    [/\.math-card > p\s*\{[\s\S]*?font-size:\s*var\(--lesson-math-card-body-size\)/, 'math-card body size'],
+  ];
+
+  for (const [regex, label] of requiredTokenUsage) {
+    if (!regex.test(unifiedMathCardCss)) {
+      report(cssFile, `shared ${label} must use the lesson-math-card token.`);
+    }
+  }
+
+  for (const match of unifiedMathCardCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selector = match[1].trim();
+    const body = match[2];
+    if (!selector.includes('.math-card')) continue;
+    if (/(?:min-height|padding|font-size)\s*:\s*(?!var\(--lesson-math-card)[^;]+)[^;]+;/u.test(body)) {
+      report(cssFile, `hard-coded math-card size found in "${selector}". Use --lesson-math-card-* tokens.`);
+    }
+  }
+}
+
+// Do not reintroduce ad-hoc formula cards that bypass the shared math-card system.
+for (const file of files) {
+  const content = readFileSync(file, 'utf8');
+  if (/class(?:Name)?=["'][^"']*explain-card[^"']*["'][\s\S]{0,700}<h[1-6][^>]*>\s*<MathExpr\b/u.test(content)) {
+    report(file, 'formula inside explain-card found. Use math-card + math-card-formula for consistent sizing.');
+  }
+  if (/class(?:Name)?=["'][^"']*perspective[^"']*["'][\s\S]{0,1400}<strong>\s*<MathExpr\b/u.test(content)) {
+    report(file, 'formula comparison inside perspective card found. Use shared math-card system.');
+  }
+}
+
 if (failed) process.exit(1);
 console.log('Math style check passed.');
