@@ -169,3 +169,18 @@ Quy tắc MathExpr không chỉ áp dụng trong prose. Nó áp dụng cho headi
 - Visual area phải đủ lớn để đọc axis/label mà không zoom. Không để một card có nhiều khoảng trắng chỉ vì figure quá nhỏ.
 - Metric/readout formula phải đi qua `MathExpr`; trong JSX có TeX command phải dùng `String.raw` hoặc double escaping.
 - Khi review interactive lab, kiểm tra cả ba trạng thái: desktop rộng, tablet/2-column và mobile/1-column. Không chấp nhận raw TeX, clipped formula hoặc text nhỏ khó đọc.
+
+
+### Math size trong box phải theo purpose, không theo page
+
+Khi thiết kế một box kỹ thuật, phải xác định math bên trong là:
+- công thức chính;
+- công thức phụ;
+- giá trị/state trong một process flow;
+- readout chính;
+- readout phụ;
+- hay notation trong SVG.
+
+Mỗi loại dùng shared `--lesson-box-math-*` token. Không đặt một cỡ riêng chỉ cho một bài hoặc một component.
+
+Các process diagram phải phân biệt rõ **state** và **operation**: state là card, operation (DAC, mixer, FFT, filter...) nằm trên arrow giữa hai state. Không xếp operation thành một card ngang hàng với state nếu điều đó làm người đọc hiểu nhầm chuỗi xử lý.
