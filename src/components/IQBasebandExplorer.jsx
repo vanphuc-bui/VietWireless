@@ -62,10 +62,10 @@ export default function IQBasebandExplorer() {
       </div>
 
       <div className="iq-baseband-readout">
-        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex={String.raw`A\\cos\\phi`} /></span></div>
-        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex={String.raw`A\\sin\\phi`} /></span></div>
-        <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span><MathExpr tex={String.raw`\\sqrt{I^2+Q^2}`} /></span></div>
-        <div><small>PHASE</small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span><MathExpr tex={String.raw`\\operatorname{atan2}(Q,I)`} /></span></div>
+        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex={`A\\cos\\phi`} /></span></div>
+        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex={`A\\sin\\phi`} /></span></div>
+        <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span><MathExpr tex={`\\sqrt{I^2+Q^2}`} /></span></div>
+        <div><small>PHASE</small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span><MathExpr tex={`\\operatorname{atan2}(Q,I)`} /></span></div>
       </div>
 
       <div className="iq-baseband-grid">
@@ -95,14 +95,14 @@ export default function IQBasebandExplorer() {
             <strong><MathExpr tex="s(t)" /> là tín hiệu thực</strong>
           </div>
           <div className="iq-rf-formula">
-            <MathExpr tex={String.raw`s(t)=I\\cos(\\omega_c t)-Q\\sin(\\omega_c t)`} />
+            <MathExpr tex={`s(t)=I\\cos(\\omega_c t)-Q\\sin(\\omega_c t)`} />
           </div>
           <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Waveform RF thực được tổng hợp từ I và Q">
             <line className="iqb-axis" x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} />
             <path className="iqb-rf-wave" d={path} />
           </svg>
           <p>
-            Với <MathExpr tex={String.raw`I=A\\cos\\phi`} /> và <MathExpr tex={String.raw`Q=A\\sin\\phi`} />, biểu thức trên trở thành <MathExpr tex={String.raw`A\\cos(\\omega_c t+\\phi)`} />.
+            Với <MathExpr tex={`I=A\\cos\\phi`} /> và <MathExpr tex={`Q=A\\sin\\phi`} />, biểu thức trên trở thành <MathExpr tex={`A\\cos(\\omega_c t+\\phi)`} />.
             <MathExpr tex="I+jQ" /> là representation ở baseband; waveform ngoài RF chain vẫn là tín hiệu thực.
           </p>
         </div>
