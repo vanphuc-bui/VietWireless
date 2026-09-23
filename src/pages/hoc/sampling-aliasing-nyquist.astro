@@ -72,11 +72,11 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <h2>Sampling không biến amplitude thành các mức rời rạc. Nó chọn những thời điểm để đo waveform.</h2>
       <p>
         Giả sử một điện áp analog x(t) tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
-        <MathExpr tex="0,\,T_s,\,2T_s,\,3T_s,\ldots" /> Khi đó:
+        <MathExpr tex={String.raw`0,\,T_s,\,2T_s,\,3T_s,\ldots`} /> Khi đó:
       </p>
 
       <MathExpr tex="x[n] = x(nT_s)" display />
-      <p class="math-caption"><MathExpr tex="n = 0,1,2,\ldots" /> và <MathExpr tex="T_s" /> là khoảng thời gian giữa hai lần lấy mẫu.</p>
+      <p class="math-caption"><MathExpr tex={String.raw`n = 0,1,2,\ldots`} /> và <MathExpr tex="T_s" /> là khoảng thời gian giữa hai lần lấy mẫu.</p>
 
       <div class="sampling-visual sampling-process-visual" aria-label="Waveform liên tục được lấy mẫu rồi lượng tử hóa">
         <article class="sampling-stage">
@@ -145,7 +145,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
       <p>
         Sampling rate là số lần đo trong một giây: <MathExpr tex="f_s = 1/T_s" />.
-        Nếu <MathExpr tex="f_s=48\,\mathrm{kHz}" />, khoảng cách giữa hai sample là khoảng <MathExpr tex="20.83\,\mu\mathrm{s}" />.
+        Nếu <MathExpr tex={String.raw`f_s=48\,\mathrm{kHz}`} />, khoảng cách giữa hai sample là khoảng <MathExpr tex={String.raw`20.83\,\mu\mathrm{s}`} />.
       </p>
     </section>
 
@@ -160,7 +160,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <div class="alias-story" aria-label="Hai waveform khác tần số đi qua cùng các sample">
         <div class="visual-caption">
           <span>CÙNG SAMPLE, HAI CÁCH DIỄN GIẢI</span>
-          <strong><MathExpr tex="7\,\mathrm{Hz}" /> và <MathExpr tex="3\,\mathrm{Hz}" /> khi <MathExpr tex="f_s=10\,\mathrm{Hz}" /></strong>
+          <strong><MathExpr tex={String.raw`7\,\mathrm{Hz}`} /> và <MathExpr tex={String.raw`3\,\mathrm{Hz}`} /> khi <MathExpr tex={String.raw`f_s=10\,\mathrm{Hz}`} /></strong>
         </div>
         <svg viewBox="0 0 820 260" role="img" aria-label="Tone 7 Hz và tone 3 Hz đi qua cùng một tập sample khi sampling ở 10 Hz">
           <line class="sample-axis" x1={aliasPlot.left} y1={aliasPlot.mid} x2={aliasPlot.width - aliasPlot.right} y2={aliasPlot.mid} />
@@ -173,22 +173,22 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           </g>
         </svg>
         <div class="alias-story-legend">
-          <span><i class="legend-fast"></i> waveform nhanh <MathExpr tex="7\,\mathrm{Hz}" /></span>
-          <span><i class="legend-slow"></i> waveform chậm <MathExpr tex="3\,\mathrm{Hz}" /></span>
-          <span><i class="legend-dot"></i> samples ở <MathExpr tex="10\,\mathrm{Hz}" /></span>
+          <span><i class="legend-fast"></i> waveform nhanh <MathExpr tex={String.raw`7\,\mathrm{Hz}`} /></span>
+          <span><i class="legend-slow"></i> waveform chậm <MathExpr tex={String.raw`3\,\mathrm{Hz}`} /></span>
+          <span><i class="legend-dot"></i> samples ở <MathExpr tex={String.raw`10\,\mathrm{Hz}`} /></span>
         </div>
       </div>
 
       <p>
-        Với một cosine <MathExpr tex="7\,\mathrm{Hz}" /> được lấy mẫu ở <MathExpr tex="10\,\mathrm{Hz}" />:
+        Với một cosine <MathExpr tex={String.raw`7\,\mathrm{Hz}`} /> được lấy mẫu ở <MathExpr tex={String.raw`10\,\mathrm{Hz}`} />:
       </p>
 
-      <MathExpr tex="7\,\mathrm{Hz} \;\longrightarrow\; |7-10| = 3\,\mathrm{Hz}" display />
-      <p class="math-caption"><MathExpr tex="7\,\mathrm{Hz}" /> nằm phía trên <MathExpr tex="f_s/2 = 5\,\mathrm{Hz}" /> và bị “fold” về <MathExpr tex="3\,\mathrm{Hz}" />.</p>
+      <MathExpr tex={String.raw`7\,\mathrm{Hz} \;\longrightarrow\; |7-10| = 3\,\mathrm{Hz}`} display />
+      <p class="math-caption"><MathExpr tex={String.raw`7\,\mathrm{Hz}`} /> nằm phía trên <MathExpr tex={String.raw`f_s/2 = 5\,\mathrm{Hz}`} /> và bị “fold” về <MathExpr tex={String.raw`3\,\mathrm{Hz}`} />.</p>
 
       <p>
-        Sau sampling, các giá trị <MathExpr tex="x[n]" /> của tone <MathExpr tex="7\,\mathrm{Hz}" /> trùng với một tone <MathExpr tex="3\,\mathrm{Hz}" /> tại đúng các sample time.
-        Receiver chỉ nhìn dãy sample thì không thể biết chắc waveform analog trước ADC là <MathExpr tex="7\,\mathrm{Hz}" /> hay <MathExpr tex="3\,\mathrm{Hz}" />.
+        Sau sampling, các giá trị <MathExpr tex="x[n]" /> của tone <MathExpr tex={String.raw`7\,\mathrm{Hz}`} /> trùng với một tone <MathExpr tex={String.raw`3\,\mathrm{Hz}`} /> tại đúng các sample time.
+        Receiver chỉ nhìn dãy sample thì không thể biết chắc waveform analog trước ADC là <MathExpr tex={String.raw`7\,\mathrm{Hz}`} /> hay <MathExpr tex={String.raw`3\,\mathrm{Hz}`} />.
         Hiện tượng một thành phần tần số cao xuất hiện như một tần số thấp khác được gọi là <strong>aliasing</strong>.
       </p>
     </section>
@@ -266,7 +266,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           <span class="card-label">NYQUIST RATE</span>
           <div class="math-card-formula"><MathExpr tex="2B" /></div>
           <p>
-            Nếu signal cần giữ tới <MathExpr tex="B\,\mathrm{Hz}" />, <MathExpr tex="2B" /> là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
+            Nếu signal cần giữ tới <MathExpr tex={String.raw`B\,\mathrm{Hz}`} />, <MathExpr tex="2B" /> là tốc độ lấy mẫu tối thiểu theo mô hình lý tưởng thường được nhắc tới.
           </p>
         </article>
         <article class="math-card">
@@ -279,8 +279,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       </div>
 
       <p>
-        Ví dụ một ADC đang chạy ở <MathExpr tex="20\,\mathrm{MHz}" /> có Nyquist frequency là <MathExpr tex="10\,\mathrm{MHz}" />.
-        Còn nếu signal cần giữ có bandwidth từ DC tới <MathExpr tex="4\,\mathrm{MHz}" />, Nyquist rate lý tưởng của signal đó là <MathExpr tex="8\,\mathrm{MHz}" />.
+        Ví dụ một ADC đang chạy ở <MathExpr tex={String.raw`20\,\mathrm{MHz}`} /> có Nyquist frequency là <MathExpr tex={String.raw`10\,\mathrm{MHz}`} />.
+        Còn nếu signal cần giữ có bandwidth từ DC tới <MathExpr tex={String.raw`4\,\mathrm{MHz}`} />, Nyquist rate lý tưởng của signal đó là <MathExpr tex={String.raw`8\,\mathrm{MHz}`} />.
         Hai câu đang nhìn cùng bài toán từ hai phía khác nhau.
       </p>
     </section>
