@@ -395,3 +395,34 @@ Ngoại lệ:
 - nếu KaTeX trong SVG nhìn nhỏ hơn prose dù CSS px lớn hơn, phải hiệu chỉnh shared SVG token, không hard-code page-specific font-size.
 
 CI phải chặn việc đổi shared box-math/body tokens ra khỏi `var(--lesson-prose-size)`.
+
+
+## Rule bắt buộc: TeX escape trong Astro/JSX
+
+Một lỗi nguy hiểm là JavaScript/Astro string nuốt dấu backslash trước khi KaTeX nhận được TeX.
+
+Sai:
+
+    <MathExpr tex="N_{ID}^{cell}=3\cdot217+1" />
+
+hoặc khi source đã bị mất escape:
+
+    <MathExpr tex="N_{ID}^{cell}=3cdot217+1" />
+
+Kết quả có thể render chữ `cdot`, `qquad`, `mathrm`... như text thường mà build vẫn thành công.
+
+Đúng, ưu tiên:
+
+    <MathExpr tex={String.raw`N_{ID}^{cell}=3\cdot217+1`} />
+
+Hoặc dùng JavaScript string với double escaping:
+
+    <MathExpr tex={"N_{ID}^{cell}=3\\cdot217+1"} />
+
+Direct quoted prop như `tex="N_{ID}^{(1)}"` chỉ dùng khi expression hoàn toàn không có TeX command cần backslash.
+
+Project có hai lớp bảo vệ:
+1. `check:math` quét Astro/JSX/TSX để bắt single-backslash, stripped command và double-backslash sai trong `String.raw`;
+2. Math renderers gọi `assertValidTex()` trước KaTeX, nên build/runtime sẽ fail nếu gặp các command phổ biến đã mất backslash như `cdot`, `qquad`, `frac`, `mathrm`, `Delta`, `mu`, `tau`...
+
+Không merge bằng cách bỏ qua guard. Nếu guard báo false positive, sửa validator cùng regression case thay vì disable check cho riêng page.
