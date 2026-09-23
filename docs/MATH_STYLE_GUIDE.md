@@ -426,3 +426,24 @@ Project có hai lớp bảo vệ:
 2. Math renderers gọi `assertValidTex()` trước KaTeX, nên build/runtime sẽ fail nếu gặp các command phổ biến đã mất backslash như `cdot`, `qquad`, `frac`, `mathrm`, `Delta`, `mu`, `tau`...
 
 Không merge bằng cách bỏ qua guard. Nếu guard báo false positive, sửa validator cùng regression case thay vì disable check cho riêng page.
+
+## Typography toán: STIX Two Math + native MathML
+
+VietWireless dùng một cặp font khoa học thống nhất:
+
+- prose/article text: `STIX Two Text`;
+- mathematical output: `STIX Two Math`;
+- UI/navigation/control metadata: sans-serif system font.
+
+TeX vẫn được parse và validate bằng KaTeX ở build time, nhưng visible output phải là **MathML** (`output: 'mathml'`). Browser render MathML bằng `STIX Two Math`, vì vậy công thức không được phụ thuộc vào KaTeX HTML font stack hoặc font cài sẵn trên Windows/Linux.
+
+Quy tắc bắt buộc:
+
+- Không đặt `font-family` riêng cho công thức ở từng page/component.
+- Inline math phải có optical size bằng prose xung quanh: wrapper `.math-inline .katex` dùng `1em`.
+- Display equation chỉ lớn hơn prose nhẹ, khoảng 8%; hierarchy chủ yếu đến từ spacing/layout chứ không phóng công thức quá lớn.
+- Math trong formula card, readout, flow, table và box tiếp tục lấy size từ shared `--lesson-box-math-*` / `--lesson-*-size` tokens.
+- SVG math tiếp tục dùng role token riêng vì viewBox scaling; font family vẫn là `STIX Two Math`.
+- Không re-enable `htmlAndMathml` chỉ để sửa visual; nếu có lỗi layout, sửa shared CSS/token hoặc MathML styling.
+- Font source được pin trong `BaseLayout.astro`; không thêm Google/system-font override ở page riêng.
+
