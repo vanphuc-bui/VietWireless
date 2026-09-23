@@ -8870,6 +8870,8 @@ main,
   --lesson-box-math-readout-secondary: .94rem;
   --lesson-box-math-label: .78rem;
   --lesson-box-math-svg: 13px;
+  --lesson-box-math-svg-label: 16px;
+  --lesson-box-math-svg-equation: 20px;
 }
 
 /* Main equation inside a formula/explanation card. */
@@ -8931,9 +8933,17 @@ main,
   font-size: 1em;
 }
 
-/* SVG math has its own fixed visual scale because it lives in a viewBox. */
+/* SVG math uses fixed sizes by purpose because it lives inside a viewBox. */
 .svg-math .katex {
   font-size: var(--lesson-box-math-svg);
+}
+
+.svg-math.svg-math-label .katex {
+  font-size: var(--lesson-box-math-svg-label);
+}
+
+.svg-math.svg-math-equation .katex {
+  font-size: var(--lesson-box-math-svg-equation);
 }
 
 /* Explicit role overrides must win over generic flow/readout selectors above. */
