@@ -8963,3 +8963,424 @@ main,
 .process-op-math .katex {
   font-size: var(--lesson-box-math-readout-secondary);
 }
+
+
+/* --- Cyclic Prefix: geometry, ISI and guard-interval visuals --- */
+.cp-geometry-card {
+  margin: 28px 0 18px;
+}
+
+.cp-geometry-figure {
+  min-height: 300px;
+}
+
+.cp-geometry-figure > svg {
+  max-height: 300px;
+}
+
+.cp-ground {
+  stroke: var(--line-strong);
+  stroke-width: 2;
+}
+
+.cp-building {
+  fill: var(--paper-2);
+  stroke: var(--line-strong);
+  stroke-width: 2;
+}
+
+.cp-node {
+  stroke: #fff;
+  stroke-width: 4;
+}
+
+.cp-node.tx {
+  fill: var(--accent);
+}
+
+.cp-node.rx {
+  fill: var(--blue);
+}
+
+.cp-node-label,
+.cp-natural-label {
+  fill: var(--muted);
+  font-size: 15px;
+}
+
+.cp-node-label {
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.cp-path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cp-path.direct {
+  stroke: var(--blue);
+  stroke-width: 5;
+}
+
+.cp-path.reflected {
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-dasharray: 10 8;
+}
+
+.cp-delay-bracket {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2;
+}
+
+.cp-geometry-example,
+.cp-discrete-example,
+.cp-distance-cases,
+.cp-before-after,
+.cp-does-grid {
+  margin: 24px 0 30px;
+  display: grid;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.cp-geometry-example {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cp-discrete-example,
+.cp-distance-cases,
+.cp-before-after,
+.cp-does-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cp-path-meaning-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cp-overlap-visual {
+  margin: 28px 0;
+  overflow: hidden;
+}
+
+.cp-overlap-axis {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 15px 120px;
+  color: var(--muted);
+  font-size: .72rem;
+  text-align: center;
+}
+
+.cp-overlap-axis > b {
+  color: var(--accent);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cp-overlap-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4px;
+  align-items: stretch;
+  margin-bottom: 11px;
+}
+
+.cp-overlap-row > small {
+  display: grid;
+  align-items: center;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.cp-symbol {
+  min-height: 68px;
+  display: grid;
+  place-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  font-size: .8rem;
+  text-align: center;
+}
+
+.cp-symbol.current {
+  background: var(--blue-soft);
+  border-color: #bfd4e1;
+}
+
+.reflected-row {
+  padding-left: 8%;
+}
+
+.reflected-row .cp-symbol {
+  border-style: dashed;
+}
+
+.cp-isi-zone {
+  position: absolute;
+  left: calc(50% + 52px);
+  top: 0;
+  width: 16%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: rgba(182, 64, 49, .16);
+  border-left: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  color: var(--accent);
+  font-style: normal;
+  font-size: .72rem;
+  font-weight: 850;
+}
+
+.cp-overlap-note {
+  margin: 8px 0 0 !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.cp-sample-equation {
+  max-width: 820px;
+  margin: 24px 0 30px;
+}
+
+.cp-sample-equation-main {
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
+.cp-sample-equation-main .katex {
+  font-size: var(--lesson-box-math-formula-main);
+}
+
+.cp-sample-equation > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.cp-tail-example {
+  margin: 28px 0;
+}
+
+.cp-sample-strip {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(52px, 1fr));
+  gap: 4px;
+  overflow-x: auto;
+  padding: 6px 0 14px;
+}
+
+.cp-sample-strip > i {
+  min-height: 74px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border: 1px solid #bfd4e1;
+  background: var(--blue-soft);
+  font-style: normal;
+}
+
+.cp-sample-strip > i.cp-prefix-sample {
+  border-color: #d8b1a8;
+  background: var(--accent-soft);
+}
+
+.cp-sample-strip small {
+  color: var(--muted);
+  font-size: .62rem;
+}
+
+.cp-sample-strip strong {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+}
+
+.cp-case {
+  min-height: 250px;
+}
+
+.cp-case.bad {
+  border-top: 3px solid var(--accent);
+}
+
+.cp-case.good {
+  border-top: 3px solid var(--blue);
+}
+
+.cp-case-track {
+  position: relative;
+  min-height: 116px;
+  display: grid;
+  grid-template-columns: 42% 58%;
+  align-items: stretch;
+  margin: 14px 0 16px;
+}
+
+.cp-case-track.with-prefix {
+  grid-template-columns: 35% 18% 47%;
+}
+
+.cp-case-track > span {
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: .76rem;
+  text-align: center;
+}
+
+.cp-case-prev {
+  background: var(--paper-2);
+}
+
+.cp-case-prefix {
+  background: var(--accent-soft);
+  border-color: #d8b1a8 !important;
+}
+
+.cp-case-useful {
+  background: var(--blue-soft);
+  border-color: #bfd4e1 !important;
+}
+
+.cp-case-overlap {
+  position: absolute;
+  left: 34%;
+  top: 0;
+  width: 22%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: rgba(182, 64, 49, .16);
+  border-left: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  color: var(--accent);
+  font-style: normal;
+  font-size: .68rem;
+  font-weight: 850;
+  text-align: center;
+}
+
+.cp-case-track.with-prefix .cp-case-overlap {
+  left: 35%;
+  width: 18%;
+}
+
+.cp-distance-card.good {
+  border-top: 3px solid var(--blue);
+}
+
+.cp-distance-card.bad {
+  border-top: 3px solid var(--accent);
+}
+
+.cp-distance-card .formula-card-details {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
+.cp-distance-card .formula-card-details .katex {
+  font-size: var(--lesson-box-math-formula-secondary);
+}
+
+.cp-does-grid .technical-card {
+  min-height: 220px;
+}
+
+.cp-does-grid ul {
+  margin: 4px 0 0;
+  padding-left: 20px;
+  color: var(--ink-soft);
+}
+
+.cp-does-grid li {
+  margin: 8px 0;
+}
+
+@media (max-width: 900px) {
+  .cp-geometry-example {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-path-meaning-grid,
+  .cp-discrete-example,
+  .cp-distance-cases,
+  .cp-before-after,
+  .cp-does-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-overlap-axis {
+    margin-left: 92px;
+  }
+
+  .cp-overlap-row {
+    grid-template-columns: 82px minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .cp-isi-zone {
+    left: calc(50% + 40px);
+  }
+}
+
+@media (max-width: 720px) {
+  .cp-geometry-figure {
+    min-height: 230px;
+  }
+
+  .cp-geometry-figure > svg {
+    min-width: 650px;
+    max-height: 230px;
+  }
+
+  .cp-geometry-card .visual-card-figure {
+    overflow-x: auto;
+    justify-content: start;
+  }
+
+  .cp-overlap-axis {
+    display: none;
+  }
+
+  .cp-overlap-row {
+    grid-template-columns: 72px minmax(160px, 1fr) minmax(160px, 1fr);
+    min-width: 450px;
+  }
+
+  .cp-overlap-visual {
+    overflow-x: auto;
+  }
+
+  .cp-isi-zone {
+    left: 230px;
+    width: 88px;
+  }
+
+  .cp-sample-strip {
+    min-width: 620px;
+  }
+
+  .cp-tail-example {
+    overflow-x: auto;
+  }
+
+  .cp-case {
+    min-height: 0;
+  }
+}
