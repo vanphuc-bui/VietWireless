@@ -56,7 +56,7 @@ export default function IFFTFFTExplorer() {
             <button key={k} className={idx >= 0 ? 'active' : ''} onClick={() => cycleBin(k)}>
               <small><MathExpr tex={`k=${k}`} /></small>
               <strong>{idx < 0 ? 'OFF' : qpsk[idx].name}</strong>
-              <span>{idx < 0 ? '0' : `${qpsk[idx].re.toFixed(2)} ${qpsk[idx].im >= 0 ? '+' : '-'} j${Math.abs(qpsk[idx].im).toFixed(2)}`}</span>
+              <span><MathExpr tex={idx < 0 ? '0' : `${qpsk[idx].re.toFixed(2)}${qpsk[idx].im >= 0 ? '+' : '-'}j${Math.abs(qpsk[idx].im).toFixed(2)}`} /></span>
             </button>
           ))}
         </div>
@@ -76,7 +76,7 @@ export default function IFFTFFTExplorer() {
               <small><MathExpr tex={`n=${n}`} /></small>
               <i className="real" style={{ height: `${Math.abs(v.re) / maxTime * 46}%`, transform: v.re >= 0 ? 'translateY(-50%)' : 'translateY(50%)' }}></i>
               <i className="imag" style={{ height: `${Math.abs(v.im) / maxTime * 46}%`, transform: v.im >= 0 ? 'translateY(-50%)' : 'translateY(50%)' }}></i>
-              <span>{v.re.toFixed(2)} {v.im >= 0 ? '+' : '-'} j{Math.abs(v.im).toFixed(2)}</span>
+              <span><MathExpr tex={`${v.re.toFixed(2)}${v.im >= 0 ? '+' : '-'}j${Math.abs(v.im).toFixed(2)}`} /></span>
             </div>
           ))}
         </div>
@@ -93,9 +93,9 @@ export default function IFFTFFTExplorer() {
           const err = Math.hypot(v.re - X[k].re, v.im - X[k].im);
           return (
             <div key={k}>
-              <small>k={k}</small>
+              <small><MathExpr tex={`k=${k}`} /></small>
               <strong><MathExpr tex={`|Y|=${Math.hypot(v.re, v.im).toFixed(2)}`} /></strong>
-              <span>error {err.toExponential(1)}</span>
+              <span><MathExpr tex={`\\varepsilon=${err.toExponential(1)}`} /></span>
             </div>
           );
         })}
