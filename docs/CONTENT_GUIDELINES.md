@@ -260,3 +260,24 @@ Mọi content text và mathematical content bên trong technical box phải có 
 - Nếu một box cần nhiều nội dung hơn, tăng diện tích box hoặc đổi layout, không giảm font-size.
 
 Shared size source nằm trong `src/styles/global.css` qua `--lesson-prose-size` và `--lesson-box-content-size`.
+
+## Typography system
+
+Reading surface của VietWireless dùng typography kiểu giáo trình kỹ thuật, đồng nhất giữa chữ và toán:
+
+- nội dung bài học/home essay: `STIX Two Text`;
+- công thức: `STIX Two Math` qua native MathML;
+- navigation, button, badge, eyebrow và UI metadata: sans-serif system font.
+
+Shared source of truth nằm trong `src/styles/global.css`:
+
+- `--font-text`;
+- `--font-math`;
+- `--font-ui`;
+- `--article-prose-size`;
+- `--lesson-prose-size`.
+
+Body prose chuẩn là **18 px** (`1.125rem`). Inline math phải cùng optical size với prose. Display math chỉ nhỉnh hơn prose khoảng 8%. Nội dung giải thích và mathematical content trong box không được co nhỏ để vừa layout; nếu thiếu chỗ thì tăng box, đổi grid hoặc cho phép wrap/scroll phù hợp.
+
+Không dùng `Times New Roman`, `Cambria`, `Georgia` hoặc font math cục bộ như một quyết định page-specific. Chỉ được giữ chúng ở fallback stack của shared token khi thật sự cần compatibility.
+
