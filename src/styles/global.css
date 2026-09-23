@@ -9626,3 +9626,116 @@ main,
     margin-left: auto;
   }
 }
+
+
+/* --- Learning map: overview rows jump to detailed lesson sections --- */
+.learning-map-list li {
+  min-height: 0;
+  display: block;
+  padding: 0;
+}
+
+.course-list .learning-map-link {
+  width: 100%;
+  min-height: 112px;
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 4px;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  border: 0;
+  outline: 0;
+  transition: background .16s ease, padding .16s ease;
+}
+
+.course-list .learning-map-link:hover {
+  padding-inline: 10px;
+  background: linear-gradient(90deg, var(--accent-soft), rgba(246, 232, 228, .18) 72%, transparent);
+}
+
+.course-list .learning-map-link:focus-visible {
+  padding-inline: 10px;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 2px rgba(182, 64, 49, .3);
+}
+
+.learning-map-link h3 {
+  color: var(--ink);
+}
+
+.learning-map-link p {
+  color: var(--muted);
+}
+
+.learning-map-cta {
+  min-width: 108px;
+  color: var(--accent);
+  font-size: .82rem;
+  font-weight: 750;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.learning-map-link:hover .learning-map-cta {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.learning-map-target,
+#ban-do-tong-the {
+  scroll-margin-top: 92px;
+}
+
+.learning-map-target:target {
+  animation: learning-map-focus 1.25s ease;
+}
+
+@keyframes learning-map-focus {
+  0% {
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 18px var(--accent-soft);
+  }
+  100% {
+    background: transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@media (max-width: 720px) {
+  .course-list .learning-map-link {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 18px 6px;
+  }
+
+  .course-list .learning-map-link:hover,
+  .course-list .learning-map-link:focus-visible {
+    padding-inline: 10px;
+  }
+
+  .learning-map-cta {
+    min-width: 0;
+    margin-top: 5px;
+    text-align: left;
+  }
+
+  .learning-map-target,
+  #ban-do-tong-the {
+    scroll-margin-top: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learning-map-target:target {
+    animation: none;
+    background: var(--accent-soft);
+  }
+
+  .course-list .learning-map-link {
+    transition: none;
+  }
+}
