@@ -55,6 +55,23 @@ function report(file, message) {
   console.error(`${relative('.', file)}: ${message}`);
 }
 
+function runTexGuardRegressionChecks() {
+  if (findStrippedTexCommand('3cdot217+1') !== 'cdot') {
+    report('scripts/check-math-style.mjs', 'TeX guard regression: stripped cdot is no longer detected.');
+  }
+  if (findStrippedTexCommand('217,qquad N') !== 'qquad') {
+    report('scripts/check-math-style.mjs', 'TeX guard regression: stripped qquad is no longer detected.');
+  }
+  if (findStrippedTexCommand('N_{ID}^{cell}') !== null) {
+    report('scripts/check-math-style.mjs', 'TeX guard false positive: "cell" must not be interpreted as stripped \\ell.');
+  }
+  if (findStrippedTexCommand(String.raw`3\cdot217+1`) !== null) {
+    report('scripts/check-math-style.mjs', 'TeX guard false positive: valid String.raw TeX was rejected.');
+  }
+}
+
+runTexGuardRegressionChecks();
+
 for (const file of files) {
   const content = readFileSync(file, 'utf8');
   const extension = extname(file);
