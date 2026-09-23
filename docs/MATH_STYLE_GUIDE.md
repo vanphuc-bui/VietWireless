@@ -196,3 +196,21 @@ Shared classes ưu tiên:
 - `.math-card-secondary`.
 
 Nếu một công thức dài hơn, cho nó wrap/scroll hợp lý; không tăng riêng font-size của card đó.
+
+
+## Inline math phải hòa vào dòng chữ
+
+Inline KaTeX không được trông như một badge hoặc một mảnh chữ tách khỏi câu:
+- dùng cùng optical size với prose;
+- baseline phải gần baseline của chữ thường xung quanh;
+- không thêm background/border;
+- không thêm margin lớn hai bên;
+- kiểm tra bằng các câu có nhiều notation xen kẽ như `phase <MathExpr tex="\\phi" />`, `<MathExpr tex="I" /> và <MathExpr tex="Q" />`.
+
+## Flow/card formula phải đủ lớn để đọc
+
+Khi công thức là nội dung chính của một flow card, không dùng size của body text. Formula trong các flow card phải có visual weight tương đương heading nhỏ, nhưng các card cùng flow phải dùng cùng size.
+
+## Bảng số liệu kỹ thuật
+
+Khi dữ liệu có quan hệ hàng/cột thực sự, dùng HTML `<table>` thay vì một grid card giả-table. Header và data columns phải thẳng hàng. Mathematical values trong cell vẫn dùng `MathExpr`.
