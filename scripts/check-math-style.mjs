@@ -200,10 +200,10 @@ for (const token of mathCardTokens) {
   }
 }
 
-const mathCardScaleMarker = '/* --- Unified math-card scale: one visual system across lesson cards --- */';
+const mathCardScaleMarker = '--lesson-math-card-min-height:';
 const mathCardScaleIndex = css.indexOf(mathCardScaleMarker);
 if (mathCardScaleIndex < 0) {
-  report(cssFile, 'missing unified math-card scale block.');
+  report(cssFile, 'missing unified math-card scale tokens/block.');
 } else {
   const unifiedMathCardCss = css.slice(mathCardScaleIndex);
   const requiredTokenUsage = [
