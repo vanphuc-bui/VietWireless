@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import MathExpr from './MathExpr.jsx';
 
 const N_SC = 24;
 const N_SYM = 14;
@@ -16,10 +17,10 @@ export default function ResourceGridExplorer() {
   return (
     <div className="resource-grid-lab">
       <div className="resource-grid-readout">
-        <div><small>SELECTED RE</small><strong>(k,l)=({selectedK},{selectedL})</strong><span>frequency, time</span></div>
+        <div><small>SELECTED RE</small><strong><MathExpr tex={`(k,\\ell)=(${selectedK},${selectedL})`} /></strong><span>frequency, time</span></div>
         <div><small>RB INDEX</small><strong>{rb}</strong><span>demo has 2 RBs</span></div>
-        <div><small>k WITHIN RB</small><strong>{kInRb}</strong><span>0…11</span></div>
-        <div><small>VALUE</small><strong>X[{selectedK},{selectedL}]</strong><span>one complex modulation symbol</span></div>
+        <div><small><MathExpr tex="k" /> WITHIN RB</small><strong>{kInRb}</strong><span>0…11</span></div>
+        <div><small>VALUE</small><strong><MathExpr tex={`X[${selectedK},${selectedL}]`} /></strong><span>one complex modulation symbol</span></div>
       </div>
 
       <div className="resource-grid-interactive-wrap">
@@ -48,7 +49,7 @@ export default function ResourceGridExplorer() {
               </div>
             ))}
           </div>
-          <div className="resource-grid-x-label">OFDM symbol index l →</div>
+          <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex="\\ell" /> →</div>
         </div>
       </div>
 
