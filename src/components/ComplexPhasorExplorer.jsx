@@ -68,35 +68,34 @@ export default function ComplexPhasorExplorer() {
         </label>
       </div>
 
-      <div className="phasor-readout">
-        <div>
-          <small>TỔNG GÓC</small>
-          <strong>{totalAngle.toFixed(0)}°</strong>
-          <span><MathExpr tex={`\omega t+\phi`} /></span>
+      <div className="phasor-readout metric-card-grid">
+        <div className="metric-card">
+          <small className="metric-card-label">TỔNG GÓC</small>
+          <strong className="metric-card-value">{displayAngle.toFixed(0)}°</strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`\omega t+\phi`} /></span>
         </div>
-        <div>
-          <small>PHẦN THỰC</small>
-          <strong>{real.toFixed(3)}</strong>
-          <span><MathExpr tex={`A\cos(\omega t+\phi)`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">PHẦN THỰC</small>
+          <strong className="metric-card-value">{real.toFixed(3)}</strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></span>
         </div>
-        <div>
-          <small>PHẦN ẢO</small>
-          <strong>{imag.toFixed(3)}</strong>
-          <span><MathExpr tex={`A\sin(\omega t+\phi)`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">PHẦN ẢO</small>
+          <strong className="metric-card-value">{imag.toFixed(3)}</strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`A\sin(\omega t+\phi)`} /></span>
         </div>
-        <div>
-          <small>ĐỘ LỚN</small>
-          <strong>{magnitude.toFixed(2)}</strong>
-          <span><MathExpr tex={`\sqrt{\operatorname{Re}^2+\operatorname{Im}^2}`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">ĐỘ LỚN</small>
+          <strong className="metric-card-value">{magnitude.toFixed(2)}</strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`\sqrt{(\operatorname{Re}z)^2+(\operatorname{Im}z)^2}`} /></span>
         </div>
       </div>
-
       <div className="phasor-plot">
         <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Vector phức với phần thực, phần ảo, magnitude và phase">
           <line className="phasor-axis" x1="70" y1={CY} x2="430" y2={CY} />
           <line className="phasor-axis" x1={CX} y1="25" x2={CX} y2="335" />
-          <text className="phasor-label" x="408" y={CY - 10}>Re</text>
-          <text className="phasor-label" x={CX + 10} y="42">Im</text>
+          <SvgMathExpr tex={String.raw`\operatorname{Re}`} x={408} y={CY - 10} width={44} className="phasor-svg-axis" />
+          <SvgMathExpr tex={String.raw`\operatorname{Im}`} x={CX + 10} y={42} width={44} className="phasor-svg-axis" />
 
           <circle className="phasor-guide-circle" cx={CX} cy={CY} r={RMAX * magnitude} />
 
@@ -111,18 +110,14 @@ export default function ComplexPhasorExplorer() {
             d={`M ${CX + 42} ${CY} A 42 42 0 ${Math.abs(totalAngle % 360) > 180 ? 1 : 0} ${totalAngle >= 0 ? 0 : 1} ${CX + 42 * Math.cos(degToRad(totalAngle))} ${CY - 42 * Math.sin(degToRad(totalAngle))}`}
           />
 
-          <SvgMathExpr tex={`\omega t+\phi`} x={CX + 48} y={CY - 18} width={86} />
+          <SvgMathExpr tex={String.raw`\omega t+\phi`} x={CX + 48} y={CY - 18} width={102} className="phasor-svg-angle" />
 
-          <text className="phasor-value-label" x={point.x + 8} y={CY - 8}>
-            Re = {real.toFixed(2)}
-          </text>
-          <text className="phasor-value-label" x={CX + 8} y={point.y - 8}>
-            Im = {imag.toFixed(2)}
-          </text>
+          <SvgMathExpr tex={String.raw`\operatorname{Re}=${real.toFixed(2)}`} x={point.x + 8} y={CY - 8} width={96} className="phasor-svg-value" />
+          <SvgMathExpr tex={String.raw`\operatorname{Im}=${imag.toFixed(2)}`} x={CX + 8} y={point.y - 8} width={96} className="phasor-svg-value" />
 
-          <SvgMathExpr tex={`z(t)=Ae^{j(\omega t+\phi)}`} x={475} y={88} width={205} />
-          <SvgMathExpr tex={`=A\cos(\omega t+\phi)`} x={475} y={125} width={180} />
-          <SvgMathExpr tex={`+jA\sin(\omega t+\phi)`} x={475} y={156} width={185} />
+          <SvgMathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} x={475} y={88} width={225} className="phasor-svg-equation" />
+          <SvgMathExpr tex={String.raw`=A\cos(\omega t+\phi)`} x={475} y={125} width={205} className="phasor-svg-equation" />
+          <SvgMathExpr tex={String.raw`+jA\sin(\omega t+\phi)`} x={475} y={156} width={210} className="phasor-svg-equation" />
           <text className="phasor-side-note" x="475" y="214">Giữ magnitude cố định</text>
           <text className="phasor-side-note" x="475" y="236">và tăng góc quay:</text>
           <text className="phasor-side-note" x="475" y="258">vector quay trên</text>
