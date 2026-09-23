@@ -103,7 +103,8 @@ button, input { font: inherit; }
 
 .concept-block { padding-block: 68px; border-bottom: 1px solid var(--line); }
 .concept-block > h2 { max-width: 820px; margin: 0 0 22px; font-family: var(--font-serif); font-size: clamp(1.65rem, 3vw, 2.45rem); font-weight: 500; line-height: 1.16; letter-spacing: -0.02em; }
-.concept-block > p { max-width: 780px; color: var(--ink-soft); font-size: 1.03rem; }
+:root { --lesson-prose-size: 1.03rem; }
+.concept-block > p { max-width: 780px; color: var(--ink-soft); font-size: var(--lesson-prose-size); }
 .concept-block > p strong { color: var(--ink); }
 
 .journey-grid { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr; align-items: stretch; gap: 7px; margin: 38px 0 28px; }
@@ -8425,15 +8426,15 @@ main,
 :root {
   --lesson-technical-card-padding: 22px;
   --lesson-technical-card-label-size: .7rem;
-  --lesson-technical-card-body-size: .92rem;
+  --lesson-technical-card-body-size: var(--lesson-prose-size);
   --lesson-formula-card-min-height: 240px;
-  --lesson-formula-card-main-size: clamp(1.42rem, 2.1vw, 1.78rem);
-  --lesson-formula-card-detail-size: 1.05rem;
+  --lesson-formula-card-main-size: var(--lesson-prose-size);
+  --lesson-formula-card-detail-size: var(--lesson-prose-size);
   --lesson-visual-card-figure-height: 230px;
   --lesson-metric-card-min-height: 122px;
   --lesson-metric-card-label-size: .65rem;
-  --lesson-metric-card-value-size: 1.38rem;
-  --lesson-metric-card-formula-size: .9rem;
+  --lesson-metric-card-value-size: var(--lesson-prose-size);
+  --lesson-metric-card-formula-size: var(--lesson-prose-size);
 }
 
 .technical-card {
@@ -8690,11 +8691,11 @@ main,
   :root {
     --lesson-technical-card-padding: 19px;
     --lesson-formula-card-min-height: 0px;
-    --lesson-formula-card-main-size: 1.38rem;
+    --lesson-formula-card-main-size: var(--lesson-prose-size);
     --lesson-visual-card-figure-height: 205px;
     --lesson-metric-card-min-height: 112px;
-    --lesson-metric-card-value-size: 1.28rem;
-    --lesson-metric-card-formula-size: .88rem;
+    --lesson-metric-card-value-size: var(--lesson-prose-size);
+    --lesson-metric-card-formula-size: var(--lesson-prose-size);
   }
 
   .complex-plane-intro,
@@ -8863,15 +8864,15 @@ main,
 
 /* --- Site-wide box math roles: fixed size by purpose --- */
 :root {
-  --lesson-box-math-formula-main: 1.5rem;
-  --lesson-box-math-formula-secondary: 1.05rem;
-  --lesson-box-math-flow: 1.28rem;
-  --lesson-box-math-readout-primary: 1.16rem;
-  --lesson-box-math-readout-secondary: .94rem;
+  --lesson-box-math-formula-main: var(--lesson-prose-size);
+  --lesson-box-math-formula-secondary: var(--lesson-prose-size);
+  --lesson-box-math-flow: var(--lesson-prose-size);
+  --lesson-box-math-readout-primary: var(--lesson-prose-size);
+  --lesson-box-math-readout-secondary: var(--lesson-prose-size);
   --lesson-box-math-label: .78rem;
   --lesson-box-math-svg: 13px;
-  --lesson-box-math-svg-label: 16px;
-  --lesson-box-math-svg-equation: 20px;
+  --lesson-box-math-svg-label: 18px;
+  --lesson-box-math-svg-equation: 26px;
 }
 
 /* Main equation inside a formula/explanation card. */
@@ -8942,8 +8943,23 @@ main,
   font-size: var(--lesson-box-math-svg-label);
 }
 
+.svg-math.svg-math-equation {
+  justify-content: center;
+}
+
 .svg-math.svg-math-equation .katex {
   font-size: var(--lesson-box-math-svg-equation);
+}
+
+.svg-math-equation-badge {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 1px 3px rgba(32, 24, 18, .08);
 }
 
 /* Explicit role overrides must win over generic flow/readout selectors above. */
@@ -9015,7 +9031,7 @@ main,
 .cp-node-label,
 .cp-natural-label {
   fill: var(--muted);
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .cp-node-label {
@@ -9748,4 +9764,53 @@ main,
   .course-list .learning-map-link {
     transition: none;
   }
+}
+
+
+/* --- Lesson box content scale: match surrounding prose --- */
+.lesson {
+  --lesson-box-content-size: var(--lesson-prose-size);
+}
+
+/* Body copy inside shared boxes must read at the same optical size as lesson prose. */
+.lesson :is(
+  .technical-card,
+  .math-card,
+  .explain-card,
+  .mental-model,
+  .journey-node,
+  .system-position,
+  .concept-flow-card,
+  .metric-card
+) > p,
+.lesson .domain-grid article > p {
+  font-size: var(--lesson-box-content-size);
+}
+
+/* Formula/readout containers use prose size; hierarchy comes from weight, layout and spacing. */
+.formula-card-main,
+.formula-card-details,
+.math-card-formula,
+.math-card-secondary,
+.metric-card-value,
+.metric-card-formula,
+.process-op-math {
+  font-size: var(--lesson-box-content-size);
+}
+
+.formula-card-main .katex,
+.formula-card-details .katex,
+.math-card-formula .katex,
+.math-card-secondary .katex,
+.metric-card-value .katex,
+.metric-card-formula .katex,
+.process-op-math .katex {
+  font-size: 1em;
+}
+
+/* Natural-language annotations in the CP SVG use the same optical scale as prose.
+   KaTeX SVG roles are calibrated separately because SVG viewBox scaling changes rendered size. */
+.cp-natural-label,
+.cp-node-label {
+  font-size: 18px;
 }
