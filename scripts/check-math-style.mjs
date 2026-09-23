@@ -431,5 +431,50 @@ for (const file of files) {
   }
 }
 
+
+// Typography contract: STIX text + STIX math + MathML output.
+const typographyChecks = [
+  [/--font-text:\s*"STIX Two Text"/u, 'missing STIX Two Text shared font token'],
+  [/--font-math:\s*"STIX Two Math"/u, 'missing STIX Two Math shared font token'],
+  [/--font-ui:/u, 'missing shared UI font token'],
+  [/--article-prose-size:\s*1\.125rem/u, 'article prose must remain 18px (1.125rem)'],
+  [/--lesson-prose-size:\s*var\(--article-prose-size\)/u, 'lesson prose must inherit the shared 18px article scale'],
+  [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use STIX Two Text'],
+  [/\.katex math\s*\{[\s\S]*?font-size:\s*1em/u, 'MathML must inherit the surrounding purpose scale'],
+];
+
+for (const [regex, message] of typographyChecks) {
+  if (!regex.test(css)) report(cssFile, message);
+}
+
+const mathRendererFiles = [
+  'src/components/Math.astro',
+  'src/components/MathExpr.jsx',
+];
+
+for (const mathFile of mathRendererFiles) {
+  const source = readFileSync(mathFile, 'utf8');
+  if (!/output:\s*['"]mathml['"]/u.test(source)) {
+    report(mathFile, 'visible math output must remain native MathML so STIX Two Math renders consistently across platforms.');
+  }
+  if (/output:\s*['"]htmlAndMathml['"]/u.test(source)) {
+    report(mathFile, 'htmlAndMathml reintroduces KaTeX HTML fonts; use MathML-only output.');
+  }
+}
+
+const baseLayoutFile = 'src/layouts/BaseLayout.astro';
+const baseLayout = readFileSync(baseLayoutFile, 'utf8');
+for (const fontAsset of [
+  '@fontsource/stix-two-text@5.3.0/400.css',
+  '@fontsource/stix-two-text@5.3.0/500.css',
+  '@fontsource/stix-two-text@5.3.0/600.css',
+  '@fontsource/stix-two-text@5.3.0/700.css',
+  '@fontsource/stix-two-math@5.3.0/400.css',
+]) {
+  if (!baseLayout.includes(fontAsset)) {
+    report(baseLayoutFile, `missing pinned typography asset "${fontAsset}".`);
+  }
+}
+
 if (failed) process.exit(1);
 console.log('Math style check passed.');
