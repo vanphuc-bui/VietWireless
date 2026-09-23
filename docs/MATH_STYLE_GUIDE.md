@@ -295,3 +295,36 @@ Sai:
 Dạng sai có thể vẫn build nhưng render thành text như `omegat + phi`, `sqrtoperatorname...`. CI phải chặn single-backslash TeX trong JS/JSX template/string literals.
 
 Trong SVG, `Re`, `Im`, góc, biến và biểu thức toán phải dùng `SvgMathExpr`; không quay lại `<text>Re</text>` hoặc raw TeX text.
+
+
+## Rule bắt buộc: fixed math size theo mục đích của box
+
+Không để mỗi component tự chọn cỡ KaTeX. Math nằm trong box phải được xếp vào **math role** rồi lấy cỡ từ shared token toàn site.
+
+Các role chuẩn:
+
+| Math role | Dùng cho | Shared token |
+| --- | --- | --- |
+| Formula main | công thức chính trong formula/math card | `--lesson-box-math-formula-main` |
+| Formula secondary | công thức phụ trong cùng card | `--lesson-box-math-formula-secondary` |
+| Flow state | giá trị/ký hiệu chính trong process, flow, story, chain, overview, step box | `--lesson-box-math-flow` |
+| Readout primary | đại lượng toán chính trong readout/metric | `--lesson-box-math-readout-primary` |
+| Readout secondary | công thức giải thích nhỏ dưới readout | `--lesson-box-math-readout-secondary` |
+| SVG math | notation nằm trong diagram/SVG | `--lesson-box-math-svg` |
+
+Các token này dùng **fixed rem/px values**, không dùng clamp riêng theo page. Mục tiêu là cùng một purpose thì cùng optical size trên toàn website.
+
+Không viết:
+```css
+.my-new-box strong .katex { font-size: 1.05rem; }
+```
+
+Thay vào đó box phải thuộc một role chung:
+- formula card: `.math-card-formula` hoặc `.formula-card-main`;
+- flow/process box: đặt trong class có semantics `*-flow`, `*-story`, `*-chain`, `*-overview`, `*-step`, hoặc dùng shared process/card class;
+- readout: `*-readout`, `.metric-card-value`, `.metric-card-formula`;
+- SVG: `.svg-math`.
+
+Nếu một page cần math lớn hơn chỉ vì “nhìn hơi nhỏ”, trước tiên kiểm tra page đang gán **đúng role** chưa. Không tạo một font-size riêng cho page đó.
+
+Inline math trong prose không thuộc box-role system; nó tiếp tục theo kích thước chữ của câu xung quanh.
