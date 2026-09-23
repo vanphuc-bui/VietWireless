@@ -69,8 +69,8 @@ export default function RFChainExplorer() {
       </div>
 
       <div className="rf-chain-readout">
-        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex={String.raw`A\\cos\\phi`} /></span></div>
-        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex={String.raw`A\\sin\\phi`} /></span></div>
+        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex={`A\\cos\\phi`} /></span></div>
+        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex={`A\\sin\\phi`} /></span></div>
         <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span>baseband symbol</span></div>
         <div><small>PHASE</small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span>baseband phase</span></div>
       </div>
@@ -92,7 +92,7 @@ export default function RFChainExplorer() {
         </div>
 
         <div className="rf-mixer-panel">
-          <div className="visual-caption"><span>QUADRATURE UPCONVERSION</span><strong><MathExpr tex={String.raw`I\\cos(\\omega_ct)-Q\\sin(\\omega_ct)`} /></strong></div>
+          <div className="visual-caption"><span>QUADRATURE UPCONVERSION</span><strong><MathExpr tex={`I\\cos(\\omega_ct)-Q\\sin(\\omega_ct)`} /></strong></div>
           <div className="rf-wave-stack">
             <article>
               <small><MathExpr tex="I" /> branch</small>
