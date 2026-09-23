@@ -97,7 +97,7 @@ for (const file of files) {
     report(file, `bare N-based sample/FFT notation found in "${nBasedMatch}". Render N with MathExpr.`);
   }
 
-  const namedVariableMatch = firstNodeMatch(/\b(?:subcarrier|bin|frequency|sample(?:\s+index)?|time(?:\s+index)?|delay|phase|amplitude|gain)\s+(?:A|G|I|Q|N|f|k|l|m|n|t)\b/u);
+  const namedVariableMatch = firstNodeMatch(/\b(?:subcarrier|bin|frequency|sample(?:\s+index)?|time(?:\s+index)?|delay|phase|amplitude|gain)\s+(?:A|G|I|Q|N|f|k|l|m|n|t)(?![\p{L}\p{N}_])/u);
   if (namedVariableMatch) {
     report(file, `bare named mathematical variable found in "${namedVariableMatch}". Use MathExpr.`);
   }
