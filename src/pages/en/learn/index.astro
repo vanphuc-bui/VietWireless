@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const lessons = [
+  ['01', 'What is a signal?', 'Sound → microphone → samples → time/frequency domain → FFT → I and Q → resource grid.', '/hoc/tin-hieu-la-gi/'],
+  ['02', 'Sampling, aliasing and Nyquist', 'How does a continuous waveform become samples, and what happens when sampling is too slow?', '/hoc/sampling-aliasing-nyquist/'],
+  ['03', 'Amplitude, frequency and phase', 'The three parameters behind a sinusoid and why phase matters.', '/hoc/amplitude-frequency-phase/'],
+  ['04', 'Complex numbers and phasors', 'Why complex representation is so natural in signal processing.', '/hoc/so-phuc-va-phasor/'],
+  ['05', 'I and Q and complex baseband', 'How I and Q represent amplitude and phase.', '/hoc/iq-va-complex-baseband/'],
+  ['06', 'Time domain and frequency domain', 'Two views of the same signal and what each one reveals.', '/hoc/mien-thoi-gian-va-mien-tan-so/'],
+  ['07', 'Fourier, DFT and FFT', 'How a signal is decomposed into frequency components.', '/hoc/fourier-dft-fft/'],
+  ['08', 'Modulation: BPSK → QPSK → QAM', 'How bits become constellation points and complex symbols.', '/hoc/modulation-bpsk-qpsk-qam/'],
+  ['09', 'Baseband → RF → antenna', 'How digital I and Q samples become a physical RF waveform.', '/hoc/baseband-rf-antenna/'],
+  ['10', 'Wireless channel', 'Attenuation, delay, phase rotation and fading.', '/hoc/wireless-channel/'],
+  ['11', 'Noise, SNR and EVM', 'Ways to quantify degradation at the receiver.', '/hoc/noise-snr-evm/'],
+  ['12', 'Multipath and delay spread', 'Why copies of the same signal can arrive at different times.', '/hoc/multipath-delay-spread/'],
+  ['13', 'Correlation', 'How a receiver finds a known sequence in noise.', '/hoc/correlation/'],
+  ['14', 'OFDM: the big picture', 'Why splitting bandwidth into many subcarriers is useful.', '/hoc/ofdm-buc-tranh-tong-the/'],
+  ['15', 'IFFT/FFT in OFDM', 'How frequency-domain symbols become time-domain samples and back again.', '/hoc/ifft-fft-trong-ofdm/'],
+  ['16', 'Cyclic Prefix', 'How CP protects OFDM against channel delay spread.', '/hoc/cyclic-prefix/'],
+  ['17', 'Resource grid', 'Subcarriers, OFDM symbols, resource elements and resource blocks.', '/hoc/resource-grid/'],
+  ['18', '5G NR numerology', 'How SCS, symbol duration, slots and frames change with numerology.', '/hoc/numerology-5g-nr/'],
+];
+---
+
+<BaseLayout
+  lang="en"
+  alternateHref="/hoc/"
+  title="Learning path | VietWireless"
+  description="A structured learning path from signal fundamentals to OFDM, 5G NR and NTN."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" href="/en/">← VietWireless</a>
+      <p class="concept-kicker">LEARNING PATH</p>
+      <h1>From first principles to a real wireless PHY.</h1>
+      <p class="lesson-deck">
+        Learn the concepts in dependency order: signal → sampling → complex baseband → modulation →
+        channel → OFDM → 5G NR → NTN.
+      </p>
+    </header>
+
+    <section class="concept-block">
+      <p class="concept-kicker">PART I–II · AVAILABLE TOPICS</p>
+      <h2>The first 18 lessons already exist in Vietnamese; English lesson pages are being translated progressively.</h2>
+      <p>
+        For now, each item below opens the complete Vietnamese lesson. The VI/EN navigation and English
+        site structure are already live, so individual English lessons can be published without changing the URL scheme later.
+      </p>
+
+      <ol class="course-list">
+        {lessons.map(([number, title, summary, href]) => (
+          <li class="available">
+            <span class="course-no">Lesson {number}</span>
+            <div>
+              <h3>{title}</h3>
+              <p>{summary}</p>
+            </div>
+            <a href={href} hreflang="vi">Vietnamese lesson →</a>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <nav class="next-lesson" aria-label="Language">
+      <span>VIETNAMESE EDITION</span>
+      <div>
+        <h2>All detailed lessons are available in Vietnamese.</h2>
+        <p>Use the VI button at any time to return to the original edition.</p>
+      </div>
+      <a class="text-button" href="/hoc/">Open Vietnamese syllabus →</a>
+    </nav>
+  </article>
+</BaseLayout>
