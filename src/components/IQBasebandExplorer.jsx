@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import MathExpr, { SvgMathExpr } from './MathExpr.jsx';
 
 const W = 760;
 const H = 230;
@@ -37,7 +38,7 @@ export default function IQBasebandExplorer() {
     <div className="iq-baseband-lab">
       <div className="iq-baseband-controls">
         <label>
-          <span>Amplitude <strong>A = {amplitude.toFixed(2)}</strong></span>
+          <span>Amplitude <strong><MathExpr tex={`A=${amplitude.toFixed(2)}`} /></strong></span>
           <input
             type="range"
             min="0.2"
@@ -48,7 +49,7 @@ export default function IQBasebandExplorer() {
           />
         </label>
         <label>
-          <span>Phase <strong>φ = {phase.toFixed(0)}°</strong></span>
+          <span>Phase <strong><MathExpr tex={`\\phi=${phase.toFixed(0)}^\\circ`} /></strong></span>
           <input
             type="range"
             min="-180"
@@ -61,17 +62,17 @@ export default function IQBasebandExplorer() {
       </div>
 
       <div className="iq-baseband-readout">
-        <div><small>I</small><strong>{i.toFixed(3)}</strong><span>A cos φ</span></div>
-        <div><small>Q</small><strong>{q.toFixed(3)}</strong><span>A sin φ</span></div>
-        <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span>√(I²+Q²)</span></div>
-        <div><small>PHASE</small><strong>{phase.toFixed(0)}°</strong><span>atan2(Q,I)</span></div>
+        <div><small><MathExpr tex="I" /></small><strong>{i.toFixed(3)}</strong><span><MathExpr tex="A\\cos\\phi" /></span></div>
+        <div><small><MathExpr tex="Q" /></small><strong>{q.toFixed(3)}</strong><span><MathExpr tex="A\\sin\\phi" /></span></div>
+        <div><small>MAGNITUDE</small><strong>{Math.hypot(i, q).toFixed(3)}</strong><span><MathExpr tex="\\sqrt{I^2+Q^2}" /></span></div>
+        <div><small>PHASE</small><strong><MathExpr tex={`${phase.toFixed(0)}^\\circ`} /></strong><span><MathExpr tex="\\operatorname{atan2}(Q,I)" /></span></div>
       </div>
 
       <div className="iq-baseband-grid">
         <div className="iq-baseband-plane">
           <div className="visual-caption">
             <span>COMPLEX BASEBAND</span>
-            <strong>x = I + jQ</strong>
+            <strong><MathExpr tex="x=I+jQ" /></strong>
           </div>
           <svg viewBox="0 0 360 330" role="img" aria-label="Điểm I Q trên mặt phẳng phức">
             <line className="iqb-axis" x1="42" y1={cy} x2="326" y2={cy} />
@@ -81,28 +82,28 @@ export default function IQBasebandExplorer() {
             <line className="iqb-projection" x1={px} y1={py} x2={cx} y2={py} />
             <line className="iqb-vector" x1={cx} y1={cy} x2={px} y2={py} />
             <circle className="iqb-dot" cx={px} cy={py} r="6" />
-            <text className="iqb-label" x="312" y={cy - 9}>I</text>
-            <text className="iqb-label" x={cx + 9} y="42">Q</text>
-            <text className="iqb-value" x={px + 8} y={cy - 8}>I={i.toFixed(2)}</text>
-            <text className="iqb-value" x={cx + 8} y={py - 8}>Q={q.toFixed(2)}</text>
+            <SvgMathExpr tex="I" x={312} y={cy - 9} width={24} />
+            <SvgMathExpr tex="Q" x={cx + 9} y={42} width={24} />
+            <SvgMathExpr tex={`I=${i.toFixed(2)}`} x={px + 8} y={cy - 8} width={74} />
+            <SvgMathExpr tex={`Q=${q.toFixed(2)}`} x={cx + 8} y={py - 8} width={74} />
           </svg>
         </div>
 
         <div className="iq-baseband-rf">
           <div className="visual-caption">
             <span>PHYSICAL RF · MINH HỌA</span>
-            <strong>s(t) là tín hiệu thực</strong>
+            <strong><MathExpr tex="s(t)" /> là tín hiệu thực</strong>
           </div>
           <div className="iq-rf-formula">
-            s(t) = I cos(ω<sub>c</sub>t) - Q sin(ω<sub>c</sub>t)
+            <MathExpr tex="s(t)=I\\cos(\\omega_c t)-Q\\sin(\\omega_c t)" />
           </div>
           <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Waveform RF thực được tổng hợp từ I và Q">
             <line className="iqb-axis" x1={PAD} y1={H / 2} x2={W - PAD} y2={H / 2} />
             <path className="iqb-rf-wave" d={path} />
           </svg>
           <p>
-            Với I = A cosφ và Q = A sinφ, biểu thức trên trở thành A cos(ω<sub>c</sub>t + φ).
-            I+jQ là representation ở baseband; waveform ngoài RF chain vẫn là tín hiệu thực.
+            Với <MathExpr tex="I=A\\cos\\phi" /> và <MathExpr tex="Q=A\\sin\\phi" />, biểu thức trên trở thành <MathExpr tex="A\\cos(\\omega_c t+\\phi)" />.
+            <MathExpr tex="I+jQ" /> là representation ở baseband; waveform ngoài RF chain vẫn là tín hiệu thực.
           </p>
         </div>
       </div>
