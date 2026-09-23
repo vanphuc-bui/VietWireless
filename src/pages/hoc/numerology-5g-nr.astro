@@ -49,11 +49,21 @@ import MathExpr from '../../components/Math.astro';
 
       <MathExpr tex="\\Delta f = 15\\cdot 2^{\\mu}\\,\\mathrm{kHz}" display />
 
-      <div class="numerology-simple-table">
-        <div><strong><MathExpr tex="\\mu=0" /></strong><span><MathExpr tex="15\\,\\mathrm{kHz}" /></span></div>
-        <div><strong><MathExpr tex="\\mu=1" /></strong><span><MathExpr tex="30\\,\\mathrm{kHz}" /></span></div>
-        <div><strong><MathExpr tex="\\mu=2" /></strong><span><MathExpr tex="60\\,\\mathrm{kHz}" /></span></div>
-        <div><strong><MathExpr tex="\\mu=3" /></strong><span><MathExpr tex="120\\,\\mathrm{kHz}" /></span></div>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead>
+            <tr>
+              <th>Numerology</th>
+              <th>Subcarrier spacing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><MathExpr tex="\\mu=0" /></td><td><MathExpr tex="15\\,\\mathrm{kHz}" /></td></tr>
+            <tr><td><MathExpr tex="\\mu=1" /></td><td><MathExpr tex="30\\,\\mathrm{kHz}" /></td></tr>
+            <tr><td><MathExpr tex="\\mu=2" /></td><td><MathExpr tex="60\\,\\mathrm{kHz}" /></td></tr>
+            <tr><td><MathExpr tex="\\mu=3" /></td><td><MathExpr tex="120\\,\\mathrm{kHz}" /></td></tr>
+          </tbody>
+        </table>
       </div>
 
       <p>
@@ -68,11 +78,21 @@ import MathExpr from '../../components/Math.astro';
 
       <MathExpr tex="T_u = \\frac{1}{\\Delta f}" display />
 
-      <div class="numerology-simple-table">
-        <div><strong><MathExpr tex="15\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="66.67\\,\\mu\\mathrm{s}" /></span></div>
-        <div><strong><MathExpr tex="30\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="33.33\\,\\mu\\mathrm{s}" /></span></div>
-        <div><strong><MathExpr tex="60\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="16.67\\,\\mu\\mathrm{s}" /></span></div>
-        <div><strong><MathExpr tex="120\\,\\mathrm{kHz}" /></strong><span><MathExpr tex="8.33\\,\\mu\\mathrm{s}" /></span></div>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead>
+            <tr>
+              <th>Subcarrier spacing</th>
+              <th>Useful duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><MathExpr tex="15\\,\\mathrm{kHz}" /></td><td><MathExpr tex="66.67\\,\\mu\\mathrm{s}" /></td></tr>
+            <tr><td><MathExpr tex="30\\,\\mathrm{kHz}" /></td><td><MathExpr tex="33.33\\,\\mu\\mathrm{s}" /></td></tr>
+            <tr><td><MathExpr tex="60\\,\\mathrm{kHz}" /></td><td><MathExpr tex="16.67\\,\\mu\\mathrm{s}" /></td></tr>
+            <tr><td><MathExpr tex="120\\,\\mathrm{kHz}" /></td><td><MathExpr tex="8.33\\,\\mu\\mathrm{s}" /></td></tr>
+          </tbody>
+        </table>
       </div>
 
       <p>
