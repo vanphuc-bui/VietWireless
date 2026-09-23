@@ -17,6 +17,7 @@ const defaultAlternateHref = isEnglish
     ? '/en/learn/'
     : '/en/';
 const resolvedAlternateHref = alternateHref ?? defaultAlternateHref;
+const hasTranslationPair = Boolean(alternateHref);
 const alternateLang = isEnglish ? 'vi' : 'en';
 const currentAbsolute = new URL(currentPath, Astro.url.origin).href;
 const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
@@ -30,9 +31,15 @@ const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
     <meta name="description" content={description} />
     <meta name="theme-color" content="#fbfaf7" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" hreflang={lang} href={currentAbsolute} />
-    <link rel="alternate" hreflang={alternateLang} href={alternateAbsolute} />
-    <link rel="alternate" hreflang="x-default" href={isEnglish ? alternateAbsolute : currentAbsolute} />
+    {
+      hasTranslationPair && (
+        <>
+          <link rel="alternate" hreflang={lang} href={currentAbsolute} />
+          <link rel="alternate" hreflang={alternateLang} href={alternateAbsolute} />
+          <link rel="alternate" hreflang="x-default" href={isEnglish ? alternateAbsolute : currentAbsolute} />
+        </>
+      )
+    }
     <title>{title}</title>
   </head>
   <body>
