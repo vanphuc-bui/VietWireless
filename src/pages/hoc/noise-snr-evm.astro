@@ -31,10 +31,10 @@ import MathExpr from '../../components/Math.astro';
       <div class="system-position">
         <span>IDEAL SYMBOL → RECEIVED SYMBOL</span>
         <div class="system-position-flow">
-          <span>X</span><b>→</b>
+          <span><MathExpr tex="X" /></span><b>→</b>
           <span>channel</span><b>+</b>
           <strong>noise / impairment</strong><b>→</b>
-          <span>Y</span><b>→</b>
+          <span><MathExpr tex="Y" /></span><b>→</b>
           <span>SNR + EVM</span>
         </div>
         <p>
@@ -55,9 +55,9 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="P_n = kTB" display />
 
       <div class="thermal-symbols">
-        <div><strong>k</strong><span>Boltzmann constant</span></div>
-        <div><strong>T</strong><span>absolute temperature</span></div>
-        <div><strong>B</strong><span>noise bandwidth</span></div>
+        <div><strong><MathExpr tex="k" /></strong><span>Boltzmann constant</span></div>
+        <div><strong><MathExpr tex="T" /></strong><span>absolute temperature</span></div>
+        <div><strong><MathExpr tex="B" /></strong><span>noise bandwidth</span></div>
       </div>
 
       <p>
@@ -144,11 +144,11 @@ import MathExpr from '../../components/Math.astro';
           <line class="evm-error-vector" x1="410" y1="110" x2="445" y2="145" />
           <circle class="evm-ref-dot" cx="410" cy="110" r="7" />
           <circle class="evm-meas-dot" cx="445" cy="145" r="7" />
-          <text class="evm-label" x="420" y="98">reference X</text>
-          <text class="evm-label" x="454" y="160">measured Y</text>
+          <foreignObject x="402" y="82" width="104" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>reference&nbsp;</span><MathExpr tex="X" /></div></foreignObject>
+          <foreignObject x="438" y="144" width="112" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>measured&nbsp;</span><MathExpr tex="Y" /></div></foreignObject>
           <text class="evm-label accent" x="432" y="122">error vector</text>
-          <text class="evm-label" x="540" y="214">I</text>
-          <text class="evm-label" x="262" y="70">Q</text>
+          <foreignObject x="528" y="198" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="I" /></div></foreignObject>
+          <foreignObject x="250" y="54" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="Q" /></div></foreignObject>
         </svg>
       </div>
 
@@ -159,7 +159,7 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex={String.raw`\mathrm{EVM}_{\mathrm{RMS}} = \sqrt{\frac{\sum_k |Y_k-X_k|^2}{\sum_k |X_k|^2}}`} display />
 
       <p>
-        Nếu EVM = 0.05, ta thường viết 5%.
+        Nếu <MathExpr tex={String.raw`\mathrm{EVM}=0.05`} />, ta thường viết <MathExpr tex={String.raw`5\%`} />.
         Numerator là tổng error energy; denominator là reference-symbol energy dùng để normalize.
         Exact standard measurement có thể quy định thêm reference reconstruction, averaging và normalization cụ thể.
       </p>
@@ -197,7 +197,7 @@ import MathExpr from '../../components/Math.astro';
         <b>→ sync / FFT →</b>
         <div><small>SUBCARRIER</small><strong><MathExpr tex="Y[k]" /></strong><span>channel vẫn còn</span></div>
         <b>→ equalize →</b>
-        <div><small>SYMBOL</small><strong>X̂[k]</strong><span>residual error</span></div>
+        <div><small>SYMBOL</small><strong><MathExpr tex={String.raw`\hat{X}[k]`} /></strong><span>residual error</span></div>
       </div>
 
       <p>
@@ -229,7 +229,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap">
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Thermal noise:</strong> có noise floor cơ bản và tăng theo bandwidth qua kTB.</li>
+        <li><strong>Thermal noise:</strong> có noise floor cơ bản và tăng theo bandwidth qua <MathExpr tex="kTB" />.</li>
         <li><strong>SNR:</strong> ratio giữa wanted-signal power và noise power tại cùng reference point.</li>
         <li><strong>dB:</strong> biến power ratio thành phép cộng/trừ thuận tiện.</li>
         <li><strong>EVM:</strong> normalized RMS complex error giữa measured và reference symbols.</li>
