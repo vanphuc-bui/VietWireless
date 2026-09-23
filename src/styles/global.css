@@ -8729,3 +8729,237 @@ main,
     border-bottom: 0;
   }
 }
+
+
+/* --- Process flow: states are cards, operations live on arrows --- */
+.process-flow {
+  --process-card-min-height: 156px;
+  --process-arrow-width: 112px;
+}
+
+.rf-chain-overview.process-flow {
+  grid-template-columns:
+    minmax(0, 1fr)
+    var(--process-arrow-width)
+    minmax(0, 1fr)
+    var(--process-arrow-width)
+    minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.rf-chain-overview.process-flow > .process-card {
+  min-width: 0;
+  min-height: var(--process-card-min-height);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.process-card-step {
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .09em;
+}
+
+.rf-chain-overview.process-flow > .process-card > strong {
+  margin: 0 0 8px;
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  line-height: 1.2;
+}
+
+.rf-chain-overview.process-flow > .process-card > strong .katex {
+  font-size: 1em;
+}
+
+.rf-chain-overview.process-flow > .process-card > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.55;
+}
+
+.rf-chain-overview.process-flow > .process-arrow {
+  min-width: 0;
+  min-height: var(--process-card-min-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--violet);
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+}
+
+.process-op {
+  color: var(--muted);
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.process-op-math {
+  min-height: 20px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.process-op-math .katex {
+  font-size: 1rem;
+}
+
+.process-arrow-glyph {
+  color: var(--violet);
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.process-card-rf {
+  border-top: 3px solid var(--accent) !important;
+}
+
+.process-takeaway {
+  max-width: 820px;
+  margin: -4px 0 30px !important;
+  padding: 14px 16px;
+  border-left: 3px solid var(--blue);
+  background: var(--blue-soft);
+  color: var(--ink-soft) !important;
+  font-size: .9rem !important;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .rf-chain-overview.process-flow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .rf-chain-overview.process-flow > .process-card {
+    min-height: 0;
+  }
+
+  .rf-chain-overview.process-flow > .process-arrow {
+    min-height: 62px;
+    gap: 2px;
+  }
+
+  .process-arrow-glyph {
+    transform: rotate(90deg);
+  }
+}
+
+
+/* --- Site-wide box math roles: fixed size by purpose --- */
+:root {
+  --lesson-box-math-formula-main: 1.5rem;
+  --lesson-box-math-formula-secondary: 1.05rem;
+  --lesson-box-math-flow: 1.28rem;
+  --lesson-box-math-readout-primary: 1.16rem;
+  --lesson-box-math-readout-secondary: .94rem;
+  --lesson-box-math-label: .78rem;
+  --lesson-box-math-svg: 13px;
+}
+
+/* Main equation inside a formula/explanation card. */
+.math-card .math-card-formula .katex,
+.formula-card-main .katex {
+  font-size: var(--lesson-box-math-formula-main);
+}
+
+/* Supporting equation inside the same card. */
+.math-card .math-card-secondary .katex,
+.formula-card-details .katex {
+  font-size: var(--lesson-box-math-formula-secondary);
+}
+
+/* State/value shown inside process, flow, story, chain and step boxes. */
+.lesson :is(
+  [class*="-flow"],
+  [class*="-story"],
+  [class*="-chain"],
+  [class*="-overview"],
+  [class*="-step"],
+  .concept-bridge,
+  .phase-comparison,
+  .frequency-period-visual,
+  .sinusoid-three-grid,
+  .domain-question-grid,
+  .bits-per-symbol-grid,
+  .parallel-subcarriers,
+  .nr-slot-equations,
+  .numerology-simple-table,
+  .dft-symbols,
+  .bin-equations
+) strong .katex,
+.lesson :is(
+  [class*="-flow"],
+  [class*="-story"],
+  [class*="-chain"],
+  [class*="-overview"],
+  [class*="-step"]
+) > div > strong .katex {
+  font-size: var(--lesson-box-math-flow);
+}
+
+/* Readouts: the current value is larger; explanatory math below it is smaller. */
+.lesson [class*="-readout"] strong .katex,
+.metric-card-value .katex {
+  font-size: var(--lesson-box-math-readout-primary);
+}
+
+.lesson [class*="-readout"] > div > span .katex,
+.lesson [class*="-readout"] > span .katex,
+.metric-card-formula .katex,
+.lab-readout .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
+
+/* Math embedded in a box label follows label scale, never the main-equation scale. */
+.lesson :is(.card-label, .process-card-step, .metric-card-label, small) .katex {
+  font-size: 1em;
+}
+
+/* SVG math has its own fixed visual scale because it lives in a viewBox. */
+.svg-math .katex {
+  font-size: var(--lesson-box-math-svg);
+}
+
+/* Explicit role overrides must win over generic flow/readout selectors above. */
+.formula-card .formula-card-main .katex,
+.math-card .math-card-formula .katex {
+  font-size: var(--lesson-box-math-formula-main);
+}
+
+.formula-card .formula-card-details .katex,
+.math-card .math-card-secondary .katex {
+  font-size: var(--lesson-box-math-formula-secondary);
+}
+
+.metric-card .metric-card-formula .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
+
+/* The RF process flow is a flow box, so it uses the same site-wide role size. */
+.rf-chain-overview.process-flow > .process-card > strong {
+  font-size: var(--lesson-box-math-flow);
+}
+
+.rf-chain-overview.process-flow > .process-card > strong .katex {
+  font-size: 1em;
+}
+
+.process-op-math .katex {
+  font-size: var(--lesson-box-math-readout-secondary);
+}
