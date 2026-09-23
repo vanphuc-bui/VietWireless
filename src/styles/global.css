@@ -8419,3 +8419,303 @@ main,
     min-height: 20px;
   }
 }
+
+
+/* --- Technical card taxonomy: formula / visual / metric --- */
+:root {
+  --lesson-technical-card-padding: 22px;
+  --lesson-technical-card-label-size: .7rem;
+  --lesson-technical-card-body-size: .92rem;
+  --lesson-formula-card-min-height: 240px;
+  --lesson-formula-card-main-size: clamp(1.42rem, 2.1vw, 1.78rem);
+  --lesson-formula-card-detail-size: 1.05rem;
+  --lesson-visual-card-figure-height: 230px;
+  --lesson-metric-card-min-height: 122px;
+  --lesson-metric-card-label-size: .65rem;
+  --lesson-metric-card-value-size: 1.38rem;
+  --lesson-metric-card-formula-size: .9rem;
+}
+
+.technical-card {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.technical-card > .card-label,
+.technical-card .card-label {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-size: var(--lesson-technical-card-label-size);
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: .09em;
+}
+
+.formula-card {
+  min-height: var(--lesson-formula-card-min-height);
+  display: flex;
+  flex-direction: column;
+}
+
+.formula-card-main {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.formula-card-main .math-inline .katex,
+.formula-card-main .katex {
+  font-size: var(--lesson-formula-card-main-size);
+}
+
+.formula-card > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-technical-card-body-size);
+  line-height: 1.6;
+}
+
+.formula-card-details {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+
+.formula-card-details.math-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.formula-card-details .math-display {
+  min-width: 0;
+  margin: 0;
+  padding: 8px 4px;
+  overflow-x: auto;
+  text-align: left;
+}
+
+.formula-card-details .math-display .katex {
+  font-size: var(--lesson-formula-card-detail-size);
+}
+
+.formula-card-compact {
+  min-height: 145px !important;
+  padding: var(--lesson-technical-card-padding) !important;
+  justify-content: center;
+}
+
+.visual-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.visual-card-figure {
+  width: 100%;
+  min-height: var(--lesson-visual-card-figure-height);
+  display: grid;
+  place-items: center;
+  margin-bottom: 12px;
+}
+
+.visual-card-figure > svg {
+  width: 100%;
+  max-height: var(--lesson-visual-card-figure-height);
+  display: block;
+  margin: 0;
+}
+
+.visual-card > p {
+  margin: auto 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-technical-card-body-size);
+  line-height: 1.55;
+}
+
+.concept-flow-card {
+  width: 100%;
+  max-width: 860px;
+  padding: var(--lesson-technical-card-padding);
+}
+
+.concept-flow-card .system-position-flow {
+  gap: 9px;
+  margin: 14px 0 12px;
+  font-size: .9rem;
+}
+
+.concept-flow-card .system-position-flow strong {
+  padding: 6px 10px;
+}
+
+.concept-flow-card .system-position-flow .math-inline .katex {
+  font-size: 1.12em;
+}
+
+.concept-flow-card > p {
+  font-size: var(--lesson-technical-card-body-size);
+  line-height: 1.6;
+}
+
+.complex-plane-intro {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.complex-plane-intro .visual-card {
+  min-height: 350px;
+}
+
+.complex-plane-intro .real-number-line {
+  width: 100%;
+  min-height: 210px;
+}
+
+.complex-plane-intro .visual-card > svg,
+.complex-plane-intro .visual-card-figure > svg {
+  margin-top: 0;
+}
+
+.complex-two-views {
+  align-items: stretch;
+}
+
+.complex-two-views .formula-card {
+  min-height: 305px;
+}
+
+.euler-geometry.technical-card {
+  padding: var(--lesson-technical-card-padding);
+}
+
+.metric-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.phasor-readout > .metric-card {
+  min-width: 0;
+  min-height: var(--lesson-metric-card-min-height);
+  padding: 17px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-right: 1px solid var(--line);
+}
+
+.phasor-readout > .metric-card:last-child {
+  border-right: 0;
+}
+
+.metric-card-label {
+  color: var(--muted);
+  font-size: var(--lesson-metric-card-label-size);
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.metric-card-value {
+  margin: 7px 0 5px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--lesson-metric-card-value-size);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card-formula {
+  min-height: 31px;
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  color: var(--muted);
+  font-size: var(--lesson-metric-card-formula-size);
+  line-height: 1.2;
+  scrollbar-width: thin;
+}
+
+.metric-card-formula .math-inline,
+.metric-card-formula .math-inline .katex {
+  line-height: 1.2;
+}
+
+.svg-math.phasor-svg-axis {
+  font-size: 13px;
+}
+
+.svg-math.phasor-svg-angle,
+.svg-math.phasor-svg-value {
+  font-size: 13px;
+}
+
+.svg-math.phasor-svg-equation {
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+.phasor-side-note {
+  font-size: 12.5px;
+}
+
+@media (max-width: 900px) {
+  .metric-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .phasor-readout > .metric-card:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .phasor-readout > .metric-card:nth-child(-n+2) {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --lesson-technical-card-padding: 19px;
+    --lesson-formula-card-min-height: 0px;
+    --lesson-formula-card-main-size: 1.38rem;
+    --lesson-visual-card-figure-height: 205px;
+    --lesson-metric-card-min-height: 112px;
+    --lesson-metric-card-value-size: 1.28rem;
+    --lesson-metric-card-formula-size: .88rem;
+  }
+
+  .complex-plane-intro,
+  .complex-two-views {
+    grid-template-columns: 1fr;
+  }
+
+  .complex-plane-intro .visual-card {
+    min-height: 0;
+  }
+
+  .formula-card-details.math-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .formula-card-compact {
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .metric-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phasor-readout > .metric-card {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .phasor-readout > .metric-card:last-child {
+    border-bottom: 0;
+  }
+}
