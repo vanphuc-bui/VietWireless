@@ -8870,8 +8870,8 @@ main,
   --lesson-box-math-readout-secondary: .94rem;
   --lesson-box-math-label: .78rem;
   --lesson-box-math-svg: 13px;
-  --lesson-box-math-svg-label: 16px;
-  --lesson-box-math-svg-equation: 20px;
+  --lesson-box-math-svg-label: 18px;
+  --lesson-box-math-svg-equation: 26px;
 }
 
 /* Main equation inside a formula/explanation card. */
@@ -8942,8 +8942,23 @@ main,
   font-size: var(--lesson-box-math-svg-label);
 }
 
+.svg-math.svg-math-equation {
+  justify-content: center;
+}
+
 .svg-math.svg-math-equation .katex {
   font-size: var(--lesson-box-math-svg-equation);
+}
+
+.svg-math-equation-badge {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 1px 3px rgba(32, 24, 18, .08);
 }
 
 /* Explicit role overrides must win over generic flow/readout selectors above. */
