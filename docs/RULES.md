@@ -62,10 +62,10 @@ Math content có TeX command phải dùng `String.raw` hoặc double escaping. D
 
 ### Typography contract
 
-- Reading text dùng `STIX Two Text`; math dùng `STIX Two Math`; UI metadata dùng shared sans-serif stack.
-- KaTeX chỉ parse/validate TeX; visible math output là native MathML.
-- Lesson prose source of truth là `--article-prose-size: 1.125rem` và `--lesson-prose-size: var(--article-prose-size)`; box content phải bám prose scale.
-- Lesson typography chỉ có bốn cấp chính: 32 px page title, 24 px section title, 18 px content/math, 16 px metadata. H3 mặc định 18 px với weight/spacing.
-- Không thêm page-specific font stack hoặc page-specific math size để chữa layout.
-- Mọi thay đổi typography phải pass `npm run check:math` và giữ được consistency desktop/mobile.
-
+- Reading text dùng `"Times New Roman", Times, serif`, gần với Machine Learning Cơ Bản.
+- UI metadata dùng `Arial, Helvetica, sans-serif`.
+- KaTeX giữ `htmlAndMathml` và font TeX mặc định; không ép sang STIX/MathML-only.
+- Lesson prose source of truth là `--article-prose-size: 1rem` và `--lesson-prose-size: var(--article-prose-size)`.
+- Box/table/callout body phải bám prose scale.
+- Không thêm page-specific font stack hoặc page-specific math font để chữa layout.
+- Mọi thay đổi typography phải pass `npm run check:math` và `npm run build`.
