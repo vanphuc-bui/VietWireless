@@ -5091,8 +5091,8 @@ g.active .mod-point {
 .thermal-equation b,
 .evm-equation span,
 .evm-equation b,
-.snr-evm-relation span,
-.snr-evm-relation b,
+.snr-evm-relation > span,
+.snr-evm-relation > b,
 .multipath-equation span,
 .multipath-equation b,
 .rms-delay-equation span,
@@ -5107,7 +5107,7 @@ g.active .mod-point {
 .delay-phase-equation b,
 .thermal-equation b,
 .evm-equation b,
-.snr-evm-relation b,
+.snr-evm-relation > b,
 .multipath-equation b,
 .rms-delay-equation b {
   color: var(--accent);
