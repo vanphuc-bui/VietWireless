@@ -33,7 +33,7 @@ import MathExpr from '../../components/Math.astro';
           <strong><MathExpr tex="X[k]" /></strong>
         </div>
         <p>
-          Với signal liên tục thường viết <MathExpr tex="x(t) \leftrightarrow X(f)" />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <MathExpr tex="x[n] \leftrightarrow X[k]" />.
+          Với signal liên tục thường viết <MathExpr tex={String.raw`x(t) \leftrightarrow X(f)`} />. Với một record rời rạc hữu hạn dùng DFT, ta thường viết <MathExpr tex={String.raw`x[n] \leftrightarrow X[k]`} />.
         </p>
       </div>
     </section>
@@ -94,7 +94,7 @@ import MathExpr from '../../components/Math.astro';
             <text class="domain-svg-label" x="350" y="163">+f₀</text>
             <text class="domain-svg-label" x="480" y="163">f</text>
           </svg>
-          <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở <MathExpr tex="\pm f_0" />.</p>
+          <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở <MathExpr tex={String.raw`\pm f_0`} />.</p>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ import MathExpr from '../../components/Math.astro';
         <strong>Tại sao có -f?</strong>
         <p>
           Negative frequency xuất hiện tự nhiên từ complex exponential:
-          <MathExpr tex="\cos(2\pi f_0 t) = \frac{e^{j2\pi f_0 t}+e^{-j2\pi f_0 t}}{2}" />.
+          <MathExpr tex={String.raw`\cos(2\pi f_0 t) = \frac{e^{j2\pi f_0 t}+e^{-j2\pi f_0 t}}{2}`} />.
           Nó là một phần của representation toán học, không phải một đồng hồ vật lý đang chạy ngược.
         </p>
       </aside>
@@ -115,12 +115,12 @@ import MathExpr from '../../components/Math.astro';
       <div class="domain-sum-flow">
         <div>
           <small>TONE 1</small>
-          <strong><MathExpr tex="5\,\mathrm{Hz}" /></strong>
+          <strong><MathExpr tex={String.raw`5\,\mathrm{Hz}`} /></strong>
         </div>
         <b>+</b>
         <div>
           <small>TONE 2</small>
-          <strong><MathExpr tex="12\,\mathrm{Hz}" /></strong>
+          <strong><MathExpr tex={String.raw`12\,\mathrm{Hz}`} /></strong>
         </div>
         <b>→</b>
         <div>
@@ -144,7 +144,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
       <h2>Đổi hai tone rồi chuyển qua lại giữa time domain và frequency domain.</h2>
       <p>
-        Lab này dùng một record <MathExpr tex="1\,\mathrm{s}" /> với sampling rate <MathExpr tex="64\,\mathrm{Hz}" />. Hai tone được đặt đúng DFT bins để tập trung vào
+        Lab này dùng một record <MathExpr tex={String.raw`1\,\mathrm{s}`} /> với sampling rate <MathExpr tex={String.raw`64\,\mathrm{Hz}`} />. Hai tone được đặt đúng DFT bins để tập trung vào
         ý tưởng representation; leakage và windowing sẽ được tách riêng ở Bài 07.
       </p>
       <SignalExplorer client:load />
@@ -162,7 +162,7 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article>
           <span class="card-label">PHASE</span>
-          <h3><MathExpr tex="\angle X[k]" /></h3>
+          <h3><MathExpr tex={String.raw`\angle X[k]`} /></h3>
           <p>Thành phần đó có phase nào so với reference của record.</p>
         </article>
       </div>
