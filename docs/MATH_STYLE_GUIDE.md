@@ -252,3 +252,46 @@ Ký tự đơn chỉ là dữ liệu minh họa, ví dụ chữ “A” được
 ## Rule layout khi MathExpr nằm trong text
 
 Không viết CSS selector kiểu `.foo span { display:block }` nếu bên trong `.foo` có thể chứa `MathExpr`, vì `MathExpr` cũng render thành `span` và sẽ bị bẻ dòng. Dùng direct-child selector như `.foo > span` hoặc target class cụ thể. Inline math phải luôn ở cùng dòng với câu khi còn đủ chỗ.
+
+
+## Rule technical cards: phân loại formula / visual / metric
+
+Không ép mọi box kỹ thuật vào cùng một chiều cao. Trước khi style một box, phải xác định nó thuộc một trong ba loại sau:
+
+- **Formula card**: label + công thức chính + prose/công thức phụ. Dùng `.technical-card.formula-card`, với công thức chính trong `.formula-card-main` và công thức phụ trong `.formula-card-details`.
+- **Visual card**: label + SVG/plot/diagram + caption. Dùng `.technical-card.visual-card` và đặt hình trong `.visual-card-figure`. Các visual card cùng cấp phải có figure area cùng scale.
+- **Metric card**: label + giá trị hiện tại + công thức/notation phụ, thường nằm trong readout của interactive lab. Dùng `.metric-card-grid` + `.metric-card`, với `.metric-card-label`, `.metric-card-value`, `.metric-card-formula`.
+
+Nguồn chuẩn cho kích thước là các token `--lesson-technical-card-*`, `--lesson-formula-card-*`, `--lesson-visual-card-*` và `--lesson-metric-card-*`. Không hard-code lại padding, min-height hoặc font-size theo từng page nếu shared token đã tồn tại.
+
+Mục tiêu là **đồng nhất trong đúng loại card**, không phải ép formula card, visual card và metric card có cùng chiều cao. Formula phải đủ lớn để đọc; visual phải có vùng hình đủ rộng; metric phải gọn nhưng công thức phụ vẫn đọc được.
+
+Minimum readability:
+- công thức chính trong formula card không được nhỏ hơn khoảng 1.35rem trên desktop;
+- công thức phụ/readout không được nhỏ tới mức phải zoom; giữ khoảng 0.88rem trở lên;
+- metric value phải nổi bật hơn formula phụ;
+- nếu công thức dài, ưu tiên horizontal overflow cục bộ hoặc đổi layout, không giảm riêng font-size xuống rất nhỏ.
+
+## Rule TeX trong React/JSX
+
+Trong JavaScript/JSX, backslash của TeX có thể bị JavaScript nuốt trước khi KaTeX nhận chuỗi. Vì vậy:
+
+Đúng:
+```jsx
+<MathExpr tex={String.raw`\omega t+\phi`} />
+<SvgMathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} ... />
+```
+
+Cũng chấp nhận double escaping:
+```jsx
+<MathExpr tex={`\\omega t+\\phi`} />
+```
+
+Sai:
+```jsx
+<MathExpr tex={`\omega t+\phi`} />
+```
+
+Dạng sai có thể vẫn build nhưng render thành text như `omegat + phi`, `sqrtoperatorname...`. CI phải chặn single-backslash TeX trong JS/JSX template/string literals.
+
+Trong SVG, `Re`, `Im`, góc, biến và biểu thức toán phải dùng `SvgMathExpr`; không quay lại `<text>Re</text>` hoặc raw TeX text.
