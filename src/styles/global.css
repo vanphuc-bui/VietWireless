@@ -76,7 +76,7 @@ button, input { font: inherit; }
 
 .teaching-steps { max-width: 820px; margin-top: 34px; display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
 .teaching-steps article { min-height: 190px; padding: 23px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.44); }
-.teaching-steps span { color: var(--accent); font-family: var(--font-serif); font-size: 1rem; }
+.teaching-steps > article > span { color: var(--accent); font-family: var(--font-serif); font-size: 1rem; }
 .teaching-steps h3 { margin: 26px 0 7px; font-family: var(--font-serif); font-size: 1.2rem; }
 .teaching-steps p { margin: 0; color: var(--muted); font-size: 0.9rem; }
 
@@ -395,7 +395,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: .76rem;
 }
 
-.chain-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.chain-legend > span { display: inline-flex; align-items: center; gap: 7px; }
 
 .legend-dot {
   width: 9px;
@@ -1402,7 +1402,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   gap: 12px;
 }
 
-.visual-caption span,
+.visual-caption > span,
 .zoom-label {
   color: var(--accent);
   font-size: .68rem;
@@ -1763,12 +1763,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: #fff;
 }
 
-.ofdm-rx-return strong,
+.ofdm-rx-return > div > strong,
 .ofdm-rx-return > div > span {
   display: block;
 }
 
-.ofdm-rx-return strong {
+.ofdm-rx-return > div > strong {
   font-family: var(--font-serif);
 }
 
@@ -2131,13 +2131,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: var(--paper-2);
 }
 
-.nyquist-rule span,
-.nyquist-rule b {
+.nyquist-rule > span,
+.nyquist-rule > b {
   font-family: var(--font-serif);
   font-size: 1.65rem;
 }
 
-.nyquist-rule b {
+.nyquist-rule > b {
   color: var(--accent);
 }
 
@@ -2378,12 +2378,12 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   box-shadow: 0 0 0 1px var(--accent);
 }
 
-.history-overview-item strong,
+.history-overview-item > strong,
 .history-overview-item > span {
   display: block;
 }
 
-.history-overview-item strong {
+.history-overview-item > strong {
   font-family: var(--font-serif);
   font-size: .88rem;
 }
@@ -2417,7 +2417,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   gap: 7px;
 }
 
-.em-path span {
+.em-path > span {
   min-height: 58px;
   display: grid;
   place-items: center;
@@ -2617,7 +2617,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     #fff;
 }
 
-.shannon-visual .noisy-channel span {
+.shannon-visual .noisy-channel > span {
   margin-top: 9px;
   color: var(--violet);
   letter-spacing: .16em;
@@ -2718,7 +2718,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     margin: 3px 0 0 -27px;
   }
 
-  .history-overview-item strong {
+  .history-overview-item > strong {
     grid-column: 3;
   }
 
@@ -3313,16 +3313,16 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: var(--line-strong);
 }
 
-.real-number-line span,
-.real-number-line b {
+.real-number-line > span,
+.real-number-line > b {
   position: relative;
   z-index: 1;
   padding-top: 32px;
   font-size: .78rem;
 }
 
-.real-number-line span::before,
-.real-number-line b::before {
+.real-number-line > span::before,
+.real-number-line > b::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -3859,17 +3859,17 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 }
 
 .iq-core-equations p,
-.iq-operation-flow span,
-.iq-carrier-flow span,
-.iq-spectrum-shift span,
-.domain-sum-flow span,
-.time-frequency-resolution span,
-.fourier-basis-story span,
-.dft-ofdm-bridge span,
-.modulation-core-flow span,
+.iq-operation-flow > div > span,
+.iq-carrier-flow > div > span,
+.iq-spectrum-shift > div > span,
+.domain-sum-flow > div > span,
+.time-frequency-resolution > div > span,
+.fourier-basis-story > div > span,
+.dft-ofdm-bridge > div > span,
+.modulation-core-flow > div > span,
 .qam-grid-story p,
-.normalization-story span,
-.decision-story span {
+.normalization-story > div > span,
+.decision-story > div > span {
   margin: 0;
   color: var(--muted);
   font-size: .8rem;
@@ -3982,9 +3982,9 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.18rem;
 }
 
-.iq-baseband-readout span,
-.fourier-readout span,
-.modulation-readout span {
+.iq-baseband-readout > div > span,
+.fourier-readout > div > span,
+.modulation-readout > div > span {
   color: var(--muted);
   font-size: .74rem;
 }
@@ -4240,7 +4240,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-family: var(--font-serif);
 }
 
-.wireless-domain-table span {
+.wireless-domain-table > div > span {
   color: var(--muted);
 }
 
@@ -5043,17 +5043,17 @@ g.active .mod-point {
   font-size: 1.08rem;
 }
 
-.rf-chain-overview span,
+.rf-chain-overview > div > span,
 .dac-story p,
 .frequency-translation p,
-.antenna-story span,
-.receiver-chain span,
-.phase-distance-story span,
-.fading-story span,
-.measurement-chain span,
-.copy-sum-story span,
+.antenna-story > div > span,
+.receiver-chain > div > span,
+.phase-distance-story > div > span,
+.fading-story > div > span,
+.measurement-chain > div > span,
+.copy-sum-story > div > span,
 .isi-story p,
-.delay-frequency-duality span {
+.delay-frequency-duality > div > span {
   margin: 0;
   color: var(--muted);
   font-size: .78rem;
@@ -5264,10 +5264,10 @@ g.active .mod-point {
   font-size: 1.16rem;
 }
 
-.rf-chain-readout span,
-.channel-readout span,
-.noise-readout span,
-.multipath-readout span {
+.rf-chain-readout > div > span,
+.channel-readout > div > span,
+.noise-readout > div > span,
+.multipath-readout > div > span {
   color: var(--muted);
   font-size: .74rem;
 }
@@ -5431,7 +5431,7 @@ g.active .mod-point {
   text-align: center;
 }
 
-.path-loss-source strong,
+.path-loss-source > strong,
 .path-loss-source > span {
   display: block;
 }
@@ -5463,7 +5463,7 @@ g.active .mod-point {
 .path-loss-rings i:nth-child(3) { width: 420px; height: 260px; }
 .path-loss-rings i:nth-child(4) { width: 590px; height: 320px; }
 
-.path-loss-receivers span {
+.path-loss-receivers > span {
   position: absolute;
   z-index: 3;
   padding: 8px 10px;
@@ -6741,13 +6741,13 @@ main,
   font-size: 1.08rem;
 }
 
-.correlation-story span,
-.ofdm-problem-flow span,
-.ofdm-overview-chain span,
-.ifft-channel-flow span,
-.grid-coordinate-story span,
-.grid-column-flow span,
-.frame-structure-flow span {
+.correlation-story > div > span,
+.ofdm-problem-flow > div > span,
+.ofdm-overview-chain > div > span,
+.ifft-channel-flow > div > span,
+.grid-coordinate-story > div > span,
+.grid-column-flow > div > span,
+.frame-structure-flow > div > span {
   color: var(--muted);
   font-size: .78rem;
 }
@@ -6930,11 +6930,11 @@ main,
   font-size: 1.14rem;
 }
 
-.correlation-readout span,
-.ofdm-orth-readout span,
-.cp-readout span,
-.resource-grid-readout span,
-.numerology-readout span {
+.correlation-readout > div > span,
+.ofdm-orth-readout > div > span,
+.cp-readout > div > span,
+.resource-grid-readout > div > span,
+.numerology-readout > div > span {
   color: var(--muted);
   font-size: .73rem;
 }
@@ -7218,7 +7218,7 @@ main,
 .ifft-sample-grid i.real { left: 42%; background: var(--blue); }
 .ifft-sample-grid i.imag { left: 56%; background: var(--violet); }
 
-.ifft-sample-grid span {
+.ifft-sample-grid > div > span {
   position: absolute;
   left: 3px;
   right: 3px;
@@ -7238,12 +7238,12 @@ main,
   text-align: center;
 }
 
-.ifft-recovered strong,
+.ifft-recovered > strong,
 .ifft-recovered > span {
   display: block;
 }
 
-.ifft-recovered strong {
+.ifft-recovered > strong {
   margin-top: 4px;
   font-family: var(--font-serif);
   font-size: .8rem;
@@ -7368,13 +7368,13 @@ main,
   overflow: hidden;
 }
 
-.cp-channel-memory span,
-.cp-channel-memory strong {
+.cp-channel-memory > span,
+.cp-channel-memory > strong {
   position: relative;
   z-index: 2;
 }
 
-.cp-channel-memory strong {
+.cp-channel-memory > strong {
   margin-left: 8px;
 }
 
@@ -7510,8 +7510,8 @@ main,
   background: #fff;
 }
 
-.nr-slot-equations span,
-.numerology-simple-table span {
+.nr-slot-equations > div > span,
+.numerology-simple-table > div > span {
   display: block;
   color: var(--muted);
   font-size: .76rem;
@@ -7562,7 +7562,7 @@ main,
   font-size: .58rem;
 }
 
-.numerology-slot-strip.dense span {
+.numerology-slot-strip.dense > span {
   position: absolute;
   right: 8px;
   bottom: 6px;
@@ -7598,12 +7598,12 @@ main,
   font-weight: 850;
 }
 
-.numerology-symbol-story strong,
+.numerology-symbol-story > div > strong,
 .numerology-symbol-story > div > span {
   display: block;
 }
 
-.numerology-symbol-story strong {
+.numerology-symbol-story > div > strong {
   margin: 6px 0 3px;
   font-family: var(--font-serif);
 }
@@ -8109,7 +8109,7 @@ main,
 .iq-operation-flow strong .math-inline .katex,
 .iq-carrier-flow strong .math-inline .katex,
 .frame-structure-flow strong .math-inline .katex,
-.numerology-symbol-story strong .math-inline .katex {
+.numerology-symbol-story > div > strong .math-inline .katex {
   font-size: 1.28rem;
 }
 
@@ -8174,7 +8174,7 @@ main,
   .iq-operation-flow strong .math-inline .katex,
   .iq-carrier-flow strong .math-inline .katex,
   .frame-structure-flow strong .math-inline .katex,
-  .numerology-symbol-story strong .math-inline .katex {
+  .numerology-symbol-story > div > strong .math-inline .katex {
     font-size: 1.18rem;
   }
 
