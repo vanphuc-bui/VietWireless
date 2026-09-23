@@ -5,34 +5,89 @@ import '../styles/global.css';
 const {
   title = 'VietWireless | Ghi chép trực quan về viễn thông',
   description = 'Những ghi chép trực quan về signal, wireless, 4G, 5G NR, NTN và 6G, kèm đồ thị và interactive labs.',
+  lang = 'vi',
+  alternateHref,
 } = Astro.props;
+
+const isEnglish = lang === 'en';
+const currentPath = Astro.url.pathname;
+const defaultAlternateHref = isEnglish
+  ? '/'
+  : currentPath.startsWith('/hoc/')
+    ? '/en/learn/'
+    : '/en/';
+const resolvedAlternateHref = alternateHref ?? defaultAlternateHref;
+const alternateLang = isEnglish ? 'vi' : 'en';
+const currentAbsolute = new URL(currentPath, Astro.url.origin).href;
+const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
 ---
 
 <!doctype html>
-<html lang="vi">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#fbfaf7" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang={lang} href={currentAbsolute} />
+    <link rel="alternate" hreflang={alternateLang} href={alternateAbsolute} />
+    <link rel="alternate" hreflang="x-default" href={isEnglish ? alternateAbsolute : currentAbsolute} />
     <title>{title}</title>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="VietWireless home">
+      <a class="brand" href={isEnglish ? '/en/' : '/'} aria-label="VietWireless home">
         <span class="brand-mark" aria-hidden="true">≈</span>
         <span>
           <strong>VietWireless</strong>
-          <small>Ghi chép về viễn thông</small>
+          <small>{isEnglish ? 'Visual notes on wireless communications' : 'Ghi chép về viễn thông'}</small>
         </span>
       </a>
-      <nav class="site-nav" aria-label="Điều hướng chính">
-        <a href="/#lich-su">Lịch sử</a>
-        <a href="/#buc-tranh-lon">Bức tranh lớn</a>
-        <a href="/hoc/">Lộ trình học</a>
-        <a href="/#tai-sao">Về VietWireless</a>
-      </nav>
+
+      <div class="header-actions">
+        <nav class="site-nav" aria-label={isEnglish ? 'Main navigation' : 'Điều hướng chính'}>
+          {
+            isEnglish ? (
+              <>
+                <a href="/en/#history">History</a>
+                <a href="/en/#big-picture">Big picture</a>
+                <a href="/en/learn/">Learning path</a>
+                <a href="/en/#about">About</a>
+              </>
+            ) : (
+              <>
+                <a href="/#lich-su">Lịch sử</a>
+                <a href="/#buc-tranh-lon">Bức tranh lớn</a>
+                <a href="/hoc/">Lộ trình học</a>
+                <a href="/#tai-sao">Về VietWireless</a>
+              </>
+            )
+          }
+        </nav>
+
+        <nav class="language-switcher" aria-label={isEnglish ? 'Language' : 'Ngôn ngữ'}>
+          <a
+            href={isEnglish ? resolvedAlternateHref : currentPath}
+            class:list={['language-option', { active: !isEnglish }]}
+            lang="vi"
+            hreflang="vi"
+            aria-current={!isEnglish ? 'page' : undefined}
+          >
+            VI
+          </a>
+          <span aria-hidden="true">/</span>
+          <a
+            href={isEnglish ? currentPath : resolvedAlternateHref}
+            class:list={['language-option', { active: isEnglish }]}
+            lang="en"
+            hreflang="en"
+            aria-current={isEnglish ? 'page' : undefined}
+          >
+            EN
+          </a>
+        </nav>
+      </div>
     </header>
 
     <main>
@@ -42,11 +97,26 @@ const {
     <footer class="site-footer">
       <div>
         <strong>VietWireless</strong>
-        <p>Một góc nhìn trực quan về tín hiệu, wireless, 4G, 5G, NTN và 6G.</p>
+        <p>
+          {
+            isEnglish
+              ? 'A visual way to understand signals, wireless, 4G, 5G, NTN and 6G.'
+              : 'Một góc nhìn trực quan về tín hiệu, wireless, 4G, 5G, NTN và 6G.'
+          }
+        </p>
       </div>
       <div class="footer-note">
-        <p>Viết bởi <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">Van-Phuc Bui</a>.</p>
-        <p>Nội dung kỹ thuật độc lập, dựa trên kiến thức và nguồn công khai.</p>
+        <p>
+          {isEnglish ? 'Written by ' : 'Viết bởi '}
+          <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">Van-Phuc Bui</a>.
+        </p>
+        <p>
+          {
+            isEnglish
+              ? 'Independent technical content based on engineering practice and public sources.'
+              : 'Nội dung kỹ thuật độc lập, dựa trên kiến thức và nguồn công khai.'
+          }
+        </p>
       </div>
     </footer>
   </body>
