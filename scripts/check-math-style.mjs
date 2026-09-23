@@ -221,6 +221,8 @@ const boxMathRoleTokens = [
   '--lesson-box-math-readout-secondary',
   '--lesson-box-math-label',
   '--lesson-box-math-svg',
+  '--lesson-box-math-svg-label',
+  '--lesson-box-math-svg-equation',
 ];
 
 for (const token of boxMathRoleTokens) {
@@ -234,7 +236,9 @@ const requiredBoxMathRoleCss = [
   [/\.formula-card-details \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-formula-secondary\)/, 'formula-secondary math role'],
   [/--lesson-box-math-flow[\s\S]*?\.rf-chain-overview\.process-flow[\s\S]*?font-size:\s*var\(--lesson-box-math-flow\)/, 'flow-state math role'],
   [/\.metric-card \.metric-card-formula \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-readout-secondary\)/, 'readout-secondary math role'],
-  [/\.svg-math \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-svg\)/, 'SVG math role'],
+  [/\.svg-math \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-svg\)/, 'SVG base math role'],
+  [/\.svg-math\.svg-math-label \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-svg-label\)/, 'SVG label math role'],
+  [/\.svg-math\.svg-math-equation \.katex[\s\S]*?font-size:\s*var\(--lesson-box-math-svg-equation\)/, 'SVG equation math role'],
 ];
 
 for (const [regex, label] of requiredBoxMathRoleCss) {
