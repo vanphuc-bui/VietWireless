@@ -229,3 +229,15 @@ Math rules áp dụng cho toàn bộ UI có nội dung kỹ thuật, không ch�
 Acronym/tên công nghệ như FFT, OFDM, ADC, PBCH, 5G NR có thể là text thường. Mathematical notation như I, Q, I/Q, x[n], X[k], H[k], N, k, n, μ, Δf, φ, θ, τ, T_u, f_s, f_c phải dùng MathExpr hoặc SvgMathExpr nếu nằm trong SVG.
 
 Math trong table phải dùng HTML table thật khi dữ liệu có quan hệ hàng/cột. Không dựng bảng bằng CSS grid nếu header và data cần alignment chính xác.
+
+## Rule bắt buộc cho SVG, chart và visual
+
+Không được viết notation toán trực tiếp bằng SVG `<text>`, Unicode subscript/superscript hoặc plain text. Ví dụ sai: `<text>x(t)</text>`, `<text>-f₀</text>`, `<text>θ</text>`.
+
+Trong Astro SVG, dùng `<foreignObject>` + `<MathExpr />`. Trong React SVG, dùng `<SvgMathExpr />`. Chỉ label ngôn ngữ tự nhiên như “power”, “time”, “reference” mới được để text thường.
+
+QA phải quét cả text node bên trong SVG; không được bỏ qua toàn bộ SVG khi kiểm tra math style.
+
+## Rule layout khi MathExpr nằm trong text
+
+Không viết CSS selector kiểu `.foo span { display:block }` nếu bên trong `.foo` có thể chứa `MathExpr`, vì `MathExpr` cũng render thành `span` và sẽ bị bẻ dòng. Dùng direct-child selector như `.foo > span` hoặc target class cụ thể. Inline math phải luôn ở cùng dòng với câu khi còn đủ chỗ.
