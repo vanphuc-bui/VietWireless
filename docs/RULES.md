@@ -59,3 +59,12 @@ Math content có TeX command phải dùng `String.raw` hoặc double escaping. D
 - command mất backslash, ví dụ `3cdot217`, `qquad`;
 - single-backslash trong JavaScript string/template;
 - double-backslash runtime do dùng sai `String.raw`.
+
+### Typography contract
+
+- Reading text dùng `STIX Two Text`; math dùng `STIX Two Math`; UI metadata dùng shared sans-serif stack.
+- KaTeX chỉ parse/validate TeX; visible math output là native MathML.
+- Lesson prose source of truth là `--lesson-prose-size: 1.125rem`; box content phải bám prose scale.
+- Không thêm page-specific font stack hoặc page-specific math size để chữa layout.
+- Mọi thay đổi typography phải pass `npm run check:math` và giữ được consistency desktop/mobile.
+
