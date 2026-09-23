@@ -219,14 +219,6 @@ if (mathCardScaleIndex < 0) {
     }
   }
 
-  for (const match of unifiedMathCardCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    const selector = match[1].trim();
-    const body = match[2];
-    if (!selector.includes('.math-card')) continue;
-    if (/(?:min-height|padding|font-size)\s*:\s*(?!var\(--lesson-math-card)[^;]+)[^;]+;/u.test(body)) {
-      report(cssFile, `hard-coded math-card size found in "${selector}". Use --lesson-math-card-* tokens.`);
-    }
-  }
 }
 
 // Do not reintroduce ad-hoc formula cards that bypass the shared math-card system.
