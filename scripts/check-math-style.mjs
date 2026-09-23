@@ -77,23 +77,15 @@ for (const file of files) {
     report(file, 'raw Σ/√ formula glyph found. Use TeX inside MathExpr.');
   }
 
-  let visibleSource = '';
+  const withoutMath = content
+    .replace(/^---[\s\S]*?---/m, '')
+    .replace(/<MathExpr\b[^>]*\/>/gs, '')
+    .replace(/<SvgMathExpr\b[^>]*\/>/gs, '');
 
-  if (extension === '.astro') {
-    visibleSource = content
-      .replace(/^---[\s\S]*?---/m, '')
-      .replace(/\b(?:title|description|aria-label)="[^"]*"/g, '')
-      .replace(/<svg\b[\s\S]*?<\/svg>/gi, '')
-      .replace(/<MathExpr\b[^>]*\/>/gs, '')
-      .replace(/tex=(?:"[^"]*"|'[^']*')/gs, '');
-  } else {
-    const withoutMath = content
-      .replace(/<MathExpr\b[^>]*\/>/gs, '')
-      .replace(/<SvgMathExpr\b[^>]*\/>/gs, '');
-    visibleSource = [...withoutMath.matchAll(/>([^<>{\n]+)</g)]
-      .map((match) => match[1])
-      .join(' ');
-  }
+  const visibleNodes = [...withoutMath.matchAll(/>([^<>{\n]+)</g)]
+    .map((match) => match[1].trim())
+    .filter(Boolean);
+  const visibleSource = visibleNodes.join(' ');
 
   if (/\bN\s+samples?\b/u.test(visibleSource)) {
     report(file, 'bare "N sample(s)" found. Render N with MathExpr.');
@@ -115,8 +107,32 @@ for (const file of files) {
     report(file, 'bare scalar equation found in visible content. Use MathExpr.');
   }
 
-  if (/\b\d+(?:\.\d+)?\s*(?:Hz|kHz|MHz|GHz|µs|ms|dB|dBm)\b/u.test(visibleSource)) {
+  if (/\b\d+(?:\.\d+)?\s*(?:Hz|kHz|MHz|GHz|µs|μs|ns|ms|dB|dBm|dBm\/Hz)\b/u.test(visibleSource)) {
     report(file, 'bare numeric value with technical unit found. Use MathExpr.');
+  }
+
+  if (/\b(?:x|X|Y|H|h|y|s|z|w|I|Q)\([^()<>]{1,24}\)/u.test(visibleSource)) {
+    report(file, 'bare function-style math notation found, e.g. x(t) or H(f). Use MathExpr/SvgMathExpr.');
+  }
+
+  if (/\b(?:O|E)\s*\([^()<>]{1,24}\)|\bE\s*\[[^\]<>]+\]/u.test(visibleSource)) {
+    report(file, 'bare complexity/expectation notation found. Use MathExpr.');
+  }
+
+  if (/\([^()<>]{0,6}\b(?:k|l|m|n)\s*,\s*(?:k|l|m|n)\b[^()<>]{0,6}\)/u.test(visibleSource)) {
+    report(file, 'bare coordinate/index tuple found. Use MathExpr.');
+  }
+
+  for (const node of visibleNodes) {
+    const plain = node.replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+    if (/^(?:A|B|G|I|Q|T|X|Y|M|N|a|b|d|f|j|k|l|m|n|t|x|y|z)$/u.test(plain)) {
+      report(file, `bare standalone math symbol "${plain}" found. Use MathExpr/SvgMathExpr.`);
+      break;
+    }
+    if (/[₀₁₂₃₄₅₆₇₈₉²³ᵤₛ]/u.test(plain)) {
+      report(file, 'raw Unicode subscript/superscript found in visible text. Use TeX via MathExpr.');
+      break;
+    }
   }
 }
 
