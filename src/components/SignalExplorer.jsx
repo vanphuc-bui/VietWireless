@@ -97,8 +97,8 @@ function TimeFrequencyLab() {
               const y = PAD + ((2 - v) / 4) * (H - PAD * 2);
               return <circle key={i} cx={x} cy={y} r="2.6" className="sample-dot" />;
             })}
-            <SvgMathExpr tex="0\\,\\mathrm{s}" x={PAD} y={H - 13} width={38} />
-            <SvgMathExpr tex="1\\,\\mathrm{s}" x={W - PAD - 26} y={H - 13} width={38} />
+            <SvgMathExpr tex={String.raw`0\\,\\mathrm{s}`} x={PAD} y={H - 13} width={38} />
+            <SvgMathExpr tex={String.raw`1\\,\\mathrm{s}`} x={W - PAD - 26} y={H - 13} width={38} />
           </svg>
         ) : (
           <svg viewBox={"0 0 " + W + " " + H} role="img" aria-label="Magnitude spectrum trong frequency domain">
@@ -125,7 +125,7 @@ function TimeFrequencyLab() {
                 </g>
               );
             })}
-            <SvgMathExpr tex="\\mathrm{Hz}" x={W - 62} y={18} width={34} />
+            <SvgMathExpr tex={String.raw`\\mathrm{Hz}`} x={W - 62} y={18} width={34} />
           </svg>
         )}
       </div>
