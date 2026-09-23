@@ -90,16 +90,16 @@ import MathExpr from '../../components/Math.astro';
             <line class="domain-spectrum-line" x1="360" y1="142" x2="360" y2="55" />
             <circle class="domain-spectrum-dot" cx="160" cy="55" r="5" />
             <circle class="domain-spectrum-dot" cx="360" cy="55" r="5" />
-            <text class="domain-svg-label" x="144" y="163">-f₀</text>
-            <text class="domain-svg-label" x="350" y="163">+f₀</text>
-            <text class="domain-svg-label" x="480" y="163">f</text>
+            <foreignObject x="132" y="148" width="56" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-f_0" /></div></foreignObject>
+            <foreignObject x="338" y="148" width="56" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+f_0" /></div></foreignObject>
+            <foreignObject x="468" y="148" width="36" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f" /></div></foreignObject>
           </svg>
           <p>Với cosine real lý tưởng, spectrum có hai thành phần đối xứng ở <MathExpr tex={String.raw`\pm f_0`} />.</p>
         </div>
       </div>
 
       <aside class="precision-note">
-        <strong>Tại sao có -f?</strong>
+        <strong>Tại sao có <MathExpr tex="-f" />?</strong>
         <p>
           Negative frequency xuất hiện tự nhiên từ complex exponential:
           <MathExpr tex={String.raw`\cos(2\pi f_0 t) = \frac{e^{j2\pi f_0 t}+e^{-j2\pi f_0 t}}{2}`} />.
@@ -234,7 +234,7 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card previous" href="/hoc/iq-va-complex-baseband/">
         <span>← BÀI TRƯỚC</span>
         <strong><MathExpr tex="I/Q" /> và complex baseband</strong>
-        <small>Từ I+jQ tới complex samples trong DSP.</small>
+        <small>Từ <MathExpr tex="I+jQ" /> tới complex samples trong DSP.</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/fourier-dft-fft/">
         <span>BÀI TIẾP THEO →</span>
