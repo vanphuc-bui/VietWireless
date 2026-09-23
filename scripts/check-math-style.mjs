@@ -90,7 +90,7 @@ for (const file of files) {
     const withoutMath = content
       .replace(/<MathExpr\b[^>]*\/>/gs, '')
       .replace(/<SvgMathExpr\b[^>]*\/>/gs, '');
-    visibleSource = [...withoutMath.matchAll(/>([^<>{]+)(?=[<{])/g)]
+    visibleSource = [...withoutMath.matchAll(/>([^<>{\n]+)</g)]
       .map((match) => match[1])
       .join(' ');
   }
