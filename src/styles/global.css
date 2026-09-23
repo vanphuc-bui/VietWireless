@@ -76,7 +76,7 @@ button, input { font: inherit; }
 
 .teaching-steps { max-width: 820px; margin-top: 34px; display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
 .teaching-steps article { min-height: 190px; padding: 23px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.44); }
-.teaching-steps span { color: var(--accent); font-family: var(--font-serif); font-size: 1rem; }
+.teaching-steps > article > span { color: var(--accent); font-family: var(--font-serif); font-size: 1rem; }
 .teaching-steps h3 { margin: 26px 0 7px; font-family: var(--font-serif); font-size: 1.2rem; }
 .teaching-steps p { margin: 0; color: var(--muted); font-size: 0.9rem; }
 
@@ -121,14 +121,15 @@ button, input { font: inherit; }
 .two-column, .domain-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin: 32px 0; }
 .explain-card, .domain-grid article { padding: 22px; border: 1px solid var(--line); background: #fff; }
 .card-label { color: var(--accent); font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
-.explain-card h3 { margin: 16px 0 8px; font-family: var(--font-serif); font-size: 1.9rem; }
+.explain-card h3 { margin: 16px 0 8px; font-family: var(--font-serif); font-size: 1.9rem; line-height:1.15; }
+.explain-card h3 .math-inline { display:inline; vertical-align:baseline; }
 .explain-card p, .domain-grid p { margin: 0; color: var(--muted); }
 
 .perspective { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; margin: 36px 0; }
 .perspective > div:not(.perspective-equals) { min-height: 170px; padding: 22px; display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--line); background: #fff; }
 .perspective small { color: var(--accent); font-weight: 800; }
 .perspective strong { margin: 5px 0 11px; font-family: var(--font-serif); font-size: 2rem; }
-.perspective span { color: var(--muted); }
+.perspective > div > span { color: var(--muted); }
 .perspective-equals { color: #aaa39b; font-size: 1.8rem; }
 
 .signal-explorer { margin-top: 34px; overflow: hidden; border: 1px solid var(--line-strong); background: #fff; }
@@ -154,8 +155,10 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .spectrum-bar { fill: var(--violet); opacity: .82; }
 .plot-label { fill: #858078; font-size: 11px; }
 .lab-readout { min-height: 62px; padding: 14px 2px 0; }
-.lab-readout strong, .lab-readout span { display:block; }
-.lab-readout span { margin-top: 3px; color: var(--muted); font-size:.88rem; }
+.lab-readout > strong, .lab-readout > span { display:block; }
+.lab-readout > span { margin-top: 3px; color: var(--muted); font-size:.88rem; }
+.lab-readout .math-inline { display:inline; margin:0; vertical-align:baseline; white-space:nowrap; line-height:inherit; }
+.lab-readout .math-inline .katex { font-size:1em; line-height:inherit; }
 
 .iq-grid { display:grid; grid-template-columns:minmax(260px,1fr) .8fr; gap:26px; align-items:center; }
 .iq-grid svg { width:100%; max-height:360px; }
@@ -166,7 +169,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .iq-readout { display:grid; gap:8px; }
 .formula { margin:0 0 10px; color:var(--accent); font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; font-weight:700; }
 .iq-readout > div { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); }
-.iq-readout span { color:var(--muted); }
+.iq-readout > div > span { color:var(--muted); }
 .play-button { margin-top:10px; padding:9px 11px; color:var(--ink); border-color:var(--line-strong); background:#fff; }
 .phase-slider { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:12px; margin-top:12px; color:var(--muted); font-size:.8rem; }
 .lab-caption { color:var(--muted); font-size:.87rem; }
@@ -179,7 +182,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .ofdm-flow > div { min-height:132px; padding:16px; display:flex; flex-direction:column; justify-content:center; border:1px solid var(--line); background:#fff; }
 .ofdm-flow small { color:var(--accent); font-size:.62rem; font-weight:850; letter-spacing:.08em; }
 .ofdm-flow strong { margin:4px 0; font-family:Georgia,"Times New Roman",serif; font-size:1.4rem; }
-.ofdm-flow span:not(.flow-op) { color:var(--muted); font-size:.74rem; }
+.ofdm-flow > div > span:not(.flow-op) { color:var(--muted); font-size:.74rem; }
 .flow-op { color:var(--violet); font-size:.77rem; font-weight:850; white-space:nowrap; }
 
 .inline-cta { display:inline-block; margin-top:16px; }
@@ -392,7 +395,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: .76rem;
 }
 
-.chain-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.chain-legend > span { display: inline-flex; align-items: center; gap: 7px; }
 
 .legend-dot {
   width: 9px;
@@ -499,7 +502,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-family: var(--font-serif);
   font-size: 1.2rem;
 }
-.chain-transform span {
+.chain-transform > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .64rem;
@@ -544,7 +547,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-family: "SFMono-Regular", Consolas, monospace;
   font-size: .82rem;
 }
-.coding-visual span {
+.coding-visual > span {
   padding: 5px 7px;
   background: #e9f2f7;
 }
@@ -618,7 +621,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   height: 84px;
   margin: 13px auto 7px;
 }
-.antenna-visual span {
+.antenna-visual > span {
   position: absolute;
   left: 25px;
   bottom: 4px;
@@ -928,7 +931,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.25rem;
 }
 
-.transform-block span {
+.transform-block > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .67rem;
@@ -961,7 +964,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   gap: 6px;
 }
 
-.representation-visual span {
+.representation-visual > span {
   padding: 5px 7px;
   border: 1px solid var(--line);
   background: var(--paper-2);
@@ -1399,7 +1402,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   gap: 12px;
 }
 
-.visual-caption span,
+.visual-caption > span,
 .zoom-label {
   color: var(--accent);
   font-size: .68rem;
@@ -1435,7 +1438,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.15rem;
 }
 
-.frequency-axis span {
+.frequency-axis > span {
   font-size: .68rem;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
@@ -1624,7 +1627,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.05rem;
 }
 
-.symbol-step span {
+.symbol-step > span {
   display: block;
   margin-top: 5px;
   color: var(--muted);
@@ -1705,7 +1708,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.35rem;
 }
 
-.ofdm-transform-card span {
+.ofdm-transform-card > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .7rem;
@@ -1760,16 +1763,16 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: #fff;
 }
 
-.ofdm-rx-return strong,
-.ofdm-rx-return span {
+.ofdm-rx-return > div > strong,
+.ofdm-rx-return > div > span {
   display: block;
 }
 
-.ofdm-rx-return strong {
+.ofdm-rx-return > div > strong {
   font-family: var(--font-serif);
 }
 
-.ofdm-rx-return span {
+.ofdm-rx-return > div > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .78rem;
@@ -2044,7 +2047,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.55rem;
 }
 
-.sampling-lab-readout span {
+.sampling-lab-readout > div > span {
   color: var(--muted);
   font-size: .78rem;
 }
@@ -2128,13 +2131,13 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: var(--paper-2);
 }
 
-.nyquist-rule span,
-.nyquist-rule b {
+.nyquist-rule > span,
+.nyquist-rule > b {
   font-family: var(--font-serif);
   font-size: 1.65rem;
 }
 
-.nyquist-rule b {
+.nyquist-rule > b {
   color: var(--accent);
 }
 
@@ -2251,7 +2254,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: #fff;
 }
 
-.lesson-nav-card span {
+.lesson-nav-card > span {
   color: var(--accent);
   font-size: .67rem;
   font-weight: 850;
@@ -2375,17 +2378,17 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   box-shadow: 0 0 0 1px var(--accent);
 }
 
-.history-overview-item strong,
-.history-overview-item span {
+.history-overview-item > strong,
+.history-overview-item > span {
   display: block;
 }
 
-.history-overview-item strong {
+.history-overview-item > strong {
   font-family: var(--font-serif);
   font-size: .88rem;
 }
 
-.history-overview-item span {
+.history-overview-item > span {
   margin-top: 3px;
   color: var(--muted);
   font-size: .67rem;
@@ -2414,7 +2417,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   gap: 7px;
 }
 
-.em-path span {
+.em-path > span {
   min-height: 58px;
   display: grid;
   place-items: center;
@@ -2614,7 +2617,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     #fff;
 }
 
-.shannon-visual .noisy-channel span {
+.shannon-visual .noisy-channel > span {
   margin-top: 9px;
   color: var(--violet);
   letter-spacing: .16em;
@@ -2715,11 +2718,11 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
     margin: 3px 0 0 -27px;
   }
 
-  .history-overview-item strong {
+  .history-overview-item > strong {
     grid-column: 3;
   }
 
-  .history-overview-item span {
+  .history-overview-item > span {
     grid-column: 3;
   }
 }
@@ -3073,7 +3076,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.15rem;
 }
 
-.sinusoid-readout span {
+.sinusoid-readout > div > span {
   color: var(--muted);
   font-size: .76rem;
 }
@@ -3192,7 +3195,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.08rem;
 }
 
-.concept-bridge span {
+.concept-bridge > div > span {
   color: var(--muted);
   font-size: .78rem;
 }
@@ -3310,16 +3313,16 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   background: var(--line-strong);
 }
 
-.real-number-line span,
-.real-number-line b {
+.real-number-line > span,
+.real-number-line > b {
   position: relative;
   z-index: 1;
   padding-top: 32px;
   font-size: .78rem;
 }
 
-.real-number-line span::before,
-.real-number-line b::before {
+.real-number-line > span::before,
+.real-number-line > b::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -3530,7 +3533,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.18rem;
 }
 
-.projection-story span {
+.projection-story > div > span {
   color: var(--muted);
   font-size: .82rem;
 }
@@ -3600,7 +3603,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.22rem;
 }
 
-.phasor-readout span {
+.phasor-readout > div > span {
   color: var(--muted);
   font-size: .75rem;
 }
@@ -3716,7 +3719,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.16rem;
 }
 
-.iq-preview span {
+.iq-preview > div > span {
   color: var(--muted);
   font-size: .8rem;
 }
@@ -3856,17 +3859,17 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 }
 
 .iq-core-equations p,
-.iq-operation-flow span,
-.iq-carrier-flow span,
-.iq-spectrum-shift span,
-.domain-sum-flow span,
-.time-frequency-resolution span,
-.fourier-basis-story span,
-.dft-ofdm-bridge span,
-.modulation-core-flow span,
+.iq-operation-flow > div > span,
+.iq-carrier-flow > div > span,
+.iq-spectrum-shift > div > span,
+.domain-sum-flow > div > span,
+.time-frequency-resolution > div > span,
+.fourier-basis-story > div > span,
+.dft-ofdm-bridge > div > span,
+.modulation-core-flow > div > span,
 .qam-grid-story p,
-.normalization-story span,
-.decision-story span {
+.normalization-story > div > span,
+.decision-story > div > span {
   margin: 0;
   color: var(--muted);
   font-size: .8rem;
@@ -3979,9 +3982,9 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.18rem;
 }
 
-.iq-baseband-readout span,
-.fourier-readout span,
-.modulation-readout span {
+.iq-baseband-readout > div > span,
+.fourier-readout > div > span,
+.modulation-readout > div > span {
   color: var(--muted);
   font-size: .74rem;
 }
@@ -4096,14 +4099,14 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   border-bottom: 0;
 }
 
-.iq-buffer span {
+.iq-buffer > span {
   padding: 11px 13px;
   border-right: 1px solid var(--line);
   font-family: "SFMono-Regular", Consolas, monospace;
   font-size: .78rem;
 }
 
-.iq-buffer span:last-child {
+.iq-buffer > span:last-child {
   border-right: 0;
 }
 
@@ -4237,7 +4240,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-family: var(--font-serif);
 }
 
-.wireless-domain-table span {
+.wireless-domain-table > div > span {
   color: var(--muted);
 }
 
@@ -4298,7 +4301,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-size: 1.35rem;
 }
 
-.dft-symbols span {
+.dft-symbols > div > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .76rem;
@@ -4356,7 +4359,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   font-family: var(--font-serif);
 }
 
-.leakage-story span {
+.leakage-story > div > span {
   color: var(--muted);
   font-size: .76rem;
 }
@@ -4561,7 +4564,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   text-align: center;
 }
 
-.bits-per-symbol-grid span {
+.bits-per-symbol-grid > article > span {
   color: var(--accent);
   font-size: .7rem;
   font-weight: 850;
@@ -5040,17 +5043,17 @@ g.active .mod-point {
   font-size: 1.08rem;
 }
 
-.rf-chain-overview span,
+.rf-chain-overview > div > span,
 .dac-story p,
 .frequency-translation p,
-.antenna-story span,
-.receiver-chain span,
-.phase-distance-story span,
-.fading-story span,
-.measurement-chain span,
-.copy-sum-story span,
+.antenna-story > div > span,
+.receiver-chain > div > span,
+.phase-distance-story > div > span,
+.fading-story > div > span,
+.measurement-chain > div > span,
+.copy-sum-story > div > span,
 .isi-story p,
-.delay-frequency-duality span {
+.delay-frequency-duality > div > span {
   margin: 0;
   color: var(--muted);
   font-size: .78rem;
@@ -5088,8 +5091,8 @@ g.active .mod-point {
 .thermal-equation b,
 .evm-equation span,
 .evm-equation b,
-.snr-evm-relation span,
-.snr-evm-relation b,
+.snr-evm-relation > span,
+.snr-evm-relation > b,
 .multipath-equation span,
 .multipath-equation b,
 .rms-delay-equation span,
@@ -5104,7 +5107,7 @@ g.active .mod-point {
 .delay-phase-equation b,
 .thermal-equation b,
 .evm-equation b,
-.snr-evm-relation b,
+.snr-evm-relation > b,
 .multipath-equation b,
 .rms-delay-equation b {
   color: var(--accent);
@@ -5261,10 +5264,10 @@ g.active .mod-point {
   font-size: 1.16rem;
 }
 
-.rf-chain-readout span,
-.channel-readout span,
-.noise-readout span,
-.multipath-readout span {
+.rf-chain-readout > div > span,
+.channel-readout > div > span,
+.noise-readout > div > span,
+.multipath-readout > div > span {
   color: var(--muted);
   font-size: .74rem;
 }
@@ -5428,12 +5431,12 @@ g.active .mod-point {
   text-align: center;
 }
 
-.path-loss-source strong,
-.path-loss-source span {
+.path-loss-source > strong,
+.path-loss-source > span {
   display: block;
 }
 
-.path-loss-source span {
+.path-loss-source > span {
   font-size: .58rem;
   opacity: .8;
 }
@@ -5460,7 +5463,7 @@ g.active .mod-point {
 .path-loss-rings i:nth-child(3) { width: 420px; height: 260px; }
 .path-loss-rings i:nth-child(4) { width: 590px; height: 320px; }
 
-.path-loss-receivers span {
+.path-loss-receivers > span {
   position: absolute;
   z-index: 3;
   padding: 8px 10px;
@@ -5582,7 +5585,7 @@ g.active .mod-point {
   font-size: 1.28rem;
 }
 
-.thermal-symbols span {
+.thermal-symbols > div > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: .78rem;
@@ -6738,13 +6741,13 @@ main,
   font-size: 1.08rem;
 }
 
-.correlation-story span,
-.ofdm-problem-flow span,
-.ofdm-overview-chain span,
-.ifft-channel-flow span,
-.grid-coordinate-story span,
-.grid-column-flow span,
-.frame-structure-flow span {
+.correlation-story > div > span,
+.ofdm-problem-flow > div > span,
+.ofdm-overview-chain > div > span,
+.ifft-channel-flow > div > span,
+.grid-coordinate-story > div > span,
+.grid-column-flow > div > span,
+.frame-structure-flow > div > span {
   color: var(--muted);
   font-size: .78rem;
 }
@@ -6927,11 +6930,11 @@ main,
   font-size: 1.14rem;
 }
 
-.correlation-readout span,
-.ofdm-orth-readout span,
-.cp-readout span,
-.resource-grid-readout span,
-.numerology-readout span {
+.correlation-readout > div > span,
+.ofdm-orth-readout > div > span,
+.cp-readout > div > span,
+.resource-grid-readout > div > span,
+.numerology-readout > div > span {
   color: var(--muted);
   font-size: .73rem;
 }
@@ -7037,7 +7040,7 @@ main,
   text-align: center;
 }
 
-.parallel-subcarriers span {
+.parallel-subcarriers > article > span {
   color: var(--accent);
   font-size: .67rem;
   font-weight: 850;
@@ -7142,7 +7145,7 @@ main,
   font-family: var(--font-serif);
 }
 
-.ifft-bin-row span {
+.ifft-bin-row > span {
   color: var(--muted);
   font-size: .62rem;
   overflow-wrap: anywhere;
@@ -7164,7 +7167,7 @@ main,
   font-family: var(--font-serif);
 }
 
-.ifft-transform-arrow span {
+.ifft-transform-arrow > span {
   color: var(--muted);
   font-size: .7rem;
 }
@@ -7215,7 +7218,7 @@ main,
 .ifft-sample-grid i.real { left: 42%; background: var(--blue); }
 .ifft-sample-grid i.imag { left: 56%; background: var(--violet); }
 
-.ifft-sample-grid span {
+.ifft-sample-grid > div > span {
   position: absolute;
   left: 3px;
   right: 3px;
@@ -7235,18 +7238,18 @@ main,
   text-align: center;
 }
 
-.ifft-recovered strong,
-.ifft-recovered span {
+.ifft-recovered > strong,
+.ifft-recovered > span {
   display: block;
 }
 
-.ifft-recovered strong {
+.ifft-recovered > strong {
   margin-top: 4px;
   font-family: var(--font-serif);
   font-size: .8rem;
 }
 
-.ifft-recovered span {
+.ifft-recovered > span {
   margin-top: 2px;
   color: var(--muted);
   font-size: .56rem;
@@ -7355,7 +7358,7 @@ main,
   font-size: .8rem;
 }
 
-.cp-copy-note span {
+.cp-copy-note > span {
   color: var(--accent);
   font-weight: 800;
 }
@@ -7365,13 +7368,13 @@ main,
   overflow: hidden;
 }
 
-.cp-channel-memory span,
-.cp-channel-memory strong {
+.cp-channel-memory > span,
+.cp-channel-memory > strong {
   position: relative;
   z-index: 2;
 }
 
-.cp-channel-memory strong {
+.cp-channel-memory > strong {
   margin-left: 8px;
 }
 
@@ -7419,7 +7422,7 @@ main,
   gap: 2px;
 }
 
-.resource-grid-top-axis span {
+.resource-grid-top-axis > span {
   color: var(--muted);
   font-size: .55rem;
   text-align: center;
@@ -7507,8 +7510,8 @@ main,
   background: #fff;
 }
 
-.nr-slot-equations span,
-.numerology-simple-table span {
+.nr-slot-equations > div > span,
+.numerology-simple-table > div > span {
   display: block;
   color: var(--muted);
   font-size: .76rem;
@@ -7559,7 +7562,7 @@ main,
   font-size: .58rem;
 }
 
-.numerology-slot-strip.dense span {
+.numerology-slot-strip.dense > span {
   position: absolute;
   right: 8px;
   bottom: 6px;
@@ -7595,17 +7598,17 @@ main,
   font-weight: 850;
 }
 
-.numerology-symbol-story strong,
-.numerology-symbol-story span {
+.numerology-symbol-story > div > strong,
+.numerology-symbol-story > div > span {
   display: block;
 }
 
-.numerology-symbol-story strong {
+.numerology-symbol-story > div > strong {
   margin: 6px 0 3px;
   font-family: var(--font-serif);
 }
 
-.numerology-symbol-story span {
+.numerology-symbol-story > div > span {
   color: var(--muted);
   font-size: .76rem;
 }
@@ -8106,7 +8109,7 @@ main,
 .iq-operation-flow strong .math-inline .katex,
 .iq-carrier-flow strong .math-inline .katex,
 .frame-structure-flow strong .math-inline .katex,
-.numerology-symbol-story strong .math-inline .katex {
+.numerology-symbol-story > div > strong .math-inline .katex {
   font-size: 1.28rem;
 }
 
@@ -8171,7 +8174,7 @@ main,
   .iq-operation-flow strong .math-inline .katex,
   .iq-carrier-flow strong .math-inline .katex,
   .frame-structure-flow strong .math-inline .katex,
-  .numerology-symbol-story strong .math-inline .katex {
+  .numerology-symbol-story > div > strong .math-inline .katex {
     font-size: 1.18rem;
   }
 
@@ -8195,6 +8198,14 @@ main,
   font-size: 12px;
   line-height: 1;
   pointer-events: none;
+}
+
+.svg-math .math-inline {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .svg-math .math-inline .katex {

@@ -162,10 +162,10 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
           <path class="parameter-wave primary" d="M42 60 C100 60 100 200 158 200 S216 60 274 60 S332 200 390 200 S448 60 506 60 S564 200 622 200 S680 60 735 60" />
           <line class="amplitude-bracket" x1="78" y1="60" x2="78" y2="130" />
           <path class="amplitude-bracket" d="M72 66 L78 60 L84 66 M72 124 L78 130 L84 124" />
-          <text class="amplitude-label" x="89" y="100">A</text>
+          <foreignObject x="82" y="84" width="40" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="A" /></div></foreignObject>
           <line class="amplitude-bracket" x1="684" y1="60" x2="684" y2="200" />
           <path class="amplitude-bracket" d="M678 66 L684 60 L690 66 M678 194 L684 200 L690 194" />
-          <text class="amplitude-label" x="696" y="134">2A</text>
+          <foreignObject x="688" y="118" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="2A" /></div></foreignObject>
         </svg>
       </div>
 
@@ -185,7 +185,7 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <div class="frequency-period-visual">
         <div>
           <span class="card-label">PERIOD</span>
-          <strong>T</strong>
+          <strong><MathExpr tex="T" /></strong>
           <p>Thời gian để waveform lặp lại một chu kỳ.</p>
         </div>
         <b>↔</b>
@@ -221,17 +221,17 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <div class="phase-comparison">
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=0^\circ`} /></span>
-          <strong>x(0) = A</strong>
+          <strong><MathExpr tex="x(0)=A" /></strong>
           <p>Cosine bắt đầu tại đỉnh dương.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=+90^\circ`} /></span>
-          <strong>x(0) = 0</strong>
+          <strong><MathExpr tex="x(0)=0" /></strong>
           <p>Waveform đã tiến một phần tư chu kỳ so với cosine tham chiếu.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=180^\circ`} /></span>
-          <strong>x(0) = -A</strong>
+          <strong><MathExpr tex="x(0)=-A" /></strong>
           <p>Waveform đảo vị trí so với <MathExpr tex={String.raw`\phi=0^\circ`} /> tại cùng mốc thời gian.</p>
         </article>
       </div>
@@ -312,9 +312,9 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
       <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <h2>Một sinusoid có thể được đọc như ba câu hỏi rất đơn giản.</h2>
       <ol class="recap-list">
-        <li><strong>Amplitude A:</strong> waveform lớn tới đâu theo trục dọc?</li>
-        <li><strong>Frequency f:</strong> waveform hoàn thành bao nhiêu chu kỳ mỗi giây?</li>
-        <li><strong>Period T = 1/f:</strong> một chu kỳ kéo dài bao lâu?</li>
+        <li><strong>Amplitude <MathExpr tex="A" />:</strong> waveform lớn tới đâu theo trục dọc?</li>
+        <li><strong>Frequency <MathExpr tex="f" />:</strong> waveform hoàn thành bao nhiêu chu kỳ mỗi giây?</li>
+        <li><strong>Period <MathExpr tex="T=1/f" />:</strong> một chu kỳ kéo dài bao lâu?</li>
         <li><strong>Phase <MathExpr tex={String.raw`\phi`} />:</strong> waveform đang nằm ở đâu trong chu kỳ so với reference đã chọn?</li>
         <li><strong>Angular frequency <MathExpr tex={String.raw`\omega=2\pi f`} />:</strong> cùng tốc độ dao động nhưng biểu diễn bằng radian trên mỗi giây.</li>
         <li><strong><MathExpr tex={String.raw`x(t) = A\cos(2\pi f t + \phi)`} />:</strong> ba tham số trên được gói lại trong một biểu thức duy nhất.</li>

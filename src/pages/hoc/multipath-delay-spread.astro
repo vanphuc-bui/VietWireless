@@ -24,7 +24,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Bài 10 dùng <MathExpr tex={String.raw`y(t)=h\,x(t-\tau)`} /> để xây trực giác.
         Bây giờ thay vì một path, giả sử có direct path và vài reflected paths.
-        Mỗi path mang một copy của x(t), nhưng copy đó tới muộn và có complex gain riêng.
+        Mỗi path mang một copy của <MathExpr tex="x(t)" />, nhưng copy đó tới muộn và có complex gain riêng.
       </p>
 
       <div class="system-position">
@@ -111,7 +111,7 @@ import MathExpr from '../../components/Math.astro';
         <b>+</b>
         <div><small>PATH 2…</small><strong>...</strong><span>more copies</span></div>
         <b>→</b>
-        <div><small>RX</small><strong>y(t)</strong><span>all copies overlap</span></div>
+        <div><small>RX</small><strong><MathExpr tex="y(t)" /></strong><span>all copies overlap</span></div>
       </div>
 
       <p>
@@ -121,8 +121,8 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="frequency-selective">
-      <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH H(f)</p>
-      <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi f.</h2>
+      <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH <MathExpr tex="H(f)" /></p>
+      <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi <MathExpr tex="f" />.</h2>
 
       <MathExpr tex={String.raw`H(f) = \sum_{\ell} \alpha_{\ell}e^{-j2\pi f\tau_{\ell}}`} display />
 
@@ -130,7 +130,7 @@ import MathExpr from '../../components/Math.astro';
         Đây là một kết quả rất quan trọng.
         Một path delay <MathExpr tex={String.raw`\tau`} /> tạo phase <MathExpr tex={String.raw`-2\pi f\tau`} />, tức phase thay đổi theo <MathExpr tex="f" />.
         Vì vậy hai paths có thể cộng constructive ở frequency này nhưng destructive ở frequency khác.
-        Khi vẽ |H(f)|, ta có thể thấy peaks và notches.
+        Khi vẽ <MathExpr tex="|H(f)|" />, ta có thể thấy peaks và notches.
       </p>
 
       <div class="interference-cases">
@@ -166,7 +166,7 @@ import MathExpr from '../../components/Math.astro';
           <circle class="pdp-dot" cx="370" cy="155" r="5" />
           <line class="pdp-stem" x1="575" y1="220" x2="575" y2="188" />
           <circle class="pdp-dot" cx="575" cy="188" r="5" />
-          <text class="pdp-label" x="650" y="245">delay τ</text>
+          <foreignObject x="622" y="228" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\mathrm{delay}\;\tau`} /></div></foreignObject>
           <text class="pdp-label" x="62" y="52">power</text>
         </svg>
       </div>
@@ -250,7 +250,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="delay-frequency-duality">
         <div><small>DELAY DOMAIN</small><strong>nhiều taps cách xa nhau</strong><span>large delay spread</span></div>
         <b>↔ Fourier ↔</b>
-        <div><small>FREQUENCY DOMAIN</small><strong>H(f) có nhiều gợn/notches</strong><span>smaller coherence scale</span></div>
+        <div><small>FREQUENCY DOMAIN</small><strong><MathExpr tex="H(f)" /> có nhiều gợn/notches</strong><span>smaller coherence scale</span></div>
       </div>
 
       <p>
@@ -266,7 +266,7 @@ import MathExpr from '../../components/Math.astro';
         <li><strong>Multipath:</strong> nhiều delayed/scaled/rotated copies của cùng signal.</li>
         <li><strong>Impulse response:</strong> mô tả channel bằng complex taps <MathExpr tex={String.raw`\alpha_{\ell}`} /> tại delays <MathExpr tex={String.raw`\tau_{\ell}`} />.</li>
         <li><strong>Convolution:</strong> received waveform là tổng các delayed copies.</li>
-        <li><strong>H(f):</strong> các path delays tạo phase khác nhau theo frequency, dẫn tới peaks/notches.</li>
+        <li><strong><MathExpr tex="H(f)" />:</strong> các path delays tạo phase khác nhau theo frequency, dẫn tới peaks/notches.</li>
         <li><strong>PDP:</strong> giữ path power theo delay và bỏ phase.</li>
         <li><strong>RMS delay spread:</strong> power-weighted spread của channel energy theo thời gian.</li>
         <li><strong>ISI:</strong> xuất hiện khi channel memory đáng kể so với symbol/guard interval.</li>

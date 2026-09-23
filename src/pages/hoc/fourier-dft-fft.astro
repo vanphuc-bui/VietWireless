@@ -75,7 +75,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="transform-family">
         <article>
           <span class="card-label">CONTINUOUS-TIME FOURIER TRANSFORM</span>
-          <h3>x(t) ↔ X(f)</h3>
+          <h3><MathExpr tex={String.raw`x(t) \leftrightarrow X(f)`} /></h3>
           <p>Đầu vào liên tục theo thời gian; frequency cũng là biến liên tục.</p>
         </article>
         <article>
@@ -97,14 +97,14 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="dft-formula">
       <p class="concept-kicker">03 · DFT ĐANG TÍNH GÌ?</p>
-      <h2>Mỗi bin k hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
+      <h2>Mỗi bin <MathExpr tex="k" /> hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
 
       <MathExpr tex={String.raw`X[k] = \sum_{n=0}^{N-1} x[n]e^{-j2\pi kn/N}`} display />
 
       <div class="dft-symbols">
-        <div><strong>N</strong><span>số samples trong record</span></div>
-        <div><strong>n</strong><span>sample index</span></div>
-        <div><strong>k</strong><span>frequency-bin index</span></div>
+        <div><strong><MathExpr tex="N" /></strong><span>số samples trong record</span></div>
+        <div><strong><MathExpr tex="n" /></strong><span>sample index</span></div>
+        <div><strong><MathExpr tex="k" /></strong><span>frequency-bin index</span></div>
         <div><strong><MathExpr tex="X[k]" /></strong><span>complex coefficient tại bin <MathExpr tex="k" /></span></div>
       </div>
 
@@ -202,7 +202,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="window-compare">
         <article>
           <span class="card-label">RECTANGULAR</span>
-          <h3>w[n] = 1</h3>
+          <h3><MathExpr tex="w[n]=1" /></h3>
           <p>Main lobe hẹp hơn, nhưng sidelobes tương đối cao. Khi tone đúng bin, đây có thể là lựa chọn rất sạch.</p>
         </article>
         <article>
@@ -225,13 +225,13 @@ import MathExpr from '../../components/Math.astro';
       <div class="fft-complexity">
         <div>
           <span class="card-label">DFT TRỰC TIẾP</span>
-          <strong>O(N²)</strong>
+          <strong><MathExpr tex={String.raw`\mathcal{O}(N^2)`} /></strong>
           <p>Mỗi trong <MathExpr tex="N" /> bins cộng contribution từ <MathExpr tex="N" /> samples.</p>
         </div>
         <b>→ cấu trúc lại →</b>
         <div>
           <span class="card-label">FFT</span>
-          <strong>O(N log N)</strong>
+          <strong><MathExpr tex={String.raw`\mathcal{O}(N\log N)`} /></strong>
           <p>Reuse các phép tính có cấu trúc thay vì tính mọi thứ độc lập.</p>
         </div>
       </div>

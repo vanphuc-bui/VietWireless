@@ -198,15 +198,15 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="cp-not-inside">
-      <p class="concept-kicker">09 · CP KHÔNG PHẢI MỘT PHẦN CỦA N-POINT IFFT DATA</p>
-      <h2>IFFT tạo N useful samples trước; CP được copy từ tail và prepend sau đó.</h2>
+      <p class="concept-kicker">09 · CP KHÔNG PHẢI MỘT PHẦN CỦA <MathExpr tex="N" />-POINT IFFT DATA</p>
+      <h2>IFFT tạo <MathExpr tex="N" /> useful samples trước; CP được copy từ tail và prepend sau đó.</h2>
 
       <p>
         Receiver cũng làm chiều ngược lại:
         xác định symbol timing,
         bỏ <MathExpr tex={String.raw`N_{\mathrm{CP}}`} /> samples,
-        lấy đúng N useful samples,
-        rồi mới chạy N-point FFT.
+        lấy đúng <MathExpr tex="N" /> useful samples,
+        rồi mới chạy <MathExpr tex="N" />-point FFT.
         Nếu đưa CP vào FFT window như data thông thường, orthogonal basis assumption không còn đúng như thiết kế.
       </p>
     </section>

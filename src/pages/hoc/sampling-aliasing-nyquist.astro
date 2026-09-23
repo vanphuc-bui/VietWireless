@@ -55,7 +55,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <div class="system-position">
         <span>ANALOG → DIGITAL</span>
         <div class="system-position-flow" aria-label="Waveform liên tục qua ADC thành samples">
-          <span>Waveform x(t)</span><b>→</b>
+          <span>Waveform <MathExpr tex="x(t)" /></span><b>→</b>
           <strong>Sampling</strong><b>→</b>
           <span><MathExpr tex="x[n]" /></span><b>→</b>
           <span>DSP</span>
@@ -71,7 +71,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <p class="concept-kicker">01 · LẤY MẪU THEO THỜI GIAN</p>
       <h2>Sampling không biến amplitude thành các mức rời rạc. Nó chọn những thời điểm để đo waveform.</h2>
       <p>
-        Giả sử một điện áp analog x(t) tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
+        Giả sử một điện áp analog <MathExpr tex="x(t)" /> tồn tại liên tục theo thời gian. ADC đo giá trị của nó tại các thời điểm
         <MathExpr tex={String.raw`0,\,T_s,\,2T_s,\,3T_s,\ldots`} /> Khi đó:
       </p>
 
@@ -86,7 +86,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
             <path class="analog-wave" d="M20 82 C44 22 69 24 92 78 S138 126 163 65 S210 18 232 79 S275 125 302 56" />
             <text class="sample-svg-label" x="278" y="68">thời gian</text>
           </svg>
-          <strong>x(t)</strong>
+          <strong><MathExpr tex="x(t)" /></strong>
           <p>Giá trị tồn tại ở mọi thời điểm.</p>
         </article>
 
@@ -108,7 +108,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
             </g>
           </svg>
           <strong><MathExpr tex="x[n]" /></strong>
-          <p>Thời gian đã trở thành các sample index n.</p>
+          <p>Thời gian đã trở thành các sample index <MathExpr tex="n" />.</p>
         </article>
 
         <div class="sampling-arrow" aria-hidden="true">→</div>
@@ -228,8 +228,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
             <path class="spectrum-copy main-copy" d="M210 132 L240 62 L270 132 Z" />
             <path class="spectrum-copy muted-copy" d="M384 132 L414 82 L444 132 Z" />
             <text class="sample-svg-label" x="230" y="151">0</text>
-            <text class="sample-svg-label" x="49" y="151">-fₛ</text>
-            <text class="sample-svg-label" x="402" y="151">+fₛ</text>
+            <foreignObject x="34" y="136" width="64" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-f_s" /></div></foreignObject>
+            <foreignObject x="387" y="136" width="64" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+f_s" /></div></foreignObject>
           </svg>
           <p>Mỗi copy còn khoảng trống với copy bên cạnh.</p>
         </article>

@@ -40,7 +40,7 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="iq-la-gi">
-      <p class="concept-kicker">01 · I VÀ Q LÀ HAI TỌA ĐỘ</p>
+      <p class="concept-kicker">01 · <MathExpr tex="I" /> VÀ <MathExpr tex="Q" /> LÀ HAI TỌA ĐỘ</p>
       <h2>Một complex sample có thể được đọc theo Cartesian hoặc theo magnitude và phase.</h2>
 
       <div class="math-card-grid">
@@ -92,7 +92,7 @@ import MathExpr from '../../components/Math.astro';
           <small>CHANNEL</small>
           <strong><MathExpr tex={String.raw`h = Ge^{j\theta}`} /></strong>
         </div>
-        <b>=</b>
+        <b><MathExpr tex="=" /></b>
         <div>
           <small>RX SAMPLE</small>
           <strong><MathExpr tex="y = hx" /></strong>
@@ -107,7 +107,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="baseband-rf">
       <p class="concept-kicker">03 · COMPLEX BASEBAND KHÔNG PHẢI RF WAVEFORM</p>
-      <h2>I+jQ là representation chậm hơn quanh carrier; RF waveform vật lý vẫn là tín hiệu thực.</h2>
+      <h2><MathExpr tex="I+jQ" /> là representation chậm hơn quanh carrier; RF waveform vật lý vẫn là tín hiệu thực.</h2>
 
       <p>
         Gọi complex baseband là:
@@ -120,9 +120,9 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex={String.raw`s_{\mathrm{RF}}(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
 
       <div class="iq-carrier-flow">
-        <div><small>I PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex={String.raw`\times\cos(2\pi f_ct)`} /></span></div>
+        <div><small><MathExpr tex="I" /> PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex={String.raw`\times\cos(2\pi f_ct)`} /></span></div>
         <b>+</b>
-        <div><small>Q PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex={String.raw`-\sin(2\pi f_ct)`} /></span></div>
+        <div><small><MathExpr tex="Q" /> PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex={String.raw`-\sin(2\pi f_ct)`} /></span></div>
         <b>→</b>
         <div><small>RF</small><strong><MathExpr tex="s(t)" /></strong><span>real waveform</span></div>
       </div>

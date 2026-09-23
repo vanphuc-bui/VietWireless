@@ -67,11 +67,11 @@ import MathExpr from '../../components/Math.astro';
             <line class="complex-projection" x1="238" y1="72" x2="238" y2="130" />
             <line class="complex-projection" x1="238" y1="72" x2="150" y2="72" />
             <circle class="complex-tip" cx="238" cy="72" r="5" />
-            <text class="complex-label" x="276" y="119">Re</text>
-            <text class="complex-label" x="160" y="42">Im</text>
-            <text class="complex-label" x="202" y="151">a</text>
-            <text class="complex-label" x="160" y="77">b</text>
-            <text class="complex-label strong" x="244" y="66">z</text>
+            <foreignObject x="262" y="103" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
+            <foreignObject x="146" y="26" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
+            <foreignObject x="190" y="135" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="a" /></div></foreignObject>
+            <foreignObject x="148" y="61" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="b" /></div></foreignObject>
+            <foreignObject x="232" y="50" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="z" /></div></foreignObject>
           </svg>
           <p>Hai tọa độ, nhưng cũng có thể đọc thành magnitude và phase.</p>
         </article>
@@ -80,8 +80,8 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex="z = a + jb" display />
 
       <p>
-        Trong kỹ thuật điện, ta thường dùng <strong>j</strong> thay cho i vì i thường đã được dùng cho dòng điện.
-        Ta có <strong>j² = -1</strong>. Phần a gọi là phần thực, còn b là hệ số của phần ảo.
+        Trong kỹ thuật điện, ta thường dùng <strong><MathExpr tex="j" /></strong> thay cho <MathExpr tex="i" /> vì <MathExpr tex="i" /> thường đã được dùng cho dòng điện.
+        Ta có <strong><MathExpr tex="j^2=-1" /></strong>. Phần <MathExpr tex="a" /> gọi là phần thực, còn <MathExpr tex="b" /> là hệ số của phần ảo.
       </p>
     </section>
 
@@ -92,7 +92,7 @@ import MathExpr from '../../components/Math.astro';
       <div class="complex-two-views">
         <article>
           <span class="card-label">CARTESIAN</span>
-          <h3>z = a + jb</h3>
+          <h3><MathExpr tex="z=a+jb" /></h3>
           <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
           <div class="math-pair">
             <MathExpr tex={String.raw`\operatorname{Re}\{z\} = a`} display class="math-compact" />
@@ -142,13 +142,13 @@ import MathExpr from '../../components/Math.astro';
           <line class="complex-projection" x1="375" y1="152" x2="375" y2="220" />
           <line class="complex-projection" x1="375" y1="152" x2="270" y2="152" />
           <circle class="complex-tip" cx="375" cy="152" r="5" />
-          <text class="complex-label" x="575" y="207">Re</text>
-          <text class="complex-label" x="282" y="62">Im</text>
-          <text class="complex-label strong" x="390" y="147">Aeʲθ</text>
-          <text class="complex-label" x="322" y="240">A cos θ</text>
-          <text class="complex-label" x="282" y="146">A sin θ</text>
+          <foreignObject x="560" y="191" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
+          <foreignObject x="267" y="46" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
+          <foreignObject x="378" y="131" width="86" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`Ae^{j\theta}`} /></div></foreignObject>
+          <foreignObject x="306" y="224" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\cos\theta`} /></div></foreignObject>
+          <foreignObject x="266" y="130" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\sin\theta`} /></div></foreignObject>
           <path class="complex-angle" d="M315 220 A45 45 0 0 0 307 195" />
-          <text class="complex-label" x="315" y="196">θ</text>
+          <foreignObject x="303" y="180" width="40" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\theta`} /></div></foreignObject>
         </svg>
       </div>
     </section>
@@ -207,14 +207,14 @@ import MathExpr from '../../components/Math.astro';
       <div class="phasor-definition">
         <div>
           <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
-          <strong>z(t) = <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
+          <strong><MathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} /></strong>
         </div>
-        <b>=</b>
+        <b><MathExpr tex="=" /></b>
         <div>
           <small>PHASOR</small>
           <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
-        <b>×</b>
+        <b><MathExpr tex={String.raw`\times`} /></b>
         <div>
           <small>COMMON ROTATION</small>
           <strong><MathExpr tex={String.raw`e^{j\omega t}`} /></strong>
@@ -246,12 +246,12 @@ import MathExpr from '../../components/Math.astro';
           <small>SIGNAL</small>
           <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
         </div>
-        <b>×</b>
+        <b><MathExpr tex={String.raw`\times`} /></b>
         <div>
           <small>HỆ SỐ</small>
           <strong><MathExpr tex={String.raw`Ge^{j\theta}`} /></strong>
         </div>
-        <b>=</b>
+        <b><MathExpr tex="=" /></b>
         <div>
           <small>KẾT QUẢ</small>
           <strong><MathExpr tex={String.raw`AGe^{j(\phi+\theta)}`} /></strong>
@@ -272,19 +272,19 @@ import MathExpr from '../../components/Math.astro';
       <div class="iq-preview">
         <div>
           <small>PHẦN THỰC</small>
-          <strong>a</strong>
-          <span>sẽ trở thành I</span>
+          <strong><MathExpr tex="a" /></strong>
+          <span>sẽ trở thành <MathExpr tex="I" /></span>
         </div>
-        <b>+</b>
+        <b><MathExpr tex="+" /></b>
         <div>
           <small>PHẦN ẢO</small>
-          <strong>jb</strong>
-          <span>b sẽ trở thành Q</span>
+          <strong><MathExpr tex="jb" /></strong>
+          <span><MathExpr tex="b" /> sẽ trở thành <MathExpr tex="Q" /></span>
         </div>
         <b>→</b>
         <div>
           <small>COMPLEX BASEBAND</small>
-          <strong>I + jQ</strong>
+          <strong><MathExpr tex="I+jQ" /></strong>
           <span>magnitude + phase trong một sample</span>
         </div>
       </div>
@@ -299,7 +299,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
       <h2>Tới đây, số phức có thể được nhìn như hình học chứ không chỉ là ký hiệu j.</h2>
       <ol class="recap-list">
-        <li><strong>z = a + jb:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
+        <li><strong><MathExpr tex="z=a+jb" />:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
         <li><strong>Magnitude:</strong> <MathExpr tex={String.raw`A=\sqrt{a^2+b^2}`} /> là độ dài vector từ gốc tới điểm z.</li>
         <li><strong>Phase:</strong> <MathExpr tex={String.raw`\phi`} /> là góc của vector so với trục thực.</li>
         <li><strong>Euler:</strong> <MathExpr tex={String.raw`e^{j\theta}=\cos\theta+j\sin\theta`} /> nối số phức với sinusoid.</li>
