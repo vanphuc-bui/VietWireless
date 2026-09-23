@@ -31,9 +31,9 @@ import MathExpr from '../../components/Math.astro';
       <div class="system-position">
         <span>FREQUENCY × TIME</span>
         <div class="system-position-flow">
-          <span>subcarrier k</span><b>×</b>
-          <span>OFDM-symbol position l</span><b>→</b>
-          <strong>resource element (k,l)</strong><b>→</b>
+          <span>subcarrier <MathExpr tex="k" /></span><b>×</b>
+          <span>OFDM-symbol position <MathExpr tex={String.raw`\ell`} /></span><b>→</b>
+          <strong>resource element <MathExpr tex={String.raw`(k,\ell)`} /></strong><b>→</b>
           <span>complex value <MathExpr tex={String.raw`a_{k,\ell}`} /></span>
         </div>
         <p>
@@ -193,11 +193,11 @@ import MathExpr from '../../components/Math.astro';
         PRB-local subcarrier 0…11,
         BWP-relative PRB,
         FFT-bin index.
-        Nếu tất cả đều gọi đơn giản là k, mapping bug rất dễ xảy ra.
+        Nếu tất cả đều gọi đơn giản là <MathExpr tex="k" />, mapping bug rất dễ xảy ra.
       </p>
 
       <p>
-        Bài này dùng (k,l) như coordinate khái niệm trên grid.
+        Bài này dùng <MathExpr tex={String.raw`(k,\ell)`} /> như coordinate khái niệm trên grid.
         Khi đi sâu vào 3GPP channels, từng clause sẽ định nghĩa reference/indexing cụ thể hơn.
       </p>
     </section>
