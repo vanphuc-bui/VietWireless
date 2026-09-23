@@ -12,7 +12,7 @@ import MathExpr from '../../components/Math.astro';
     <header class="lesson-hero">
       <a class="back-link" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 05 · SIGNAL FOUNDATIONS</p>
-      <h1>I/Q và complex baseband</h1>
+      <h1><MathExpr tex="I/Q" /> và complex baseband</h1>
       <p class="lesson-deck">
         Số phức ở Bài 04 chưa chỉ là một mẹo toán học. Trong transmitter và receiver số,{" "}
         <strong>I và Q chính là hai tọa độ ta dùng để lưu một signal có amplitude và phase.</strong>
@@ -141,7 +141,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Thay amplitude và phase để nhìn I/Q đổi ra sao và waveform RF tương ứng dịch như thế nào.</h2>
       <p>
         Lab giữ một carrier minh họa cố định. Điểm trên complex plane là baseband representation;
-        waveform bên phải là tín hiệu real thu được từ hai nhánh I và Q.
+        waveform bên phải là tín hiệu real thu được từ hai nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" />.
       </p>
       <IQBasebandExplorer client:load />
     </section>
@@ -150,16 +150,47 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">05 · TRONG CODE, I/Q THƯỜNG LÀ SAMPLES</p>
       <h2>ADC/DSP không nhất thiết lưu một “waveform đẹp”; chúng làm việc với các cặp số theo sample index.</h2>
 
-      <div class="iq-buffer">
-        <div class="iq-buffer-head"><span><MathExpr tex="n" /></span><span><MathExpr tex="I[n]" /></span><span><MathExpr tex="Q[n]" /></span><span><MathExpr tex="x[n]" /></span></div>
-        <div><span>0</span><span>0.71</span><span>0.71</span><span>0.71 + j0.71</span></div>
-        <div><span>1</span><span>0.38</span><span>0.92</span><span>0.38 + j0.92</span></div>
-        <div><span>2</span><span>-0.20</span><span>0.98</span><span>-0.20 + j0.98</span></div>
-        <div><span>3</span><span>-0.82</span><span>0.57</span><span>-0.82 + j0.57</span></div>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead>
+            <tr>
+              <th><MathExpr tex="n" /></th>
+              <th><MathExpr tex="I[n]" /></th>
+              <th><MathExpr tex="Q[n]" /></th>
+              <th><MathExpr tex="x[n]" /></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><MathExpr tex="0" /></td>
+              <td><MathExpr tex="0.71" /></td>
+              <td><MathExpr tex="0.71" /></td>
+              <td><MathExpr tex="0.71+j0.71" /></td>
+            </tr>
+            <tr>
+              <td><MathExpr tex="1" /></td>
+              <td><MathExpr tex="0.38" /></td>
+              <td><MathExpr tex="0.92" /></td>
+              <td><MathExpr tex="0.38+j0.92" /></td>
+            </tr>
+            <tr>
+              <td><MathExpr tex="2" /></td>
+              <td><MathExpr tex="-0.20" /></td>
+              <td><MathExpr tex="0.98" /></td>
+              <td><MathExpr tex="-0.20+j0.98" /></td>
+            </tr>
+            <tr>
+              <td><MathExpr tex="3" /></td>
+              <td><MathExpr tex="-0.82" /></td>
+              <td><MathExpr tex="0.57" /></td>
+              <td><MathExpr tex="-0.82+j0.57" /></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <p>
-        Một implementation có thể lưu I và Q xen kẽ, tách thành hai buffer, dùng integer fixed-point hoặc floating-point.
+        Một implementation có thể lưu <MathExpr tex="I" /> và <MathExpr tex="Q" /> xen kẽ, tách thành hai buffer, dùng integer fixed-point hoặc floating-point.
         Representation trong memory thay đổi, nhưng ý nghĩa toán học vẫn là một chuỗi complex samples.
       </p>
     </section>
@@ -168,7 +199,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">06 · MỘT LỢI THẾ KHÁC CỦA COMPLEX BASEBAND</p>
       <h2>Complex signal cho phép phân biệt rotation dương và âm, tức hai phía của frequency axis.</h2>
       <p>
-        Với signal real, spectrum có conjugate symmetry: thành phần ở +f đi kèm một mirror ở -f.
+        Với signal real, spectrum có conjugate symmetry: thành phần ở <MathExpr tex="+f" /> đi kèm một mirror ở <MathExpr tex="-f" />.
         Complex baseband không bị bắt buộc bởi symmetry đó. Vì vậy nó rất tự nhiên khi ta muốn biểu diễn bandwidth quanh carrier
         sau khi đã dịch carrier về 0 Hz.
       </p>
@@ -182,8 +213,8 @@ import MathExpr from '../../components/Math.astro';
         <b>→ downconvert →</b>
         <div>
           <small>COMPLEX BASEBAND</small>
-          <strong>quanh 0 Hz</strong>
-          <span>negative frequency ← 0 → positive frequency</span>
+          <strong>quanh <MathExpr tex="0\\,\\mathrm{Hz}" /></strong>
+          <span>negative frequency ← <MathExpr tex="0" /> → positive frequency</span>
         </div>
       </div>
 
