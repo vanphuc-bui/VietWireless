@@ -448,6 +448,10 @@ for (const [regex, message] of typographyChecks) {
   if (!regex.test(css)) report(cssFile, message);
 }
 
+if (/\.precision-note\s+strong\s*,|\.scope-note\s+strong\s*\{/u.test(css)) {
+  report(cssFile, 'callout titles must use direct-child selectors so inline strong/math does not become block-level.');
+}
+
 const mathRendererFiles = [
   'src/components/Math.astro',
   'src/components/MathExpr.jsx',
