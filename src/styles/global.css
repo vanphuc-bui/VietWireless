@@ -10668,3 +10668,433 @@ body {
     transform: rotate(90deg);
   }
 }
+
+
+/* --- Lesson 20: synchronization --- */
+.sync-question-grid,
+.sync-boundary-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sync-question-grid .technical-card,
+.sync-boundary-grid .technical-card {
+  min-height: 0;
+}
+
+.sync-state-flow,
+.sync-known-sequence-flow,
+.sync-learning-path {
+  margin: 30px 0 26px;
+  display: grid;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.sync-state-flow {
+  grid-template-columns:
+    minmax(0, 1fr) 52px
+    minmax(0, 1fr) 52px
+    minmax(0, 1fr) 52px
+    minmax(0, 1fr);
+}
+
+.sync-known-sequence-flow {
+  grid-template-columns:
+    minmax(0, 1fr) 52px
+    minmax(0, 1fr) 52px
+    minmax(0, 1fr);
+}
+
+.sync-learning-path {
+  grid-template-columns:
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr);
+}
+
+.sync-state-card,
+.sync-sequence-card,
+.sync-learning-path > div {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sync-state-card.start {
+  border-top: 3px solid var(--muted);
+}
+
+.sync-state-card.finish {
+  border-top: 3px solid var(--blue);
+  background: var(--blue-soft);
+}
+
+.sync-state-card small,
+.sync-sequence-card small,
+.sync-learning-path small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.sync-state-card strong,
+.sync-sequence-card strong,
+.sync-learning-path strong {
+  margin: 7px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.sync-state-card > span,
+.sync-sequence-card > span,
+.sync-learning-path > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.sync-op {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--muted);
+  text-align: center;
+  font-family: var(--font-ui);
+}
+
+.sync-op > span {
+  font-size: var(--lesson-meta-size);
+  line-height: 1.25;
+}
+
+.sync-op b,
+.sync-learning-path > b,
+.sync-coarse-fine > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-dimension-list {
+  margin: 30px 0;
+  display: grid;
+  gap: 12px;
+}
+
+.sync-dimension-list article {
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  border-top: 1px solid var(--line);
+}
+
+.sync-dimension-list article:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.sync-dimension-no {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.sync-dimension-list h3 {
+  margin: 0 0 6px;
+}
+
+.sync-dimension-list p {
+  margin: 0;
+}
+
+.sync-symbol-table,
+.sync-effect-table,
+.sync-pipeline-table {
+  min-width: 760px;
+}
+
+.sync-timing-visual {
+  margin: 30px 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sync-time-row {
+  margin: 12px 0;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.sync-time-row > span {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sync-symbol-track {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 64px minmax(0, 1fr);
+  min-height: 62px;
+  border: 1px solid var(--line-strong);
+}
+
+.sync-symbol-track > i,
+.sync-symbol-track > strong {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border-right: 1px solid var(--line);
+  font-style: normal;
+}
+
+.sync-symbol-track > i {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sync-symbol-track > strong {
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-window-track {
+  width: 58%;
+  min-height: 52px;
+  margin-left: 10%;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  border: 2px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.sync-window-track em {
+  border-right: 1px solid rgba(182,64,49,.35);
+  background: rgba(182,64,49,.08);
+}
+
+.sync-window-track strong {
+  display: grid;
+  place-items: center;
+  padding: 8px 12px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-timing-visual > p {
+  margin: 16px 0 0;
+}
+
+.sync-phase-story {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr) 30px
+    minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.sync-phase-story > div {
+  min-width: 0;
+  padding: 18px 14px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: center;
+}
+
+.sync-phase-story small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.sync-phase-story > div > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-phase-story > b {
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.phase-vector {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: block;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--line), var(--line)) center/1px 100% no-repeat,
+    linear-gradient(90deg, var(--line), var(--line)) center/100% 1px no-repeat;
+}
+
+.phase-vector::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 2px;
+  transform-origin: left center;
+  background: var(--accent);
+}
+
+.phase-vector::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.phase-vector.p0::after { transform: rotate(0deg); }
+.phase-vector.p1::after { transform: rotate(-25deg); }
+.phase-vector.p2::after { transform: rotate(-55deg); }
+.phase-vector.p3::after { transform: rotate(-95deg); }
+
+.sync-example-note {
+  margin: 24px 0;
+  padding: 16px 18px;
+  border-left: 3px solid var(--blue);
+  background: var(--blue-soft);
+}
+
+.sync-example-note > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.sync-example-note > p {
+  margin: 0;
+}
+
+.sync-coarse-fine {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr) 30px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.sync-coarse-fine article {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sync-coarse-fine article p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 980px) {
+  .sync-state-flow,
+  .sync-known-sequence-flow,
+  .sync-learning-path,
+  .sync-phase-story,
+  .sync-coarse-fine {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .sync-op,
+  .sync-learning-path > b,
+  .sync-phase-story > b,
+  .sync-coarse-fine > b {
+    min-height: 28px;
+    transform: rotate(90deg);
+  }
+
+  .sync-op > span {
+    display: none;
+  }
+
+  .sync-phase-story > div {
+    width: min(100%, 420px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .sync-question-grid,
+  .sync-boundary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sync-dimension-list article {
+    grid-template-columns: 36px minmax(0, 1fr);
+    padding-inline: 8px;
+  }
+
+  .sync-time-row {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .sync-symbol-track {
+    grid-template-columns: 46px minmax(0, 1fr) 46px minmax(0, 1fr);
+  }
+
+  .sync-window-track {
+    width: 76%;
+    margin-left: 8%;
+  }
+
+  .sync-symbol-table,
+  .sync-effect-table,
+  .sync-pipeline-table {
+    min-width: 680px;
+  }
+}
