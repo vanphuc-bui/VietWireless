@@ -59,6 +59,13 @@ for (const lesson of lessons) {
 
   const content = readFileSync(path, 'utf8');
 
+  // Presentation contract: lesson pages must consume shared typography/layout,
+  // not invent page-specific font stacks or font sizes inline.
+  if (/style\s*=\s*["'][^"']*(?:font-size|font-family)\s*:/iu.test(content)
+      || /\b(?:fontSize|fontFamily)\s*:/u.test(content)) {
+    fail(`${path} contains page-specific inline typography. Use shared CSS tokens/components instead.`);
+  }
+
   if (lesson.number >= 19) {
     const metaMatch = content.match(/const\s+lessonMeta\s*=\s*\{([\s\S]*?)\};/u);
     if (!metaMatch) {
