@@ -70,3 +70,17 @@ Math content có TeX command phải dùng `String.raw` hoặc double escaping. D
 - Callout inline content như `strong` và `MathExpr` không được bị selector rộng biến thành block; title dùng direct-child selector.
 - Không thêm page-specific font stack hoặc page-specific math font để chữa layout.
 - Mọi thay đổi typography phải pass `npm run check:math` và `npm run build`.
+
+### Presentation & layout contract
+
+- Mỗi lesson phải được trình bày như một tài liệu kỹ thuật liền mạch, không như dashboard.
+- Typography site-wide: Noto Serif cho reading surface, Noto Sans cho UI/metadata, KaTeX cho math.
+- Prose/card/table/callout body bám shared prose scale; không tạo font-size riêng theo page.
+- Card chỉ dùng khi có semantic grouping; không bọc mọi paragraph vào box.
+- Compact card phải content-driven; không dùng min-height lớn để tạo khoảng trắng.
+- Flow phải giữ đúng quan hệ logic: số grid tracks phải khớp chuỗi state/operator, operator không được tự rơi hàng.
+- State card và operation/arrow là hai loại khác nhau.
+- Callout title dùng direct-child selector; inline emphasis/math trong paragraph không được biến thành block.
+- Mobile phải giữ đúng thứ tự logic và không cần zoom ngang.
+- Mọi layout mới phải QA desktop + tablet + mobile trước merge.
+- Chi tiết nằm trong `docs/CONTENT_GUIDELINES.md` và `docs/LESSON_CONTRACT.md`.
