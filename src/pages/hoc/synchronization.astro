@@ -1,0 +1,589 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+
+const lessonMeta = {
+  number: 20,
+  part: 3,
+  slug: 'synchronization',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="Synchronization là gì trong 5G NR? | VietWireless"
+  description="Hiểu downlink synchronization trong 5G NR: timing, carrier frequency, OFDM symbol boundary, frame context, PSS/SSS và cách receiver đi từ I/Q samples tới một SSB có thể xử lý."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Bản đồ học viễn thông</a>
+      <p class="eyebrow">GHI CHÉP 20 · INITIAL ACCESS</p>
+      <h1>Synchronization là gì?</h1>
+      <p class="lesson-deck">
+        gNB và UE không dùng chung một chiếc đồng hồ vật lý. Khi UE vừa bật receiver, sample stream của nó có thể lệch cả thời gian lẫn tần số so với waveform mà gNB đã phát.{" "}
+        <strong>Synchronization là quá trình đưa receiver đủ gần với reference của cell để nó biết nên nhìn vào đâu, bằng tần số nào và theo cấu trúc thời gian nào.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>Receiver có samples rồi vẫn chưa có nghĩa là nó có thể FFT và decode đúng.</h2>
+
+      <p>
+        Hãy tưởng tượng antenna và RF front-end đã thu được tín hiệu, ADC cũng đã tạo ra một stream complex samples.
+        Vấn đề là UE chưa biết sample nào tương ứng với biên OFDM symbol của gNB.
+        Oscillator của UE cũng không hoàn toàn trùng với carrier reference phía gNB, và chuyển động có thể tạo thêm Doppler.
+      </p>
+
+      <p>
+        Nếu receiver đặt FFT window sai hoặc nhìn signal bằng một carrier reference bị lệch, các resource elements mà nó lấy ra không còn khớp với grid mà transmitter đã tạo.
+        Vì vậy trước khi nói tới PBCH decoding hay MIB, receiver cần xây một reference đủ tốt cho chính nó.
+      </p>
+
+      <div class="sync-question-grid">
+        <article class="technical-card">
+          <span class="card-label">THỜI GIAN</span>
+          <p>OFDM symbol hoặc SSB candidate bắt đầu gần sample nào?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">TẦN SỐ</span>
+          <p>Carrier reference của receiver lệch bao nhiêu so với signal đang thu?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CẤU TRÚC THỜI GIAN</span>
+          <p>Candidate vừa tìm thấy nằm ở đâu trong cấu trúc SSB/frame mà UE đang xây dần?</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">MỤC TIÊU</span>
+          <p>Đủ alignment để extract đúng resource, nhận dạng cell và tiếp tục decode broadcast information.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">SYNCHRONIZATION NẰM Ở ĐÂU?</p>
+      <h2>Nó không phải một phép đo duy nhất, mà là một progression từ reference rất thô tới receiver alignment ngày càng tốt hơn.</h2>
+
+      <div class="sync-state-flow" data-lesson-visual aria-label="Receiver đi từ sample stream chưa đồng bộ tới SSB có thể xử lý">
+        <div class="sync-state-card start">
+          <small>STATE 0</small>
+          <strong><MathExpr tex="I/Q" /> samples</strong>
+          <span>chưa biết timing và residual frequency error</span>
+        </div>
+        <div class="sync-op"><span>search</span><b>→</b></div>
+        <div class="sync-state-card">
+          <small>STATE 1</small>
+          <strong>candidate timing</strong>
+          <span>đã có một vị trí đáng kiểm tra</span>
+        </div>
+        <div class="sync-op"><span>frequency refine</span><b>→</b></div>
+        <div class="sync-state-card">
+          <small>STATE 2</small>
+          <strong>FFT-ready window</strong>
+          <span>timing và carrier đủ gần để nhìn OFDM resources</span>
+        </div>
+        <div class="sync-op"><span>PSS / SSS</span><b>→</b></div>
+        <div class="sync-state-card finish">
+          <small>STATE 3</small>
+          <strong>cell-aligned context</strong>
+          <span>có cell identity và tiếp tục dựng timing/frame context</span>
+        </div>
+      </div>
+
+      <p>
+        Đây là cách VietWireless tổ chức mental model.
+        3GPP định nghĩa cell search là procedure để UE acquire time and frequency synchronization với cell và detect physical-layer cell ID.
+        Standard không bắt mọi receiver phải có đúng bốn state như hình trên.
+      </p>
+    </section>
+
+    <section class="concept-block" id="three-alignments">
+      <p class="concept-kicker">01 · ĐỒNG BỘ THỰC RA ĐANG ALIGN NHỮNG GÌ?</p>
+      <h2>Có ba lớp nên tách riêng trong đầu: vị trí theo thời gian, reference tần số và context của cấu trúc thời gian.</h2>
+
+      <div class="sync-dimension-list">
+        <article>
+          <span class="sync-dimension-no">A</span>
+          <div>
+            <h3>Timing alignment</h3>
+            <p>
+              Receiver cần biết vùng sample nào tương ứng với OFDM symbol hoặc synchronization block đang xét.
+              Ở mức implementation, điều này liên quan tới sample timing, FFT-window placement và refinement quanh candidate.
+            </p>
+          </div>
+        </article>
+        <article>
+          <span class="sync-dimension-no">B</span>
+          <div>
+            <h3>Frequency alignment</h3>
+            <p>
+              Local oscillator của UE có thể lệch so với carrier của gNB.
+              Doppler cũng có thể dịch tần số.
+              Receiver cần estimate và bù đủ phần lệch này để OFDM subcarriers vẫn được quan sát gần đúng vị trí.
+            </p>
+          </div>
+        </article>
+        <article>
+          <span class="sync-dimension-no">C</span>
+          <div>
+            <h3>Frame / SSB timing context</h3>
+            <p>
+              Biết một peak nằm ở sample nào chưa đồng nghĩa UE đã biết đầy đủ vị trí của mình trong radio frame.
+              Context này được xây dần khi UE xử lý SSB, cell identity và broadcast information.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Một cách nói dễ gây nhầm</strong>
+        <p>
+          “UE đã sync” không phải lúc nào cũng có nghĩa mọi timing/frequency uncertainty đã bằng không.
+          Trong receiver thật, synchronization thường là nhiều bước estimation và tracking với độ chính xác tăng dần.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="signal-model">
+      <p class="concept-kicker">02 · MỘT MODEL NHỎ GOM TIMING VÀ FREQUENCY OFFSET VÀO CÙNG MỘT CÂU</p>
+
+      <p>
+        Bỏ qua multipath để tập trung vào synchronization, một model discrete-time đơn giản có thể viết:
+      </p>
+
+      <MathExpr
+        tex={String.raw`r[n]=x[n-n_0]e^{j2\pi \Delta f_{\mathrm{CFO}}nT_s}+w[n]`}
+        display
+      />
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table sync-symbol-table">
+          <thead>
+            <tr><th>Ký hiệu</th><th>Ý nghĩa trong model</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><MathExpr tex="n_0" /></td>
+              <td>sample offset: receiver đang nhìn waveform lệch bao nhiêu samples so với reference timing.</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}`} /></td>
+              <td>carrier frequency offset còn lại giữa received carrier và local frequency reference.</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex="T_s" /></td>
+              <td>sampling period của receiver.</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex="w[n]" /></td>
+              <td>noise và phần impairment ta chưa đưa vào model nhỏ này.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Hai lỗi trong cùng công thức có hình dạng rất khác.
+        <MathExpr tex="n_0" /> làm waveform bị dịch theo sample index.
+        <MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}`} /> tạo một complex rotation tăng dần theo thời gian.
+        Vì vậy timing estimator và frequency estimator thường quan sát những đặc trưng khác nhau của received signal.
+      </p>
+    </section>
+
+    <section class="concept-block" id="timing">
+      <p class="concept-kicker">03 · TIMING: FFT WINDOW PHẢI NHÌN ĐÚNG ĐOẠN WAVEFORM</p>
+      <h2>Trong OFDM, câu hỏi không chỉ là “có signal hay không”, mà còn là “nên cắt block samples ở đâu”.</h2>
+
+      <div class="sync-timing-visual" data-lesson-visual>
+        <div class="sync-time-row">
+          <span>gNB symbol timing</span>
+          <div class="sync-symbol-track">
+            <i><b>CP</b></i><strong>OFDM symbol A</strong>
+            <i><b>CP</b></i><strong>OFDM symbol B</strong>
+          </div>
+        </div>
+        <div class="sync-time-row receiver-row">
+          <span>UE FFT window</span>
+          <div class="sync-window-track">
+            <em></em>
+            <strong>candidate FFT window</strong>
+          </div>
+        </div>
+        <p>
+          Receiver dịch candidate window theo sample index cho tới khi nó có một timing hypothesis phù hợp với structure/known signal đang tìm.
+        </p>
+      </div>
+
+      <p>
+        Với một OFDM receiver, timing sai quá nhiều có thể khiến FFT window lấy lẫn energy từ symbol lân cận hoặc đặt window không còn phù hợp với cyclic-prefix margin của channel.
+        Khi timing nằm trong một vùng an toàn hơn, ảnh hưởng có thể nhẹ hơn và thường biểu hiện như phase structure trên subcarriers thay vì làm toàn bộ symbol “biến mất”.
+      </p>
+
+      <p>
+        Vì vậy “timing synchronization” không nên hiểu như tìm một sample duy nhất đúng tuyệt đối trong mọi trường hợp.
+        Receiver cần một window placement đủ tốt cho bước xử lý tiếp theo, sau đó có thể tiếp tục refinement hoặc tracking.
+      </p>
+    </section>
+
+    <section class="concept-block" id="frequency">
+      <p class="concept-kicker">04 · FREQUENCY: CFO BIẾN THÀNH PHASE ROTATION TÍCH LŨY</p>
+      <h2>Một frequency error cố định nhìn trong complex baseband giống một vector cứ quay thêm theo thời gian.</h2>
+
+      <MathExpr
+        tex={String.raw`e^{j2\pi \Delta f_{\mathrm{CFO}}t}`}
+        display
+      />
+
+      <div class="sync-phase-story" data-lesson-visual aria-label="Phase rotation tăng dần do carrier frequency offset">
+        <div><small>TIME 0</small><span class="phase-vector p0"></span><strong><MathExpr tex={String.raw`0^\circ`} /></strong></div>
+        <b>→</b>
+        <div><small>LATER</small><span class="phase-vector p1"></span><strong>phase tăng</strong></div>
+        <b>→</b>
+        <div><small>LATER</small><span class="phase-vector p2"></span><strong>phase tăng tiếp</strong></div>
+        <b>→</b>
+        <div><small>LATER</small><span class="phase-vector p3"></span><strong>tiếp tục quay</strong></div>
+      </div>
+
+      <p>
+        Nếu <MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}=0`} />, phần rotation do CFO biến mất.
+        Nếu CFO khác zero, phase error tăng theo thời gian.
+        Trong OFDM, vấn đề sâu hơn là carrier mismatch làm các subcarriers không còn được receiver nhìn bằng đúng orthogonal frequency grid dự kiến, từ đó có thể sinh inter-carrier interference.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Một hình dung hữu ích</strong>
+        <p>
+          Timing offset dịch “cửa sổ” của receiver sang trái hoặc phải trên sample stream.
+          CFO làm reference complex của receiver quay nhanh hơn hoặc chậm hơn signal.
+          Hai lỗi khác bản chất nên receiver thường cần estimate cả hai.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="ofdm-impact">
+      <p class="concept-kicker">05 · VÌ SAO OFDM QUAN TÂM NHIỀU TỚI SYNCHRONIZATION?</p>
+      <h2>FFT giả định receiver đang cắt đúng block thời gian và dùng đúng frequency grid.</h2>
+
+      <div class="sync-effect-table-wrap">
+        <table class="math-data-table sync-effect-table">
+          <thead>
+            <tr>
+              <th>Lệch gì?</th>
+              <th>Receiver nhìn thấy gì?</th>
+              <th>Hệ quả điển hình</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Timing offset nhỏ</td>
+              <td>FFT window dịch trong waveform</td>
+              <td>có thể tạo phase slope / rotation theo subcarrier; mức ảnh hưởng phụ thuộc CP và channel.</td>
+            </tr>
+            <tr>
+              <td>Timing offset lớn</td>
+              <td>window lấy sai vùng symbol</td>
+              <td>ISI và mất orthogonality có thể xuất hiện.</td>
+            </tr>
+            <tr>
+              <td>Carrier frequency offset</td>
+              <td>complex phase quay theo sample/time</td>
+              <td>subcarrier orthogonality bị suy giảm, có thể tạo ICI.</td>
+            </tr>
+            <tr>
+              <td>Frame/SSB context chưa đủ</td>
+              <td>UE thấy một local pattern nhưng chưa đặt nó vào full timing context</td>
+              <td>chưa đủ thông tin để tiếp tục đúng procedure phía sau.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Bảng trên là engineering interpretation để xây trực giác.
+        Mức suy giảm cụ thể phụ thuộc offset, numerology, channel, CP, estimator và receiver implementation.
+        Bài 24 sẽ quay lại phần “fine” để nhìn kỹ hơn cách timing/frequency error được refine sau coarse acquisition.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="example">
+      <p class="concept-kicker">06 · VÍ DỤ SỐ: CFO NHỎ CỠ NÀO THÌ PHASE ĐÃ QUAY ĐÁNG KỂ?</p>
+      <h2>Chỉ cần nhìn phase drift trong một useful OFDM symbol là đã thấy vì sao frequency alignment quan trọng.</h2>
+
+      <p>
+        Đây là ví dụ minh họa, không phải một yêu cầu receiver của 3GPP.
+        Giả sử subcarrier spacing là <MathExpr tex={String.raw`\Delta f_{\mathrm{SCS}}=15\,\mathrm{kHz}`} />.
+        Useful OFDM-symbol duration xấp xỉ:
+      </p>
+
+      <MathExpr
+        tex={String.raw`T_u=\frac{1}{\Delta f_{\mathrm{SCS}}}=\frac{1}{15\,\mathrm{kHz}}\approx66.67\,\mu\mathrm{s}`}
+        display
+      />
+
+      <p>
+        Giả sử residual CFO còn <MathExpr tex={String.raw`1\,\mathrm{kHz}`} />.
+        Normalized CFO so với subcarrier spacing là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\epsilon=\frac{\Delta f_{\mathrm{CFO}}}{\Delta f_{\mathrm{SCS}}}=\frac{1}{15}\approx0.0667`}
+        display
+      />
+
+      <p>
+        Trong một useful symbol, phần phase do CFO tích lũy:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\Delta\phi=2\pi\Delta f_{\mathrm{CFO}}T_u\approx2\pi(1000)(66.67\times10^{-6})\approx0.419\,\mathrm{rad}\approx24^\circ`}
+        display
+      />
+
+      <p>
+        Nghĩa là ngay trong một useful OFDM symbol, complex reference đã quay khoảng <MathExpr tex={String.raw`24^\circ`} />.
+        Đây chưa phải cách đầy đủ để tính ICI hay link degradation, nhưng nó cho một scale trực giác tốt: CFO không cần lớn bằng cả một subcarrier spacing mới trở nên đáng quan tâm.
+      </p>
+
+      <div class="sync-example-note">
+        <span>ILLUSTRATIVE, NOT A SPEC LIMIT</span>
+        <p>
+          Receiver thực tế có thể estimate/correct CFO ở nhiều stage và còn phải xử lý phase noise, sampling-frequency offset, Doppler variation và channel.
+          Ví dụ trên chỉ cô lập một effect để nhìn rõ rotation.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="pss-sss-role">
+      <p class="concept-kicker">07 · PSS VÀ SSS GIÚP SYNCHRONIZATION NHƯ THẾ NÀO?</p>
+      <h2>Known sequences cho receiver một thứ để so sánh với received samples khi nó chưa decode được payload.</h2>
+
+      <div class="sync-known-sequence-flow">
+        <div class="sync-sequence-card">
+          <small>KNOWN</small>
+          <strong>PSS hypotheses</strong>
+          <span>receiver biết trước các candidate sequences</span>
+        </div>
+        <div class="sync-op"><span>correlate</span><b>→</b></div>
+        <div class="sync-sequence-card">
+          <small>OBSERVE</small>
+          <strong>peak + phase behavior</strong>
+          <span>tạo timing/frequency hypothesis để kiểm tra tiếp</span>
+        </div>
+        <div class="sync-op"><span>refine</span><b>→</b></div>
+        <div class="sync-sequence-card">
+          <small>NEXT</small>
+          <strong>SSS / SSB processing</strong>
+          <span>hoàn thiện identity và thêm context</span>
+        </div>
+      </div>
+
+      <p>
+        TS 38.213 nói cell search dùng PSS và SSS để UE acquire time and frequency synchronization và detect physical-layer cell ID.
+        Nhưng specification không nói “phải dùng estimator X với threshold Y”.
+        Correlator architecture, CFO estimator, interpolation, search grid và candidate management là phần implementation.
+      </p>
+
+      <p>
+        Bài 22 sẽ zoom riêng vào PSS để xem sequence đó được xây như thế nào và vì sao correlation tạo ra một timing candidate.
+        Bài này chỉ giữ vai trò lớn hơn: PSS/SSS là các reference có cấu trúc biết trước để receiver bám vào trong quá trình cell search.
+      </p>
+    </section>
+
+    <section class="concept-block" id="coarse-fine">
+      <p class="concept-kicker">08 · COARSE VÀ FINE KHÔNG PHẢI HAI CÔNG TẮC CHUẨN HÓA CỨNG</p>
+      <h2>Đó là cách kỹ sư thường mô tả độ chính xác tăng dần của receiver.</h2>
+
+      <div class="sync-coarse-fine">
+        <article>
+          <span class="card-label">COARSE ACQUISITION</span>
+          <p>
+            Mục tiêu là kéo uncertainty từ “rất rộng” xuống đủ hẹp để receiver biết candidate nào đáng FFT, correlate hoặc decode tiếp.
+          </p>
+        </article>
+        <b>→</b>
+        <article>
+          <span class="card-label">REFINEMENT</span>
+          <p>
+            Dùng thêm structure/reference đã acquire để cập nhật timing và frequency estimate tốt hơn.
+          </p>
+        </article>
+        <b>→</b>
+        <article>
+          <span class="card-label">TRACKING</span>
+          <p>
+            Khi connection/context đã tốt hơn, receiver tiếp tục bám các drift chậm và impairment thay đổi theo thời gian.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        Không nên đọc “coarse” và “fine” như hai procedure 3GPP độc lập bắt buộc có đúng ranh giới đó.
+        Đây là engineering vocabulary rất hữu ích để mô tả receiver pipeline.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">09 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>Mỗi bước synchronization thường biến một uncertainty thành một estimate hoặc một hypothesis cụ thể hơn.</h2>
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table sync-pipeline-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Input</th>
+              <th>Estimate / decision</th>
+              <th>Dùng để làm gì tiếp?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RF / sample acquisition</td>
+              <td>candidate carrier</td>
+              <td><MathExpr tex="I/Q" /> sample buffer</td>
+              <td>tạo dữ liệu cho search/correlation.</td>
+            </tr>
+            <tr>
+              <td>Timing search</td>
+              <td>sample buffer + known structure</td>
+              <td>candidate sample index</td>
+              <td>định vị vùng đáng extract/FFT.</td>
+            </tr>
+            <tr>
+              <td>Frequency estimation</td>
+              <td>received phase / known signal relation</td>
+              <td><MathExpr tex={String.raw`\widehat{\Delta f}_{\mathrm{CFO}}`} /></td>
+              <td>derotate samples hoặc update NCO/reference.</td>
+            </tr>
+            <tr>
+              <td>OFDM extraction</td>
+              <td>corrected samples + timing hypothesis</td>
+              <td>candidate FFT bins</td>
+              <td>đưa PSS/SSS/PBCH resources về domain phù hợp.</td>
+            </tr>
+            <tr>
+              <td>Cell-search refinement</td>
+              <td>PSS/SSS và SSB structure</td>
+              <td>cell identity + improved timing/frequency context</td>
+              <td>chuẩn bị PBCH DM-RS/PBCH processing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Pseudocode thật có thể khác rất nhiều.
+        Một implementation có thể scan nhiều frequency hypotheses song song, chạy correlation trong frequency domain, giữ nhiều timing candidates hoặc dùng tracking loop riêng.
+        Điều cần giữ lại là data flow: mỗi estimate giảm uncertainty cho stage sau.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">10 · BỐN CHỖ DỄ GỘP NHẦM VÀO CHỮ “SYNC”</p>
+
+      <div class="sync-boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">DOWNLINK SYNC ≠ TIMING ADVANCE</span>
+          <p>Downlink synchronization giúp UE align receiver với cell. Timing Advance sau này điều chỉnh thời điểm UE phát uplink để signal tới gNB đúng timing hơn.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PSS DETECTED ≠ SYNC DONE</span>
+          <p>Một PSS candidate là điểm bám quan trọng, nhưng receiver vẫn còn identity/context/refinement và PBCH processing phía sau.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CFO ≠ PHASE NOISE</span>
+          <p>CFO là systematic frequency mismatch trong model đơn giản. Phase noise là fluctuation khác và sẽ được tách ở phần receiver impairments.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">TIMING ≠ FULL FRAME KNOWLEDGE</span>
+          <p>Biết local symbol/SSB candidate timing không tự động cho UE toàn bộ radio-frame context hay system information.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="next-lessons">
+      <p class="concept-kicker">11 · TỪ ĐÂY CÁC BÀI SAU SẼ TÁCH SYNC RA THÀNH TỪNG MẢNH</p>
+
+      <div class="sync-learning-path">
+        <div><small>BÀI 21</small><strong>SSB</strong><span>reference block UE đang tìm nằm trên grid như thế nào?</span></div>
+        <b>→</b>
+        <div><small>BÀI 22</small><strong>PSS</strong><span>known sequence tạo timing candidate bằng correlation ra sao?</span></div>
+        <b>→</b>
+        <div><small>BÀI 23</small><strong>SSS + PCI</strong><span>cell identity được hoàn thiện như thế nào?</span></div>
+        <b>→</b>
+        <div><small>BÀI 24</small><strong>Fine sync</strong><span>timing và frequency estimate được refine ra sao?</span></div>
+      </div>
+
+      <p>
+        Vì vậy Bài 20 không cố nhồi estimator chi tiết.
+        Mục tiêu của nó là đặt đúng vocabulary và system boundary trước khi đi vào từng signal.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">12 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa mục tiêu và signals/resources; receiver algorithm vẫn là implementation.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>Cell search acquire time/frequency synchronization và physical-layer cell ID; PSS/SSS; frame/numerology; SS/PBCH block structure.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Cách tách synchronization thành timing, frequency và frame/SSB context rồi nhìn chúng như uncertainty giảm dần.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Estimator, threshold, search resolution, NCO update, FFT-window strategy, candidate pruning và tracking loop.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 4.1: cell search là procedure để UE acquire time/frequency synchronization với cell và detect physical-layer cell ID; PSS và SSS được dùng cho cell search ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 4.2 và 4.3: numerology, OFDM timing, frame và subframe structure ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, clauses 7.4.2.2, 7.4.2.3 và 7.4.3.1: PSS, SSS và time-frequency structure của SS/PBCH block ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.300 Release 18, ETSI TS 138 300 V18.8.0, clauses 5.2.4 và 5.2.5.3: system view của synchronization/cell search và SS/PBCH block ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138300/18.08.00_60/ts_138300v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">13 · NỐI LẠI TOÀN BỘ Ý</p>
+      <ol class="recap-list">
+        <li><strong>UE không dùng chung clock với gNB:</strong> received samples có thể lệch cả timing và carrier frequency.</li>
+        <li><strong>Timing synchronization:</strong> giúp receiver đặt processing/FFT window vào vùng phù hợp của waveform.</li>
+        <li><strong>Frequency synchronization:</strong> estimate và bù carrier mismatch để complex reference và OFDM frequency grid gần đúng hơn.</li>
+        <li><strong>Frame/SSB context:</strong> được xây dần; local timing candidate không đồng nghĩa UE đã biết toàn bộ radio-frame context.</li>
+        <li><strong>PSS/SSS:</strong> là known synchronization signals mà cell search dùng để acquire synchronization và cell identity.</li>
+        <li><strong>Coarse/fine:</strong> là cách hữu ích để mô tả độ chính xác tăng dần, không phải hai procedure cứng bắt mọi receiver triển khai giống nhau.</li>
+        <li><strong>Downlink synchronization không phải Timing Advance:</strong> uplink alignment là một câu chuyện khác ở phần random access.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/ue-bat-nguon/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>UE bật nguồn thì chuyện gì xảy ra?</strong>
+        <small>Bức tranh tổng thể từ sample stream tới PSS, SSS, PBCH và MIB.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>SSB là gì?</strong>
+        <small>Bài 21 sẽ zoom vào block time-frequency chứa PSS, SSS, PBCH và PBCH DM-RS.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
