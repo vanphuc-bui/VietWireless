@@ -152,3 +152,76 @@ Trước merge, bắt buộc chạy:
 - npm run build
 
 CI phải pass cả bốn.
+
+## 11. Composition và bố cục lesson
+
+Contract này áp dụng cho **mọi lesson**, kể cả các bài 1–18 dù CI metadata nghiêm ngặt hiện chỉ bắt buộc từ Bài 19.
+
+Một bài không được thiết kế như một chuỗi card ngang hàng. Reading flow ưu tiên:
+
+1. hero ngắn;
+2. problem/system context;
+3. prose + visual intuition;
+4. example;
+5. math/technical layer;
+6. boundary;
+7. implementation/system consequence;
+8. recap/navigation.
+
+Không bắt buộc mỗi mục trên thành một section riêng. Section chỉ tồn tại khi có một câu hỏi hoặc khối lập luận độc lập.
+
+### Section contract
+
+Mỗi section nên có **một điểm nhấn chính**:
+- prose;
+- một visual;
+- một equation;
+- hoặc một interactive.
+
+Không để kicker, H2, H3, card title và display equation cùng cạnh tranh thị giác trong một viewport.
+
+Nếu kicker đã nói rõ chủ đề, H2 không được chỉ lặp lại cùng câu bằng chữ lớn hơn.
+
+### Flow contract
+
+Với các chuỗi xử lý:
+- DOM order phải là reading order;
+- state/card xen kẽ connector/operator có chủ đích;
+- desktop grid tracks phải đủ cho toàn chuỗi;
+- không để output rơi sang hàng mới chỉ vì thiếu track;
+- tablet wrap theo nhóm logic;
+- mobile stack theo đúng thứ tự và xoay connector khi cần.
+
+### Box/card contract
+
+- Không dùng box nếu paragraph thường rõ hơn.
+- Card cùng hàng và cùng loại phải nhất quán padding/border/typography.
+- Height ưu tiên content-driven.
+- Chỉ equal-height khi so sánh ngang thực sự cần thiết.
+- Không giảm chữ để fit card; sửa grid/padding/content trước.
+
+### Typography contract
+
+- Noto Serif: prose và heading.
+- Noto Sans: UI/metadata/label.
+- KaTeX: math.
+- Không page-specific font stack.
+- Inline math/emphasis không tự xuống dòng do CSS.
+- Text trong box không nhỏ hơn prose chỉ để tiết kiệm chỗ.
+
+## 12. Visual QA gate
+
+Trước merge một visual hoặc flow mới, review ở desktop, tablet và mobile.
+
+Phải kiểm tra:
+- thứ tự đọc;
+- alignment của operator/arrow;
+- card height và khoảng trắng;
+- clipping/overflow;
+- inline math;
+- label tiếng Việt có đủ dấu và đúng font;
+- figure/SVG annotation có đủ lớn;
+- output/result có được nhận ra mà không cần dựa chỉ vào màu.
+
+Nếu một screenshot cần người review hỏi “mũi tên này đi đâu?” hoặc “vì sao block này rơi xuống dưới?”, visual chưa đạt contract.
+
