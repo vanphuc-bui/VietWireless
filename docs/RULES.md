@@ -62,10 +62,11 @@ Math content có TeX command phải dùng `String.raw` hoặc double escaping. D
 
 ### Typography contract
 
-- Reading text dùng `"Times New Roman", Times, serif`, gần với Machine Learning Cơ Bản.
-- UI metadata dùng `Arial, Helvetica, sans-serif`.
+- Reading text dùng `"Noto Serif", "DejaVu Serif", serif` để hỗ trợ tiếng Việt nhất quán trên mọi hệ điều hành.
+- UI metadata dùng `"Noto Sans", "DejaVu Sans", Arial, sans-serif`.
 - KaTeX giữ `htmlAndMathml` và font TeX mặc định; không ép sang STIX/MathML-only.
 - Lesson prose source of truth là `--article-prose-size: 1rem` và `--lesson-prose-size: var(--article-prose-size)`.
 - Box/table/callout body phải bám prose scale.
+- Callout inline content như `strong` và `MathExpr` không được bị selector rộng biến thành block; title dùng direct-child selector.
 - Không thêm page-specific font stack hoặc page-specific math font để chữa layout.
 - Mọi thay đổi typography phải pass `npm run check:math` và `npm run build`.
