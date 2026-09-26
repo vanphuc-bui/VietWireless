@@ -432,13 +432,13 @@ for (const file of files) {
 }
 
 
-// Typography contract: classic Machine Learning Cơ Bản-inspired article stack.
+// Typography + presentation contract: Vietnamese-safe Noto + classic KaTeX.
 const typographyChecks = [
-  [/--font-text:\s*"Times New Roman",\s*Times/u, 'reading text must use the classic Times New Roman / Times stack'],
-  [/--font-ui:\s*Arial,\s*Helvetica,\s*sans-serif/u, 'UI metadata must use Arial / Helvetica'],
+  [/--font-text:\s*"Noto Serif",\s*"DejaVu Serif"/u, 'reading text must use the Noto Serif shared stack'],
+  [/--font-ui:\s*"Noto Sans",\s*"DejaVu Sans"/u, 'UI metadata must use the Noto Sans shared stack'],
   [/--article-prose-size:\s*1rem/u, 'article prose must remain 16px (1rem)'],
   [/--lesson-prose-size:\s*var\(--article-prose-size\)/u, 'lesson prose must inherit the shared article scale'],
-  [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use the classic serif stack'],
+  [/\.home-essay,\s*\n\.lesson\s*\{[\s\S]*?font-family:\s*var\(--font-text\)/u, 'lesson/home reading surfaces must use the shared serif stack'],
   [/\.lesson \.math-display \.katex\s*\{[\s\S]*?font-size:\s*1\.08em/u, 'display math should remain only slightly larger than prose'],
   [/\.lesson \.math-data-table th\s*\{[\s\S]*?font-size:\s*var\(--lesson-meta-size\)/u, 'lesson table headers must use the shared metadata size'],
   [/\.lesson \.math-data-table td\s*\{[\s\S]*?font-size:\s*var\(--lesson-prose-size\)/u, 'lesson table body must use the shared prose size'],
@@ -448,8 +448,20 @@ for (const [regex, message] of typographyChecks) {
   if (!regex.test(css)) report(cssFile, message);
 }
 
+if (/--font-text:\s*"Times New Roman"/u.test(css) || /--font-ui:\s*Arial,\s*Helvetica/u.test(css)) {
+  report(cssFile, 'legacy Times/Arial primary typography stack found. Noto Serif/Noto Sans are the site-wide source of truth.');
+}
+
 if (/\.precision-note\s+strong\s*,|\.scope-note\s+strong\s*\{/u.test(css)) {
   report(cssFile, 'callout titles must use direct-child selectors so inline strong/math does not become block-level.');
+}
+
+if (!/\.precision-note\s*>\s*strong\s*,\s*\n\.scope-note\s*>\s*strong/u.test(css)) {
+  report(cssFile, 'precision/scope callout titles must use direct-child strong selectors.');
+}
+
+if (!/\.copy-sum-story\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)/u.test(css)) {
+  report(cssFile, 'copy-sum-story must keep seven desktop tracks for PATH0 + PATH1 + PATH2 → RX.');
 }
 
 const mathRendererFiles = [
@@ -460,17 +472,20 @@ const mathRendererFiles = [
 for (const mathFile of mathRendererFiles) {
   const source = readFileSync(mathFile, 'utf8');
   if (!/output:\s*['"]htmlAndMathml['"]/u.test(source)) {
-    report(mathFile, 'math output must remain htmlAndMathml to preserve the classic KaTeX/TeX visual.');
+    report(mathFile, 'math output must remain htmlAndMathml to preserve the KaTeX/TeX visual.');
   }
   if (/output:\s*['"]mathml['"]/u.test(source)) {
-    report(mathFile, 'MathML-only output is not allowed in the classic typography mode.');
+    report(mathFile, 'MathML-only output is not allowed in the current typography mode.');
   }
 }
 
 const baseLayoutFile = 'src/layouts/BaseLayout.astro';
 const baseLayout = readFileSync(baseLayoutFile, 'utf8');
+if (!baseLayout.includes('family=Noto+Sans') || !baseLayout.includes('family=Noto+Serif')) {
+  report(baseLayoutFile, 'Noto Sans and Noto Serif webfonts must both be loaded for consistent Vietnamese rendering.');
+}
 if (/stix-two-(?:text|math)/u.test(baseLayout)) {
-  report(baseLayoutFile, 'STIX webfont assets must not be loaded in the Machine Learning Cơ Bản typography mode.');
+  report(baseLayoutFile, 'STIX webfont assets must not be loaded as the site prose/UI typography.');
 }
 
 if (failed) process.exit(1);
