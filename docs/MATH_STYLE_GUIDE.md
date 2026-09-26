@@ -427,19 +427,20 @@ Project có hai lớp bảo vệ:
 
 Không merge bằng cách bỏ qua guard. Nếu guard báo false positive, sửa validator cùng regression case thay vì disable check cho riêng page.
 
-## Typography toán: classic TeX / KaTeX
+## Typography toán: Noto prose + classic TeX / KaTeX
 
-VietWireless bám gần cách trình bày của Machine Learning Cơ Bản:
+Typography của website được tách theo vai trò:
 
-- prose/article text: `"Times New Roman", Times, serif`;
-- mathematical output: KaTeX mặc định, giữ kiểu Computer-Modern/TeX;
-- metadata/UI: `Arial, Helvetica, sans-serif`.
+- prose/article text: `"Noto Serif", "DejaVu Serif", serif`;
+- metadata/UI: `"Noto Sans", "DejaVu Sans", Arial, sans-serif`;
+- mathematical output: KaTeX mặc định, giữ kiểu Computer Modern / TeX.
 
-KaTeX render `htmlAndMathml` để giữ visual TeX ổn định. Không ép KaTeX sang STIX hoặc đổi font-family của các span nội bộ.
+Noto là webfont bắt buộc để dấu tiếng Việt nhất quán giữa Windows, Linux và macOS. KaTeX render `htmlAndMathml`; không ép font Noto vào các span nội bộ của KaTeX và không thay math engine chỉ để chữa một lỗi bố cục.
 
 Quy tắc:
-- inline math bám cỡ chữ của câu xung quanh;
-- display math chỉ nhỉnh hơn prose nhẹ;
-- math trong box/card/readout vẫn dùng shared size token;
-- không hard-code font math theo từng page;
-- nếu công thức nhìn không cân, sửa shared spacing/size trước, không thay font engine.
+- inline math bám cỡ chữ và baseline của câu xung quanh;
+- display math chỉ nhỉnh hơn prose nhẹ, không trở thành một cấp typography riêng;
+- math trong box/card/readout dùng shared size token;
+- không hard-code font math hoặc font-size theo từng page;
+- selector chứa `MathExpr` phải tránh descendant rule rộng làm KaTeX xuống dòng hoặc đổi display;
+- nếu công thức nhìn không cân, sửa shared spacing/layout/token trước, không sửa riêng từng công thức.
