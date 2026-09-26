@@ -311,3 +311,40 @@ Tránh các câu quá tuyệt đối như:
 - DMRS cung cấp known reference symbols để receiver estimate channel trên resource liên quan.
 
 Nếu một câu ngắn dễ tạo mental model sai, viết dài hơn một chút để giữ đúng boundary.
+
+## 19. Prose là lớp chính, box là lớp hỗ trợ
+
+Không biến bài viết thành một chuỗi box chỉ vì box dễ căn CSS.
+
+Ưu tiên:
+- paragraph để giải thích;
+- equation khi thật sự cần dừng mắt;
+- visual khi quan hệ khó hình dung bằng chữ;
+- callout cho boundary/misconception/scope;
+- card cho so sánh hoặc state có cấu trúc rõ.
+
+Nếu bỏ border/background mà nội dung vẫn đọc rõ như cũ, cân nhắc dùng prose thường.
+
+## 20. Không để typography thay cho cấu trúc câu
+
+Không dùng chữ rất to, rất nhỏ hoặc uppercase liên tục để “tạo cảm giác hierarchy”.
+
+Một section tốt phải rõ nhờ:
+- thứ tự ý;
+- khoảng cách;
+- heading vừa đủ;
+- visual đúng chỗ.
+
+Label nhỏ chỉ là metadata. Nội dung kỹ thuật chính phải đọc được ở cùng nhịp với body prose.
+
+## 21. Inline math và emphasis phải nằm trong câu
+
+Khi `MathExpr`, `strong` hoặc `em` là một phần ngữ pháp của câu, nó phải render inline.
+
+Không viết CSS khiến:
+
+`Trước IFFT, X[k] là ...`
+
+thành nhiều dòng chỉ vì `X[k]` nằm trong `strong`.
+
+Title của callout có thể block; emphasis bên trong paragraph thì không.
