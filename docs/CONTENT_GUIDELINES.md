@@ -287,3 +287,91 @@ Không dùng Times New Roman hoặc STIX làm font chính cho prose. Không thê
 - `strong`, `MathExpr` và emphasis nằm trong paragraph phải luôn inline.
 - Không dùng selector kiểu `.precision-note strong { display:block }` vì nó làm công thức như `X[k]` hoặc `x[n]` tự xuống dòng.
 - Dùng direct-child selector cho title: `.precision-note > strong`, `.scope-note > strong`.
+
+## Presentation system: coi bài học như một tài liệu kỹ thuật
+
+Mỗi lesson phải trông như **một tài liệu kỹ thuật liền mạch**, không như dashboard ghép từ nhiều card.
+
+### Nguyên tắc chung
+
+- Prose là lớp chính. Card, callout, table và diagram chỉ xuất hiện khi chúng giúp tách một quan hệ kỹ thuật thật sự.
+- Không bọc mọi ý vào box. Nếu một ý đọc tốt bằng paragraph thì để paragraph.
+- Không tạo hierarchy bằng cách liên tục đổi font-size. Ưu tiên weight, spacing, border, background rất nhẹ và vị trí.
+- Không dùng min-height lớn chỉ để các card nhìn “đều”. Card phải ôm nội dung trừ khi cùng hàng thực sự cần equal-height.
+- Không để khoảng trắng lớn bên trong box do visual quá nhỏ. Hoặc tăng visual, hoặc giảm chiều cao box.
+- Không thêm page-specific font family, page-specific type scale hoặc “magic font-size” để chữa một component.
+
+### Typography bắt buộc
+
+- Nội dung/heading: `Noto Serif`.
+- UI/label/kicker/metadata: `Noto Sans`.
+- Toán: KaTeX mặc định.
+- Body prose source of truth: `--lesson-prose-size`.
+- Card body, table body, callout body và explanatory caption phải có optical size tương đương prose.
+- Label/metadata có thể nhỏ hơn, nhưng phải đủ đọc và dùng shared token.
+- Inline math, `strong`, `em` trong paragraph phải ở cùng dòng nếu câu chưa kết thúc.
+
+### Flow / process diagram
+
+Một flow phải đọc được bằng mắt theo đúng thứ tự logic.
+
+- DOM sequence và CSS grid phải khớp nhau. Ví dụ `A + B + C → Y` có 7 phần tử thì desktop grid phải có đủ 7 tracks hoặc dùng layout khác biểu diễn rõ cùng quan hệ.
+- State/card và operation/operator là hai loại khác nhau. State nằm trong card; `+`, `→`, FFT, IFFT, mixer, filter... nằm ở connector/operation node.
+- Không để arrow/operator “trôi” trong khoảng trắng hoặc rơi sang hàng khác trong khi state còn ở hàng trên.
+- Nếu flow đủ chỗ trên desktop, giữ một hàng. Nếu không đủ, wrap có chủ đích theo nhóm logic, không để CSS tự wrap ngẫu nhiên.
+- Mobile chuyển flow thành một cột theo đúng thứ tự đọc; connector có thể xoay 90°.
+- Điểm cuối/output có thể highlight rất nhẹ, nhưng không dùng màu mạnh để thay thế cấu trúc.
+
+### Card system
+
+- Card cùng vai trò trong cùng một row phải có cùng padding, border treatment và title/body hierarchy.
+- Formula card, visual card, metric/readout card và process state không được dùng lẫn taxonomy.
+- Compact formula/state card phải content-driven; không ép `min-height` lớn.
+- Một card chỉ có vài ký hiệu như `X[k]` hoặc `x[n]` không được để hàng trăm pixel khoảng trắng xung quanh.
+- Card label là metadata, không phải heading chính.
+
+### Callout
+
+- Callout dùng cho misconception, precision note, boundary hoặc scope, không dùng chỉ để đổi màu một paragraph bình thường.
+- Title trực tiếp của box dùng direct-child selector, ví dụ `.precision-note > strong`.
+- `strong`, `em`, link và `MathExpr` trong paragraph luôn inline.
+- Không dùng descendant selector rộng như `.precision-note strong { display:block }`.
+
+### Figure, SVG và interactive
+
+- Axis, notation và annotation phải đọc được ở kích thước render thực tế, không chỉ khi mở SVG riêng.
+- Visual không được nhỏ xíu trong một container lớn.
+- Natural-language annotation dùng typography tương thích prose; math trong SVG dùng shared SVG math role.
+- Interactive lab phải cân typography với phần bài xung quanh, không tạo một “mini app” có scale chữ riêng.
+
+### Responsive QA bắt buộc
+
+Mọi visual/flow mới phải được kiểm tra tối thiểu ở:
+- desktop rộng;
+- tablet khoảng 768–980 px;
+- mobile <= 720 px.
+
+Không merge nếu có một trong các lỗi:
+- card/operator tự rơi sang hàng khó hiểu;
+- horizontal overflow không có chủ đích;
+- math/text bị clip;
+- font nhỏ tới mức phải zoom;
+- arrow không còn chỉ đúng quan hệ;
+- card có khoảng trắng lớn vô nghĩa;
+- inline math/strong tự xuống dòng do CSS selector.
+
+## Bố cục chuẩn của một lesson
+
+Không bắt mọi bài dùng số section giống nhau, nhưng nhịp bài nên theo logic sau:
+
+1. **Hero ngắn:** title + deck, không nhồi định nghĩa.
+2. **Problem/system context:** vì sao khái niệm xuất hiện và nó nằm ở đâu trong chain.
+3. **Intuition/visual:** cho người đọc thấy hiện tượng trước khi đi sâu vào công thức.
+4. **Concrete example:** numerical example, waveform, sequence, grid hoặc timeline.
+5. **Math/technical layer:** công thức sau khi notation đã có nghĩa.
+6. **Boundary/misconception:** chỗ model dễ bị hiểu quá mức.
+7. **Implementation/system consequence:** samples, FFT bins, resource grid, receiver stage, state machine...
+8. **Recap + navigation:** nối lại logic, không checklist học thuộc.
+
+Không cần biến mỗi bước trên thành một section có kicker + H2. Chỉ tạo section mới khi đó là một khối nội dung độc lập. Paragraph chuyển ý nên vẫn là paragraph.
+
