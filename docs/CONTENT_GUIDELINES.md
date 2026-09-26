@@ -265,9 +265,9 @@ Shared size source nằm trong `src/styles/global.css` qua `--lesson-prose-size`
 
 VietWireless dùng typography gần với Machine Learning Cơ Bản:
 
-- nội dung bài học/home essay: `"Times New Roman", Times, serif`;
+- nội dung bài học/home essay: `"Noto Serif", "DejaVu Serif", serif`;
 - công thức: KaTeX mặc định với `htmlAndMathml`, giữ kiểu TeX/Computer Modern;
-- navigation, button, badge, eyebrow và metadata: `Arial, Helvetica, sans-serif`.
+- navigation, button, badge, eyebrow và metadata: `"Noto Sans", "DejaVu Sans", Arial, sans-serif`.
 
 Shared source of truth nằm trong `src/styles/global.css`:
 
@@ -276,6 +276,14 @@ Shared source of truth nằm trong `src/styles/global.css`:
 - `--article-prose-size`;
 - `--lesson-prose-size`.
 
-Body prose chuẩn là **16 px**, line-height **1.5**, giống nhịp đọc của một bài kỹ thuật truyền thống. Table body, callout body và card body bám cùng cỡ prose. Metadata có thể nhỏ hơn nhưng phải dùng shared token, không tự đặt cỡ theo từng component.
+Body prose chuẩn là **16 px**, line-height **1.5**. Noto Serif/Noto Sans là webfont bắt buộc để dấu tiếng Việt nhất quán giữa Windows, Linux và macOS. Table body, callout body và card body bám cùng cỡ prose. Metadata có thể nhỏ hơn nhưng phải dùng shared token, không tự đặt cỡ theo từng component.
 
-Không dùng STIX cho prose/math. Không thêm font-family riêng theo từng page.
+Không dùng Times New Roman hoặc STIX làm font chính cho prose. Không thêm font-family riêng theo từng page.
+
+
+### Inline emphasis trong callout
+
+- Title trực tiếp của callout có thể là block.
+- `strong`, `MathExpr` và emphasis nằm trong paragraph phải luôn inline.
+- Không dùng selector kiểu `.precision-note strong { display:block }` vì nó làm công thức như `X[k]` hoặc `x[n]` tự xuống dòng.
+- Dùng direct-child selector cho title: `.precision-note > strong`, `.scope-note > strong`.
