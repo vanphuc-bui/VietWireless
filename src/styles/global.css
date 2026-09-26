@@ -1,8 +1,8 @@
 :root {
-  --font-text: "Times New Roman", Times, "Liberation Serif", serif;
+  --font-text: "Noto Serif", "DejaVu Serif", serif;
   --font-serif: var(--font-text);
-  --font-ui: Arial, Helvetica, sans-serif;
-  --font-math: "KaTeX_Main", "Times New Roman", Times, serif;
+  --font-ui: "Noto Sans", "DejaVu Sans", Arial, sans-serif;
+  --font-math: "KaTeX_Main", "Noto Serif", serif;
   color-scheme: light;
   --paper: #fbfaf7;
   --paper-2: #f5f2ec;
@@ -706,8 +706,8 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
   border-left: 3px solid var(--accent);
   background: var(--accent-soft);
 }
-.precision-note strong,
-.scope-note strong {
+.precision-note > strong,
+.scope-note > strong {
   display: block;
   margin-bottom: 5px;
   font-size: .84rem;
@@ -10528,4 +10528,47 @@ textarea,
   ) > b {
     min-height: 16px;
   }
+}
+
+
+/* --- Vietnamese-safe Noto typography + inline callout emphasis --- */
+body {
+  font-family: var(--font-ui);
+  font-synthesis: none;
+}
+
+.home-essay,
+.lesson {
+  font-family: var(--font-text);
+}
+
+.home-essay :is(h1, h2, h3, h4, h5, h6),
+.lesson :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text);
+}
+
+.precision-note p strong,
+.scope-note p strong,
+.mental-model p strong {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.precision-note p .math-inline,
+.scope-note p .math-inline,
+.mental-model p .math-inline {
+  display: inline;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.precision-note p,
+.scope-note p,
+.mental-model p {
+  text-wrap: pretty;
 }
