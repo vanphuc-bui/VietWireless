@@ -11347,3 +11347,261 @@ body {
     transition: none;
   }
 }
+
+
+/* --- Synchronization constellation explorer --- */
+.sync-constellation-block {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.sync-constellation-controls {
+  margin: 14px 0 16px;
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+}
+
+.sync-modulation-select {
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.sync-modulation-select button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.sync-modulation-select button.selected {
+  border-color: var(--line-strong);
+  color: var(--ink);
+  background: #fff;
+}
+
+.sync-symbol-index-control {
+  min-width: 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sync-symbol-index-control > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sync-symbol-index-control strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-correction-control {
+  min-height: 38px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.sync-correction-control input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.sync-constellation-readout {
+  margin: 0 0 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 20px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sync-constellation-readout > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.sync-constellation-readout strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sync-constellation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sync-constellation-panel {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.sync-constellation-panel.received-panel {
+  background: #fff;
+}
+
+.sync-constellation-title {
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.sync-constellation-panel svg {
+  width: min(100%, 360px);
+  margin: 0 auto;
+  display: block;
+}
+
+.sync-const-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.sync-const-label {
+  fill: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.sync-const-point.ideal {
+  fill: var(--blue);
+}
+
+.sync-const-point.ghost {
+  fill: #d5d0c9;
+  opacity: .72;
+}
+
+.sync-const-point.received {
+  fill: var(--accent);
+}
+
+.sync-const-link {
+  stroke: rgba(182, 64, 49, .25);
+  stroke-width: 1;
+}
+
+.sync-const-cloud {
+  fill: var(--violet);
+  opacity: .46;
+}
+
+.sync-constellation-legend {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sync-constellation-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.const-key {
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.const-key.ideal { background: var(--blue); }
+.const-key.ghost { background: #d5d0c9; }
+.const-key.received { background: var(--accent); }
+.const-key.cloud {
+  width: 6px;
+  height: 6px;
+  background: var(--violet);
+  opacity: .55;
+}
+
+.sync-constellation-note {
+  margin-top: 16px;
+  padding: 15px 17px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.sync-constellation-note > strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.sync-constellation-note > p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .sync-constellation-controls {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .sync-modulation-select {
+    width: fit-content;
+  }
+
+  .sync-correction-control {
+    width: fit-content;
+  }
+
+  .sync-constellation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .sync-symbol-index-control > span {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sync-constellation-panel {
+    padding: 12px;
+  }
+
+  .sync-constellation-readout {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
