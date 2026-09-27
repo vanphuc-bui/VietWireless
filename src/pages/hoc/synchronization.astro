@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MathExpr from '../../components/Math.astro';
+import SynchronizationExplorer from '../../components/SynchronizationExplorer.jsx';
 
 const lessonMeta = {
   number: 20,
@@ -352,6 +353,27 @@ const lessonMeta = {
           Ví dụ trên chỉ cô lập một effect để nhìn rõ rotation.
         </p>
       </div>
+    </section>
+
+    <section class="concept-block lab-section" id="sync-lab">
+      <p class="concept-kicker">INTERACTIVE LAB · TỰ LÀM LỆCH RECEIVER</p>
+      <h2>Kéo timing offset và CFO để nhìn hai loại lệch này tác động lên receiver reference theo hai cách khác nhau.</h2>
+
+      <p>
+        Lab giữ subcarrier spacing ở <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> để tập trung vào hai biến chính.
+        Timing slider dịch FFT window theo sample index.
+        CFO slider làm complex reference quay dần trong một useful OFDM symbol.
+      </p>
+
+      <div data-lesson-visual>
+        <SynchronizationExplorer client:load />
+      </div>
+
+      <p>
+        Thử kéo riêng từng slider trước, sau đó kéo cả hai.
+        Cuối cùng bấm <strong>Bù về 0</strong> để đưa model về trạng thái lý tưởng.
+        Đây là visual minh họa mental model, không phải link-level simulator hay estimator chuẩn của 3GPP.
+      </p>
     </section>
 
     <section class="concept-block" id="pss-sss-role">
