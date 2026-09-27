@@ -293,8 +293,8 @@ export default function SynchronizationExplorer() {
             <svg viewBox={`0 0 ${CONST_SIZE} ${CONST_SIZE}`} role="img" aria-label="Ideal constellation">
               <line className="sync-const-axis" x1="22" y1={CONST_C} x2={CONST_SIZE - 22} y2={CONST_C} />
               <line className="sync-const-axis" x1={CONST_C} y1="22" x2={CONST_C} y2={CONST_SIZE - 22} />
-              <text className="sync-const-label" x={CONST_SIZE - 30} y={CONST_C - 8}>I</text>
-              <text className="sync-const-label" x={CONST_C + 9} y="30">Q</text>
+              <SvgMathExpr tex="I" x={CONST_SIZE - 34} y={CONST_C - 8} width={24} className="sync-const-axis-math" />
+              <SvgMathExpr tex="Q" x={CONST_C + 8} y={30} width={24} className="sync-const-axis-math" />
               {constellationData.map((point, index) => (
                 <circle
                   key={`ideal-${index}`}
@@ -314,8 +314,8 @@ export default function SynchronizationExplorer() {
             <svg viewBox={`0 0 ${CONST_SIZE} ${CONST_SIZE}`} role="img" aria-label="Received constellation affected by carrier frequency offset">
               <line className="sync-const-axis" x1="22" y1={CONST_C} x2={CONST_SIZE - 22} y2={CONST_C} />
               <line className="sync-const-axis" x1={CONST_C} y1="22" x2={CONST_C} y2={CONST_SIZE - 22} />
-              <text className="sync-const-label" x={CONST_SIZE - 30} y={CONST_C - 8}>I</text>
-              <text className="sync-const-label" x={CONST_C + 9} y="30">Q</text>
+              <SvgMathExpr tex="I" x={CONST_SIZE - 34} y={CONST_C - 8} width={24} className="sync-const-axis-math" />
+              <SvgMathExpr tex="Q" x={CONST_C + 8} y={30} width={24} className="sync-const-axis-math" />
 
               {constellationData.map((point, index) => (
                 <g key={`received-${index}`}>
