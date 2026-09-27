@@ -32,8 +32,6 @@ export default function SynchronizationExplorer() {
   }), [angle]);
 
   const timingPx = clamp(timingOffset, -32, 32) * 5.2;
-  const windowX = 250 + timingPx;
-
   const reset = () => {
     setTimingOffset(0);
     setCfoHz(0);
@@ -44,7 +42,7 @@ export default function SynchronizationExplorer() {
       <div className="sync-lab-controls">
         <label>
           <span>
-            Timing offset
+            Timing offset{" "}
             <strong><MathExpr tex={String.raw`n_0=${timingOffset}\;\text{samples}`} /></strong>
           </span>
           <input
@@ -59,7 +57,7 @@ export default function SynchronizationExplorer() {
 
         <label>
           <span>
-            Carrier frequency offset
+            Carrier frequency offset{" "}
             <strong><MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}=${cfoHz}\,\mathrm{Hz}`} /></strong>
           </span>
           <input
