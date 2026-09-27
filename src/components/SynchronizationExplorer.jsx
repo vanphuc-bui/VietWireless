@@ -8,6 +8,26 @@ const H = 250;
 const CX = 310;
 const CY = 125;
 const R = 78;
+const CONST_SIZE = 260;
+const CONST_C = CONST_SIZE / 2;
+const CONST_SCALE = 82;
+
+const QPSK_POINTS = [
+  { i: -1, q: -1 },
+  { i: -1, q: 1 },
+  { i: 1, q: -1 },
+  { i: 1, q: 1 },
+].map((point) => ({
+  i: point.i / Math.sqrt(2),
+  q: point.q / Math.sqrt(2),
+}));
+
+const QAM16_POINTS = [-3, -1, 1, 3]
+  .flatMap((i) => [-3, -1, 1, 3].map((q) => ({ i, q })))
+  .map((point) => ({
+    i: point.i / Math.sqrt(10),
+    q: point.q / Math.sqrt(10),
+  }));
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -17,12 +37,48 @@ function degToRad(deg) {
   return (deg * Math.PI) / 180;
 }
 
+function rotatePoint(point, angleRad) {
+  return {
+    i: point.i * Math.cos(angleRad) - point.q * Math.sin(angleRad),
+    q: point.i * Math.sin(angleRad) + point.q * Math.cos(angleRad),
+  };
+}
+
+function constellationSvgPoint(point) {
+  return {
+    x: CONST_C + point.i * CONST_SCALE,
+    y: CONST_C - point.q * CONST_SCALE,
+  };
+}
+
+function iciLikeOffset(point, normalizedCfo, pointIndex, cloudIndex) {
+  const strength = Math.min(Math.abs(normalizedCfo) / 0.2, 1);
+  const radial = 0.015 + 0.085 * strength;
+  const phase = 0.92 * pointIndex + 1.37 * cloudIndex;
+  const couplingI = 0.55 * point.q + 0.24 * point.i;
+  const couplingQ = -0.48 * point.i + 0.18 * point.q;
+
+  return {
+    i: radial * (0.55 * Math.cos(phase) + strength * couplingI),
+    q: radial * (0.55 * Math.sin(phase) + strength * couplingQ),
+  };
+}
+
 export default function SynchronizationExplorer() {
   const [timingOffset, setTimingOffset] = useState(12);
   const [cfoHz, setCfoHz] = useState(1200);
+  const [modulation, setModulation] = useState('16qam');
+  const [symbolIndex, setSymbolIndex] = useState(3);
+  const [cfoCorrection, setCfoCorrection] = useState(false);
 
   const normalizedCfo = cfoHz / SCS_HZ;
   const phaseDriftDeg = 360 * normalizedCfo;
+  const phaseDriftRad = degToRad(phaseDriftDeg);
+  const totalRotationDeg = phaseDriftDeg * symbolIndex;
+  const residualFactor = cfoCorrection ? 0.05 : 1;
+  const residualRotationDeg = totalRotationDeg * residualFactor;
+  const residualRotationRad = degToRad(residualRotationDeg);
+  const residualNormalizedCfo = normalizedCfo * residualFactor;
   const displayPhase = ((phaseDriftDeg % 360) + 360) % 360;
   const angle = degToRad(displayPhase);
 
@@ -32,19 +88,41 @@ export default function SynchronizationExplorer() {
   }), [angle]);
 
   const timingPx = clamp(timingOffset, -32, 32) * 5.2;
+  const constellation = modulation === 'qpsk' ? QPSK_POINTS : QAM16_POINTS;
+
+  const constellationData = useMemo(() => (
+    constellation.map((point, pointIndex) => {
+      const idealSvg = constellationSvgPoint(point);
+      const rotated = rotatePoint(point, residualRotationRad);
+      const receivedSvg = constellationSvgPoint(rotated);
+      const cloud = Array.from({ length: 5 }, (_, cloudIndex) => {
+        const offset = iciLikeOffset(rotated, residualNormalizedCfo, pointIndex, cloudIndex);
+        return constellationSvgPoint({
+          i: rotated.i + offset.i,
+          q: rotated.q + offset.q,
+        });
+      });
+
+      return {
+        idealSvg,
+        receivedSvg,
+        cloud,
+      };
+    })
+  ), [constellation, residualNormalizedCfo, residualRotationRad]);
+
   const reset = () => {
     setTimingOffset(0);
     setCfoHz(0);
+    setSymbolIndex(0);
+    setCfoCorrection(false);
   };
 
   return (
     <div className="sync-lab">
       <div className="sync-lab-controls">
         <label>
-          <span>
-            Timing offset{" "}
-            <strong><MathExpr tex={String.raw`n_0=${timingOffset}\;\text{samples}`} /></strong>
-          </span>
+          <span>Timing offset{" "}<strong><MathExpr tex={String.raw`n_0=${timingOffset}\;\text{samples}`} /></strong></span>
           <input
             type="range"
             min="-32"
@@ -56,10 +134,7 @@ export default function SynchronizationExplorer() {
         </label>
 
         <label>
-          <span>
-            Carrier frequency offset{" "}
-            <strong><MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}=${cfoHz}\,\mathrm{Hz}`} /></strong>
-          </span>
+          <span>Carrier frequency offset{" "}<strong><MathExpr tex={String.raw`\Delta f_{\mathrm{CFO}}=${cfoHz}\,\mathrm{Hz}`} /></strong></span>
           <input
             type="range"
             min="-3000"
@@ -160,10 +235,146 @@ export default function SynchronizationExplorer() {
         </div>
       </div>
 
+      <div className="sync-constellation-block">
+        <div className="visual-caption">
+          <span>CONSTELLATION</span>
+          <strong>CFO nhìn trực tiếp trên QPSK / 16-QAM</strong>
+        </div>
+
+        <div className="sync-constellation-controls">
+          <div className="sync-modulation-select" role="group" aria-label="Chọn modulation">
+            <button
+              type="button"
+              className={modulation === 'qpsk' ? 'selected' : ''}
+              onClick={() => setModulation('qpsk')}
+            >
+              QPSK
+            </button>
+            <button
+              type="button"
+              className={modulation === '16qam' ? 'selected' : ''}
+              onClick={() => setModulation('16qam')}
+            >
+              16-QAM
+            </button>
+          </div>
+
+          <label className="sync-symbol-index-control">
+            <span>OFDM symbol index{" "}<strong><MathExpr tex={String.raw`m=${symbolIndex}`} /></strong></span>
+            <input
+              type="range"
+              min="0"
+              max="10"
+              step="1"
+              value={symbolIndex}
+              onChange={(event) => setSymbolIndex(Number(event.target.value))}
+            />
+          </label>
+
+          <label className="sync-correction-control">
+            <input
+              type="checkbox"
+              checked={cfoCorrection}
+              onChange={(event) => setCfoCorrection(event.target.checked)}
+            />
+            <span>CFO correction</span>
+          </label>
+        </div>
+
+        <div className="sync-constellation-readout">
+          <span>Rotation mỗi symbol: <strong>{phaseDriftDeg.toFixed(1)}°</strong></span>
+          <span>Tại <MathExpr tex={String.raw`m=${symbolIndex}`} />: <strong>{totalRotationDeg.toFixed(1)}°</strong></span>
+          <span>Residual sau correction: <strong>{residualRotationDeg.toFixed(1)}°</strong></span>
+        </div>
+
+        <div className="sync-constellation-grid">
+          <div className="sync-constellation-panel">
+            <div className="sync-constellation-title">Ideal {modulation === 'qpsk' ? 'QPSK' : '16-QAM'}</div>
+            <svg viewBox={`0 0 ${CONST_SIZE} ${CONST_SIZE}`} role="img" aria-label="Ideal constellation">
+              <line className="sync-const-axis" x1="22" y1={CONST_C} x2={CONST_SIZE - 22} y2={CONST_C} />
+              <line className="sync-const-axis" x1={CONST_C} y1="22" x2={CONST_C} y2={CONST_SIZE - 22} />
+              <text className="sync-const-label" x={CONST_SIZE - 30} y={CONST_C - 8}>I</text>
+              <text className="sync-const-label" x={CONST_C + 9} y="30">Q</text>
+              {constellationData.map((point, index) => (
+                <circle
+                  key={`ideal-${index}`}
+                  className="sync-const-point ideal"
+                  cx={point.idealSvg.x}
+                  cy={point.idealSvg.y}
+                  r="5"
+                />
+              ))}
+            </svg>
+          </div>
+
+          <div className="sync-constellation-panel received-panel">
+            <div className="sync-constellation-title">
+              Received {cfoCorrection ? 'sau CFO correction' : 'với residual CFO'}
+            </div>
+            <svg viewBox={`0 0 ${CONST_SIZE} ${CONST_SIZE}`} role="img" aria-label="Received constellation affected by carrier frequency offset">
+              <line className="sync-const-axis" x1="22" y1={CONST_C} x2={CONST_SIZE - 22} y2={CONST_C} />
+              <line className="sync-const-axis" x1={CONST_C} y1="22" x2={CONST_C} y2={CONST_SIZE - 22} />
+              <text className="sync-const-label" x={CONST_SIZE - 30} y={CONST_C - 8}>I</text>
+              <text className="sync-const-label" x={CONST_C + 9} y="30">Q</text>
+
+              {constellationData.map((point, index) => (
+                <g key={`received-${index}`}>
+                  <circle
+                    className="sync-const-point ghost"
+                    cx={point.idealSvg.x}
+                    cy={point.idealSvg.y}
+                    r="4"
+                  />
+                  <line
+                    className="sync-const-link"
+                    x1={point.idealSvg.x}
+                    y1={point.idealSvg.y}
+                    x2={point.receivedSvg.x}
+                    y2={point.receivedSvg.y}
+                  />
+                  {point.cloud.map((cloudPoint, cloudIndex) => (
+                    <circle
+                      key={`cloud-${index}-${cloudIndex}`}
+                      className="sync-const-cloud"
+                      cx={cloudPoint.x}
+                      cy={cloudPoint.y}
+                      r="2.3"
+                    />
+                  ))}
+                  <circle
+                    className="sync-const-point received"
+                    cx={point.receivedSvg.x}
+                    cy={point.receivedSvg.y}
+                    r="5"
+                  />
+                </g>
+              ))}
+            </svg>
+          </div>
+        </div>
+
+        <div className="sync-constellation-legend">
+          <span><i className="const-key ideal"></i> ideal point</span>
+          <span><i className="const-key ghost"></i> ideal reference</span>
+          <span><i className="const-key received"></i> rotated received point</span>
+          <span><i className="const-key cloud"></i> ICI-like spread</span>
+        </div>
+
+        <div className="sync-constellation-note">
+          <strong>Cách đọc constellation</strong>
+          <p>
+            Với CFO nhỏ, hiệu ứng dễ nhìn nhất là common phase rotation: toàn bộ constellation quay dần khi <MathExpr tex="m" /> tăng.
+            Khi normalized CFO lớn hơn, OFDM còn mất orthogonality giữa các subcarriers, nên lab thêm một ICI-like spread để minh họa xu hướng méo.
+            Phần spread này là trực giác hóa, không phải full OFDM link simulation.
+          </p>
+        </div>
+      </div>
+
       <div className="sync-lab-interpretation">
         <strong>Khi bấm “Bù về 0”</strong>
         <p>
-          Window trở về reference timing và phase drift do CFO trong model này về zero.
+          Window trở về reference timing và CFO của model về zero.
+          Nếu chỉ bật <strong>CFO correction</strong>, lab giữ timing offset hiện tại nhưng gần như loại bỏ common phase rotation và ICI-like spread do CFO.
           Receiver thật vẫn còn channel, noise, sampling-frequency offset, phase noise và các bước refinement khác.
         </p>
       </div>
