@@ -5,107 +5,138 @@ import MathExpr from '../../components/Math.astro';
 ---
 
 <BaseLayout
-  title="Signal là gì? Time domain, FFT và I/Q trực quan | VietWireless"
-  description="Hiểu signal, sampling, time domain, frequency domain, FFT/IFFT và I/Q samples bằng hình ảnh và interactive lab."
+  title="Signal là gì? Từ thế giới thật tới samples | VietWireless"
+  description="Hiểu information, signal, waveform, sampling, time domain và frequency domain bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 01 · SIGNAL FOUNDATIONS</p>
       <h1>Signal là gì?</h1>
       <p class="lesson-deck">
-        Trước khi đi tới 4G, 5G hay OFDM, có một câu hỏi tôi thấy đáng quay lại:{" "}
-        <strong>rốt cuộc chúng ta đang truyền cái gì?</strong>
+        Trước khi đi tới modulation, OFDM hay 5G NR, có một câu hỏi đáng làm rõ trước:{" "}
+        <strong>information, signal và waveform có phải cùng một thứ không?</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">SIGNAL NẰM Ở ĐÂU TRONG BỨC TRANH?</p>
-      <p class="map-intro">Bài này chỉ zoom vào chữ “signal” trong bức tranh lớn.</p>
-      <div class="system-position">
+      <p class="map-intro">
+        Bài đầu tiên chỉ xây mental model. Những khái niệm như số phức, modulation, I/Q, FFT và OFDM sẽ được tách ra ở các bài sau.
+      </p>
+
+      <div class="system-position concept-flow-card">
         <span>END-TO-END MAP</span>
-        <div class="system-position-flow" aria-label="Information tới signal processing, RF, channel và receiver">
+        <div class="system-position-flow" aria-label="Information được biểu diễn bằng signal rồi được xử lý và truyền qua hệ thống">
           <span>Information</span><b>→</b>
           <strong>Signal</strong><b>→</b>
-          <span>Digital processing</span><b>→</b>
-          <span>RF</span><b>→</b>
-          <span>Channel</span><b>→</b>
+          <span>Processing</span><b>→</b>
+          <span>Physical transmission</span><b>→</b>
           <span>Receiver</span>
         </div>
         <p>
-          Ở trang đầu tôi đã đặt cả chuỗi bits → QAM → IFFT → <MathExpr tex="I/Q" /> → RF → channel → FFT → bits cạnh nhau.
-          Ở đây tôi tạm gác phần còn lại sang một bên và chỉ nhìn kỹ hơn vào một chữ xuất hiện xuyên suốt:{" "}
-          <strong>signal thực sự là gì?</strong>{" "}
-          <a href="/#buc-tranh-lon">Xem lại sơ đồ tổng thể ↑</a>
+          Một communication system thay đổi cách biểu diễn nhiều lần.
+          Bài này chỉ trả lời ba câu hỏi đầu tiên: <strong>information là gì, signal là gì, và máy tính nhìn signal dưới dạng nào?</strong>
         </p>
       </div>
     </section>
 
-    <section class="concept-block">
-      <p class="concept-kicker">01 · TỪ THẾ GIỚI THẬT</p>
-      <h2>Có thể bắt đầu rất đơn giản: signal là một đại lượng thay đổi và mang thông tin.</h2>
+    <section class="concept-block" data-lesson-role="problem" id="information-signal">
+      <p class="concept-kicker">01 · INFORMATION ≠ SIGNAL ≠ WAVEFORM</p>
+      <h2>Information là ý nghĩa. Signal là representation. Waveform chỉ là một trường hợp signal thay đổi theo thời gian.</h2>
+
       <p>
-        Khi bạn nói, áp suất không khí thay đổi theo thời gian. Microphone biến sự thay đổi đó thành
-        điện áp thay đổi theo thời gian. Camera làm một việc khác: nó đo ánh sáng tại rất nhiều vị trí
-        rồi tạo thành các giá trị pixel. Hai hệ thống trông khác nhau, nhưng cùng chung một ý tưởng:{" "}
-        <strong>đo một đại lượng để biểu diễn thông tin.</strong>
+        Khi bạn nói “xin chào”, nội dung muốn truyền là <strong>information</strong>.
+        Biến thiên áp suất trong không khí là một acoustic signal mang information đó.
+        Microphone lại tạo ra một electrical signal khác.
+        Sau ADC, phần mềm thấy một dãy số.
       </p>
 
-      <div class="journey-grid" aria-label="Hành trình từ giọng nói tới sóng vô tuyến">
-        <div class="journey-node">
-          <span class="journey-icon">◖)))</span>
-          <small>THẾ GIỚI THẬT</small>
-          <strong>Giọng nói</strong>
-          <p>Áp suất không khí biến thiên.</p>
-        </div>
-        <div class="journey-arrow">→</div>
-        <div class="journey-node">
-          <span class="journey-icon">⌁</span>
-          <small>SENSOR</small>
-          <strong>Microphone</strong>
-          <p>Biến áp suất thành điện áp.</p>
-        </div>
-        <div class="journey-arrow">→</div>
-        <div class="journey-node">
-          <span class="journey-icon">••••</span>
-          <small>ADC</small>
-          <strong>Samples</strong>
-          <p>Đo điện áp tại các thời điểm rời rạc.</p>
-        </div>
-        <div class="journey-arrow">→</div>
-        <div class="journey-node">
-          <span class="journey-icon"><MathExpr tex="I + jQ" /></span>
-          <small>BASEBAND</small>
-          <strong><MathExpr tex="I/Q" /></strong>
-          <p>Mã hóa amplitude và phase.</p>
-        </div>
-        <div class="journey-arrow">→</div>
-        <div class="journey-node">
-          <span class="journey-icon">)))</span>
-          <small>RF</small>
-          <strong>Radio wave</strong>
-          <p>Đi qua anten và không gian.</p>
-        </div>
+      <div class="signal-foundation-triad" data-lesson-visual>
+        <article>
+          <span class="card-label">INFORMATION</span>
+          <strong>“xin chào”</strong>
+          <p>Ý nghĩa hoặc nội dung mà hệ thống muốn biểu diễn, lưu trữ hay truyền đi.</p>
+        </article>
+        <article>
+          <span class="card-label">SIGNAL</span>
+          <strong><MathExpr tex="x(\cdot)" /></strong>
+          <p>Một representation có giá trị phụ thuộc vào một hoặc nhiều biến độc lập và có thể mang information.</p>
+        </article>
+        <article>
+          <span class="card-label">WAVEFORM</span>
+          <strong><MathExpr tex="x(t)" /></strong>
+          <p>Khi biến độc lập là thời gian, ta thường nhìn signal dưới dạng waveform.</p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Signal không nhất thiết phải biến đổi theo thời gian</strong>
+        <p>
+          Audio thường là signal theo thời gian. Một ảnh có thể xem như signal hai chiều theo vị trí <MathExpr tex="x" /> và <MathExpr tex="y" />.
+          Vì vậy “signal = waveform theo thời gian” là một cách hiểu quá hẹp.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="representations">
+      <p class="concept-kicker">02 · CÙNG MỘT INFORMATION, NHIỀU REPRESENTATION</p>
+      <h2>Trong một hệ thống thực, information không “biến thành RF” trong một bước. Nó đi qua nhiều representation.</h2>
+
+      <p>
+        Lấy giọng nói làm ví dụ. Cùng một câu nói có thể xuất hiện lần lượt dưới dạng áp suất không khí, điện áp microphone và samples trong bộ nhớ.
+        Những representation này khác nhau về vật lý, nhưng vẫn đang mô tả cùng một nguồn information.
+      </p>
+
+      <div class="signal-representation-flow" data-lesson-visual>
+        <article>
+          <span class="signal-step-no">01</span>
+          <div>
+            <small>PHYSICAL SOURCE</small>
+            <strong>Áp suất không khí</strong>
+            <p>Biến thiên liên tục theo thời gian khi người nói phát âm.</p>
+          </div>
+        </article>
+        <div class="signal-flow-arrow">↓</div>
+        <article>
+          <span class="signal-step-no">02</span>
+          <div>
+            <small>SENSOR OUTPUT</small>
+            <strong>Điện áp microphone</strong>
+            <p>Microphone chuyển biến thiên áp suất thành một electrical waveform.</p>
+          </div>
+        </article>
+        <div class="signal-flow-arrow">↓</div>
+        <article>
+          <span class="signal-step-no">03</span>
+          <div>
+            <small>DIGITAL REPRESENTATION</small>
+            <strong>Samples <MathExpr tex="x[n]" /></strong>
+            <p>ADC đo waveform tại các thời điểm rời rạc để DSP có thể xử lý bằng số.</p>
+          </div>
+        </article>
       </div>
 
       <aside class="mental-model">
-        <strong>Một cách dễ hình dung</strong>
+        <strong>Một điểm nên nhớ từ đầu</strong>
         <p>
-          “Signal” không đồng nghĩa với “radio wave”. Một dãy samples trong RAM cũng là signal.
-          Một waveform ở đầu ADC cũng là signal. Sóng RF ngoài anten chỉ là một dạng biểu diễn vật lý khác.
+          “Signal” không đồng nghĩa với “radio wave”.
+          Một waveform điện áp là signal. Một dãy samples trong RAM cũng là signal.
+          Radio wave chỉ là một physical representation xuất hiện ở một stage khác của hệ thống.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="sampling">
-      <p class="concept-kicker">02 · ANALOG → DIGITAL</p>
-      <h2>Nếu nhìn từ phía máy tính, waveform cuối cùng lại trở thành các samples.</h2>
+      <p class="concept-kicker">03 · CONTINUOUS-TIME → DISCRETE-TIME</p>
+      <h2>Máy tính không cần lưu cả đường cong liên tục. Nó làm việc với một dãy samples.</h2>
+
       <p>
-        Một microphone tạo ra điện áp thay đổi liên tục theo thời gian. ADC không lưu cả đường cong liên tục đó.
-        Nó đo giá trị của waveform tại những thời điểm cách nhau đều đặn. Mỗi lần đo cho ra một sample.
+        Một microphone có thể tạo ra điện áp thay đổi liên tục theo thời gian.
+        Trong model sampling lý tưởng, ADC quan sát waveform tại các thời điểm cách nhau <MathExpr tex="T_s" /> và tạo ra một dãy <MathExpr tex="x[n]" />.
       </p>
 
-      <div class="sampling-visual" aria-label="Minh họa quá trình sampling từ waveform liên tục tới các samples rời rạc">
+      <div class="sampling-visual" data-lesson-visual aria-label="Minh họa sampling từ waveform liên tục tới samples rời rạc">
         <article class="sampling-stage">
           <span class="sampling-stage-label">1 · CONTINUOUS-TIME</span>
           <svg viewBox="0 0 320 150" role="img" aria-label="Waveform liên tục x(t)">
@@ -116,7 +147,7 @@ import MathExpr from '../../components/Math.astro';
             <foreignObject x="28" y="10" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="x(t)" /></div></foreignObject>
           </svg>
           <strong>Waveform liên tục</strong>
-          <p>Điện áp tồn tại ở mọi thời điểm <MathExpr tex="t" />.</p>
+          <p>Model <MathExpr tex="x(t)" /> có giá trị tại mọi thời điểm <MathExpr tex="t" />.</p>
         </article>
 
         <div class="sampling-arrow" aria-hidden="true">→</div>
@@ -138,8 +169,8 @@ import MathExpr from '../../components/Math.astro';
             <foreignObject x="46" y="122" width="50" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="T_s" /></div></foreignObject>
             <path class="sample-bracket" d="M28 126 L28 132 L68 132 L68 126" />
           </svg>
-          <strong>Đo tại từng thời điểm</strong>
-          <p>Sampling period <MathExpr tex="T_s" /> cho biết khoảng thời gian giữa hai lần đo.</p>
+          <strong>Đo tại các thời điểm rời rạc</strong>
+          <p><MathExpr tex="T_s" /> là sampling period giữa hai lần lấy mẫu.</p>
         </article>
 
         <div class="sampling-arrow" aria-hidden="true">→</div>
@@ -161,298 +192,138 @@ import MathExpr from '../../components/Math.astro';
             <foreignObject x="28" y="10" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="x[n]" /></div></foreignObject>
           </svg>
           <strong>Một dãy số</strong>
-          <p><MathExpr tex={String.raw`x[0],\,x[1],\,x[2],\ldots`} /> là thứ phần mềm DSP thực sự xử lý.</p>
+          <p><MathExpr tex={String.raw`x[0],\,x[1],\,x[2],\ldots`} /> là representation mà DSP xử lý trực tiếp.</p>
         </article>
       </div>
 
-      <MathExpr tex="x[n] = x(nT_s)" display />
-      <p class="math-caption">Sample thứ n chính là giá trị của waveform tại thời điểm <MathExpr tex="nT_s" />.</p>
-
-      <div class="math-card-grid sampling-summary">
-        <article class="math-card">
-          <span class="card-label">Continuous-time</span>
-          <div class="math-card-formula"><MathExpr tex="x(t)" /></div>
-          <p>Ta có thể hỏi giá trị của signal tại mọi thời điểm <MathExpr tex="t" />.</p>
-        </article>
-        <article class="math-card">
-          <span class="card-label">Discrete-time</span>
-          <div class="math-card-formula"><MathExpr tex="x[n]" /></div>
-          <p>Ta chỉ giữ giá trị tại các sample index <MathExpr tex={String.raw`n=0,1,2,\ldots`} /></p>
-        </article>
-      </div>
+      <MathExpr tex="x[n]=x(nT_s)" display />
+      <p class="math-caption">
+        Trong model lý tưởng, sample thứ <MathExpr tex="n" /> là giá trị waveform tại thời điểm <MathExpr tex="nT_s" />.
+      </p>
 
       <p>
-        Sampling rate là <MathExpr tex="f_s = 1/T_s" />. Ví dụ <MathExpr tex={String.raw`f_s = 48\,\mathrm{kHz}`} /> nghĩa là ADC đo waveform
-        48.000 lần mỗi giây. Đây chưa phải toàn bộ câu chuyện của ADC. Vẫn còn quantization, dynamic range và
-        anti-alias filtering. Ở đây tôi chỉ muốn giữ lại một hình dung:{" "}
-        <strong>sampling biến waveform liên tục theo thời gian thành một dãy giá trị rời rạc theo thời gian.</strong>
+        Sampling rate là <MathExpr tex="f_s=1/T_s" />.
+        Ví dụ <MathExpr tex={String.raw`f_s=48\,\mathrm{kHz}`} /> nghĩa là hệ thống lấy 48.000 samples mỗi giây.
+        ADC thực tế còn có quantization, dynamic range và anti-alias filtering.
+        Bài 2 sẽ tập trung vào câu hỏi quan trọng hơn: <strong>lấy mẫu nhanh bao nhiêu là đủ?</strong>
       </p>
     </section>
 
-    <section class="concept-block">
+    <section class="concept-block" id="two-views">
+      <p class="concept-kicker">04 · HAI CÁCH NHÌN CÙNG MỘT SIGNAL</p>
+      <h2>Time domain trả lời “signal thay đổi khi nào?”. Frequency domain trả lời “những thành phần tần số nào đang có mặt?”.</h2>
+
       <p>
-        Miền thời gian và miền tần số chỉ là hai cách nhìn khác nhau của cùng một tín hiệu.
-      </p>
-      <p>
-        Ở miền thời gian, trục ngang là thời gian. Ta nhìn được dạng sóng thay đổi như thế nào.
-        Nhưng nếu nhiều thành phần tần số cộng vào nhau, chỉ nhìn dạng sóng thường rất khó biết chính xác từng thành phần.
-      </p>
-      <p>
-        Ở miền tần số, câu hỏi thay đổi. Thay vì hỏi tín hiệu có giá trị bao nhiêu tại từng thời điểm,
-        ta hỏi <strong>những thành phần tần số nào đang tạo nên tín hiệu, với biên độ và pha bao nhiêu?</strong>
+        Một waveform có thể là tổng của nhiều thành phần sinusoid.
+        Trong time domain, các thành phần này chồng lên nhau thành một đường cong.
+        Fourier representation cho ta một góc nhìn khác, nơi các thành phần frequency tách ra rõ hơn.
       </p>
 
-      <div class="math-equivalence-grid">
-        <article class="math-card">
-          <span class="card-label">MIỀN THỜI GIAN</span>
-          <div class="math-card-formula"><MathExpr tex="x(t)" /></div>
-          <p>“Tín hiệu thay đổi như thế nào theo thời gian?”</p>
+      <div class="signal-domain-bridge" data-lesson-visual>
+        <article>
+          <span class="card-label">TIME DOMAIN</span>
+          <strong><MathExpr tex="x(t)" /></strong>
+          <p>Giá trị của signal thay đổi thế nào theo thời gian?</p>
         </article>
-        <div class="math-equivalence-mark" aria-hidden="true">=</div>
-        <article class="math-card">
-          <span class="card-label">MIỀN TẦN SỐ</span>
-          <div class="math-card-formula"><MathExpr tex="X(f)" /></div>
-          <p>“Tín hiệu gồm những thành phần tần số nào?”</p>
+        <div class="signal-domain-transform">
+          <small>Fourier transform</small>
+          <b>↔</b>
+        </div>
+        <article>
+          <span class="card-label">FREQUENCY DOMAIN</span>
+          <strong><MathExpr tex="X(f)" /></strong>
+          <p>Signal chứa những thành phần frequency nào và mạnh tới đâu?</p>
         </article>
       </div>
 
       <aside class="mental-model">
-        <strong>Một cách dễ hình dung</strong>
+        <strong>Không phải hai signal khác nhau</strong>
         <p>
-          FFT không “biến signal thành một signal khác”. Nó cho ta một cách biểu diễn khác của cùng dữ liệu,
-          giống như nhìn cùng một thành phố trên ảnh vệ tinh và trên bản đồ đường phố.
+          <MathExpr tex="x(t)" /> và <MathExpr tex="X(f)" /> là hai representation liên hệ với nhau qua Fourier transform.
+          Ta không nên viết chúng như hai đại lượng “bằng nhau”, mà nên hiểu chúng là hai cách nhìn cùng một hiện tượng.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block lab-section" id="fft">
-      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thử nhìn xem FFT làm rõ điều gì.</h2>
+    <section class="concept-block lab-section" id="signal-lab">
+      <p class="concept-kicker">05 · INTERACTIVE SIGNAL EXPLORER</p>
+      <h2>Thay đổi hai tone và chuyển qua lại giữa time domain và frequency domain.</h2>
+
       <p>
-        Khi thay đổi hai tone bên dưới, time waveform có thể trông khá rối, còn frequency view thì tách
-        hai thành phần ra thành hai peak khá rõ. Phần demo dùng DFT trực tiếp cho dễ minh họa; FFT là thuật toán
-        tính cùng phép biến đổi đó hiệu quả hơn rất nhiều.
+        Lab này cố tình chỉ giữ một ý.
+        Khi hai tone cộng lại, waveform tổng có thể khó đọc bằng mắt, nhưng frequency view cho thấy hai peak tách biệt hơn.
+        Demo tính DFT trực tiếp để minh họa; Bài 7 sẽ giải thích Fourier, DFT và FFT kỹ hơn.
       </p>
+
       <SignalExplorer client:load />
     </section>
 
-    <section class="concept-block" id="iq">
-      <p class="concept-kicker">05 · COMPLEX NUMBER, <MathExpr tex="I/Q" /> VÀ MODULATION</p>
-      <h2>Trước khi nhìn resource grid, cần biết một ô trong grid thực sự đang chứa gì.</h2>
-      <p>
-        Trong complex baseband, một giá trị thường được viết dưới dạng <strong><MathExpr tex="I+jQ" /></strong>.
-        <MathExpr tex="I" /> và <MathExpr tex="Q" /> là hai thành phần trực giao. Nếu xem chúng như tọa độ trên một mặt phẳng,
-        khoảng cách tới gốc cho ta amplitude còn góc của vector cho ta phase.
-      </p>
-      <p>
-        Đây là lý do số phức xuất hiện rất tự nhiên trong wireless. Thay vì theo dõi amplitude và phase bằng hai cách riêng,
-        ta có thể gói chúng trong cùng một complex value.
-      </p>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">06 · SIGNAL KHÔNG ĐỒNG NGHĨA VỚI RADIO WAVE</p>
+      <h2>Cùng một information có thể được biểu diễn bằng physical signal, electrical signal hoặc numerical samples.</h2>
 
-      <div class="re-zoom-panel">
-        <div class="zoom-label">TỪ BITS TỚI MỘT COMPLEX MODULATION SYMBOL</div>
-        <div class="re-zoom-flow">
-          <div class="zoom-step">
-            <small>bits</small>
-            <strong class="mono-value">10</strong>
-          </div>
-          <span class="zoom-arrow" aria-hidden="true">→</span>
-          <div class="zoom-step">
-            <small>QPSK</small>
-            <div class="qpsk-zoom" role="img" aria-label="QPSK constellation với một complex symbol được chọn">
-              <span class="qpsk-axis horizontal"></span>
-              <span class="qpsk-axis vertical"></span>
-              <i class="q1 selected-point"></i><i class="q2"></i><i class="q3"></i><i class="q4"></i>
-              <b><MathExpr tex="I" /></b><em><MathExpr tex="Q" /></em>
-            </div>
-          </div>
-          <span class="zoom-arrow" aria-hidden="true">→</span>
-          <div class="zoom-step symbol-step">
-            <small>complex modulation symbol</small>
-            <strong><MathExpr tex="X[k,m]" /></strong>
-            <span><MathExpr tex="I + jQ" /></span>
-          </div>
-        </div>
-        <p>
-          Với QPSK, một nhóm bits được map thành một điểm constellation. Tọa độ của điểm đó là một complex modulation symbol.
-          Sau này với 16QAM hay 64QAM, số điểm tăng lên nhưng ý tưởng vẫn như vậy.
-        </p>
-      </div>
-
-      <div class="math-card-grid">
-        <article class="math-card">
-          <span class="card-label">TRƯỚC IFFT · FREQUENCY DOMAIN</span>
-          <div class="math-card-formula"><MathExpr tex="X[k,m] = I + jQ" /></div>
-          <p>
-            Đây là một <strong>complex modulation symbol</strong> gắn với subcarrier <MathExpr tex="k" /> và OFDM symbol <MathExpr tex="m" />.
-            Nó là giá trị ta sẽ đặt vào resource grid.
-          </p>
+      <div class="signal-representation-types">
+        <article>
+          <span class="card-label">PHYSICAL</span>
+          <strong>Áp suất, ánh sáng, điện từ trường</strong>
+          <p>Đại lượng vật lý tồn tại trong thế giới thật.</p>
         </article>
-        <article class="math-card">
-          <span class="card-label">SAU IFFT · TIME DOMAIN</span>
-          <div class="math-card-formula"><MathExpr tex="x[n] = I[n] + jQ[n]" /></div>
-          <p>
-            Đây là một <strong>complex time-domain sample</strong>. Nó cũng dùng biểu diễn <MathExpr tex="I/Q" />,
-            nhưng là một đại lượng ở stage khác của transmitter.
-          </p>
+        <article>
+          <span class="card-label">ELECTRICAL</span>
+          <strong>Điện áp hoặc dòng điện</strong>
+          <p>Sensor và analog front-end thường dùng representation này.</p>
+        </article>
+        <article>
+          <span class="card-label">NUMERICAL</span>
+          <strong><MathExpr tex="x[n]" /></strong>
+          <p>DSP làm việc với numbers trong memory.</p>
         </article>
       </div>
 
-      <aside class="mental-model">
-        <strong>Một chỗ khá dễ lẫn</strong>
-        <p>
-          <MathExpr tex="X[k,m]" /> và <MathExpr tex="x[n]" /> đều có thể là số phức, nhưng không phải cùng một thứ.
-          <MathExpr tex="X[k,m]" /> là modulation symbol trong miền tần số. IFFT biến cả một tập <MathExpr tex="X[k,m]" /> thành các time-domain samples <MathExpr tex="x[n]" />.
-        </p>
-      </aside>
-
       <p>
-        Tín hiệu RF vật lý ngoài anten vẫn là tín hiệu thực. Complex baseband và <MathExpr tex="I/Q" /> là cách biểu diễn toán học
-        và implementation rất tiện lợi trước khi signal đi qua DAC và RF chain.
-      </p>
-      <a class="inline-cta" href="#fft">↑ Thử tab <MathExpr tex="I/Q" /> trong Signal Lab phía trên</a>
-    </section>
-
-    <section class="concept-block ofdm-explainer" id="ofdm-grid">
-      <p class="concept-kicker">06 · RESOURCE GRID → IFFT → TIME-DOMAIN SAMPLES</p>
-      <h2>Trong OFDM, các complex modulation symbols được đặt lên resource grid trước khi trở thành waveform để phát.</h2>
-
-      <p>
-        Tới đây, <MathExpr tex="X[k,m]" /> không còn là một ký hiệu mới. Nó là complex modulation symbol vừa được tạo ra từ modulation.
-        LTE và 5G tổ chức các symbol này trên một <strong>resource grid</strong>. Trục dọc là subcarrier, tức frequency.
-        Trục ngang là OFDM symbol, tức time.
-      </p>
-      <p>
-        Mỗi ô nhỏ là một <strong>resource element (RE)</strong>. Một RE xác định một vị trí trên grid,
-        tương ứng với một subcarrier trong một OFDM symbol. Giá trị đặt vào vị trí đó có thể là một complex modulation symbol.
-      </p>
-
-      <div class="resource-grid-explainer">
-        <div class="resource-grid-panel">
-          <div class="visual-caption">
-            <span>SIMPLIFIED RESOURCE GRID</span>
-            <strong>frequency × time</strong>
-          </div>
-
-          <div class="resource-grid-wrap">
-            <div class="frequency-axis">
-              <b aria-hidden="true">↑</b>
-              <span>subcarriers / frequency</span>
-            </div>
-
-            <div class="resource-grid-main">
-              <div class="grid-symbol-labels" aria-hidden="true">
-                <span><MathExpr tex="m=0" /></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
-              </div>
-
-              <div class="resource-grid-cells" role="img" aria-label="Resource grid đơn giản với 12 subcarriers và 7 OFDM symbols. Một resource element được chọn">
-                {Array.from({ length: 84 }).map((_, i) => (
-                  <span class:list={["resource-cell", { selected: i === 38, sameSymbol: i % 7 === 3 && i !== 38 }]}></span>
-                ))}
-              </div>
-
-              <div class="time-axis">
-                <span>OFDM symbols / time</span>
-                <b aria-hidden="true">→</b>
-              </div>
-            </div>
-          </div>
-
-          <p class="visual-note">
-            Grid này chỉ là minh họa. Cột được tô nhẹ là một OFDM symbol <MathExpr tex="m_0" />. Tất cả các RE trong cột đó tạo thành
-            vector frequency-domain <strong><MathExpr tex="X[k,m_0]" /></strong> đưa vào IFFT.
-          </p>
-        </div>
-
-        <div class="re-zoom-panel">
-          <div class="zoom-label">ZOOM VÀO 1 RE</div>
-          <MathExpr tex="X[k_0,m_0] = I + jQ" display />
-          <p class="math-caption">Complex modulation symbol tại subcarrier <MathExpr tex="k_0" /> và OFDM symbol <MathExpr tex="m_0" />.</p>
-          <p>
-            Resource element là vị trí trên grid. <MathExpr tex="X[k_0,m_0]" /> là giá trị complex được đặt vào vị trí đó.
-            Phần modulation ở trên cho ta biết giá trị này đến từ đâu.
-          </p>
-        </div>
-      </div>
-
-      <p>
-        Bây giờ lấy một cột của grid, tức một OFDM symbol <MathExpr tex="m_0" />. Ta có một complex value trên mỗi subcarrier <MathExpr tex="k" />.
-        IFFT dùng toàn bộ vector đó để tạo ra một chuỗi complex samples theo thời gian.
-      </p>
-
-      <div class="ofdm-column-flow">
-        <div class="ofdm-column-step frequency-step">
-          <small>FREQUENCY-DOMAIN SYMBOLS</small>
-          <strong><MathExpr tex="X[k,m_0]" /></strong>
-          <div class="mini-subcarrier-stack" aria-hidden="true">
-            <i style="--v:35%"></i><i style="--v:65%"></i><i style="--v:46%"></i><i style="--v:82%"></i>
-            <i style="--v:58%"></i><i style="--v:72%"></i><i style="--v:42%"></i><i style="--v:67%"></i>
-          </div>
-          <span>một complex modulation symbol trên mỗi subcarrier <MathExpr tex="k" /></span>
-        </div>
-
-        <div class="ofdm-transform-card">
-          <strong>IFFT</strong>
-          <span>frequency → time</span>
-          <b aria-hidden="true">→</b>
-        </div>
-
-        <div class="ofdm-column-step time-step">
-          <small>TIME-DOMAIN COMPLEX SAMPLES</small>
-          <strong><MathExpr tex="x[n] = I[n] + jQ[n]" /></strong>
-          <svg viewBox="0 0 240 90" role="img" aria-label="Time-domain OFDM waveform sau IFFT">
-            <line x1="6" y1="46" x2="234" y2="46"></line>
-            <path d="M6 46 C12 13 18 73 25 40 S38 20 46 55 S58 69 67 36 S82 25 91 53 S105 62 114 38 S129 18 138 48 S153 73 163 38 S179 25 188 51 S204 63 214 40 S227 29 234 48"></path>
-          </svg>
-          <span>complex <MathExpr tex="I/Q" /> samples để đi tiếp tới DAC/RF</span>
-        </div>
-      </div>
-
-      <aside class="precision-note ofdm-precision-note">
-        <strong>Frequency domain không phải là sóng đang bay ngoài anten</strong>
-        <p>
-          Trong OFDM, ta tổ chức data thành các frequency-domain modulation symbols <MathExpr tex="X[k,m]" />.
-          IFFT chuyển một cột <MathExpr tex="X[k,m_0]" /> thành time-domain complex samples <MathExpr tex="x[n]" />.
-          Sau DAC và RF upconversion, transmitter mới tạo ra waveform RF vật lý để anten phát đi.
-        </p>
-      </aside>
-
-      <div class="ofdm-rx-return">
-        <div><strong>TX baseband</strong><span><MathExpr tex="X[k,m]" /> trên resource grid</span></div>
-        <b>→ IFFT →</b>
-        <div><strong>Time domain</strong><span><MathExpr tex="x[n]" /> rồi DAC / RF / channel</span></div>
-        <b>→ ADC / FFT →</b>
-        <div><strong>RX baseband</strong><span><MathExpr tex="Y[k,m]" /> trên từng subcarrier</span></div>
-      </div>
-
-      <p>
-        Ở receiver, quá trình đi ngược lại. Sau RF front-end, downconversion và ADC, receiver có time-domain complex samples <MathExpr tex="y[n]" />.
-        FFT đưa chúng trở lại các frequency bins <MathExpr tex="Y[k]" />. Từ đó receiver có thể channel estimate, equalize,
-        demodulate và lấy lại bits trên từng RE.
+        Về sau wireless còn dùng complex baseband, <MathExpr tex="I/Q" />, modulation symbols và OFDM resource grid.
+        Nhưng đó là <strong>các representation mới của signal ở những stage khác</strong>, không phải định nghĩa cơ bản của signal.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
-      <h2>Tóm lại, tôi đang nối các khái niệm này với nhau như sau.</h2>
+    <section class="concept-block" id="learning-path">
+      <p class="concept-kicker">07 · TỪ ĐÂY HỌC GÌ TIẾP?</p>
+      <h2>Bài 1 chỉ dựng bản đồ. Bài 2–8 sẽ mở từng khái niệm ra đúng lúc.</h2>
+
+      <div class="lesson1-roadmap">
+        <a href="/hoc/sampling-aliasing-nyquist/"><small>BÀI 02</small><strong>Sampling, aliasing và Nyquist</strong><span>Khi nào samples còn giữ được waveform gốc?</span></a>
+        <a href="/hoc/amplitude-frequency-phase/"><small>BÀI 03</small><strong>Amplitude, frequency và phase</strong><span>Ba đại lượng cơ bản của sinusoid.</span></a>
+        <a href="/hoc/so-phuc-va-phasor/"><small>BÀI 04</small><strong>Số phức và phasor</strong><span>Một cách gọn để biểu diễn amplitude và phase.</span></a>
+        <a href="/hoc/iq-va-complex-baseband/"><small>BÀI 05</small><strong>I/Q và complex baseband</strong><span>Tại sao wireless DSP thích biểu diễn complex.</span></a>
+        <a href="/hoc/mien-thoi-gian-va-mien-tan-so/"><small>BÀI 06</small><strong>Miền thời gian và miền tần số</strong><span>Hai representation của cùng signal.</span></a>
+        <a href="/hoc/fourier-dft-fft/"><small>BÀI 07</small><strong>Fourier, DFT và FFT</strong><span>Cầu nối toán học giữa hai miền.</span></a>
+        <a href="/hoc/modulation-bpsk-qpsk-qam/"><small>BÀI 08</small><strong>Modulation: BPSK → QPSK → QAM</strong><span>Cách bits trở thành modulation symbols.</span></a>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Signal</strong> là một đại lượng thay đổi dùng để biểu diễn hoặc mang thông tin.</li>
-        <li><strong>Sampling</strong> biến waveform liên tục thành một dãy giá trị rời rạc theo thời gian.</li>
-        <li><strong>Time domain</strong> cho ta thấy signal biến đổi khi nào và như thế nào.</li>
-        <li><strong>Frequency domain</strong> cho ta thấy các thành phần sinusoid cấu tạo nên signal.</li>
-        <li><strong><MathExpr tex="I/Q" /></strong> là complex representation giúp ta làm việc trực tiếp với amplitude và phase.</li>
-        <li><strong>Complex modulation symbol <MathExpr tex="X[k,m]" /></strong> và <strong>time-domain sample <MathExpr tex="x[n]" /></strong> đều có thể là số phức, nhưng nằm ở hai stage khác nhau.</li>
-        <li><strong>Trong OFDM</strong>, modulation symbols <MathExpr tex="X[k,m]" /> được đặt trên resource grid; IFFT biến một cột của grid thành time-domain complex samples <MathExpr tex="x[n]" /> để đi tiếp tới DAC/RF.</li>
+        <li><strong>Information</strong> là nội dung hoặc ý nghĩa cần biểu diễn hay truyền đi.</li>
+        <li><strong>Signal</strong> là một representation có giá trị phụ thuộc vào một hoặc nhiều biến độc lập và có thể mang information.</li>
+        <li><strong>Waveform</strong> thường chỉ signal được nhìn như một hàm theo thời gian.</li>
+        <li><strong>Sampling</strong> biến continuous-time waveform thành discrete-time sequence <MathExpr tex="x[n]" />.</li>
+        <li><strong>Time domain</strong> và <strong>frequency domain</strong> là hai representation liên hệ với nhau qua Fourier transform.</li>
+        <li><strong>Signal không đồng nghĩa radio wave:</strong> samples trong memory cũng là signal.</li>
       </ol>
     </section>
 
-    <nav class="next-lesson" aria-label="Bài học tiếp theo">
-      <span>GHI CHÉP TIẾP THEO</span>
-      <div>
-        <h2>Sampling, aliasing và Nyquist</h2>
-        <p>Tại sao lấy samples quá chậm có thể khiến một tần số “biến thành” tần số khác?</p>
-      </div>
-      <a class="text-button" href="/hoc/sampling-aliasing-nyquist/">Đọc bài →</a>
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="map" href="/hoc/">
+        <span>← BẢN ĐỒ HỌC</span>
+        <strong>Nền tảng tín hiệu</strong>
+        <small>Xem toàn bộ lộ trình từ signal tới 5G NR.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/sampling-aliasing-nyquist/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>Sampling, aliasing và Nyquist</strong>
+        <small>Tại sao lấy samples quá chậm có thể làm một tần số trông giống tần số khác?</small>
+      </a>
     </nav>
   </article>
 </BaseLayout>
