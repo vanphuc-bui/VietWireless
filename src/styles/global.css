@@ -16661,3 +16661,9 @@ body {
     min-width: 520px;
   }
 }
+
+
+.modulation-error-presets > button:disabled {
+  opacity: .38;
+  cursor: not-allowed;
+}
