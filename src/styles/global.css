@@ -15672,3 +15672,486 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Lesson 7 refresh: DFT basis projection + leakage --- */
+.fourier-basis-story-v2 > div > span,
+.dft-match-logic > div > span,
+.bin-equations-v2 > div > span,
+.signed-bin-map > div > span,
+.zero-padding-story > div > span,
+.fourier-boundary-grid > article > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.fourier-basis-story-v2 > div > strong,
+.dft-match-logic > div > strong,
+.bin-equations-v2 > div > strong,
+.signed-bin-map > div > strong,
+.zero-padding-story > div > strong,
+.fourier-boundary-grid > article > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.fourier-basis-story-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.transform-family-v2 article {
+  min-height: 180px;
+}
+
+.transform-family-v2 h3 {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.4;
+}
+
+.transform-family-v2 p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.dft-symbols-v2 > div > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.dft-symbols-v2 > div > span {
+  font-size: var(--lesson-meta-size);
+  line-height: 1.4;
+}
+
+.dft-match-logic {
+  margin: 26px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.dft-match-logic > div {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.dft-match-logic > div > small,
+.signed-bin-map > div > small,
+.zero-padding-story > div > small,
+.fourier-boundary-grid > article > .card-label {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.dft-match-logic > div > strong,
+.signed-bin-map > div > strong,
+.zero-padding-story > div > strong {
+  display: block;
+  margin: 7px 0 5px;
+}
+
+.dft-match-logic > div > span,
+.signed-bin-map > div > span,
+.zero-padding-story > div > span {
+  color: var(--muted);
+}
+
+.dft-match-logic > b,
+.signed-bin-map > b,
+.zero-padding-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.bin-equations-v2 > div {
+  min-height: 140px;
+}
+
+.signed-bin-map {
+  margin: 28px 0 18px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 32px
+    minmax(0, 1fr) 32px
+    minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.signed-bin-map > div {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.bin-index-example {
+  margin: 0 0 28px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1px solid var(--line);
+}
+
+.bin-index-example > span {
+  min-width: 0;
+  min-height: 72px;
+  padding: 11px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: var(--paper);
+  text-align: center;
+  font-size: var(--lesson-meta-size);
+}
+
+.bin-index-example > span:last-child {
+  border-right: 0;
+}
+
+.leakage-story-v2 {
+  grid-template-columns: 1fr 34px minmax(150px, .8fr) 1fr 34px minmax(150px, .8fr);
+}
+
+.window-compare-v2 article {
+  min-height: 210px;
+}
+
+.window-compare-v2 h3 {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.window-compare-v2 p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.fft-complexity-v2 {
+  max-width: none;
+}
+
+.fft-complexity-v2 > div {
+  min-height: 170px;
+}
+
+.fft-complexity-v2 strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-subheading-size);
+  font-weight: 600;
+}
+
+.fft-complexity-v2 p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.zero-padding-story {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.zero-padding-story > div {
+  min-width: 0;
+  min-height: 130px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fourier-boundary-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fourier-boundary-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fourier-boundary-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+}
+
+.fourier-boundary-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.fourier-dft-lab-v2 {
+  overflow: visible;
+}
+
+.fourier-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.fourier-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.fourier-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.fourier-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.fourier-basis-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fourier-dft-lab-v2 .fourier-controls label {
+  font-size: var(--lesson-meta-size);
+}
+
+.fourier-dft-lab-v2 .fourier-controls strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.fourier-basis-demo {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fourier-basis-chain {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 26px
+    minmax(0, 1fr) 32px
+    minmax(0, 1fr) 70px
+    minmax(0, 1fr);
+  gap: 7px;
+  align-items: stretch;
+}
+
+.fourier-basis-chain > div {
+  min-width: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fourier-basis-chain > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.fourier-basis-chain > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.fourier-basis-chain > div > strong {
+  margin-top: 7px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.fourier-basis-chain > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.fourier-basis-plane {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.fourier-basis-plane > svg {
+  width: 100%;
+  display: block;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fourier-basis-plane > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.fourier-basis-circle {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.fourier-basis-point {
+  fill: var(--violet);
+  opacity: .62;
+}
+
+.fourier-basis-sum {
+  stroke: var(--blue);
+  stroke-width: 3;
+}
+
+.fourier-basis-sum-tip {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.2;
+}
+
+.fourier-dft-lab-v2 .fourier-readout > div,
+.fourier-basis-readout > div {
+  min-height: 94px;
+}
+
+.fourier-dft-lab-v2 .fourier-panels > div {
+  padding: 18px;
+}
+
+.fourier-dft-lab-v2 .fourier-bin.active {
+  background: var(--accent);
+  fill: var(--accent);
+  opacity: 1;
+}
+
+.fourier-dft-lab-v2 .fourier-caption {
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--line);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+@media (max-width: 980px) {
+  .fourier-basis-demo {
+    grid-template-columns: 1fr;
+  }
+
+  .fourier-basis-chain {
+    grid-template-columns: 1fr;
+  }
+
+  .fourier-basis-chain > b {
+    min-height: 22px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .dft-match-logic,
+  .signed-bin-map,
+  .zero-padding-story,
+  .fourier-boundary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dft-match-logic > b,
+  .signed-bin-map > b,
+  .zero-padding-story > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .bin-index-example {
+    grid-template-columns: 1fr;
+  }
+
+  .bin-index-example > span {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bin-index-example > span:last-child {
+    border-bottom: 0;
+  }
+
+  .leakage-story-v2 {
+    grid-template-columns: 1fr auto minmax(140px, .8fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .fourier-mode-tabs,
+  .fourier-basis-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .fourier-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .fourier-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .fourier-dft-lab-v2 .fourier-panels > div,
+  .fourier-basis-plane {
+    overflow-x: auto;
+    padding: 12px 10px;
+  }
+
+  .fourier-dft-lab-v2 .fourier-panels svg {
+    min-width: 660px;
+  }
+
+  .fourier-basis-plane > svg {
+    min-width: 520px;
+  }
+
+  .leakage-story-v2 {
+    grid-template-columns: 1fr;
+  }
+}
