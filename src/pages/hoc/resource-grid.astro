@@ -20,12 +20,11 @@ import MathExpr from '../../components/Math.astro';
     </header>
 
     <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT SYMBOL TỚI <MathExpr tex={String.raw`X[k,\ell]`} /> CỦA NHIỀU SYMBOLS</p>
+      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT OFDM SYMBOL TỚI GRID <MathExpr tex={String.raw`a_{k,\ell}`} /></p>
       <p class="map-intro">
-        Ở Bài 15, một OFDM symbol được mô tả bằng một vector <MathExpr tex="X[k]" />.
-        Nhưng một transmission kéo dài nhiều OFDM symbols.
-        Ta thêm một time index <MathExpr tex="l" /> và có <MathExpr tex="X[k,l]" />.
-        Vẽ <MathExpr tex="k" /> theo chiều dọc, <MathExpr tex="l" /> theo chiều ngang, ta có resource grid.
+        Ở Bài 15, ta dùng <MathExpr tex="X[k]" /> để nhìn frequency-domain vector của một OFDM symbol.
+        Khi transmission kéo dài qua nhiều OFDM symbols, ta cần thêm time index <MathExpr tex={String.raw`\ell`} />.
+        Trong bài này, <MathExpr tex={String.raw`(k,\ell)`} /> là coordinate trên grid và <MathExpr tex={String.raw`a_{k,\ell}`} /> là complex value nằm tại coordinate đó.
       </p>
 
       <div class="system-position">
@@ -33,8 +32,8 @@ import MathExpr from '../../components/Math.astro';
         <div class="system-position-flow">
           <span>subcarrier <MathExpr tex="k" /></span><b>×</b>
           <span>OFDM-symbol position <MathExpr tex={String.raw`\ell`} /></span><b>→</b>
-          <strong>resource element <MathExpr tex={String.raw`(k,\ell)`} /></strong><b>→</b>
-          <span>complex value <MathExpr tex={String.raw`a_{k,\ell}`} /></span>
+          <strong>coordinate <MathExpr tex={String.raw`(k,\ell)`} /></strong><b>→</b>
+          <span>RE value <MathExpr tex={String.raw`a_{k,\ell}`} /></span>
         </div>
         <p>
           Grid không phải waveform.
@@ -52,7 +51,7 @@ import MathExpr from '../../components/Math.astro';
         <b>+</b>
         <div><small>TIME INDEX</small><strong><MathExpr tex={String.raw`\ell`} /></strong><span>OFDM symbol nào?</span></div>
         <b>→</b>
-        <div><small>RESOURCE ELEMENT</small><strong><MathExpr tex={String.raw`(k,\ell)`} /></strong><span>một complex value</span></div>
+        <div><small>RESOURCE ELEMENT</small><strong><MathExpr tex={String.raw`a_{k,\ell}`} /></strong><span>complex value tại coordinate <MathExpr tex={String.raw`(k,\ell)`} /></span></div>
       </div>
 
       <p>
@@ -69,10 +68,10 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="grid-lab">
       <p class="concept-kicker">02 · INTERACTIVE GRID</p>
-      <h2>Click một ô để xem subcarrier <MathExpr tex="k" />, OFDM-symbol index <MathExpr tex={String.raw`\ell`} /> và resource block chứa nó.</h2>
+      <h2>Explore một RE, bật signal map, rồi chuyển sang CRB/PRB để thấy cùng một grid nhưng ba câu hỏi hoàn toàn khác nhau.</h2>
       <p>
-        Demo chỉ có 24 subcarriers, tức hai groups 12-subcarrier, để nhìn geometry cho rõ.
-        Carrier thực tế có thể có rất nhiều RBs.
+        Demo chỉ dùng 24 subcarriers và 14 OFDM-symbol positions để geometry đủ lớn mà vẫn đọc được.
+        Tab <strong>Explore RE</strong> nối một ô với constellation value, <strong>Signal map</strong> minh họa data/reference/control cùng chia grid, còn <strong>CRB / PRB</strong> tập trung vào indexing reference.
       </p>
       <ResourceGridExplorer client:load />
     </section>
@@ -83,6 +82,19 @@ import MathExpr from '../../components/Math.astro';
 
       <MathExpr tex={String.raw`N_{\mathrm{sc}}^{\mathrm{RB}} = 12`} display />
       <p class="math-caption">Một resource block gồm 12 consecutive subcarriers trong frequency domain.</p>
+
+      <div class="rb-frequency-definition" data-lesson-visual>
+        <div class="rb-frequency-axis">frequency ↑</div>
+        <div class="rb-frequency-content">
+          <div class="rb-subcarrier-stack">
+            {Array.from({ length: 24 }, (_, index) => <i class={index < 12 ? 'rb-a' : 'rb-b'}></i>)}
+          </div>
+          <div class="rb-brackets">
+            <span><strong>RB 0</strong><small>12 subcarriers</small></span>
+            <span><strong>RB 1</strong><small>12 subcarriers</small></span>
+          </div>
+        </div>
+      </div>
 
       <p>
         Đây là chỗ rất dễ học sai.
@@ -148,14 +160,42 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">06 · MỘT COLUMN THEO TIME SẼ TRỞ THÀNH MỘT OFDM SYMBOL</p>
       <h2>Giữ <MathExpr tex={String.raw`\ell`} /> cố định, lấy toàn bộ frequency-domain values rồi map chúng vào IFFT bins.</h2>
 
-      <div class="grid-column-flow">
-        <div><small>GRID COLUMN</small><strong><MathExpr tex="X[k,l]" /></strong><span>occupied subcarriers</span></div>
-        <b>→ bin map →</b>
-        <div><small>IFFT ARRAY</small><strong><MathExpr tex={String.raw`X[0],\ldots,X[N-1]`} /></strong><span>includes zeros/guards/DC as configured</span></div>
-        <b>→ IFFT →</b>
-        <div><small>TIME</small><strong><MathExpr tex="x[n]" /></strong><span><MathExpr tex="N" /> useful samples</span></div>
-        <b>→ CP →</b>
-        <div><small>TX</small><strong>one OFDM symbol</strong><span>sent in time</span></div>
+      <div class="grid-to-ifft-story" data-lesson-visual>
+        <div class="grid-column-slice">
+          <small>FIX <MathExpr tex={String.raw`\ell`} /></small>
+          <strong>one grid column</strong>
+          <div class="grid-column-cells">
+            {Array.from({ length: 12 }, (_, index) => <i class={index === 4 || index === 9 ? 'reference' : 'data'}></i>)}
+          </div>
+          <span><MathExpr tex={String.raw`a_{\ell}[k]`} /> over occupied subcarriers</span>
+        </div>
+
+        <div class="grid-transform-op"><span>bin map</span><b>→</b></div>
+
+        <div class="ifft-bin-map">
+          <small>IFFT INPUT ARRAY</small>
+          <strong>guards + active bins + DC convention</strong>
+          <div class="ifft-bin-strip">
+            <i class="guard"></i><i class="guard"></i>
+            <i class="active"></i><i class="active"></i><i class="active"></i>
+            <i class="dc"></i>
+            <i class="active"></i><i class="active"></i><i class="active"></i>
+            <i class="guard"></i><i class="guard"></i>
+          </div>
+          <span>logical grid coordinates must be mapped to implementation FFT-bin indexes</span>
+        </div>
+
+        <div class="grid-transform-op"><span>IFFT</span><b>→</b></div>
+
+        <div class="grid-time-wave">
+          <small>TIME DOMAIN</small>
+          <strong><MathExpr tex="x[n]" /></strong>
+          <svg viewBox="0 0 260 90" aria-label="Time-domain complex OFDM waveform">
+            <line x1="8" y1="45" x2="252" y2="45"></line>
+            <path d="M8 47 C20 12,30 78,44 43 S70 20,82 51 S106 73,120 38 S145 16,158 48 S184 70,198 38 S228 23,252 48"></path>
+          </svg>
+          <span>useful samples for one OFDM symbol, before CP is prepended</span>
+        </div>
       </div>
 
       <p>
@@ -173,6 +213,22 @@ import MathExpr from '../../components/Math.astro';
         Điều này ảnh hưởng cách PRB được đánh số và resource allocation được diễn giải.
       </p>
 
+      <div class="bwp-reference-map" data-lesson-visual>
+        <div class="bwp-point-a">
+          <small>COMMON REFERENCE</small>
+          <strong>Point A</strong>
+        </div>
+        <div class="bwp-common-grid">
+          <span>CRB 40</span>
+          <span>CRB 41</span>
+          <span class="in-bwp">CRB 42<small>PRB 0</small></span>
+          <span class="in-bwp">CRB 43<small>PRB 1</small></span>
+          <span>CRB 44</span>
+          <span>CRB 45</span>
+        </div>
+        <div class="bwp-bracket"><span>BWP</span><strong>PRB numbering restarts inside this span</strong></div>
+      </div>
+
       <aside class="precision-note">
         <strong>CRB và PRB có reference khác nhau</strong>
         <p>
@@ -183,7 +239,7 @@ import MathExpr from '../../components/Math.astro';
       </aside>
     </section>
 
-    <section class="concept-block" id="coordinates">
+    <section class="concept-block" data-lesson-role="implementation" id="coordinates">
       <p class="concept-kicker">08 · “<MathExpr tex="K=10" />” CHỈ CÓ Ý NGHĨA KHI BIẾT REFERENCE</p>
       <h2>Subcarrier index có thể là local index trong hình minh họa, trong resource grid, trong RB hoặc trong FFT array.</h2>
 
@@ -200,6 +256,14 @@ import MathExpr from '../../components/Math.astro';
         Bài này dùng <MathExpr tex={String.raw`(k,\ell)`} /> như coordinate khái niệm trên grid.
         Khi đi sâu vào 3GPP channels, từng clause sẽ định nghĩa reference/indexing cụ thể hơn.
       </p>
+
+      <div class="grid-index-name-table">
+        <div><small>CONCEPTUAL GRID</small><strong><MathExpr tex="k" /></strong><span>frequency coordinate đang dùng để giải thích</span></div>
+        <div><small>WITHIN RB</small><strong><MathExpr tex={String.raw`k_{\mathrm{RB}}`} /></strong><span>0…11 bên trong một RB</span></div>
+        <div><small>BWP ALLOCATION</small><strong><MathExpr tex={String.raw`n_{\mathrm{PRB}}`} /></strong><span>PRB index relative to active BWP</span></div>
+        <div><small>COMMON GRID</small><strong><MathExpr tex={String.raw`n_{\mathrm{CRB}}`} /></strong><span>CRB index referenced to Point A</span></div>
+        <div><small>IMPLEMENTATION</small><strong>fft_bin</strong><span>array index theo convention của code/library</span></div>
+      </div>
     </section>
 
     <section class="concept-block" id="spec">
