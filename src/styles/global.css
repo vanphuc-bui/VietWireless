@@ -12032,6 +12032,10 @@ body {
   gap: 3px;
 }
 
+.ssb-map-row.symbol2 {
+  grid-template-columns: 92px 48fr 8fr 127fr 9fr 48fr;
+}
+
 .ssb-map-row.symbol1,
 .ssb-map-row.symbol3 {
   grid-template-columns: 92px minmax(0, 1fr);
@@ -12064,16 +12068,18 @@ body {
   grid-column: 2;
   padding-left: 92px;
   display: grid;
-  grid-template-columns: 56fr 1fr 126fr 1fr 56fr;
+  grid-template-columns: 48fr 8fr 127fr 9fr 48fr;
   color: var(--muted);
   font-family: var(--font-ui);
   font-size: var(--lesson-meta-size);
 }
 
-.ssb-map-scale span:nth-child(1) { grid-column: 1; }
-.ssb-map-scale span:nth-child(2) { grid-column: 2; }
-.ssb-map-scale span:nth-child(3) { grid-column: 4; }
-.ssb-map-scale span:nth-child(4) { grid-column: 5; text-align: right; }
+.ssb-map-scale span:nth-child(1) { grid-column: 1; justify-self: start; }
+.ssb-map-scale span:nth-child(2) { grid-column: 1; justify-self: end; }
+.ssb-map-scale span:nth-child(3) { grid-column: 2; justify-self: end; }
+.ssb-map-scale span:nth-child(4) { grid-column: 3; justify-self: end; }
+.ssb-map-scale span:nth-child(5) { grid-column: 4; justify-self: end; }
+.ssb-map-scale span:nth-child(6) { grid-column: 5; justify-self: end; }
 
 .ssb-map-time {
   grid-column: 2;
