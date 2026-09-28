@@ -460,15 +460,100 @@ const lessonMeta = {
       <p class="concept-kicker">09 · NẾU NHÌN TỪ CODE RECEIVER, FLOW NÀY TRÔNG RA SAO?</p>
       <h2>PHY implementation thường biến cùng một progression thành buffers, hypotheses, metrics và decoder states.</h2>
 
-      <div class="implementation-layers">
-        <article><span>RF / ADC</span><p>Chọn candidate carrier, thu <MathExpr tex="I/Q" /> và tạo sample buffer.</p></article>
-        <article><span>PSS detector</span><p>Chạy correlation hoặc matched-filter style metric cho các PSS hypotheses; lấy candidate sample timing và identity subset.</p></article>
-        <article><span>Sync refinement</span><p>Ước lượng/correct residual frequency error và căn FFT window đủ tốt để extract SSB.</p></article>
-        <article><span>SSS detector</span><p>So sánh SSS hypotheses phù hợp với candidate PSS; hoàn thiện physical cell ID.</p></article>
-        <article><span>SSB resource extractor</span><p>Map received FFT bins về PSS, SSS, PBCH và PBCH DM-RS resource elements.</p></article>
-        <article><span>PBCH receiver</span><p>Estimate channel từ DM-RS, equalize, QPSK demap, descramble/rate-recover, polar decode và CRC check.</p></article>
-        <article><span>MIB parser</span><p>Parse higher-layer MIB fields và ghép các timing/index bits được physical layer mang thêm.</p></article>
-        <article><span>Next state</span><p>Dùng MIB để dựng initial control search cho bước tìm SIB1.</p></article>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">RF / ADC</span>
+            <h3>Thu candidate carrier và tạo sample buffer</h3>
+            <p>Receiver chọn candidate carrier, thu <MathExpr tex="I/Q" /> và ghi samples vào buffer để các detector phía sau xử lý.</p>
+            <small>OUTPUT · <MathExpr tex="I/Q" /> buffer</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PSS DETECTOR</span>
+            <h3>Tìm timing candidate và identity subset</h3>
+            <p>Chạy correlation hoặc matched-filter style metric cho các PSS hypotheses; giữ lại candidate sample timing và <MathExpr tex="N_{ID}^{(2)}" />.</p>
+            <small>OUTPUT · timing candidate + <MathExpr tex="N_{ID}^{(2)}" /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SYNC REFINEMENT</span>
+            <h3>Refine timing và residual frequency error</h3>
+            <p>Ước lượng/correct residual frequency error và căn FFT window đủ tốt để extract các resource của candidate SSB.</p>
+            <small>OUTPUT · corrected samples + FFT-window hypothesis</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SSS DETECTOR</span>
+            <h3>Hoàn thiện physical cell ID</h3>
+            <p>So sánh SSS hypotheses phù hợp với candidate PSS và lấy <MathExpr tex="N_{ID}^{(1)}" /> để hoàn thiện PCI.</p>
+            <small>OUTPUT · physical cell ID</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SSB RESOURCE EXTRACTOR</span>
+            <h3>Đưa FFT bins về đúng PSS, SSS, PBCH và DM-RS REs</h3>
+            <p>Receiver dùng timing, PCI và SSB hypothesis hiện có để map received FFT bins về các resource elements cần thiết.</p>
+            <small>OUTPUT · extracted SSB resources</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">06</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PBCH RECEIVER</span>
+            <h3>Estimate channel, equalize và decode PBCH</h3>
+            <p>Dùng PBCH DM-RS để estimate channel, sau đó equalize, QPSK demap, descramble/rate-recover, polar decode và kiểm tra CRC.</p>
+            <small>OUTPUT · valid PBCH payload candidate</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">07</div>
+          <div class="implementation-step-body">
+            <span class="card-label">MIB PARSER</span>
+            <h3>Parse MIB và ghép bootstrap timing/index context</h3>
+            <p>Parse các MIB fields và ghép những timing/index bits được physical layer mang thêm trong PBCH processing.</p>
+            <small>OUTPUT · MIB + bootstrap context</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">08</div>
+          <div class="implementation-step-body">
+            <span class="card-label">NEXT STATE</span>
+            <h3>Dựng initial control search cho SIB1</h3>
+            <p>Dùng MIB để derive common control context, rồi đi tiếp tới CORESET#0, SearchSpace#0, PDCCH và SIB1.</p>
+            <small>OUTPUT · initial control search</small>
+          </div>
+        </article>
       </div>
 
       <p>
