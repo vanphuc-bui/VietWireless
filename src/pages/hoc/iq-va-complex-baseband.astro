@@ -6,149 +6,251 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="I/Q và complex baseband trực quan | VietWireless"
-  description="Hiểu I, Q, complex baseband, magnitude, phase và cách I/Q được biến thành waveform RF thực bằng hình ảnh và interactive lab."
+  description="Hiểu I/Q, complex baseband, quadrature modulation, RF synthesis và cách receiver recover I/Q bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 05 · SIGNAL FOUNDATIONS</p>
       <h1><MathExpr tex="I/Q" /> và complex baseband</h1>
       <p class="lesson-deck">
-        Số phức ở Bài 04 chưa chỉ là một mẹo toán học. Trong transmitter và receiver số,{" "}
-        <strong><MathExpr tex="I" /> và <MathExpr tex="Q" /> chính là hai tọa độ ta dùng để lưu một signal có amplitude và phase.</strong>
+        Bài 04 đã cho ta một complex number với real và imaginary coordinates.
+        Bài này gắn hai coordinates đó vào transmitter/receiver:{" "}
+        <strong><MathExpr tex="I" /> và <MathExpr tex="Q" /> là cách DSP giữ cả magnitude lẫn phase mà không cần làm việc trực tiếp ở carrier frequency.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 04 đã có một điểm <MathExpr tex="z = a + jb" /> trên mặt phẳng phức. Trong baseband, ta đổi tên hai tọa độ đó thành <MathExpr tex="I" /> và <MathExpr tex="Q" />.
+        Bài 04 dừng ở <MathExpr tex={String.raw`z=a+jb=Ae^{j\phi}`} />.
+        Trong complex baseband, ta đổi tên hai coordinates thành <MathExpr tex="I" /> và <MathExpr tex="Q" /> rồi cho chúng thay đổi theo time hoặc sample index.
       </p>
-      <div class="system-position">
-        <span>TỪ SỐ PHỨC TỚI SIGNAL PROCESSING</span>
-        <div class="system-position-flow" aria-label="Số phức nối sang I Q và RF">
+
+      <div class="system-position concept-flow-card">
+        <span>FROM MATH TO TRANSCEIVER</span>
+        <div class="system-position-flow" aria-label="Số phức nối sang complex baseband rồi sang waveform RF thực">
           <span><MathExpr tex="a+jb" /></span><b>→</b>
           <strong><MathExpr tex="I+jQ" /></strong><b>→</b>
           <span>complex baseband</span><b>→</b>
-          <span>DAC / RF</span><b>→</b>
-          <span>anten</span>
+          <span>quadrature mixer</span><b>→</b>
+          <span>real RF waveform</span>
         </div>
         <p>
-          Complex baseband là representation rất tiện trong DSP. Nó không có nghĩa rằng ngoài anten tồn tại một điện áp “phức”.
+          Complex baseband là một <strong>lowpass-equivalent representation centered around zero frequency</strong>.
+          Nó không có nghĩa rằng anten phát một điện áp “phức”.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="iq-la-gi">
-      <p class="concept-kicker">01 · <MathExpr tex="I" /> VÀ <MathExpr tex="Q" /> LÀ HAI TỌA ĐỘ</p>
-      <h2>Một complex sample có thể được đọc theo Cartesian hoặc theo magnitude và phase.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="iq-coordinates">
+      <p class="concept-kicker">01 · <MathExpr tex="I" /> VÀ <MathExpr tex="Q" /> LÀ HAI COORDINATES</p>
+      <h2>Cùng một complex value có thể đọc theo Cartesian hoặc theo magnitude và phase.</h2>
 
       <div class="math-card-grid">
         <article class="math-card">
           <span class="card-label">CARTESIAN</span>
-          <div class="math-card-formula"><MathExpr tex="x = I + jQ" /></div>
-          <p>Ta lưu hai thành phần vuông góc <MathExpr tex="I" /> và <MathExpr tex="Q" />.</p>
+          <div class="math-card-formula"><MathExpr tex="x=I+jQ" /></div>
+          <p><MathExpr tex="I" /> là real coordinate, <MathExpr tex="Q" /> là imaginary coordinate.</p>
         </article>
+
         <article class="math-card">
           <span class="card-label">POLAR</span>
-          <div class="math-card-formula"><MathExpr tex={String.raw`x = Ae^{j\phi}`} /></div>
-          <p>Ta đọc cùng điểm đó bằng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />.</p>
+          <div class="math-card-formula"><MathExpr tex={String.raw`x=Ae^{j\phi}`} /></div>
+          <p>Cùng point được đọc bằng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />.</p>
         </article>
+
         <article class="math-card">
-          <span class="card-label">TỪ <MathExpr tex="I,Q" /> → <MathExpr tex={String.raw`A,\phi`} /></span>
-          <div class="math-card-formula"><MathExpr tex={String.raw`A = \sqrt{I^2+Q^2}`} /></div>
-          <p>Magnitude là khoảng cách từ gốc tới điểm <MathExpr tex="(I,Q)" />.</p>
-          <div class="math-card-secondary"><MathExpr tex={String.raw`\phi = \operatorname{atan2}(Q,I)`} /></div>
+          <span class="card-label">CARTESIAN → POLAR</span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`A=\sqrt{I^2+Q^2}`} /></div>
+          <p>Magnitude là khoảng cách từ origin tới point trên complex plane.</p>
+          <div class="math-card-secondary"><MathExpr tex={String.raw`\phi=\operatorname{atan2}(Q,I)`} /></div>
         </article>
+
         <article class="math-card">
-          <span class="card-label">TỪ <MathExpr tex={String.raw`A,\phi`} /> → <MathExpr tex="I,Q" /></span>
-          <div class="math-card-formula"><MathExpr tex={String.raw`I = A\cos\phi`} /></div>
-          <p><MathExpr tex="Q" /> là projection vuông góc còn lại.</p>
-          <div class="math-card-secondary"><MathExpr tex={String.raw`Q = A\sin\phi`} /></div>
+          <span class="card-label">POLAR → CARTESIAN</span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`I=A\cos\phi`} /></div>
+          <p>Hai projections vuông góc reconstruct cùng magnitude và phase.</p>
+          <div class="math-card-secondary"><MathExpr tex={String.raw`Q=A\sin\phi`} /></div>
         </article>
       </div>
 
-      <p>
-        Vì vậy không nên hình dung <MathExpr tex="I" /> và <MathExpr tex="Q" /> như hai RF waveform độc lập. Ở complex baseband,
-        chúng là hai thành phần trực giao dùng chung để biểu diễn một complex signal.
-      </p>
+      <aside class="mental-model">
+        <strong><MathExpr tex="I" /> và <MathExpr tex="Q" /> không phải hai signals “cạnh tranh” nhau</strong>
+        <p>
+          Trong complex-baseband model, chúng là hai coordinates của cùng một signal.
+          Trong hardware IQ modulator/demodulator, hai coordinates này có thể xuất hiện thành hai physical branch waveforms,
+          nhưng hai nhánh vẫn cùng nhau mô tả một complex signal.
+        </p>
+      </aside>
     </section>
 
-    <section class="concept-block" id="tai-sao-can-iq">
-      <p class="concept-kicker">02 · TẠI SAO KHÔNG CHỈ LƯU AMPLITUDE VÀ PHASE?</p>
-      <h2><MathExpr tex="I/Q" /> làm nhiều phép xử lý trở thành các phép toán rất gọn trên số phức.</h2>
+    <section class="concept-block" data-lesson-role="math" id="complex-baseband">
+      <p class="concept-kicker">02 · COMPLEX BASEBAND THỰC SỰ LÀ GÌ?</p>
+      <h2>Không chỉ một point cố định: <MathExpr tex="I" /> và <MathExpr tex="Q" /> có thể thay đổi theo thời gian.</h2>
+
+      <MathExpr tex={String.raw`x_{\mathrm{bb}}(t)=I(t)+jQ(t)=A(t)e^{j\phi(t)}`} display />
+
       <p>
-        Phase có điểm bất tiện là nó wrap tại <MathExpr tex={String.raw`\pm\pi`} /> hoặc <MathExpr tex={String.raw`0^\circ/360^\circ`} />. <MathExpr tex="I" /> và <MathExpr tex="Q" /> thì biến thiên liên tục trên hai trục.
-        Khi channel gây scale và rotation, hoặc khi receiver cần bù phase, phép nhân complex xử lý hai hiệu ứng này cùng lúc.
+        Một complex-baseband waveform là một trajectory trên complex plane.
+        Ở mỗi thời điểm, <MathExpr tex="I(t)" /> và <MathExpr tex="Q(t)" /> cho một point;
+        magnitude <MathExpr tex="A(t)" /> và phase <MathExpr tex={String.raw`\phi(t)`} /> có thể cùng thay đổi.
       </p>
 
-      <div class="iq-operation-flow">
-        <div>
-          <small>TX SAMPLE</small>
-          <strong><MathExpr tex="x = I + jQ" /></strong>
+      <div class="iq-trajectory-story" data-lesson-visual>
+        <div class="iq-trajectory-plane">
+          <small>COMPLEX PLANE</small>
+          <svg viewBox="0 0 360 270" role="img" aria-label="Trajectory của complex baseband signal trên I Q plane">
+            <line class="iqb-axis" x1="42" y1="138" x2="326" y2="138" />
+            <line class="iqb-axis" x1="180" y1="24" x2="180" y2="246" />
+            <path class="iq-trajectory-path" d="M228 104 C278 86,296 132,264 163 C226 201,171 193,149 157 C128 122,145 82,188 72 C224 64,245 79,255 96" />
+            <circle class="iqb-dot" cx="228" cy="104" r="5" />
+            <circle class="iq-trajectory-dot muted" cx="264" cy="163" r="4" />
+            <circle class="iq-trajectory-dot muted" cx="149" cy="157" r="4" />
+            <foreignObject x="306" y="112" width="26" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="I" /></div></foreignObject>
+            <foreignObject x="188" y="24" width="26" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="Q" /></div></foreignObject>
+          </svg>
         </div>
-        <b>×</b>
-        <div>
-          <small>CHANNEL</small>
-          <strong><MathExpr tex={String.raw`h = Ge^{j\theta}`} /></strong>
+        <div class="iq-trajectory-explain">
+          <span class="card-label">ONE POINT AT EACH TIME</span>
+          <strong><MathExpr tex={String.raw`x_{\mathrm{bb}}(t_0)=I(t_0)+jQ(t_0)`} /></strong>
+          <p>
+            Khi time chạy, point di chuyển.
+            “Complex baseband” vì vậy là cả một signal trajectory, không chỉ một constellation point.
+          </p>
         </div>
-        <b><MathExpr tex="=" /></b>
-        <div>
-          <small>RX SAMPLE</small>
-          <strong><MathExpr tex="y = hx" /></strong>
-        </div>
-      </div>
-
-      <p>
-        Nếu bỏ noise để nhìn trực giác, magnitude của <MathExpr tex="x" /> bị nhân với <MathExpr tex="G" /> và phase bị cộng thêm <MathExpr tex={String.raw`\theta`} />.
-        Đây là mental model sẽ quay lại khi học channel estimation và equalization.
-      </p>
-    </section>
-
-    <section class="concept-block" id="baseband-rf">
-      <p class="concept-kicker">03 · COMPLEX BASEBAND KHÔNG PHẢI RF WAVEFORM</p>
-      <h2><MathExpr tex="I+jQ" /> là representation chậm hơn quanh carrier; RF waveform vật lý vẫn là tín hiệu thực.</h2>
-
-      <p>
-        Gọi complex baseband là:
-      </p>
-      <MathExpr tex={String.raw`x_{\mathrm{bb}}(t) = I(t) + jQ(t)`} display />
-
-      <p>
-        Một cách tổng hợp waveform real passband thường viết:
-      </p>
-      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
-
-      <div class="iq-carrier-flow">
-        <div><small><MathExpr tex="I" /> PATH</small><strong><MathExpr tex="I(t)" /></strong><span><MathExpr tex={String.raw`\times\cos(2\pi f_ct)`} /></span></div>
-        <b>+</b>
-        <div><small><MathExpr tex="Q" /> PATH</small><strong><MathExpr tex="Q(t)" /></strong><span><MathExpr tex={String.raw`-\sin(2\pi f_ct)`} /></span></div>
-        <b>→</b>
-        <div><small>RF</small><strong><MathExpr tex="s(t)" /></strong><span>real waveform</span></div>
       </div>
 
       <aside class="precision-note">
-        <strong>Dấu của nhánh Q phụ thuộc convention</strong>
+        <strong>Một complex sample không mặc định là một modulation symbol</strong>
         <p>
-          Một số tài liệu hoặc implementation dùng convention dấu khác cho complex exponential, mixer hoặc Fourier transform.
-          Điều quan trọng là toàn bộ transmitter và receiver phải dùng convention nhất quán.
+          Modulation symbol cũng thường là một complex value, nhưng complex samples còn xuất hiện sau pulse shaping, interpolation,
+          OFDM processing, filtering, channel propagation và nhiều stage khác.
+          Context quyết định complex number đó đang đại diện cho cái gì.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="baseband-to-rf">
+      <p class="concept-kicker">03 · TỪ COMPLEX BASEBAND TỚI REAL RF</p>
+      <h2>Hai coordinates điều khiển hai carrier vuông pha, rồi hai nhánh được cộng lại thành một waveform thực.</h2>
+
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=\operatorname{Re}\!\left\{x_{\mathrm{bb}}(t)e^{j2\pi f_ct}\right\}`} display />
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=I(t)\cos(2\pi f_ct)-Q(t)\sin(2\pi f_ct)`} display />
+
+      <div class="iq-rf-synthesis-flow" data-lesson-visual>
+        <div>
+          <small><MathExpr tex="I" /> BRANCH</small>
+          <strong><MathExpr tex="I(t)" /></strong>
+          <span><MathExpr tex={String.raw`\times\cos(2\pi f_ct)`} /></span>
+        </div>
+        <b>+</b>
+        <div>
+          <small><MathExpr tex="Q" /> BRANCH</small>
+          <strong><MathExpr tex="Q(t)" /></strong>
+          <span><MathExpr tex={String.raw`\times[-\sin(2\pi f_ct)]`} /></span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>REAL PASSBAND</small>
+          <strong><MathExpr tex={String.raw`s_{\mathrm{RF}}(t)`} /></strong>
+          <span>một physical waveform đi tới RF chain</span>
+        </div>
+      </div>
+
+      <div class="iq-basis-examples" data-lesson-visual>
+        <article>
+          <span class="card-label"><MathExpr tex="I=1,\;Q=0" /></span>
+          <strong><MathExpr tex={String.raw`s(t)=\cos(\omega_ct)`} /></strong>
+          <p>Chỉ cosine basis còn lại.</p>
+        </article>
+        <article>
+          <span class="card-label"><MathExpr tex="I=0,\;Q=1" /></span>
+          <strong><MathExpr tex={String.raw`s(t)=-\sin(\omega_ct)`} /></strong>
+          <p>Chỉ quadrature basis còn lại.</p>
+        </article>
+        <article>
+          <span class="card-label"><MathExpr tex={String.raw`I=Q=1/\sqrt2`} /></span>
+          <strong><MathExpr tex={String.raw`s(t)=\cos(\omega_ct+45^\circ)`} /></strong>
+          <p>Hai basis kết hợp thành cùng amplitude nhưng phase shifted.</p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Dấu của nhánh <MathExpr tex="Q" /> phụ thuộc convention</strong>
+        <p>
+          Công thức trên tương ứng convention <MathExpr tex={String.raw`e^{+j2\pi f_ct}`} />.
+          Tài liệu khác có thể dùng dấu khác cho complex exponential, mixer hoặc Fourier transform.
+          Điều bắt buộc là transmitter và receiver phải dùng cùng convention.
         </p>
       </aside>
     </section>
 
     <section class="concept-block lab-section" id="iq-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thay amplitude và phase để nhìn <MathExpr tex="I/Q" /> đổi ra sao và waveform RF tương ứng dịch như thế nào.</h2>
+      <h2>Di chuyển complex point rồi nhìn từng nhánh mixer và waveform RF tổng.</h2>
+
       <p>
-        Lab giữ một carrier minh họa cố định. Điểm trên complex plane là baseband representation;
-        waveform bên phải là tín hiệu real thu được từ hai nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" />.
+        Preset giúp isolate các case <MathExpr tex="I" />-only, <MathExpr tex="Q" />-only và phase ±45°.
+        Plot RF hiển thị riêng <MathExpr tex={String.raw`I\cos(\omega_ct)`} />,
+        <MathExpr tex={String.raw`-Q\sin(\omega_ct)`} /> và tổng của hai nhánh.
       </p>
+
       <IQBasebandExplorer client:load />
     </section>
 
+    <section class="concept-block" data-lesson-role="implementation" id="rf-to-baseband">
+      <p class="concept-kicker">05 · RECEIVER LÀM CHIỀU NGƯỢC LẠI</p>
+      <h2>Quadrature demodulation nhân RF với hai local oscillators vuông pha rồi low-pass để recover <MathExpr tex="I" /> và <MathExpr tex="Q" />.</h2>
+
+      <p>
+        Trong ideal model, bắt đầu từ
+        <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=I(t)\cos(\omega_ct)-Q(t)\sin(\omega_ct)`} />.
+        Nhân với hai oscillator có factor 2:
+      </p>
+
+      <div class="iq-rx-recovery" data-lesson-visual>
+        <div class="input">
+          <small>RF INPUT</small>
+          <strong><MathExpr tex={String.raw`s_{\mathrm{RF}}(t)`} /></strong>
+          <span>real passband waveform</span>
+        </div>
+        <div class="split">↙︎ ↘︎</div>
+        <div class="branches">
+          <article>
+            <small>IN-PHASE MIXER</small>
+            <strong><MathExpr tex={String.raw`2s_{\mathrm{RF}}(t)\cos(\omega_ct)`} /></strong>
+            <span>baseband term + components around <MathExpr tex={String.raw`2f_c`} /></span>
+            <b>↓ low-pass</b>
+            <em><MathExpr tex="I(t)" /></em>
+          </article>
+          <article>
+            <small>QUADRATURE MIXER</small>
+            <strong><MathExpr tex={String.raw`-2s_{\mathrm{RF}}(t)\sin(\omega_ct)`} /></strong>
+            <span>baseband term + components around <MathExpr tex={String.raw`2f_c`} /></span>
+            <b>↓ low-pass</b>
+            <em><MathExpr tex="Q(t)" /></em>
+          </article>
+        </div>
+      </div>
+
+      <p>
+        Sau low-pass filtering, các high-frequency mixer products bị loại và hai baseband components được giữ lại.
+        Factor 2 ở đây chỉ chọn normalization để ideal output đúng bằng <MathExpr tex="I(t)" /> và <MathExpr tex="Q(t)" />.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Hardware thực tế có nhiều kiến trúc</strong>
+        <p>
+          Direct-conversion, low-IF, digital downconversion và ADC placement có thể khác nhau.
+          Flow trên là mental model của quadrature modulation/demodulation, không phải sơ đồ bắt buộc cho mọi radio.
+        </p>
+      </aside>
+    </section>
+
     <section class="concept-block" id="samples">
-      <p class="concept-kicker">05 · TRONG CODE, <MathExpr tex="I/Q" /> THƯỜNG LÀ SAMPLES</p>
-      <h2>ADC/DSP không nhất thiết lưu một “waveform đẹp”; chúng làm việc với các cặp số theo sample index.</h2>
+      <p class="concept-kicker">06 · TRONG CODE, <MathExpr tex="I/Q" /> THƯỜNG LÀ MỘT CHUỖI COMPLEX SAMPLES</p>
+      <h2>DSP nhìn thấy các cặp số theo sample index, không nhất thiết một “waveform đẹp” như trên oscilloscope.</h2>
 
       <div class="math-data-table-wrap">
         <table class="math-data-table">
@@ -157,7 +259,8 @@ import MathExpr from '../../components/Math.astro';
               <th><MathExpr tex="n" /></th>
               <th><MathExpr tex="I[n]" /></th>
               <th><MathExpr tex="Q[n]" /></th>
-              <th><MathExpr tex="x[n]" /></th>
+              <th><MathExpr tex="x[n]=I[n]+jQ[n]" /></th>
+              <th><MathExpr tex="|x[n]|" /></th>
             </tr>
           </thead>
           <tbody>
@@ -166,90 +269,112 @@ import MathExpr from '../../components/Math.astro';
               <td><MathExpr tex="0.71" /></td>
               <td><MathExpr tex="0.71" /></td>
               <td><MathExpr tex="0.71+j0.71" /></td>
+              <td><MathExpr tex="1.00" /></td>
             </tr>
             <tr>
               <td><MathExpr tex="1" /></td>
               <td><MathExpr tex="0.38" /></td>
               <td><MathExpr tex="0.92" /></td>
               <td><MathExpr tex="0.38+j0.92" /></td>
+              <td><MathExpr tex="1.00" /></td>
             </tr>
             <tr>
               <td><MathExpr tex="2" /></td>
               <td><MathExpr tex="-0.20" /></td>
               <td><MathExpr tex="0.98" /></td>
               <td><MathExpr tex="-0.20+j0.98" /></td>
+              <td><MathExpr tex="1.00" /></td>
             </tr>
             <tr>
               <td><MathExpr tex="3" /></td>
               <td><MathExpr tex="-0.82" /></td>
               <td><MathExpr tex="0.57" /></td>
               <td><MathExpr tex="-0.82+j0.57" /></td>
+              <td><MathExpr tex="1.00" /></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p>
-        Một implementation có thể lưu <MathExpr tex="I" /> và <MathExpr tex="Q" /> xen kẽ, tách thành hai buffer, dùng integer fixed-point hoặc floating-point.
-        Representation trong memory thay đổi, nhưng ý nghĩa toán học vẫn là một chuỗi complex samples.
-      </p>
-    </section>
-
-    <section class="concept-block" id="positive-negative-frequency">
-      <p class="concept-kicker">06 · MỘT LỢI THẾ KHÁC CỦA COMPLEX BASEBAND</p>
-      <h2>Complex signal cho phép phân biệt rotation dương và âm, tức hai phía của frequency axis.</h2>
-      <p>
-        Với signal real, spectrum có conjugate symmetry: thành phần ở <MathExpr tex="+f" /> đi kèm một mirror ở <MathExpr tex="-f" />.
-        Complex baseband không bị bắt buộc bởi symmetry đó. Vì vậy nó rất tự nhiên khi ta muốn biểu diễn bandwidth quanh carrier
-        sau khi đã dịch carrier về <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />.
-      </p>
-
-      <div class="iq-spectrum-shift">
+      <div class="iq-memory-layout" data-lesson-visual>
         <div>
-          <small>PASSBAND</small>
-          <strong>quanh <MathExpr tex="f_c" /></strong>
-          <span>RF spectrum ở tần số cao</span>
+          <small>INTERLEAVED MEMORY</small>
+          <code>I0 Q0 I1 Q1 I2 Q2 I3 Q3 ...</code>
         </div>
-        <b>→ downconvert →</b>
+        <b>or</b>
         <div>
-          <small>COMPLEX BASEBAND</small>
-          <strong>quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /></strong>
-          <span>negative frequency ← <MathExpr tex="0" /> → positive frequency</span>
+          <small>SEPARATE BUFFERS</small>
+          <code>I[] = ...</code>
+          <code>Q[] = ...</code>
+        </div>
+        <b>or</b>
+        <div>
+          <small>COMPLEX TYPE</small>
+          <code>complex&lt;float&gt; x[n]</code>
         </div>
       </div>
 
+      <p>
+        Implementation có thể dùng floating-point, signed integer hoặc fixed-point.
+        Storage format thay đổi nhưng mathematical object vẫn là sequence <MathExpr tex="x[n]=I[n]+jQ[n]" />.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="frequency-preview">
+      <p class="concept-kicker">07 · VÌ SAO COMPLEX BASEBAND SẼ HỮU ÍCH Ở BÀI SAU?</p>
+      <h2>Chiều quay trên complex plane giữ được dấu của frequency offset.</h2>
+
+      <div class="iq-frequency-direction" data-lesson-visual>
+        <article>
+          <span class="card-label">POSITIVE ROTATION</span>
+          <strong><MathExpr tex={String.raw`e^{+j2\pi ft}`} /></strong>
+          <p>Angle tăng theo time.</p>
+        </article>
+        <article>
+          <span class="card-label">NEGATIVE ROTATION</span>
+          <strong><MathExpr tex={String.raw`e^{-j2\pi ft}`} /></strong>
+          <p>Angle giảm theo time.</p>
+        </article>
+      </div>
+
+      <p>
+        Với real-valued signal, positive và negative frequency components xuất hiện theo conjugate-symmetric pairs.
+        Complex signal không bị bắt buộc bởi symmetry đó.
+        Đây là một lý do complex baseband rất tự nhiên khi ta dịch một RF band về quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />.
+      </p>
+
       <aside class="mental-model">
-        <strong>Baseband ở đây không có nghĩa “chỉ còn DC”</strong>
+        <strong>“Baseband” không có nghĩa “chỉ còn DC”</strong>
         <p>
-          Carrier được chuyển về quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, nhưng information vẫn nằm trong một dải frequency quanh <MathExpr tex="0" />.
-          Bandwidth của signal không tự biến mất.
+          Carrier center được chuyển về quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, nhưng information vẫn chiếm một bandwidth quanh zero.
+          Bài 06 sẽ dùng chính điểm này để mở ra time domain và frequency domain.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">07 · NỐI LẠI CÁC Ý</p>
-      <h2><MathExpr tex="I/Q" /> là nơi hình học số phức bắt đầu trở thành dữ liệu mà DSP thực sự xử lý.</h2>
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong><MathExpr tex="x=I+jQ" />:</strong> một complex sample có hai thành phần trực giao.</li>
-        <li><strong><MathExpr tex={String.raw`A=\sqrt{I^2+Q^2}`} />:</strong> magnitude được lấy từ khoảng cách tới gốc.</li>
-        <li><strong><MathExpr tex={String.raw`\phi=\operatorname{atan2}(Q,I)`} />:</strong> phase là góc của điểm <MathExpr tex="I/Q" />.</li>
-        <li><strong>Complex baseband:</strong> representation quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, không phải waveform RF vật lý.</li>
-        <li><strong>RF reconstruction:</strong> <MathExpr tex="I" /> và <MathExpr tex="Q" /> điều khiển hai carrier trực giao cos và sin.</li>
-        <li><strong>Trong code:</strong> receiver/transmitter thường xử lý một chuỗi complex samples <MathExpr tex="x[n]" />.</li>
+        <li><strong><MathExpr tex="x=I+jQ" />:</strong> một complex value có hai coordinates trực giao.</li>
+        <li><strong>Complex baseband:</strong> <MathExpr tex={String.raw`x_{\mathrm{bb}}(t)=I(t)+jQ(t)`} /> là một lowpass-equivalent signal centered around zero frequency.</li>
+        <li><strong>RF synthesis:</strong> <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=I(t)\cos(\omega_ct)-Q(t)\sin(\omega_ct)`} />.</li>
+        <li><strong>Receiver:</strong> quadrature mixers + low-pass filtering recover <MathExpr tex="I(t)" /> và <MathExpr tex="Q(t)" /> trong ideal model.</li>
+        <li><strong>Trong code:</strong> DSP thường xử lý sequence <MathExpr tex="x[n]=I[n]+jQ[n]" /> bằng complex numeric types hoặc hai buffers.</li>
+        <li><strong>Complex sample ≠ modulation symbol:</strong> ý nghĩa của complex value phụ thuộc stage của signal chain.</li>
+        <li><strong>Frequency sign:</strong> complex representation giữ được chiều quay dương/âm trên complex plane.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/so-phuc-va-phasor/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/so-phuc-va-phasor/">
         <span>← BÀI TRƯỚC</span>
         <strong>Số phức và phasor</strong>
-        <small>Từ mặt phẳng phức tới magnitude và phase.</small>
+        <small>Cartesian, polar, Euler và sự khác nhau giữa complex exponential với phasor.</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Miền thời gian và miền tần số</strong>
-        <small>Hai cách nhìn khác nhau của cùng một signal.</small>
+        <small>Một complex signal có thể được nhìn theo time như thế nào và theo frequency như thế nào?</small>
       </a>
     </nav>
   </article>
