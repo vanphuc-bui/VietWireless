@@ -13860,3 +13860,479 @@ body {
     min-width: 660px;
   }
 }
+
+
+/* --- Lesson 3 refresh: isolate amplitude frequency phase --- */
+.sinusoid-three-grid-v2 > article > strong,
+.sinusoid-three-grid-v2 > article > p,
+.sinusoid-parameter-list-v2 p,
+.phase-comparison-v2 p {
+  font-size: var(--lesson-prose-size);
+}
+
+.sinusoid-three-grid-v2 > article > strong,
+.sinusoid-parameter-list-v2 h3,
+.phase-comparison-v2 > article > strong {
+  font-family: var(--font-text);
+  font-weight: 600;
+}
+
+.sinusoid-three-grid-v2 > article > p,
+.sinusoid-parameter-list-v2 p,
+.phase-comparison-v2 p {
+  line-height: 1.5;
+}
+
+.phase-unit-bridge {
+  max-width: 720px;
+  margin: 28px 0;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.phase-unit-bridge > div {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  text-align: center;
+}
+
+.phase-unit-bridge > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.phase-unit-bridge > div > strong {
+  margin-top: 6px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.phase-unit-bridge > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.phase-unit-bridge > span {
+  grid-column: 1 / -1;
+  padding-top: 6px;
+  color: var(--muted);
+  text-align: center;
+  font-size: var(--lesson-prose-size);
+}
+
+.amplitude-visual-v2 {
+  overflow-x: auto;
+}
+
+.amplitude-visual-v2 > svg {
+  min-width: 660px;
+}
+
+.frequency-period-visual-v2 {
+  max-width: none;
+  grid-template-columns:
+    minmax(0, 1fr) 34px
+    minmax(0, 1fr) 34px
+    minmax(0, 1fr);
+}
+
+.frequency-period-visual-v2 > div {
+  min-height: 140px;
+  padding: 18px;
+}
+
+.frequency-period-visual-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.frequency-period-visual-v2 > div > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.period-wave-visual {
+  margin: 28px 0;
+  padding: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.period-wave-visual > svg {
+  width: 100%;
+  min-width: 660px;
+  display: block;
+}
+
+.period-wave-visual > p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+}
+
+.period-guide {
+  stroke: #b9b2a9;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.period-bracket {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.phase-comparison-v2 > article {
+  min-height: 150px;
+}
+
+.sinusoid-scope-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sinusoid-scope-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sinusoid-scope-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.sinusoid-scope-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.phasor-preview-flow {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 32px
+    minmax(0, 1.25fr) 42px
+    minmax(0, 1.2fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.phasor-preview-flow > div {
+  min-width: 0;
+  min-height: 130px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.phasor-preview-flow > div.next {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.phasor-preview-flow > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.phasor-preview-flow > div > strong {
+  margin: 7px 0 5px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.phasor-preview-flow > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+}
+
+.phasor-preview-flow > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.sinusoid-lab-v2 {
+  overflow: visible;
+}
+
+.sinusoid-focus-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.sinusoid-focus-tabs > button {
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.sinusoid-focus-tabs > button:last-child {
+  border-right: 0;
+}
+
+.sinusoid-focus-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.sinusoid-lab-v2 .sinusoid-controls {
+  background: var(--paper-2);
+}
+
+.sinusoid-lab-v2 .sinusoid-controls label {
+  font-size: var(--lesson-meta-size);
+}
+
+.sinusoid-lab-v2 .sinusoid-controls label.disabled {
+  opacity: .42;
+}
+
+.sinusoid-lab-v2 .sinusoid-controls label.disabled input {
+  cursor: not-allowed;
+}
+
+.sinusoid-lab-v2 .sinusoid-controls strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sinusoid-current-formula {
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 4px 18px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.sinusoid-current-formula > small {
+  grid-row: 1 / 3;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.sinusoid-current-formula > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.sinusoid-current-formula > span {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.sinusoid-readout-v2 > div {
+  min-height: 94px;
+}
+
+.sinusoid-readout-v2 > div > small {
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.sinusoid-readout-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.sinusoid-readout-v2 > div > span {
+  font-size: var(--lesson-meta-size);
+  line-height: 1.35;
+}
+
+.sinusoid-lab-v2 .sinusoid-plot-wrap {
+  padding: 18px;
+}
+
+.sinusoid-lab-v2 .sinusoid-legend {
+  font-size: var(--lesson-meta-size);
+}
+
+.sinusoid-lab-v2 .sinusoid-plot-wrap > svg {
+  min-height: 300px;
+}
+
+.sinusoid-amplitude-guide {
+  stroke: #ddd7cf;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.sinusoid-amplitude-bracket,
+.sinusoid-period-bracket,
+.sinusoid-shift-bracket {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.45;
+}
+
+.sinusoid-geometry-readout {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sinusoid-geometry-readout > span {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+  line-height: 1.4;
+}
+
+.sinusoid-geometry-readout > span > strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.sinusoid-lab-v2 .sinusoid-caption {
+  margin-top: 12px;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.sinusoid-secondary-readout {
+  padding: 12px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  border-top: 1px solid var(--line);
+  background: var(--paper-2);
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.sinusoid-secondary-readout > span {
+  display: inline-flex;
+  gap: 5px;
+  align-items: baseline;
+}
+
+.sinusoid-secondary-readout > span > strong {
+  color: var(--ink);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .sinusoid-scope-grid,
+  .sinusoid-geometry-readout {
+    grid-template-columns: 1fr;
+  }
+
+  .phasor-preview-flow,
+  .frequency-period-visual-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .phasor-preview-flow > b,
+  .frequency-period-visual-v2 > b {
+    min-height: 26px;
+    transform: rotate(90deg);
+  }
+
+  .sinusoid-current-formula {
+    grid-template-columns: 1fr;
+  }
+
+  .sinusoid-current-formula > small {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .phase-unit-bridge {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-unit-bridge > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .phase-unit-bridge > span {
+    grid-column: 1;
+  }
+
+  .sinusoid-focus-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sinusoid-focus-tabs > button:nth-child(2) {
+    border-right: 0;
+  }
+
+  .sinusoid-focus-tabs > button:nth-child(-n+2) {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sinusoid-lab-v2 .sinusoid-plot-wrap {
+    overflow-x: auto;
+    padding: 12px 10px;
+  }
+
+  .sinusoid-lab-v2 .sinusoid-plot-wrap > svg {
+    min-width: 700px;
+  }
+
+  .sinusoid-secondary-readout {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sinusoid-focus-tabs > button {
+    scroll-behavior: auto;
+  }
+}
