@@ -102,7 +102,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Cùng một point có thể được mô tả bằng tọa độ <MathExpr tex="a,b" /> hoặc bằng magnitude và phase.</h2>
 
       <div class="complex-coordinate-bridge" data-lesson-visual>
-        <article>
+        <article class="technical-card formula-card">
           <span class="card-label">CARTESIAN</span>
           <strong><MathExpr tex="z=a+jb" /></strong>
           <p>Tiện khi cần nhìn trực tiếp real và imaginary components.</p>
@@ -117,7 +117,7 @@ import MathExpr from '../../components/Math.astro';
           <b>↔</b>
         </div>
 
-        <article>
+        <article class="technical-card formula-card">
           <span class="card-label">POLAR</span>
           <strong><MathExpr tex={String.raw`z=A\angle\phi`} /></strong>
           <p>Tiện khi cần nhìn magnitude và phase.</p>
