@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MathExpr from '../../components/Math.astro';
+import InitialAccessExplorer from '../../components/InitialAccessExplorer.jsx';
 
 const lessonMeta = {
   number: 19,
@@ -41,6 +42,15 @@ const lessonMeta = {
         Trong NR, cấu trúc trung tâm của bước này là <strong>SS/PBCH block</strong>, thường gọi ngắn là <strong>SSB</strong>.
       </p>
 
+      <aside class="precision-note ia-scope-note">
+        <strong>PHẠM VI CỦA BÀI</strong>
+        <p>
+          “UE bật nguồn” ở đây không mô tả toàn bộ quá trình boot của điện thoại.
+          Bài bắt đầu từ lúc receiver đang thử một candidate NR carrier và chỉ theo dõi phần PHY từ cell search tới khi MIB được đọc.
+          USIM, NAS, PLMN selection và các bước higher-layer khác nằm ngoài phạm vi.
+        </p>
+      </aside>
+
       <div class="initial-access-question-grid">
         <article class="technical-card">
           <span class="card-label">UE CHƯA BIẾT</span>
@@ -65,35 +75,29 @@ const lessonMeta = {
       <p class="concept-kicker">BỨC TRANH TỔNG THỂ</p>
       <h2>Từ “tôi chỉ thấy samples” tới “tôi đã đọc được MIB” là một chuỗi state transition.</h2>
 
-      <div class="initial-access-flow" data-lesson-visual>
+      <div class="initial-access-flow ia-overview-four" data-lesson-visual>
         <div class="ia-flow-card state-start">
-          <small>STATE 0</small>
-          <strong>RF + <MathExpr tex="I/Q" /> samples</strong>
-          <span>chưa có cell timing</span>
+          <small>STAGE 1 · FIND</small>
+          <strong>Candidate carrier + <MathExpr tex="I/Q" /></strong>
+          <span>scan một frequency region và tìm synchronization pattern trong sample stream</span>
         </div>
-        <div class="ia-flow-arrow"><span>search + correlation</span><b>→</b></div>
+        <div class="ia-flow-arrow"><span>PSS / SSS</span><b>→</b></div>
         <div class="ia-flow-card">
-          <small>STATE 1</small>
-          <strong>PSS candidate</strong>
-          <span>coarse timing + <MathExpr tex="N_{ID}^{(2)}" /></span>
+          <small>STAGE 2 · SYNC + IDENTIFY</small>
+          <strong>Timing + PCI</strong>
+          <span>receiver có candidate timing và physical cell ID</span>
         </div>
-        <div class="ia-flow-arrow"><span>SSS detection</span><b>→</b></div>
+        <div class="ia-flow-arrow"><span>SSB + DM-RS</span><b>→</b></div>
         <div class="ia-flow-card">
-          <small>STATE 2</small>
-          <strong>Cell identified</strong>
-          <span>physical cell ID</span>
+          <small>STAGE 3 · OBSERVE PBCH</small>
+          <strong>Channel estimate</strong>
+          <span>extract đúng resources và equalize PBCH hypothesis</span>
         </div>
-        <div class="ia-flow-arrow"><span>PBCH DM-RS</span><b>→</b></div>
-        <div class="ia-flow-card">
-          <small>STATE 3</small>
-          <strong>PBCH observable</strong>
-          <span>channel estimate + SSB hypothesis</span>
-        </div>
-        <div class="ia-flow-arrow"><span>equalize + decode</span><b>→</b></div>
+        <div class="ia-flow-arrow"><span>decode + parse</span><b>→</b></div>
         <div class="ia-flow-card state-finish">
-          <small>STATE 4</small>
+          <small>STAGE 4 · BOOTSTRAP</small>
           <strong>MIB acquired</strong>
-          <span>đủ để đi tiếp tới initial control</span>
+          <span>đủ context để đi tiếp tới initial common control và SIB1</span>
         </div>
       </div>
 
@@ -102,6 +106,20 @@ const lessonMeta = {
         3GPP định nghĩa signals, resource mapping và thông tin UE phải có được.
         Cách scan frequency, cách correlate, estimator nào được dùng hoặc bao nhiêu hypothesis chạy song song là lựa chọn implementation.
       </p>
+    </section>
+
+    <section class="concept-block lab-section" id="initial-access-explorer">
+      <p class="concept-kicker">INTERACTIVE MAP · UE BIẾT THÊM GÌ SAU MỖI BƯỚC?</p>
+      <h2>Đi qua từng checkpoint và theo dõi ba thứ: UE đã biết gì, vẫn chưa biết gì, và output nào mở khóa bước tiếp theo.</h2>
+
+      <p>
+        Đây là interactive phù hợp với một bài overview: không mô phỏng estimator, mà cho thấy uncertainty giảm dần từ candidate carrier tới MIB.
+        Các bài 20–27 sẽ zoom vào từng signal và thuật toán cụ thể hơn.
+      </p>
+
+      <div data-lesson-visual>
+        <InitialAccessExplorer client:load />
+      </div>
     </section>
 
     <section class="concept-block" id="search-space">
@@ -113,6 +131,26 @@ const lessonMeta = {
         Một đoạn trong stream đó có thể chứa SSB, nhưng biên OFDM symbol chưa chắc đã biết chính xác.
         Carrier cũng có thể còn residual frequency error do oscillator và Doppler.
       </p>
+
+      <div class="ia-search-context" data-lesson-visual>
+        <div class="ia-frequency-scan">
+          <span class="card-label">FREQUENCY SEARCH</span>
+          <div class="ia-frequency-track">
+            <i></i><i></i><i class="active"></i><i></i><i></i>
+          </div>
+          <p>Supported bands, stored information và synchronization raster có thể thu hẹp nơi receiver cần kiểm tra.</p>
+        </div>
+        <div class="ia-search-arrow">→</div>
+        <div class="ia-beam-candidates">
+          <span class="card-label">SSB / BEAM CANDIDATES</span>
+          <div class="ia-beam-list">
+            <span class="weak">candidate A</span>
+            <span class="strong">candidate B</span>
+            <span class="weak">candidate C</span>
+          </div>
+          <p>Một deployment có thể phát nhiều SSB candidates theo các transmission directions khác nhau. UE cần tìm candidate phù hợp trước khi decode tiếp.</p>
+        </div>
+      </div>
 
       <div class="sample-search-visual" data-lesson-visual>
         <div class="sample-search-row">
@@ -144,19 +182,30 @@ const lessonMeta = {
         Khi một correlation metric tạo peak đủ thuyết phục, UE có một candidate vị trí của PSS và biết giá trị <MathExpr tex="N_{ID}^{(2)}" /> tương ứng.
       </p>
 
-      <div class="pss-correlation-story">
-        <article class="technical-card">
-          <span class="card-label">HYPOTHESIS A</span>
-          <p>Correlation thấp, timing candidate không thuyết phục.</p>
-        </article>
-        <article class="technical-card active">
-          <span class="card-label">HYPOTHESIS B</span>
-          <p>Correlation peak xuất hiện tại một sample index cụ thể.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">HYPOTHESIS C</span>
-          <p>Correlation thấp hơn candidate tốt nhất.</p>
-        </article>
+      <div class="pss-correlation-plot" data-lesson-visual>
+        <div class="corr-axis-label">correlation metric</div>
+        <div class="corr-traces">
+          <div class="corr-trace low">
+            <span>hypothesis 0</span>
+            <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div class="corr-trace winner">
+            <span>hypothesis 1</span>
+            <div class="bars"><i></i><i></i><i></i><i></i><i></i><i class="p1"></i><i class="p2"></i><i class="peak"></i><i class="p2"></i><i class="p1"></i><i></i><i></i></div>
+          </div>
+          <div class="corr-trace low alt">
+            <span>hypothesis 2</span>
+            <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+        <div class="corr-candidate-marker">
+          <span></span>
+          <strong>candidate timing</strong>
+        </div>
+        <p>
+          Peak của một hypothesis tại một sample index tạo ra candidate để kiểm tra tiếp.
+          Threshold, normalization và cách implementation tính metric không bị 3GPP bắt buộc theo đúng hình này.
+        </p>
       </div>
 
       <p>
@@ -190,6 +239,14 @@ const lessonMeta = {
         </p>
       </div>
 
+      <div class="pci-composition" data-lesson-visual>
+        <div><small>PSS</small><strong><MathExpr tex="N_{ID}^{(2)}\in\{0,1,2\}" /></strong><span>3 possibilities</span></div>
+        <b>+</b>
+        <div><small>SSS</small><strong><MathExpr tex="N_{ID}^{(1)}\in\{0,\ldots,335\}" /></strong><span>336 possibilities</span></div>
+        <b>→</b>
+        <div class="result"><small>PHYSICAL CELL ID</small><strong>1008 possible PCIs</strong><span><MathExpr tex="0\ldots1007" /></span></div>
+      </div>
+
       <p>
         Tới đây UE đã đi từ “có một peak giống PSS” tới “tôi đang nghe một candidate cell có physical cell ID xác định”.
         Nhưng nó vẫn chưa có MIB.
@@ -200,20 +257,36 @@ const lessonMeta = {
       <p class="concept-kicker">04 · PSS VÀ SSS KHÔNG ĐỨNG RIÊNG, CHÚNG NẰM TRONG SSB</p>
       <h2>Một SS/PBCH block gom synchronization signals và broadcast channel vào cùng một khối time-frequency.</h2>
 
-      <div class="ssb-grid-card technical-card visual-card" data-lesson-visual>
+      <div class="ssb-resource-map technical-card visual-card" data-lesson-visual>
         <div class="visual-card-figure">
-          <div class="ssb-grid">
-            <div class="ssb-axis freq">240 subcarriers</div>
-            <div class="ssb-symbol pss"><small>symbol 0</small><strong>PSS</strong><span>known synchronization sequence</span></div>
-            <div class="ssb-symbol pbch"><small>symbol 1</small><strong>PBCH + DM-RS</strong><span>broadcast data + reference</span></div>
-            <div class="ssb-symbol mixed"><small>symbol 2</small><strong>SSS + PBCH/DM-RS regions</strong><span>cell identity + broadcast resources</span></div>
-            <div class="ssb-symbol pbch"><small>symbol 3</small><strong>PBCH + DM-RS</strong><span>broadcast data + reference</span></div>
-            <div class="ssb-axis time">4 OFDM symbols →</div>
+          <div class="ssb-map-axis">frequency ↑</div>
+          <div class="ssb-map-grid">
+            <div class="ssb-map-row symbol3"><small>symbol 3</small><div class="full pbch">PBCH + PBCH DM-RS</div></div>
+            <div class="ssb-map-row symbol2">
+              <small>symbol 2</small>
+              <div class="edge pbch">PBCH / DM-RS</div>
+              <div class="center sss">SSS · 127 subcarriers</div>
+              <div class="edge pbch">PBCH / DM-RS</div>
+            </div>
+            <div class="ssb-map-row symbol1"><small>symbol 1</small><div class="full pbch">PBCH + PBCH DM-RS</div></div>
+            <div class="ssb-map-row symbol0">
+              <small>symbol 0</small>
+              <div class="edge zero">unused here</div>
+              <div class="center pss">PSS · 127 subcarriers</div>
+              <div class="edge zero">unused here</div>
+            </div>
           </div>
+          <div class="ssb-map-scale">
+            <span>k = 0</span>
+            <span>56</span>
+            <span>182</span>
+            <span>239</span>
+          </div>
+          <div class="ssb-map-time">4 OFDM symbols → time</div>
         </div>
         <p>
-          Diagram này chỉ thể hiện vai trò của bốn symbols.
-          Resource mapping chính xác theo subcarrier được định nghĩa trong TS 38.211.
+          Schematic này giữ đúng mental model quan trọng: SSB rộng 240 subcarriers và dài 4 OFDM symbols; PSS/SSS chỉ chiếm 127 subcarriers ở vùng giữa của symbol tương ứng.
+          PBCH và PBCH DM-RS dùng các resource còn lại theo mapping chi tiết của TS 38.211.
         </p>
       </div>
 
@@ -237,6 +310,26 @@ const lessonMeta = {
         <div><small>PBCH</small><strong>equalized symbols</strong><span>ready for demapping</span></div>
       </div>
 
+      <div class="pbch-equalization-visual" data-lesson-visual>
+        <div>
+          <small>BEFORE EQUALIZATION</small>
+          <div class="mini-constellation distorted"><i></i><i></i><i></i><i></i></div>
+          <span>PBCH QPSK bị channel scale/rotate</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>DM-RS → CHANNEL ESTIMATE</small>
+          <strong><MathExpr tex="\widehat{H}[k]" /></strong>
+          <span>known reference cho receiver</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>AFTER EQUALIZATION</small>
+          <div class="mini-constellation ideal"><i></i><i></i><i></i><i></i></div>
+          <span>points trở về gần QPSK references</span>
+        </div>
+      </div>
+
       <p>
         Đây là cùng một logic đã học ở channel estimation: nếu transmitter và receiver cùng biết một reference symbol,
         receiver có thể quan sát symbol đó sau channel và suy ra một estimate đủ dùng để equalize data nằm gần nó.
@@ -253,17 +346,24 @@ const lessonMeta = {
       <p class="concept-kicker">06 · PBCH LÀ BROADCAST CHANNEL ĐẦU TIÊN UE CẦN DECODE</p>
       <h2>Sau equalization, receiver đi qua demapping, descrambling, rate recovery và polar decoding để lấy broadcast payload.</h2>
 
-      <div class="pbch-decode-pipeline" data-lesson-visual>
-        <div><span>01</span><strong>Equalized PBCH symbols</strong><small>complex constellation estimates</small></div>
+      <div class="pbch-decode-pipeline pbch-six-stage" data-lesson-visual>
+        <div><span>01</span><strong>Equalized QPSK</strong><small>complex PBCH symbol estimates</small></div>
         <b>→</b>
-        <div><span>02</span><strong>Soft bits</strong><small>demapping / LLRs</small></div>
+        <div><span>02</span><strong>LLRs</strong><small>soft demapping</small></div>
         <b>→</b>
-        <div><span>03</span><strong>Rate recovery</strong><small>undo rate matching structure</small></div>
+        <div><span>03</span><strong>Descrambling</strong><small>remove PBCH scrambling relation</small></div>
         <b>→</b>
-        <div><span>04</span><strong>Polar decode</strong><small>recover BCH payload bits</small></div>
+        <div><span>04</span><strong>Rate recovery</strong><small>undo rate matching structure</small></div>
         <b>→</b>
-        <div><span>05</span><strong>CRC check</strong><small>accept or reject candidate</small></div>
+        <div><span>05</span><strong>Polar decode</strong><small>recover BCH payload candidate</small></div>
+        <b>→</b>
+        <div><span>06</span><strong>CRC / payload</strong><small>validate candidate and parse bits</small></div>
       </div>
+
+      <p class="pipeline-boundary-note">
+        Đây là receive-side overview đã giản lược để giữ flow đọc.
+        TS 38.212 định nghĩa chi tiết payload generation, scrambling, CRC, polar coding và rate matching; implementation receiver có thể tổ chức các bước nội bộ khác nhau.
+      </p>
 
       <p>
         TS 38.300 nêu PBCH dùng QPSK và polar coding.
@@ -283,31 +383,41 @@ const lessonMeta = {
       <p class="concept-kicker">07 · MIB LÀ CẦU NỐI TỪ SSB SANG INITIAL CONTROL</p>
       <h2>MIB không chứa mọi cấu hình của cell. Nó chỉ đưa cho UE những mảnh thông tin tối thiểu để đi tiếp.</h2>
 
-      <div class="mib-fields-grid">
-        <article class="technical-card">
-          <span class="card-label">SYSTEM FRAME NUMBER</span>
-          <p>MIB mang các MSB của System Frame Number; các LSB còn lại được bổ sung qua PBCH processing.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">COMMON SCS</span>
-          <p>Cho biết subcarrier spacing dùng cho một số common/initial-access transmissions theo frequency range và rule tương ứng.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">SSB OFFSET</span>
-          <p><MathExpr tex="k_{SSB}" /> liên hệ SSB với overall resource-block grid theo rule physical layer.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">PDCCH CONFIG FOR SIB1</span>
-          <p>Cho UE thông tin để xác định common CORESET và search space cần cho bước tìm SIB1.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">CELL STATUS</span>
-          <p>MIB mang cellBarred và thông tin liên quan tới intra-frequency reselection.</p>
-        </article>
-        <article class="technical-card">
-          <span class="card-label">DM-RS TYPE-A POSITION</span>
-          <p>Cho biết vị trí reference-signal type-A theo định nghĩa RRC/physical-layer tương ứng.</p>
-        </article>
+      <div class="mib-bootstrap-map" data-lesson-visual>
+        <div class="mib-root">
+          <small>PBCH DECODED</small>
+          <strong>MIB</strong>
+          <span>bootstrap information</span>
+        </div>
+        <div class="mib-branches">
+          <div>
+            <small>TIMING</small>
+            <strong>System Frame Number</strong>
+            <span>một phần frame context để tiếp tục procedure</span>
+          </div>
+          <div>
+            <small>GRID / COMMON PHY</small>
+            <strong>common SCS + <MathExpr tex="k_{SSB}" /></strong>
+            <span>giúp đặt SSB/common resources vào frequency-grid context</span>
+          </div>
+          <div class="control">
+            <small>INITIAL CONTROL</small>
+            <strong>pdcch-ConfigSIB1</strong>
+            <span>đầu mối để derive CORESET#0 / SearchSpace#0</span>
+          </div>
+        </div>
+        <div class="mib-control-path">
+          <span>MIB</span><b>→</b>
+          <span>CORESET#0 + SearchSpace#0</span><b>→</b>
+          <span>PDCCH</span><b>→</b>
+          <span>SIB1</span>
+        </div>
+      </div>
+
+      <div class="mib-field-strip">
+        <span><strong>dmrs-TypeA-Position</strong> · common reference-signal context</span>
+        <span><strong>cellBarred</strong> · cell status</span>
+        <span><strong>intraFreqReselection</strong> · reselection indication</span>
       </div>
 
       <p>
