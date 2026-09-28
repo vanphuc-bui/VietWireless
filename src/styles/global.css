@@ -16155,3 +16155,509 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Lesson 8 refresh: modulation mapping + noisy decisions --- */
+.modulation-core-flow-v2 > div.result,
+.normalization-story-v2 > div.result,
+.decision-story-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.bits-per-symbol-grid-v2 > article > p,
+.qam-grid-story-v2 > div > p,
+.decision-story-v2 > div > span,
+.normalization-story-v2 > div > span,
+.rate-meaning-grid > div > span,
+.after-mapper-flow .branches > article > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.psk-compare {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.psk-compare > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.psk-compare > article > svg {
+  width: 100%;
+  display: block;
+}
+
+.psk-compare > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.psk-compare > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.mod-point.static {
+  cursor: default;
+}
+
+.qam-grid-story-v2 > div {
+  min-height: 130px;
+}
+
+.qam-grid-story-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.distance-compare {
+  margin: 26px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.distance-compare > div {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.distance-compare > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.distance-compare > div > strong {
+  display: block;
+  margin-top: 7px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.modulation-lab-v2 {
+  overflow: visible;
+}
+
+.modulation-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.modulation-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.modulation-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.modulation-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.modulation-tabs-v2 {
+  border-bottom: 1px solid var(--line);
+}
+
+.modulation-error-controls {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  gap: 18px;
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.modulation-error-controls > label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.modulation-error-controls > label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.modulation-error-controls > label strong {
+  color: var(--ink);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.modulation-error-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.modulation-error-presets > button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  color: var(--ink-soft);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.modulation-error-presets > button:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.modulation-body-v2 {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .85fr);
+}
+
+.mod-decision-boundary {
+  stroke: #bdb5ab;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+  opacity: .85;
+}
+
+.mod-error-vector {
+  stroke: var(--accent);
+  stroke-width: 2.2;
+}
+
+.mod-received-point {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.modulation-constellation-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.modulation-constellation-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.modulation-constellation-legend > span > i {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+.modulation-constellation-legend > span > i.ideal {
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.modulation-constellation-legend > span > i.received {
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.modulation-constellation-legend > span > i.boundary {
+  width: 18px;
+  height: 0;
+  border-top: 1px dashed #bdb5ab;
+}
+
+.modulation-symbol-picker-v2 {
+  background: var(--paper);
+}
+
+.modulation-symbol-details,
+.modulation-decision-summary {
+  margin: 14px 0;
+  display: grid;
+  gap: 8px;
+}
+
+.modulation-symbol-details > div,
+.modulation-decision-summary > div {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.modulation-symbol-details > div > small,
+.modulation-decision-summary > div > small {
+  display: block;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.modulation-symbol-details > div > strong,
+.modulation-decision-summary > div > strong {
+  display: block;
+  margin-top: 5px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.modulation-chain-mini-v2 > div {
+  background: #fff;
+}
+
+.modulation-symbol-picker-v2 > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.modulation-caption-v2 {
+  margin: 0;
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.gray-label-story {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr) minmax(180px, .8fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.gray-label-story > div {
+  min-width: 0;
+  min-height: 110px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.gray-label-story > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.gray-label-story > div > strong {
+  margin-top: 7px;
+  font-size: var(--lesson-subheading-size);
+  font-weight: 600;
+}
+
+.gray-label-story > b,
+.gray-label-story > span {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.gray-label-story > span {
+  padding: 12px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--paper);
+}
+
+.rate-meaning-grid {
+  margin: 26px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.rate-meaning-grid > div {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.rate-meaning-grid > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.rate-meaning-grid > div > strong {
+  display: block;
+  margin: 7px 0 5px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.rate-meaning-grid > div > span {
+  color: var(--muted);
+}
+
+.after-mapper-flow {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.after-mapper-flow > .input {
+  width: min(100%, 320px);
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  text-align: center;
+}
+
+.after-mapper-flow > .input > small,
+.after-mapper-flow .branches > article > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.after-mapper-flow > .input > strong,
+.after-mapper-flow .branches > article > strong {
+  margin: 6px 0 4px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.after-mapper-flow > .input > span,
+.after-mapper-flow .branches > article > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.after-mapper-flow > .split {
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+}
+
+.after-mapper-flow .branches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.after-mapper-flow .branches > article {
+  min-width: 0;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+@media (max-width: 900px) {
+  .psk-compare,
+  .distance-compare,
+  .rate-meaning-grid,
+  .after-mapper-flow .branches,
+  .modulation-body-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .modulation-constellation {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gray-label-story {
+    grid-template-columns: 1fr;
+  }
+
+  .gray-label-story > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .modulation-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .modulation-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .modulation-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .modulation-error-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .modulation-error-presets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modulation-constellation {
+    overflow-x: auto;
+    padding: 12px 10px;
+  }
+
+  .modulation-constellation > svg {
+    min-width: 520px;
+  }
+}
