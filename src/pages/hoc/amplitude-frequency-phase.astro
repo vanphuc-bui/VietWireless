@@ -36,27 +36,27 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
 
 <BaseLayout
   title="Amplitude, frequency và phase của sinusoid | VietWireless"
-  description="Hiểu trực quan amplitude, frequency, period và phase qua waveform sinusoid, công thức x(t)=A cos(2πft+φ) và interactive lab."
+  description="Hiểu amplitude, frequency, period và phase qua waveform sinusoid, công thức x(t)=A cos(2πft+φ) và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 03 · SIGNAL FOUNDATIONS</p>
       <h1>Amplitude, frequency và phase</h1>
       <p class="lesson-deck">
-        Một sinusoid nhìn rất đơn giản, nhưng chỉ với ba tham số này ta đã có thể mô tả:{" "}
-        <strong>nó lớn tới đâu, dao động nhanh tới mức nào và đang nằm ở đâu trong chu kỳ.</strong>
+        Một sinusoid chỉ cần vài tham số để trả lời ba câu hỏi:{" "}
+        <strong>nó lớn tới đâu, lặp nhanh tới mức nào, và đang ở vị trí nào trong chu kỳ so với reference?</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 02 nói về việc đo waveform tại những thời điểm rời rạc. Trước khi lấy sample,
-        ta cần nhìn kỹ hơn chính waveform đang thay đổi như thế nào.
+        Bài 02 hỏi “sampling nhanh tới mức nào là đủ?”. Bài 03 quay lại waveform trước sampling và học cách đọc một sinusoid bằng ba tham số cơ bản.
       </p>
-      <div class="system-position">
-        <span>MỘT SINUSOID ĐƠN GIẢN</span>
+
+      <div class="system-position concept-flow-card">
+        <span>ONE SINUSOID</span>
         <div class="system-position-flow" aria-label="Một sinusoid được mô tả bởi amplitude frequency và phase">
           <span><MathExpr tex="x(t)" /></span><b>→</b>
           <strong>Amplitude <MathExpr tex="A" /></strong><b>·</b>
@@ -64,17 +64,17 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
           <strong>Phase <MathExpr tex={String.raw`\phi`} /></strong>
         </div>
         <p>
-          Đây chưa phải mọi loại signal. Tôi chọn sinusoid vì nó là khối xây dựng rất quan trọng:
-          Fourier cho phép ta nhìn nhiều signal phức tạp như tổ hợp của các thành phần sinusoid.
+          Bài này chỉ tập trung vào một sinusoid real.
+          Số phức và phasor sẽ xuất hiện ở Bài 04, sau khi ý nghĩa của amplitude và phase trên waveform đã thật rõ.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="ba-tham-so">
-      <p class="concept-kicker">01 · BA NÚT ĐIỀU KHIỂN</p>
-      <h2>Nếu giữ hai tham số cố định và chỉ đổi một tham số, waveform thay đổi theo ba cách rất khác nhau.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="ba-tham-so">
+      <p class="concept-kicker">01 · BA THAY ĐỔI, BA Ý NGHĨA KHÁC NHAU</p>
+      <h2>Giữ hai tham số cố định và chỉ đổi một tham số. Waveform sẽ thay đổi theo đúng một “chiều” trực giác.</h2>
 
-      <div class="sinusoid-three-grid">
+      <div class="sinusoid-three-grid sinusoid-three-grid-v2" data-lesson-visual>
         <article>
           <span class="sampling-stage-label">AMPLITUDE</span>
           <svg viewBox="0 0 760 180" role="img" aria-label="Hai sinusoid cùng tần số và phase nhưng khác amplitude">
@@ -82,8 +82,8 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
             <path class="parameter-wave secondary" d={amplitudeLow} />
             <path class="parameter-wave primary" d={amplitudeHigh} />
           </svg>
-          <strong>Cao hay thấp</strong>
-          <p>Amplitude thay đổi độ lớn theo trục dọc, nhưng không làm chu kỳ ngắn hay dài hơn.</p>
+          <strong>Độ lớn theo trục dọc</strong>
+          <p>Đổi <MathExpr tex="A" /> làm peak cao/thấp hơn nhưng không làm chu kỳ ngắn đi hay dịch mốc phase.</p>
         </article>
 
         <article>
@@ -93,8 +93,8 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
             <path class="parameter-wave secondary" d={frequencyLow} />
             <path class="parameter-wave primary" d={frequencyHigh} />
           </svg>
-          <strong>Nhanh hay chậm</strong>
-          <p>Frequency cho biết waveform hoàn thành bao nhiêu chu kỳ trong một giây.</p>
+          <strong>Số chu kỳ mỗi giây</strong>
+          <p>Đổi <MathExpr tex="f" /> làm các peak gần hoặc xa nhau theo thời gian, tức thay đổi period <MathExpr tex="T" />.</p>
         </article>
 
         <article>
@@ -104,58 +104,91 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
             <path class="parameter-wave secondary" d={phaseZero} />
             <path class="parameter-wave primary" d={phaseShifted} />
           </svg>
-          <strong>Đang ở đâu trong chu kỳ</strong>
-          <p>Phase thay đổi vị trí tương đối của waveform mà không đổi amplitude hay frequency.</p>
+          <strong>Vị trí tương đối trong chu kỳ</strong>
+          <p>Đổi <MathExpr tex={String.raw`\phi`} /> giữ nguyên shape và period nhưng thay vị trí waveform so với mốc thời gian.</p>
         </article>
       </div>
+
+      <aside class="mental-model">
+        <strong>Đừng học ba từ này như ba định nghĩa rời nhau</strong>
+        <p>
+          Hãy nhìn chúng như ba knobs độc lập của cùng một sinusoid:
+          <MathExpr tex="A" /> điều khiển độ lớn, <MathExpr tex="f" /> điều khiển tốc độ lặp, còn <MathExpr tex={String.raw`\phi`} /> điều khiển vị trí tương đối so với reference.
+        </p>
+      </aside>
     </section>
 
-    <section class="concept-block" id="cong-thuc">
-      <p class="concept-kicker">02 · CÔNG THỨC XUẤT HIỆN SAU HÌNH</p>
-      <h2>Ba thay đổi vừa nhìn thấy nằm gọn trong một công thức.</h2>
+    <section class="concept-block" data-lesson-role="math" id="cong-thuc">
+      <p class="concept-kicker">02 · MỘT CÔNG THỨC GÓI CẢ BA THAM SỐ</p>
+      <h2>Waveform trực giác ở trên được mô tả bằng một biểu thức duy nhất.</h2>
 
-      <MathExpr tex={String.raw`x(t) = A\cos(2\pi f t + \phi)`} display />
+      <MathExpr tex={String.raw`x(t)=A\cos(2\pi f t+\phi)`} display />
 
-      <div class="sinusoid-parameter-list">
+      <div class="sinusoid-parameter-list sinusoid-parameter-list-v2">
         <article>
           <strong><MathExpr tex="A" /></strong>
           <div>
             <h3>Amplitude</h3>
-            <p>Độ lớn cực đại của cosine tính từ mức 0. Đơn vị phụ thuộc đại lượng đang đo, ví dụ volt.</p>
+            <p>Peak magnitude tính từ mức zero/reference. Đơn vị phụ thuộc đại lượng đang biểu diễn, ví dụ volt.</p>
           </div>
         </article>
         <article>
           <strong><MathExpr tex="f" /></strong>
           <div>
             <h3>Frequency</h3>
-            <p>Số chu kỳ mỗi giây. Đơn vị là hertz, viết tắt Hz.</p>
+            <p>Số chu kỳ mỗi giây. Đơn vị là hertz, với <MathExpr tex={String.raw`1\,\mathrm{Hz}=1\,\text{cycle/s}`} />.</p>
           </div>
         </article>
         <article>
           <strong><MathExpr tex={String.raw`\phi`} /></strong>
           <div>
             <h3>Phase</h3>
-            <p>Vị trí của sinusoid trong chu kỳ so với mốc thời gian đã chọn. Có thể viết bằng radian hoặc độ.</p>
+            <p>Vị trí của sinusoid so với reference time. Trong công thức toán học, phase angle được hiểu theo radian trừ khi degree được ghi rõ.</p>
           </div>
         </article>
       </div>
 
+      <div class="phase-unit-bridge" data-lesson-visual>
+        <div>
+          <small>DEGREE</small>
+          <strong><MathExpr tex={String.raw`90^\circ`} /></strong>
+        </div>
+        <b>↔</b>
+        <div>
+          <small>RADIAN</small>
+          <strong><MathExpr tex={String.raw`\pi/2`} /></strong>
+        </div>
+        <span><MathExpr tex={String.raw`\phi_{\mathrm{rad}}=\phi_{\mathrm{deg}}\pi/180`} /></span>
+      </div>
+
       <p>
-        Cùng công thức này cũng thường được viết là <MathExpr tex={String.raw`x(t) = A\cos(\omega t + \phi)`} />,
-        với <MathExpr tex={String.raw`\omega = 2\pi f`} />. Khi đó <MathExpr tex={String.raw`\omega`} /> là angular frequency và có đơn vị <MathExpr tex={String.raw`\mathrm{rad/s}`} />.
+        Ta cũng thường viết <MathExpr tex={String.raw`x(t)=A\cos(\omega t+\phi)`} />, trong đó
+        <MathExpr tex={String.raw`\omega=2\pi f`} /> là angular frequency với đơn vị <MathExpr tex={String.raw`\mathrm{rad/s}`} />.
+        Frequency <MathExpr tex="f" /> và angular frequency <MathExpr tex={String.raw`\omega`} /> mô tả cùng tốc độ dao động bằng hai đơn vị khác nhau.
       </p>
+
+      <aside class="precision-note">
+        <strong>Một convention hữu ích: lấy <MathExpr tex={String.raw`A\ge 0`} /></strong>
+        <p>
+          Nếu xuất hiện amplitude âm, dấu âm có thể hấp thụ vào phase:
+          <MathExpr tex={String.raw`-A\cos(\theta)=A\cos(\theta+\pi)`} />.
+          Vì vậy khi nói “amplitude” của sinusoid, ta thường dùng magnitude không âm.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="amplitude">
       <p class="concept-kicker">03 · AMPLITUDE</p>
-      <h2>Amplitude nói signal lớn tới đâu, không nói nó dao động nhanh tới đâu.</h2>
+      <h2>Amplitude đo độ lớn theo trục dọc. Nó không phải frequency và cũng không phải power.</h2>
+
       <p>
-        Với <MathExpr tex={String.raw`x(t) = A\cos(2\pi f t + \phi)`} />, giá trị lớn nhất là +A và nhỏ nhất là -A.
-        Vì vậy khoảng từ đáy tới đỉnh là 2A, thường gọi là peak-to-peak.
+        Với <MathExpr tex={String.raw`x(t)=A\cos(2\pi f t+\phi)`} /> và <MathExpr tex={String.raw`A\ge 0`} />,
+        waveform chạy từ <MathExpr tex="-A" /> tới <MathExpr tex="+A" />.
+        Vì vậy peak-to-peak value là <MathExpr tex="2A" />.
       </p>
 
-      <div class="amplitude-visual">
-        <svg viewBox="0 0 760 260" role="img" aria-label="Minh họa amplitude A và peak to peak 2A trên sinusoid">
+      <div class="amplitude-visual amplitude-visual-v2" data-lesson-visual>
+        <svg viewBox="0 0 760 260" role="img" aria-label="Minh họa amplitude A và peak-to-peak 2A trên sinusoid">
           <line class="sample-axis" x1="42" y1="130" x2="735" y2="130" />
           <line class="amplitude-guide" x1="42" y1="60" x2="735" y2="60" />
           <line class="amplitude-guide" x1="42" y1="200" x2="735" y2="200" />
@@ -166,171 +199,204 @@ const phaseShifted = cosinePath({ amplitude: .82, frequency: 2, phaseDeg: 90 });
           <line class="amplitude-bracket" x1="684" y1="60" x2="684" y2="200" />
           <path class="amplitude-bracket" d="M678 66 L684 60 L690 66 M678 194 L684 200 L690 194" />
           <foreignObject x="688" y="118" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="2A" /></div></foreignObject>
+          <foreignObject x="48" y="42" width="52" height="25"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+A" /></div></foreignObject>
+          <foreignObject x="48" y="194" width="52" height="25"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-A" /></div></foreignObject>
         </svg>
       </div>
 
       <aside class="precision-note">
-        <strong>Amplitude không phải là một từ đồng nghĩa với power</strong>
+        <strong>Amplitude không phải power</strong>
         <p>
-          Trong nhiều hệ điện với impedance cố định, average power của một sinusoid tỉ lệ với A².
-          Vì vậy tăng amplitude thường làm power tăng, nhưng hai khái niệm vẫn không nên dùng thay cho nhau.
+          Trong một hệ điện trở cố định, average power của sinusoid tỉ lệ với <MathExpr tex="A^2" />.
+          Còn RMS amplitude của một pure sinusoid là <MathExpr tex={String.raw`A/\sqrt{2}`} />.
+          Các đại lượng liên quan với nhau nhưng không phải từ đồng nghĩa.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="frequency">
-      <p class="concept-kicker">04 · FREQUENCY VÀ PERIOD</p>
-      <h2>Một chu kỳ dài bao lâu và một giây có bao nhiêu chu kỳ là cùng một câu chuyện nhìn từ hai phía.</h2>
+      <p class="concept-kicker">04 · FREQUENCY, PERIOD VÀ ANGULAR FREQUENCY</p>
+      <h2>Ba notation khác nhau, nhưng đều đang mô tả waveform lặp nhanh tới mức nào.</h2>
 
-      <div class="frequency-period-visual">
+      <div class="frequency-period-visual frequency-period-visual-v2" data-lesson-visual>
         <div>
           <span class="card-label">PERIOD</span>
           <strong><MathExpr tex="T" /></strong>
-          <p>Thời gian để waveform lặp lại một chu kỳ.</p>
+          <p>Thời gian cho một chu kỳ.</p>
         </div>
         <b>↔</b>
         <div>
           <span class="card-label">FREQUENCY</span>
           <strong><MathExpr tex="f=1/T" /></strong>
-          <p>Số chu kỳ hoàn thành trong một giây.</p>
+          <p>Số chu kỳ trong một giây.</p>
+        </div>
+        <b>↔</b>
+        <div>
+          <span class="card-label">ANGULAR FREQUENCY</span>
+          <strong><MathExpr tex={String.raw`\omega=2\pi f`} /></strong>
+          <p>Số radian phase tiến trong một giây.</p>
         </div>
       </div>
 
+      <div class="period-wave-visual" data-lesson-visual>
+        <svg viewBox="0 0 760 220" role="img" aria-label="Hai peak liên tiếp cách nhau đúng một period T">
+          <line class="sample-axis" x1="38" y1="112" x2="730" y2="112" />
+          <path class="parameter-wave primary" d="M50 58 C93 58 93 166 136 166 S179 58 222 58 S265 166 308 166 S351 58 394 58 S437 166 480 166 S523 58 566 58 S609 166 652 166 S695 58 728 58" />
+          <line class="period-guide" x1="222" y1="48" x2="222" y2="184" />
+          <line class="period-guide" x1="394" y1="48" x2="394" y2="184" />
+          <path class="period-bracket" d="M222 190 L222 198 L394 198 L394 190" />
+          <foreignObject x="296" y="184" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="T" /></div></foreignObject>
+        </svg>
+        <p>Hai peak cùng phase liên tiếp cách nhau đúng một period <MathExpr tex="T" />.</p>
+      </div>
+
       <p>
-        Ví dụ, một tone <MathExpr tex={String.raw`2\,\mathrm{Hz}`} /> có period <MathExpr tex={String.raw`T=0.5\,\mathrm{s}`} />. Một tone <MathExpr tex={String.raw`10\,\mathrm{kHz}`} /> có period <MathExpr tex={String.raw`100\,\mu\mathrm{s}`} />.
-        Frequency càng cao thì các chu kỳ càng nằm sát nhau trên trục thời gian.
+        Ví dụ, <MathExpr tex={String.raw`f=2\,\mathrm{Hz}`} /> tương ứng <MathExpr tex={String.raw`T=0.5\,\mathrm{s}`} /> và
+        <MathExpr tex={String.raw`\omega=4\pi\,\mathrm{rad/s}`} />.
+        Frequency càng cao thì period càng ngắn.
       </p>
 
       <aside class="mental-model">
         <strong>Frequency không phải bandwidth</strong>
         <p>
-          Một sinusoid lý tưởng chỉ có một frequency. Bandwidth bắt đầu trở nên có ý nghĩa khi signal chứa một dải
-          các thành phần tần số. Ta sẽ quay lại chuyện này khi đi sâu vào Fourier và wireless channel.
+          Một ideal sinusoid chỉ có một frequency.
+          Bandwidth mô tả một range frequency của signal có nhiều spectral components và sẽ được xử lý kỹ hơn ở các bài về miền tần số/Fourier.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="phase">
-      <p class="concept-kicker">05 · PHASE</p>
-      <h2>Phase chỉ có ý nghĩa khi ta biết đang so với mốc nào.</h2>
+      <p class="concept-kicker">05 · PHASE LUÔN CẦN MỘT REFERENCE</p>
+      <h2>Phase không nói waveform “nhanh” hay “lớn”. Nó nói waveform đang ở đâu trong chu kỳ so với mốc đã chọn.</h2>
+
       <p>
-        Nếu <MathExpr tex="f" /> và <MathExpr tex="A" /> giữ nguyên, thay <MathExpr tex={String.raw`\phi`} /> không làm waveform dao động nhanh hơn hoặc lớn hơn.
-        Nó thay đổi vị trí của waveform so với mốc <MathExpr tex="t=0" />.
+        Nếu <MathExpr tex="A" /> và <MathExpr tex="f" /> giữ nguyên, đổi <MathExpr tex={String.raw`\phi`} /> không thay amplitude hoặc period.
+        Nó chỉ thay vị trí waveform so với reference time, chẳng hạn <MathExpr tex="t=0" />.
       </p>
 
-      <div class="phase-comparison">
+      <div class="phase-comparison phase-comparison-v2" data-lesson-visual>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=0^\circ`} /></span>
           <strong><MathExpr tex="x(0)=A" /></strong>
-          <p>Cosine bắt đầu tại đỉnh dương.</p>
+          <p>Cosine reference bắt đầu tại positive peak.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=+90^\circ`} /></span>
           <strong><MathExpr tex="x(0)=0" /></strong>
-          <p>Waveform đã tiến một phần tư chu kỳ so với cosine tham chiếu.</p>
+          <p>Tại mốc zero, waveform đang đi qua zero với slope âm. Nó tương đương shift sang trái <MathExpr tex="T/4" />.</p>
         </article>
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\phi=180^\circ`} /></span>
           <strong><MathExpr tex="x(0)=-A" /></strong>
-          <p>Waveform đảo vị trí so với <MathExpr tex={String.raw`\phi=0^\circ`} /> tại cùng mốc thời gian.</p>
+          <p>Cosine nằm tại negative peak, tức lệch nửa chu kỳ so với reference.</p>
         </article>
       </div>
 
-      <p>
-        Có một cách khác để đọc phase. Với cùng frequency, phase shift có thể được viết thành một time shift:
-      </p>
+      <p>Với cùng frequency, phase shift và time shift liên hệ với nhau:</p>
 
-      <MathExpr tex={String.raw`A\cos(2\pi f t + \phi) = A\cos\!\left[2\pi f(t-\tau)\right]`} display />
-      <p class="math-caption">Với <MathExpr tex={String.raw`\tau = -\phi/(2\pi f)`} />.</p>
+      <MathExpr tex={String.raw`A\cos(2\pi f t+\phi)=A\cos\!\left[2\pi f(t-\tau)\right]`} display />
+      <MathExpr tex={String.raw`\tau=-\frac{\phi}{2\pi f}\qquad\text{hoặc}\qquad\frac{\tau}{T}=-\frac{\phi_{\mathrm{deg}}}{360^\circ}`} display />
 
-      <p>
-        Vì vậy một phase +90° tương ứng với waveform dịch sang trái một phần tư chu kỳ.
-        Dấu cộng của phase và hướng dịch theo thời gian thường là chỗ dễ lẫn nếu chỉ nhìn công thức.
+      <p class="math-caption">
+        Dấu âm rất quan trọng: positive phase trong convention <MathExpr tex={String.raw`\cos(2\pi f t+\phi)`} /> tương ứng waveform shift sang trái theo time axis.
       </p>
 
       <aside class="precision-note">
-        <strong>Không có “absolute phase” tách rời khỏi reference</strong>
+        <strong>Không có một “absolute phase” hữu ích khi tách khỏi reference</strong>
         <p>
-          Nếu ta đổi mốc thời gian <MathExpr tex="t=0" />, giá trị phase của cùng một sinusoid cũng thay đổi.
-          Trong thực tế, phase thường hữu ích vì ta đang so một signal với một reference, một oscillator hoặc một signal khác.
+          Đổi mốc thời gian sẽ đổi numerical phase của cùng sinusoid.
+          Trong receiver, phase trở nên hữu ích khi ta so received signal với oscillator, pilot/reference signal hoặc một hypothesis khác.
         </p>
       </aside>
     </section>
 
     <section class="concept-block lab-section" id="sinusoid-lab">
       <p class="concept-kicker">06 · INTERACTIVE LAB</p>
-      <h2>Kéo từng tham số một để nhìn xem waveform thực sự thay đổi theo cách nào.</h2>
+      <h2>Isolate từng tham số trước, sau đó chuyển sang Free mode để thay cả ba.</h2>
+
       <p>
-        Đường nét đứt giữ cùng amplitude và frequency với waveform hiện tại nhưng đặt phase bằng 0°.
-        Điều này giúp tách riêng ảnh hưởng của phase khỏi hai tham số còn lại.
+        Các focus mode khóa hai tham số còn lại để mental model không bị trộn.
+        Plot đồng thời đánh dấu amplitude, period và equivalent time shift để thấy công thức gắn trực tiếp với geometry của waveform.
       </p>
+
       <SinusoidExplorer client:load />
     </section>
 
-    <section class="concept-block" id="tai-sao-can">
-      <p class="concept-kicker">07 · VÌ SAO BA THAM SỐ NÀY SẼ QUAY LẠI LIÊN TỤC?</p>
-      <h2>Một sinusoid đơn giản là chiếc cầu dẫn sang Fourier, modulation và <MathExpr tex="I/Q" />.</h2>
-      <p>
-        Khi một signal phức tạp được nhìn trong frequency domain, ta thường quan tâm từng thành phần sinusoid đang có
-        frequency nào, amplitude bao nhiêu và phase ra sao. Đây chính là lý do ba tham số này xuất hiện lại trong Fourier.
-      </p>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">07 · NHỮNG GÌ BÀI NÀY CHƯA LÀM</p>
+      <h2>Một sinusoid real mới chỉ là bước đầu. Ta chưa cần constellation, modulation hay complex baseband ở đây.</h2>
 
-      <div class="concept-bridge">
+      <div class="sinusoid-scope-grid">
+        <article>
+          <span class="card-label">ĐÃ CÓ</span>
+          <strong><MathExpr tex={String.raw`A,\;f,\;\phi`} /></strong>
+          <p>Đọc một sinusoid real trên time axis bằng độ lớn, tốc độ lặp và phase relative to a reference.</p>
+        </article>
+        <article>
+          <span class="card-label">CHƯA CẦN</span>
+          <strong>Complex plane</strong>
+          <p>Ta chưa cần dùng vector quay để biểu diễn amplitude và phase.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI TIẾP THEO</span>
+          <strong>Số phức và phasor</strong>
+          <p>Bài 04 sẽ biến hai ý “magnitude + angle” thành một representation hình học gọn hơn.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="bridge-next">
+      <p class="concept-kicker">08 · VÌ SAO PHASOR LÀ BƯỚC TIẾP THEO TỰ NHIÊN?</p>
+      <h2>Trong sinusoid, phase angle tăng tuyến tính theo thời gian. Ta có thể tưởng tượng một angle đang quay.</h2>
+
+      <div class="phasor-preview-flow" data-lesson-visual>
         <div>
-          <small>SINUSOID</small>
-          <strong><MathExpr tex={String.raw`A,\,f,\,\phi`} /></strong>
-          <span>một thành phần đơn</span>
+          <small>AMPLITUDE</small>
+          <strong><MathExpr tex="A" /></strong>
+          <span>magnitude không đổi</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>ANGLE</small>
+          <strong><MathExpr tex={String.raw`\theta(t)=2\pi f t+\phi`} /></strong>
+          <span>angle tăng đều theo time</span>
         </div>
         <b>→</b>
-        <div>
-          <small>FOURIER</small>
-          <strong>nhiều thành phần</strong>
-          <span>amplitude + phase theo frequency</span>
-        </div>
-        <b>→</b>
-        <div>
-          <small>MODULATION</small>
-          <strong>thay <MathExpr tex="A" /> / <MathExpr tex={String.raw`\phi`} /></strong>
-          <span>mang information lên signal</span>
-        </div>
-        <b>→</b>
-        <div>
-          <small><MathExpr tex="I/Q" /></small>
-          <strong>complex representation</strong>
-          <span>làm amplitude và phase dễ xử lý hơn</span>
+        <div class="next">
+          <small>BÀI 04</small>
+          <strong>rotating-vector view</strong>
+          <span>phasor sẽ formalize mental model này</span>
         </div>
       </div>
 
       <p>
-        Trong QPSK, phase sẽ trực tiếp phân biệt các constellation points.
-        Trong QAM, amplitude và phase cùng thay đổi. Trong receiver, channel và synchronization cũng liên tục tác động lên những đại lượng này.
-        Bài này chỉ xây trực giác để những phần đó sau này không xuất hiện như các khái niệm hoàn toàn mới.
+        Bài này dừng ở đây để không “học trước” số phức.
+        Điều cần mang sang Bài 04 chỉ là: một sinusoid có magnitude <MathExpr tex="A" /> và một phase angle <MathExpr tex={String.raw`2\pi f t+\phi`} /> đang tiến theo thời gian.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
-      <h2>Một sinusoid có thể được đọc như ba câu hỏi rất đơn giản.</h2>
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Amplitude <MathExpr tex="A" />:</strong> waveform lớn tới đâu theo trục dọc?</li>
-        <li><strong>Frequency <MathExpr tex="f" />:</strong> waveform hoàn thành bao nhiêu chu kỳ mỗi giây?</li>
-        <li><strong>Period <MathExpr tex="T=1/f" />:</strong> một chu kỳ kéo dài bao lâu?</li>
-        <li><strong>Phase <MathExpr tex={String.raw`\phi`} />:</strong> waveform đang nằm ở đâu trong chu kỳ so với reference đã chọn?</li>
-        <li><strong>Angular frequency <MathExpr tex={String.raw`\omega=2\pi f`} />:</strong> cùng tốc độ dao động nhưng biểu diễn bằng radian trên mỗi giây.</li>
-        <li><strong><MathExpr tex={String.raw`x(t) = A\cos(2\pi f t + \phi)`} />:</strong> ba tham số trên được gói lại trong một biểu thức duy nhất.</li>
+        <li><strong>Amplitude <MathExpr tex="A" />:</strong> peak magnitude của sinusoid; peak-to-peak là <MathExpr tex="2A" />.</li>
+        <li><strong>Frequency <MathExpr tex="f" />:</strong> số chu kỳ mỗi giây; <MathExpr tex="T=1/f" /> là thời gian của một chu kỳ.</li>
+        <li><strong>Angular frequency <MathExpr tex={String.raw`\omega=2\pi f`} />:</strong> cùng tốc độ dao động, đo bằng radian trên giây.</li>
+        <li><strong>Phase <MathExpr tex={String.raw`\phi`} />:</strong> vị trí trong chu kỳ chỉ có ý nghĩa so với một reference.</li>
+        <li><strong>Phase ↔ time shift:</strong> với cùng frequency, <MathExpr tex={String.raw`\tau=-\phi/(2\pi f)`} />.</li>
+        <li><strong>Sinusoid model:</strong> <MathExpr tex={String.raw`x(t)=A\cos(2\pi f t+\phi)`} />.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/sampling-aliasing-nyquist/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/sampling-aliasing-nyquist/">
         <span>← BÀI TRƯỚC</span>
         <strong>Sampling, aliasing và Nyquist</strong>
-        <small>Khi nào samples còn giữ đủ thông tin về waveform?</small>
+        <small>Khi nào samples giữ được information của continuous-time signal?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/so-phuc-va-phasor/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/so-phuc-va-phasor/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Số phức và phasor</strong>
-        <small>Từ phase trên waveform tới một vector quay trên mặt phẳng phức.</small>
+        <small>Từ magnitude + phase trên waveform tới một vector quay trên mặt phẳng phức.</small>
       </a>
     </nav>
   </article>
