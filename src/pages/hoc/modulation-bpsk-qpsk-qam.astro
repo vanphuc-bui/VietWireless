@@ -6,63 +6,74 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Modulation: BPSK, QPSK và QAM | VietWireless"
-  description="Hiểu bits được map thành constellation points và complex symbols trong BPSK, QPSK và QAM bằng hình ảnh và interactive lab."
+  description="Hiểu bit mapping, constellation geometry, BPSK, QPSK, QAM, normalization, Gray labeling và receiver decisions bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 08 · SIGNAL FOUNDATIONS</p>
       <h1>Modulation: BPSK → QPSK → QAM</h1>
       <p class="lesson-deck">
-        Bits chỉ là 0 và 1. RF chain lại cần waveform. Bước modulation nằm ở giữa:{" "}
-        <strong>gom bits thành nhóm rồi map mỗi nhóm tới một complex symbol có <MathExpr tex="I" />, <MathExpr tex="Q" />, amplitude và phase cụ thể.</strong>
+        Bài 7 tạo complex coefficients bằng transform. Bài 8 làm một việc khác:{" "}
+        <strong>chủ động chọn complex points từ một constellation để biểu diễn các bit groups.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 05 cho ta complex baseband <MathExpr tex="I+jQ" />. Bài 07 cho ta các frequency-domain bins <MathExpr tex="X[k]" />.
-        Modulation trả lời câu hỏi còn thiếu: giá trị complex <MathExpr tex="X[k]" /> đó đến từ bits như thế nào?
+        Bài 05 cho ta complex number <MathExpr tex="I+jQ" />.
+        Bài 07 dùng complex numbers làm DFT coefficients <MathExpr tex="X[k]" />.
+        Bài 08 dùng chúng theo nghĩa khác: mapper chọn một symbol <MathExpr tex="d[m]" /> từ một finite constellation.
       </p>
-      <div class="system-position">
-        <span>BIT → SYMBOL → WAVEFORM</span>
-        <div class="system-position-flow" aria-label="Bits được map thành modulation symbols rồi thành waveform">
-          <span>bits</span><b>→</b>
+      <div class="system-position concept-flow-card">
+        <span>BIT MAPPING, NOT A TRANSFORM</span>
+        <div class="system-position-flow" aria-label="Bits được nhóm rồi map thành một complex modulation symbol">
+          <span>input bits</span><b>→</b>
+          <span>bit group</span><b>→</b>
           <strong>mapper</strong><b>→</b>
-          <span>complex symbols</span><b>→</b>
-          <span>OFDM / pulse shaping</span><b>→</b>
-          <span>samples</span>
+          <span><MathExpr tex="d[m]" /></span><b>→</b>
+          <span>waveform generation later</span>
         </div>
         <p>
-          Bài này tập trung vào mapper và constellation. Cách symbols trở thành waveform phụ thuộc waveform design;
-          OFDM sẽ được học sâu ở Phần II.
+          Dùng <MathExpr tex="d[m]" /> giúp tránh một nhầm lẫn quan trọng:
+          modulation symbol không phải DFT coefficient <MathExpr tex="X[k]" /> chỉ vì cả hai đều là complex numbers.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="symbol-la-gi">
-      <p class="concept-kicker">01 · TỪ BITS TỚI SYMBOL</p>
-      <h2>Modulation không gửi từng bit như một mức điện áp riêng lẻ; nó chọn một điểm trong một tập hữu hạn.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="symbol-la-gi">
+      <p class="concept-kicker">01 · SYMBOL LÀ MỘT LỰA CHỌN TRONG MỘT TẬP HỮU HẠN</p>
+      <h2>Mapper biến một bit label thành một complex point hợp lệ trong constellation set.</h2>
 
-      <div class="modulation-core-flow">
-        <div><small>BIT STREAM</small><strong>10110100...</strong><span>chuỗi 0 và 1</span></div>
+      <div class="modulation-core-flow modulation-core-flow-v2" data-lesson-visual>
+        <div><small>BIT STREAM</small><strong>10110100…</strong><span>bits tại input của mapper</span></div>
         <b>→ group →</b>
-        <div><small>BIT GROUP</small><strong>10</strong><span>ví dụ 2 bits</span></div>
+        <div><small>BIT LABEL</small><strong>10</strong><span>ví dụ 2 bits</span></div>
         <b>→ map →</b>
-        <div><small>COMPLEX SYMBOL</small><strong><MathExpr tex="I+jQ" /></strong><span>một điểm constellation</span></div>
+        <div class="result"><small>MODULATION SYMBOL</small><strong><MathExpr tex="d[m]=I+jQ" /></strong><span>một point trong constellation set</span></div>
       </div>
 
       <p>
-        Nếu constellation có <MathExpr tex="M" /> điểm, mỗi symbol có thể đại diện tối đa <MathExpr tex={String.raw`\log_2(M)`} /> bits khi <MathExpr tex="M" /> là lũy thừa của 2.
+        Nếu constellation có <MathExpr tex="M" /> points và <MathExpr tex="M" /> là power of two,
+        mỗi symbol label chứa <MathExpr tex={String.raw`\log_2 M`} /> bits.
       </p>
 
-      <div class="bits-per-symbol-grid">
+      <div class="bits-per-symbol-grid bits-per-symbol-grid-v2">
         <article><span>BPSK</span><strong><MathExpr tex="M=2" /></strong><p>1 bit / symbol</p></article>
         <article><span>QPSK</span><strong><MathExpr tex="M=4" /></strong><p>2 bits / symbol</p></article>
         <article><span>16QAM</span><strong><MathExpr tex="M=16" /></strong><p>4 bits / symbol</p></article>
         <article><span>64QAM</span><strong><MathExpr tex="M=64" /></strong><p>6 bits / symbol</p></article>
       </div>
+
+      <aside class="mental-model">
+        <strong>Bit label và constellation geometry là hai lớp khác nhau</strong>
+        <p>
+          Geometry quyết định vị trí và khoảng cách giữa points.
+          Mapping table quyết định bit string nào gắn với point nào.
+          Có thể đổi labels mà không di chuyển bất kỳ constellation point nào.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="bpsk">
@@ -84,10 +95,10 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <div>
           <p>
-            Một mapping đơn giản có thể dùng 0 → -1 và 1 → +1 trên trục <MathExpr tex="I" />. <MathExpr tex="Q=0" />.
-            Hai điểm cách nhau tối đa trên một vòng tròn magnitude cố định, nên BPSK khá robust với noise.
+            Một mapping minh họa có thể dùng 0 → -1 và 1 → +1 trên trục <MathExpr tex="I" />. <MathExpr tex="Q=0" />.
+            Khi average symbol energy được normalize về 1, khoảng cách giữa hai points là <MathExpr tex="2" />.
           </p>
-          <MathExpr tex={String.raw`b\in\{0,1\} \;\longrightarrow\; x\in\{-1,+1\}`} display class="math-compact" />
+          <MathExpr tex={String.raw`b\in\{0,1\}\;\longrightarrow\;d\in\{-1,+1\}`} display class="math-compact" />
         </div>
       </div>
     </section>
@@ -119,7 +130,7 @@ import MathExpr from '../../components/Math.astro';
             nên magnitude của bốn points bằng nhau và phase khác nhau.
           </p>
           <p>
-            Một symbol QPSK mang 2 bits. Với cùng symbol rate, raw bit rate vì vậy gấp đôi BPSK.
+            Một symbol QPSK mang 2 bits. Với unit average symbol energy, nearest-neighbor distance là <MathExpr tex={String.raw`\sqrt2`} />.
           </p>
         </div>
       </div>
@@ -164,17 +175,31 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Nhiều points hơn tăng spectral efficiency tiềm năng, nhưng khoảng cách giữa các neighboring points nhỏ hơn nếu average power
-        và bandwidth bị giữ trong cùng giới hạn. Receiver vì vậy cần SNR/EVM tốt hơn để phân biệt chính xác.
+        Nếu average symbol energy được giữ cố định, nhiều points hơn làm nearest-neighbor distance nhỏ hơn.
+        Received sample vì vậy có ít geometric margin hơn trước khi crossing sang decision region khác.
       </p>
+
+      <div class="distance-compare" data-lesson-visual>
+        <div><small>NORMALIZED BPSK</small><strong><MathExpr tex={String.raw`d_{\min}=2`} /></strong></div>
+        <div><small>NORMALIZED QPSK</small><strong><MathExpr tex={String.raw`d_{\min}=\sqrt2`} /></strong></div>
+        <div><small>NORMALIZED 16QAM</small><strong><MathExpr tex={String.raw`d_{\min}=2/\sqrt{10}`} /></strong></div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>“Higher-order modulation cần SNR cao hơn” phải đi kèm normalization và performance target</strong>
+        <p>
+          Comparison thực tế còn phụ thuộc coding, channel model và target error rate.
+          Bài này chỉ giữ geometry intuition bằng cùng unit average symbol energy.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block lab-section" id="modulation-lab">
       <p class="concept-kicker">05 · INTERACTIVE LAB</p>
-      <h2>Chọn BPSK, QPSK hoặc 16QAM rồi bấm từng nhóm bits để xem complex symbol tương ứng.</h2>
+      <h2>Mode Mapping cho thấy bit label → complex symbol. Mode Noisy decision cho thấy received sample crossing decision boundaries.</h2>
       <p>
-        Demo dùng một mapping Gray minh họa và normalize average symbol energy theo convention thông dụng.
-        Mục tiêu là nhìn dependency bits → point → I+jQ, không phải định nghĩa mapping của một standard cụ thể.
+        Demo dùng normalized constellations và một Gray labeling minh họa.
+        Kéo error vector để thấy geometry quyết định detected point, còn labeling quyết định detected bits.
       </p>
       <ModulationExplorer client:load />
     </section>
@@ -187,12 +212,12 @@ import MathExpr from '../../components/Math.astro';
         <div>
           <small>RAW 16QAM LEVELS</small>
           <strong><MathExpr tex={String.raw`I,Q\in\{\pm1,\pm3\}`} /></strong>
-          <span>average <MathExpr tex="|x|^2=10" /></span>
+          <span><MathExpr tex={String.raw`E_s=\mathbb E[|d|^2]=10`} /></span>
         </div>
         <b><MathExpr tex={String.raw`\div\sqrt{10}`} /> →</b>
         <div>
           <small>NORMALIZED</small>
-          <strong><MathExpr tex={String.raw`\mathbb{E}[|x|^2]=1`} /></strong>
+          <strong><MathExpr tex={String.raw`\mathbb E[|d|^2]=1`} /></strong>
           <span>dễ so sánh giữa modulation orders</span>
         </div>
       </div>
@@ -203,91 +228,119 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </section>
 
-    <section class="concept-block" id="noise-distance">
-      <p class="concept-kicker">07 · RECEIVER QUYẾT ĐỊNH SYMBOL NHƯ THẾ NÀO?</p>
-      <h2>Sau equalization, receiver thường chọn constellation point hợp lý nhất với sample nhận được.</h2>
+    <section class="concept-block" data-lesson-role="implementation" id="noise-distance">
+      <p class="concept-kicker">07 · RECEIVER NHÌN THẤY MỘT COMPLEX SAMPLE, KHÔNG NHÌN THẤY BIT LABEL</p>
+      <h2>Hard detector chọn constellation point gần observation nhất.</h2>
 
-      <div class="decision-story">
-        <div>
-          <small>IDEAL SYMBOL</small>
-          <strong><MathExpr tex="X" /></strong>
-          <span>điểm transmitter muốn gửi</span>
-        </div>
+      <MathExpr tex={String.raw`\hat d=\arg\min_{a\in\mathcal S}|y-a|^2`} display />
+
+      <div class="decision-story decision-story-v2" data-lesson-visual>
+        <div><small>TRANSMITTED</small><strong><MathExpr tex="d" /></strong><span>ideal constellation point</span></div>
         <b>→ channel + noise →</b>
-        <div>
-          <small>RECEIVED</small>
-          <strong><MathExpr tex="Y" /></strong>
-          <span>điểm bị dịch khỏi vị trí lý tưởng</span>
-        </div>
-        <b>→ decision →</b>
-        <div>
-          <small>DETECTED</small>
-          <strong><MathExpr tex={String.raw`\hat{X}`} /></strong>
-          <span>nearest valid point</span>
-        </div>
+        <div><small>OBSERVATION</small><strong><MathExpr tex="y" /></strong><span>received/equalized complex sample</span></div>
+        <b>→ nearest point →</b>
+        <div class="result"><small>HARD DECISION</small><strong><MathExpr tex={String.raw`\hat d`} /></strong><span>detected constellation point</span></div>
       </div>
 
       <p>
-        Đây là cầu nối tự nhiên tới EVM: error vector chính là vector từ ideal constellation point tới measured/received point
-        theo convention đo tương ứng.
+        Với equally likely symbols và circular AWGN sau ideal equalization, nearest Euclidean point là maximum-likelihood hard decision.
+        Practical coded receivers thường tạo soft bit metrics hoặc LLRs thay vì chỉ hard-decide một symbol rồi chuyển thẳng thành bits.
       </p>
+
+      <aside class="mental-model">
+        <strong>Decision boundary thuộc về geometry, không thuộc về label</strong>
+        <p>
+          Boundary nằm giữa constellation points.
+          Mapping table chỉ quyết định point ở mỗi region mang bit string nào.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="gray">
+      <p class="concept-kicker">08 · GRAY LABELING GIẢM BIT DAMAGE CỦA NEAREST-NEIGHBOR ERRORS</p>
+      <h2>Cùng constellation geometry nhưng cách gắn labels có thể làm bit-error behavior khác nhau.</h2>
+
+      <div class="gray-label-story" data-lesson-visual>
+        <div><small>LABEL A</small><strong>00</strong></div>
+        <b>↔ nearest neighbors ↔</b>
+        <div><small>LABEL B</small><strong>01</strong></div>
+        <span>chỉ một bit khác nhau</span>
+      </div>
+
+      <p>
+        Gray labeling thường làm nearest-neighbor labels khác nhau một bit.
+        Vì many symbol errors ở moderate/high SNR đi sang point lân cận, mapping này thường giảm số bit errors trên mỗi nearby symbol error.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Mapping cụ thể là convention hoặc standard-dependent</strong>
+        <p>
+          Tên QPSK hay 16QAM không tự xác định duy nhất label của từng point.
+          Mapper và demapper phải dùng cùng mapping table.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="symbol-rate">
-      <p class="concept-kicker">08 · BIT RATE KHÔNG PHẢI SYMBOL RATE</p>
-      <h2>Modulation order quyết định có bao nhiêu bits được đóng vào một symbol.</h2>
+      <p class="concept-kicker">09 · SYMBOL RATE, MAPPER BIT RATE VÀ PAYLOAD THROUGHPUT KHÔNG PHẢI MỘT</p>
+      <h2><MathExpr tex={String.raw`\log_2M`} /> chỉ nói mapper đóng bao nhiêu input bits vào mỗi symbol.</h2>
 
-      <MathExpr tex={String.raw`R_b = R_s\log_2(M)`} display />
-      <p class="math-caption">Trong mapping uncoded lý tưởng, trước khi tính coding, pilots, CP và overhead khác.</p>
+      <MathExpr tex={String.raw`R_{b,\mathrm{mapper}}=R_s\log_2M`} display />
+      <p class="math-caption">Đây là bit rate tại mapper interface, không phải end-user throughput.</p>
 
-      <p>
-        Ví dụ symbol rate 1 Msymbol/s với QPSK tương ứng 2 Mbit/s ở output của mapper.
-        Với 16QAM là 4 Mbit/s. Nhưng throughput hệ thống thực còn phụ thuộc coding rate, resource allocation,
-        reference signals, control overhead và nhiều yếu tố khác.
-      </p>
-    </section>
-
-    <section class="concept-block" id="ofdm">
-      <p class="concept-kicker">09 · MODULATION NẰM Ở ĐÂU TRONG OFDM?</p>
-      <h2>Mapper tạo complex symbols; OFDM đặt chúng lên subcarriers rồi IFFT tạo waveform theo thời gian.</h2>
-
-      <div class="modulation-ofdm-flow">
-        <div><small>BITS</small><strong>1011...</strong></div>
-        <b>→</b>
-        <div><small>QAM MAPPER</small><strong><MathExpr tex="I+jQ" /></strong></div>
-        <b>→</b>
-        <div><small>RESOURCE GRID</small><strong><MathExpr tex="X[k,m]" /></strong></div>
-        <b>→ IFFT →</b>
-        <div><small>TIME DOMAIN</small><strong><MathExpr tex="x[n]" /></strong></div>
+      <div class="rate-meaning-grid">
+        <div><small>SYMBOL RATE</small><strong><MathExpr tex="R_s" /></strong><span>symbols per second</span></div>
+        <div><small>BITS / SYMBOL</small><strong><MathExpr tex={String.raw`\log_2M`} /></strong><span>label width</span></div>
+        <div><small>MAPPER BIT RATE</small><strong><MathExpr tex={String.raw`R_s\log_2M`} /></strong><span>before system overhead interpretation</span></div>
       </div>
 
       <p>
-        Đây là dependency chain mà Bài 01 đã preview. Tới đây từng mắt xích đầu tiên đã có bài riêng,
-        nên khi vào OFDM ta không cần dùng “complex symbol” như một khái niệm chưa được giải thích nữa.
+        Payload throughput còn phụ thuộc coding rate, reference signals, control, resource allocation, retransmissions,
+        guard intervals và waveform-specific overhead.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
-      <h2>Modulation là phép map thông tin số vào một tập complex values đã được thiết kế trước.</h2>
+    <section class="concept-block" data-lesson-role="boundary" id="after-mapper">
+      <p class="concept-kicker">10 · SAU MAPPER, SYMBOL CHƯA PHẢI RF WAVEFORM</p>
+      <h2>Cùng sequence <MathExpr tex="d[m]" /> có thể đi vào các waveform-generation chains khác nhau.</h2>
+
+      <div class="after-mapper-flow" data-lesson-visual>
+        <div class="input"><small>MAPPER OUTPUT</small><strong><MathExpr tex="d[m]" /></strong><span>complex symbol sequence</span></div>
+        <div class="split">↙︎ ↘︎</div>
+        <div class="branches">
+          <article><small>SINGLE-CARRIER EXAMPLE</small><strong>pulse shaping</strong><span>symbols điều khiển một continuous baseband waveform</span></article>
+          <article><small>MULTICARRIER EXAMPLE</small><strong>OFDM later</strong><span>symbols có thể được gán lên frequency-time resources trước IFFT</span></article>
+        </div>
+      </div>
+
+      <p>
+        Bài 8 dừng ở mapper/demapper.
+        Bài 9 chuyển sang câu hỏi vật lý hơn: complex baseband samples đi qua DAC, frequency translation, power amplifier và antenna như thế nào.
+      </p>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>BPSK:</strong> 2 points, 1 bit/symbol.</li>
-        <li><strong>QPSK:</strong> 4 points, 2 bits/symbol.</li>
-        <li><strong>16QAM:</strong> 16 points, 4 bits/symbol và thay đổi cả <MathExpr tex="I/Q" /> amplitude.</li>
-        <li><strong>Constellation:</strong> hình học của tập complex symbols hợp lệ.</li>
-        <li><strong>Gray mapping:</strong> thường giúp nearest-neighbor symbol errors gây ít bit errors hơn.</li>
-        <li><strong>Higher-order modulation:</strong> tăng bits/symbol nhưng cần chất lượng link tốt hơn.</li>
-        <li><strong>Trong OFDM:</strong> mapped symbols trở thành <MathExpr tex="X[k,m]" /> trên resource grid trước IFFT.</li>
+        <li><strong>Mapper:</strong> map bit labels vào một finite constellation set <MathExpr tex={String.raw`\mathcal S`} />.</li>
+        <li><strong>Modulation symbol:</strong> dùng <MathExpr tex="d[m]" /> để tránh nhầm với DFT coefficient <MathExpr tex="X[k]" />.</li>
+        <li><strong>BPSK / QPSK:</strong> PSK dùng phase choices; QPSK mang 2 bits/symbol.</li>
+        <li><strong>QAM:</strong> dùng nhiều amplitude/phase combinations để tăng constellation size.</li>
+        <li><strong>Normalization:</strong> cho phép so geometry ở cùng average symbol energy reference.</li>
+        <li><strong>Minimum distance:</strong> spacing nhỏ hơn làm decision nhạy hơn với received error vector.</li>
+        <li><strong>Gray labeling:</strong> geometry không đổi nhưng nearby symbol errors thường gây ít bit errors hơn.</li>
+        <li><strong>Receiver:</strong> hard nearest-point decision là geometry operation; coded systems thường dùng soft metrics.</li>
+        <li><strong>Mapper bit rate:</strong> <MathExpr tex={String.raw`R_s\log_2M`} /> không đồng nghĩa với end-user throughput.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/fourier-dft-fft/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/fourier-dft-fft/">
         <span>← BÀI TRƯỚC</span>
         <strong>Fourier, DFT và FFT</strong>
-        <small>Từ samples tới complex frequency bins.</small>
+        <small>Complex transform coefficients được tạo bởi basis projection như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/baseband-rf-antenna/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/baseband-rf-antenna/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Baseband → RF → antenna</strong>
         <small>Từ complex samples tới một waveform RF vật lý được phát ra không gian.</small>
