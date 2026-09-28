@@ -444,11 +444,12 @@ const lessonMeta = {
             </tr>
           </thead>
           <tbody>
-            <tr><td>Power on</td><td>RF capability + search strategy</td><td>cell timing, PCI, MIB</td></tr>
+            <tr><td>Candidate carrier</td><td>frequency hypothesis + <MathExpr tex="I/Q" /> buffer</td><td>cell timing, PCI, MIB</td></tr>
             <tr><td>PSS detected</td><td>timing candidate + <MathExpr tex="N_{ID}^{(2)}" /></td><td>full PCI, MIB</td></tr>
             <tr><td>SSS detected</td><td>physical cell ID</td><td>PBCH payload</td></tr>
             <tr><td>PBCH DM-RS processed</td><td>channel estimate for PBCH hypothesis</td><td>decoded broadcast payload</td></tr>
-            <tr><td>PBCH decoded</td><td>MIB + additional PBCH timing/index bits</td><td>SIB1 và RRC access context</td></tr>
+            <tr><td>PBCH decoded</td><td>BCH/PBCH payload candidate + timing/index context</td><td>parsed MIB, SIB1</td></tr>
+            <tr><td>MIB parsed</td><td>bootstrap information for initial common control</td><td>SIB1 và RRC access context</td></tr>
           </tbody>
         </table>
       </div>
@@ -550,7 +551,7 @@ const lessonMeta = {
     <section class="concept-block recap" data-lesson-role="recap" id="recap">
       <p class="concept-kicker">12 · NỐI LẠI TOÀN BỘ FLOW</p>
       <ol class="recap-list">
-        <li><strong>Power on:</strong> UE chưa có cell timing, physical cell ID hay MIB.</li>
+        <li><strong>Candidate carrier:</strong> receiver đã có một frequency hypothesis và <MathExpr tex="I/Q" /> buffer, nhưng chưa có cell timing, PCI hay MIB.</li>
         <li><strong>PSS:</strong> tạo candidate timing và cung cấp <MathExpr tex="N_{ID}^{(2)}" />.</li>
         <li><strong>SSS:</strong> cung cấp <MathExpr tex="N_{ID}^{(1)}" /> để hoàn thiện physical cell ID.</li>
         <li><strong>SSB:</strong> gom PSS, SSS, PBCH và PBCH DM-RS vào một block chung.</li>
