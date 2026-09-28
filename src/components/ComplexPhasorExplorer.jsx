@@ -182,7 +182,7 @@ export default function ComplexPhasorExplorer() {
         <div className="metric-card">
           <small className="metric-card-label">PRINCIPAL ANGLE</small>
           <strong className="metric-card-value"><MathExpr tex={principalAngle.toFixed(0) + '^\\circ'} /></strong>
-          <span className="metric-card-formula">{mode === 'static' ? 'arg(z)' : 'wrapped current angle'}</span>
+          <span className="metric-card-formula">{mode === 'static' ? <MathExpr tex={String.raw`\arg(z)`} /> : 'wrapped current angle'}</span>
         </div>
       </div>
 
