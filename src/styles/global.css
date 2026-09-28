@@ -11663,7 +11663,7 @@ body {
   line-height: 1;
 }
 
-.ia-explorer-tabs button span {
+.ia-explorer-tabs button > span {
   font-size: var(--lesson-prose-size);
   line-height: 1.2;
 }
@@ -11845,7 +11845,7 @@ body {
   align-items: end;
 }
 
-.ia-beam-list span {
+.ia-beam-list > span {
   min-height: 54px;
   padding: 9px 7px;
   display: grid;
@@ -11858,7 +11858,7 @@ body {
   font-size: var(--lesson-meta-size);
 }
 
-.ia-beam-list span.strong {
+.ia-beam-list > span.strong {
   min-height: 82px;
   border-color: #d7b5ae;
   color: var(--accent);
@@ -11986,7 +11986,7 @@ body {
   font-weight: 600;
 }
 
-.pci-composition span {
+.pci-composition > div > span {
   color: var(--muted);
 }
 
@@ -12074,12 +12074,12 @@ body {
   font-size: var(--lesson-meta-size);
 }
 
-.ssb-map-scale span:nth-child(1) { grid-column: 1; justify-self: start; }
-.ssb-map-scale span:nth-child(2) { grid-column: 1; justify-self: end; }
-.ssb-map-scale span:nth-child(3) { grid-column: 2; justify-self: end; }
-.ssb-map-scale span:nth-child(4) { grid-column: 3; justify-self: end; }
-.ssb-map-scale span:nth-child(5) { grid-column: 4; justify-self: end; }
-.ssb-map-scale span:nth-child(6) { grid-column: 5; justify-self: end; }
+.ssb-map-scale > span:nth-of-type(1) { grid-column: 1; justify-self: start; }
+.ssb-map-scale > span:nth-of-type(2) { grid-column: 1; justify-self: end; }
+.ssb-map-scale > span:nth-of-type(3) { grid-column: 2; justify-self: end; }
+.ssb-map-scale > span:nth-of-type(4) { grid-column: 3; justify-self: end; }
+.ssb-map-scale > span:nth-of-type(5) { grid-column: 4; justify-self: end; }
+.ssb-map-scale > span:nth-of-type(6) { grid-column: 5; justify-self: end; }
 
 .ssb-map-time {
   grid-column: 2;
@@ -12217,8 +12217,8 @@ body {
   font-size: var(--lesson-subheading-size);
 }
 
-.mib-root span,
-.mib-branches span {
+.mib-root > span,
+.mib-branches > div > span {
   color: var(--muted);
 }
 
@@ -12413,4 +12413,13 @@ body {
   .ia-explorer-progress > span {
     transition: none;
   }
+}
+
+
+.ssb-map-scale > small {
+  grid-column: 1 / -1;
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
 }
