@@ -163,7 +163,7 @@ export default function ComplexPhasorExplorer() {
         </span>
       </div>
 
-      <div className="phasor-readout phasor-readout-v2">
+      <div className="phasor-readout metric-card-grid">
         <div>
           <small>REAL PART</small>
           <strong><MathExpr tex={real.toFixed(3)} /></strong>
