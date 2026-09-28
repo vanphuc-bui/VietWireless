@@ -190,8 +190,8 @@ export default function ResourceGridExplorer() {
               <div className="rg-constellation">
                 <div className="rg-const-axis horizontal"></div>
                 <div className="rg-const-axis vertical"></div>
-                <span className="rg-axis-i">I</span>
-                <span className="rg-axis-q">Q</span>
+                <span className="rg-axis-i"><MathExpr tex="I" /></span>
+                <span className="rg-axis-q"><MathExpr tex="Q" /></span>
                 {constellationPoints.map((point, index) => {
                   const i = point[0];
                   const q = point[1];
