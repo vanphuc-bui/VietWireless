@@ -22,7 +22,7 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">SIGNAL NẰM Ở ĐÂU TRONG BỨC TRANH?</p>
       <p class="map-intro">
-        Bài đầu tiên chỉ xây mental model. Những khái niệm như số phức, modulation, I/Q, FFT và OFDM sẽ được tách ra ở các bài sau.
+        Bài đầu tiên chỉ xây mental model. Những khái niệm như số phức, modulation, <MathExpr tex="I/Q" />, FFT và OFDM sẽ được tách ra ở các bài sau.
       </p>
 
       <div class="system-position concept-flow-card">
@@ -60,7 +60,7 @@ import MathExpr from '../../components/Math.astro';
         </article>
         <article>
           <span class="card-label">SIGNAL</span>
-          <strong><MathExpr tex="x(\cdot)" /></strong>
+          <strong><MathExpr tex={String.raw`x(\cdot)`} /></strong>
           <p>Một representation có giá trị phụ thuộc vào một hoặc nhiều biến độc lập và có thể mang information.</p>
         </article>
         <article>
@@ -294,7 +294,7 @@ import MathExpr from '../../components/Math.astro';
         <a href="/hoc/sampling-aliasing-nyquist/"><small>BÀI 02</small><strong>Sampling, aliasing và Nyquist</strong><span>Khi nào samples còn giữ được waveform gốc?</span></a>
         <a href="/hoc/amplitude-frequency-phase/"><small>BÀI 03</small><strong>Amplitude, frequency và phase</strong><span>Ba đại lượng cơ bản của sinusoid.</span></a>
         <a href="/hoc/so-phuc-va-phasor/"><small>BÀI 04</small><strong>Số phức và phasor</strong><span>Một cách gọn để biểu diễn amplitude và phase.</span></a>
-        <a href="/hoc/iq-va-complex-baseband/"><small>BÀI 05</small><strong>I/Q và complex baseband</strong><span>Tại sao wireless DSP thích biểu diễn complex.</span></a>
+        <a href="/hoc/iq-va-complex-baseband/"><small>BÀI 05</small><strong><MathExpr tex="I/Q" /> và complex baseband</strong><span>Tại sao wireless DSP thích biểu diễn complex.</span></a>
         <a href="/hoc/mien-thoi-gian-va-mien-tan-so/"><small>BÀI 06</small><strong>Miền thời gian và miền tần số</strong><span>Hai representation của cùng signal.</span></a>
         <a href="/hoc/fourier-dft-fft/"><small>BÀI 07</small><strong>Fourier, DFT và FFT</strong><span>Cầu nối toán học giữa hai miền.</span></a>
         <a href="/hoc/modulation-bpsk-qpsk-qam/"><small>BÀI 08</small><strong>Modulation: BPSK → QPSK → QAM</strong><span>Cách bits trở thành modulation symbols.</span></a>
