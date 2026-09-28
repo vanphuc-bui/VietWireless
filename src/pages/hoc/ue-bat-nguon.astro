@@ -264,9 +264,11 @@ const lessonMeta = {
             <div class="ssb-map-row symbol3"><small>symbol 3</small><div class="full pbch">PBCH + PBCH DM-RS</div></div>
             <div class="ssb-map-row symbol2">
               <small>symbol 2</small>
-              <div class="edge pbch">PBCH / DM-RS</div>
-              <div class="center sss">SSS · 127 subcarriers</div>
-              <div class="edge pbch">PBCH / DM-RS</div>
+              <div class="pbch">PBCH / DM-RS</div>
+              <div class="zero">unused</div>
+              <div class="sss">SSS · 127 subcarriers</div>
+              <div class="zero">unused</div>
+              <div class="pbch">PBCH / DM-RS</div>
             </div>
             <div class="ssb-map-row symbol1"><small>symbol 1</small><div class="full pbch">PBCH + PBCH DM-RS</div></div>
             <div class="ssb-map-row symbol0">
@@ -278,9 +280,11 @@ const lessonMeta = {
           </div>
           <div class="ssb-map-scale">
             <span>k = 0</span>
+            <span>48</span>
             <span>56</span>
-            <span>182</span>
-            <span>239</span>
+            <span>183</span>
+            <span>192</span>
+            <span>240</span>
           </div>
           <div class="ssb-map-time">4 OFDM symbols → time</div>
         </div>
@@ -523,6 +527,10 @@ const lessonMeta = {
         <p class="spec-source">
           3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 4.1: cell search, PSS/SSS và SS/PBCH block assumptions ·
           <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.104 Release 18, ETSI TS 138 104 V18.13.0, clause 5.4.3.1: synchronization raster và GSCN cho system acquisition khi vị trí synchronization block chưa được explicit signalling ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138100_138199/138104/18.13.00_60/ts_138104v181300p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
         </p>
         <p class="spec-source">
           3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.3.1: resource mapping cho PSS, SSS, PBCH và PBCH DM-RS ·
