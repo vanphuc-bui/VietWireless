@@ -114,15 +114,18 @@ export default function ModulationExplorer() {
   }
 
   function applyErrorPreset(kind) {
+    const towardNeighborI = active.i >= 0 ? -1 : 1;
+    const towardNeighborQ = active.q >= 0 ? -1 : 1;
+
     if (kind === 'i') {
-      setErrorI(scheme === '16QAM' ? dMin * 0.62 : dMin * 0.58);
+      setErrorI(towardNeighborI * dMin * 0.58);
       setErrorQ(0);
     } else if (kind === 'q') {
       setErrorI(0);
-      setErrorQ(dMin * 0.62);
+      setErrorQ(towardNeighborQ * dMin * 0.58);
     } else {
-      setErrorI(dMin * 0.46);
-      setErrorQ(-dMin * 0.46);
+      setErrorI(towardNeighborI * dMin * 0.44);
+      setErrorQ(towardNeighborQ * dMin * 0.44);
     }
   }
 
@@ -195,8 +198,8 @@ export default function ModulationExplorer() {
           <div className="modulation-error-presets">
             <button type="button" onClick={resetError}>No error</button>
             <button type="button" onClick={() => applyErrorPreset('i')}>Cross I boundary</button>
-            <button type="button" onClick={() => applyErrorPreset('q')}>Cross Q boundary</button>
-            <button type="button" onClick={() => applyErrorPreset('diag')}>Diagonal error</button>
+            <button type="button" disabled={scheme === 'BPSK'} onClick={() => applyErrorPreset('q')}>Cross Q boundary</button>
+            <button type="button" disabled={scheme === 'BPSK'} onClick={() => applyErrorPreset('diag')}>Diagonal error</button>
           </div>
         </div>
       )}
