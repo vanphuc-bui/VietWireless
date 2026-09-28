@@ -229,7 +229,7 @@ export default function ModulationExplorer() {
           </strong>
           <span className="metric-card-formula">
             {mode === 'mapping'
-              ? <MathExpr tex="d_{\min}" />
+              ? <MathExpr tex={String.raw`d_{\\min}`} />
               : detectedBitErrors + ' bit error(s) in this label example'}
           </span>
         </div>
