@@ -6,323 +6,334 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Số phức và phasor trực quan | VietWireless"
-  description="Hiểu số phức, magnitude, phase, công thức Euler, complex exponential và phasor bằng hình học và interactive lab."
+  description="Hiểu số phức, Cartesian và polar form, công thức Euler, complex exponential và phasor bằng hình học và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 04 · SIGNAL FOUNDATIONS</p>
       <h1>Số phức và phasor</h1>
       <p class="lesson-deck">
-        Ở Bài 03, phase vẫn nằm trong một công thức cosine. Bài này đổi cách nhìn:{" "}
-        <strong>thay vì theo dõi một waveform bằng một con số trên trục thực, ta đặt nó lên một mặt phẳng và theo dõi cả độ lớn lẫn góc.</strong>
+        Bài 03 cho ta magnitude và phase trên một sinusoid. Bài này đặt hai ý đó lên một mặt phẳng và trả lời câu hỏi quan trọng:{" "}
+        <strong>số phức, complex exponential và phasor giống nhau ở đâu, khác nhau ở đâu?</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Một sinusoid có amplitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} />. Số phức cho ta một cách biểu diễn hai đại lượng đó rất gọn,
-        còn complex exponential cho ta một hình ảnh đặc biệt hữu ích: một vector quay.
+        Ở Bài 03, một sinusoid real có dạng <MathExpr tex={String.raw`A\cos(\omega t+\phi)`} />.
+        Ta đã biết <MathExpr tex="A" /> là magnitude, còn <MathExpr tex={String.raw`\phi`} /> là phase relative to a reference.
+        Số phức cho phép mang hai đại lượng này trong một object hình học duy nhất.
       </p>
-      <div class="system-position technical-card concept-flow-card">
-        <span>TỪ SINUSOID TỚI MẶT PHẲNG PHỨC</span>
-        <div class="system-position-flow" aria-label="Sinusoid được nối sang số phức, complex exponential và phasor">
-          <span><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></span><b>→</b>
-          <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong><b>→</b>
-          <span>vector quay</span><b>→</b>
+
+      <div class="system-position concept-flow-card">
+        <span>MENTAL MAP</span>
+        <div class="system-position-flow" aria-label="Từ sinusoid tới số phức, Euler, complex exponential và phasor">
+          <span>magnitude + phase</span><b>→</b>
+          <strong>complex number</strong><b>→</b>
+          <span>Euler</span><b>→</b>
+          <span>complex exponential</span><b>→</b>
           <span>phasor</span>
         </div>
         <p>
-          Mục tiêu không phải học số phức như một chương toán tách biệt. Ta chỉ lấy đúng những gì cần
-          để hiểu signal processing, <MathExpr tex="I/Q" />, modulation và channel ở các bài sau.
+          Bài này dừng ở representation toán học và hình học.
+          <MathExpr tex="I/Q" /> trong transmitter/receiver sẽ là nội dung chính của Bài 05.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="vi-sao-so-phuc">
-      <p class="concept-kicker">01 · VÌ SAO CẦN THÊM MỘT TRỤC?</p>
-      <h2>Một số thực cho ta một vị trí trên một đường. Số phức cho ta một vị trí trên một mặt phẳng.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="complex-plane">
+      <p class="concept-kicker">01 · TỪ MỘT TRỤC TỚI MỘT MẶT PHẲNG</p>
+      <h2>Một số thực cần một tọa độ. Một số phức cần hai tọa độ.</h2>
+
       <p>
-        Trên trục thực, một giá trị chỉ có thể đi sang trái hoặc sang phải. Nhưng khi ta muốn biểu diễn cả
-        độ lớn và một góc, một chiều không còn đủ tiện lợi.
+        Một số thực chỉ nằm trên một trục. Với số phức, ta thêm một trục vuông góc và viết
+        <MathExpr tex="z=a+jb" />.
+        Trong kỹ thuật điện, ký hiệu <MathExpr tex="j" /> thường được dùng thay cho <MathExpr tex="i" /> để tránh nhầm với dòng điện.
       </p>
 
-      <div class="complex-plane-intro">
+      <div class="complex-plane-intro complex-plane-intro-v2" data-lesson-visual>
         <article class="technical-card visual-card">
-          <span class="card-label">SỐ THỰC</span>
+          <span class="card-label">REAL NUMBER</span>
           <div class="visual-card-figure">
             <div class="real-number-line" aria-label="Một số thực nằm trên trục một chiều">
-            <span>-2</span><span>-1</span><b>0</b><span>1</span><span>2</span>
+              <span>-2</span><span>-1</span><b>0</b><span>1</span><span>2</span>
               <i></i>
             </div>
           </div>
-          <p>Một tọa độ trên một trục.</p>
+          <p>Một coordinate trên một trục.</p>
         </article>
 
         <article class="technical-card visual-card">
-          <span class="card-label">SỐ PHỨC</span>
+          <span class="card-label">COMPLEX NUMBER</span>
           <div class="visual-card-figure">
-          <svg viewBox="0 0 320 210" role="img" aria-label="Một số phức nằm trên mặt phẳng với trục thực và trục ảo">
-            <line class="complex-axis" x1="34" y1="130" x2="292" y2="130" />
-            <line class="complex-axis" x1="150" y1="28" x2="150" y2="190" />
-            <line class="complex-vector" x1="150" y1="130" x2="238" y2="72" />
-            <line class="complex-projection" x1="238" y1="72" x2="238" y2="130" />
-            <line class="complex-projection" x1="238" y1="72" x2="150" y2="72" />
-            <circle class="complex-tip" cx="238" cy="72" r="5" />
-            <foreignObject x="262" y="103" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
-            <foreignObject x="146" y="26" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
-            <foreignObject x="190" y="135" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="a" /></div></foreignObject>
-            <foreignObject x="148" y="61" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="b" /></div></foreignObject>
-            <foreignObject x="232" y="50" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="z" /></div></foreignObject>
-          </svg>
+            <svg viewBox="0 0 340 230" role="img" aria-label="Số phức z=a+jb trên mặt phẳng phức">
+              <line class="complex-axis" x1="38" y1="145" x2="310" y2="145" />
+              <line class="complex-axis" x1="160" y1="30" x2="160" y2="205" />
+              <line class="complex-vector" x1="160" y1="145" x2="255" y2="78" />
+              <line class="complex-projection" x1="255" y1="78" x2="255" y2="145" />
+              <line class="complex-projection" x1="255" y1="78" x2="160" y2="78" />
+              <circle class="complex-tip" cx="255" cy="78" r="5" />
+              <foreignObject x="284" y="118" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
+              <foreignObject x="162" y="28" width="48" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
+              <foreignObject x="203" y="150" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="a" /></div></foreignObject>
+              <foreignObject x="164" y="92" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="b" /></div></foreignObject>
+              <foreignObject x="256" y="57" width="34" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="z" /></div></foreignObject>
+            </svg>
           </div>
-          <p>Hai tọa độ, nhưng cũng có thể đọc thành magnitude và phase.</p>
+          <p>Cùng một point có thể đọc bằng hai coordinates hoặc bằng magnitude + angle.</p>
         </article>
       </div>
 
-      <MathExpr tex="z = a + jb" display />
+      <MathExpr tex={String.raw`z=a+jb,\qquad j^2=-1`} display />
 
-      <p>
-        Trong kỹ thuật điện, ta thường dùng <strong><MathExpr tex="j" /></strong> thay cho <MathExpr tex="i" /> vì <MathExpr tex="i" /> thường đã được dùng cho dòng điện.
-        Ta có <strong><MathExpr tex="j^2=-1" /></strong>. Phần <MathExpr tex="a" /> gọi là phần thực, còn <MathExpr tex="b" /> là hệ số của phần ảo.
-      </p>
+      <aside class="mental-model">
+        <strong>Không cần tưởng tượng “số ảo” là một loại signal bí ẩn</strong>
+        <p>
+          Ở đây số phức chỉ là một representation hai chiều.
+          <MathExpr tex="a" /> và <MathExpr tex="b" /> là hai coordinates của cùng một point.
+        </p>
+      </aside>
     </section>
 
-    <section class="concept-block" id="hai-cach-viet">
-      <p class="concept-kicker">02 · CÙNG MỘT ĐIỂM, HAI CÁCH ĐỌC</p>
-      <h2>Cartesian tiện để nhìn thành phần. Polar tiện để nhìn magnitude và phase.</h2>
+    <section class="concept-block" data-lesson-role="math" id="cartesian-polar">
+      <p class="concept-kicker">02 · CARTESIAN ↔ POLAR</p>
+      <h2>Cùng một point có thể được mô tả bằng tọa độ <MathExpr tex="a,b" /> hoặc bằng magnitude và phase.</h2>
 
-      <div class="complex-two-views">
-        <article class="technical-card formula-card">
+      <div class="complex-coordinate-bridge" data-lesson-visual>
+        <article>
           <span class="card-label">CARTESIAN</span>
-          <div class="formula-card-main"><MathExpr tex="z=a+jb" /></div>
-          <p>Ta hỏi: đi bao xa theo trục thực và bao xa theo trục ảo?</p>
-          <div class="formula-card-details math-pair">
-            <MathExpr tex={String.raw`\operatorname{Re}\{z\}=a`} display class="math-compact" />
-            <MathExpr tex={String.raw`\operatorname{Im}\{z\}=b`} display class="math-compact" />
+          <strong><MathExpr tex="z=a+jb" /></strong>
+          <p>Tiện khi cần nhìn trực tiếp real và imaginary components.</p>
+          <div class="complex-detail-lines">
+            <span><MathExpr tex={String.raw`\operatorname{Re}\{z\}=a`} /></span>
+            <span><MathExpr tex={String.raw`\operatorname{Im}\{z\}=b`} /></span>
           </div>
         </article>
-        <article class="technical-card formula-card">
+
+        <div class="complex-convert-arrow">
+          <span>convert</span>
+          <b>↔</b>
+        </div>
+
+        <article>
           <span class="card-label">POLAR</span>
-          <div class="formula-card-main"><MathExpr tex={String.raw`z=A\angle\phi`} /></div>
-          <p>Ta hỏi: vector dài bao nhiêu và tạo góc bao nhiêu so với trục thực?</p>
-          <div class="formula-card-details math-pair">
-            <MathExpr tex={String.raw`A=\sqrt{a^2+b^2}`} display class="math-compact" />
-            <MathExpr tex={String.raw`\phi=\operatorname{atan2}(b,a)`} display class="math-compact" />
+          <strong><MathExpr tex={String.raw`z=A\angle\phi`} /></strong>
+          <p>Tiện khi cần nhìn magnitude và phase.</p>
+          <div class="complex-detail-lines">
+            <span><MathExpr tex={String.raw`A=|z|=\sqrt{a^2+b^2}`} /></span>
+            <span><MathExpr tex={String.raw`\phi=\arg(z)=\operatorname{atan2}(b,a)`} /></span>
           </div>
         </article>
       </div>
 
-      <p>
-        Hai cách viết này không mô tả hai signal khác nhau. Chúng chỉ là hai hệ tọa độ để mô tả cùng một điểm.
-        Trong wireless, ta sẽ liên tục đổi qua lại giữa hai góc nhìn này.
-      </p>
+      <div class="complex-coordinate-equations">
+        <MathExpr tex={String.raw`a=A\cos\phi`} display class="math-compact" />
+        <MathExpr tex={String.raw`b=A\sin\phi`} display class="math-compact" />
+      </div>
+
+      <aside class="precision-note">
+        <strong>Phase có hai chi tiết dễ bỏ qua</strong>
+        <p>
+          Thứ nhất, các góc <MathExpr tex={String.raw`\phi+2\pi m`} /> với <MathExpr tex={String.raw`m\in\mathbb{Z}`} /> mô tả cùng một direction.
+          Thứ hai, khi <MathExpr tex="z=0" />, magnitude bằng zero nhưng phase không được xác định vì vector không có direction.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="euler">
-      <p class="concept-kicker">03 · CÔNG THỨC EULER</p>
-      <h2>Euler nối một góc quay trên mặt phẳng phức với cosine và sine.</h2>
+      <p class="concept-kicker">03 · EULER NỐI HÌNH HỌC VỚI SINUSOID</p>
+      <h2>Một point trên unit circle có real coordinate là cosine và imaginary coordinate là sine.</h2>
 
-      <MathExpr tex={String.raw`e^{j\theta} = \cos\theta + j\sin\theta`} display />
+      <MathExpr tex={String.raw`e^{j\theta}=\cos\theta+j\sin\theta`} display />
+      <MathExpr tex={String.raw`Ae^{j\theta}=A\cos\theta+jA\sin\theta`} display />
 
-      <p>
-        Nếu nhân thêm amplitude A:
-      </p>
-
-      <MathExpr tex={String.raw`Ae^{j\theta} = A\cos\theta + jA\sin\theta`} display />
-
-      <p>
-        Đây là chiếc cầu quan trọng. Một vector có magnitude <MathExpr tex="A" /> và góc <MathExpr tex={String.raw`\theta`} /> có phần thực bằng <MathExpr tex={String.raw`A\cos\theta`} />,
-        còn phần ảo bằng <MathExpr tex={String.raw`A\sin\theta`} />.
-      </p>
-
-      <div class="euler-geometry technical-card visual-card visual-card-wide">
-        <svg viewBox="0 0 700 310" role="img" aria-label="Vector phức với projection cosine và sine">
-          <line class="complex-axis" x1="70" y1="220" x2="620" y2="220" />
-          <line class="complex-axis" x1="270" y1="45" x2="270" y2="275" />
-          <circle class="complex-guide-circle" cx="270" cy="220" r="125" />
-          <line class="complex-vector" x1="270" y1="220" x2="375" y2="152" />
-          <line class="complex-projection" x1="375" y1="152" x2="375" y2="220" />
-          <line class="complex-projection" x1="375" y1="152" x2="270" y2="152" />
-          <circle class="complex-tip" cx="375" cy="152" r="5" />
-          <foreignObject x="560" y="191" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
-          <foreignObject x="267" y="46" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
-          <foreignObject x="378" y="131" width="86" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`Ae^{j\theta}`} /></div></foreignObject>
-          <foreignObject x="306" y="224" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\cos\theta`} /></div></foreignObject>
-          <foreignObject x="266" y="130" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\sin\theta`} /></div></foreignObject>
-          <path class="complex-angle" d="M315 220 A45 45 0 0 0 307 195" />
-          <foreignObject x="303" y="180" width="40" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\theta`} /></div></foreignObject>
+      <div class="euler-geometry euler-geometry-v2 technical-card visual-card visual-card-wide" data-lesson-visual>
+        <svg viewBox="0 0 700 320" role="img" aria-label="Euler geometry với magnitude A và projections cosine sine">
+          <line class="complex-axis" x1="70" y1="225" x2="625" y2="225" />
+          <line class="complex-axis" x1="275" y1="42" x2="275" y2="285" />
+          <circle class="complex-guide-circle" cx="275" cy="225" r="128" />
+          <line class="complex-vector" x1="275" y1="225" x2="382" y2="155" />
+          <line class="complex-projection" x1="382" y1="155" x2="382" y2="225" />
+          <line class="complex-projection" x1="382" y1="155" x2="275" y2="155" />
+          <circle class="complex-tip" cx="382" cy="155" r="5" />
+          <foreignObject x="565" y="196" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Re}`} /></div></foreignObject>
+          <foreignObject x="277" y="42" width="54" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\operatorname{Im}`} /></div></foreignObject>
+          <foreignObject x="386" y="132" width="86" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`Ae^{j\theta}`} /></div></foreignObject>
+          <foreignObject x="312" y="229" width="100" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\cos\theta`} /></div></foreignObject>
+          <foreignObject x="278" y="132" width="100" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`A\sin\theta`} /></div></foreignObject>
+          <path class="complex-angle" d="M322 225 A47 47 0 0 0 314 199" />
+          <foreignObject x="308" y="181" width="40" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\theta`} /></div></foreignObject>
         </svg>
       </div>
-    </section>
-
-    <section class="concept-block" id="vector-quay">
-      <p class="concept-kicker">04 · TỪ MỘT ĐIỂM TỚI MỘT VECTOR QUAY</p>
-      <h2>Nếu góc tăng tuyến tính theo thời gian, điểm trên mặt phẳng phức sẽ quay đều.</h2>
-
-      <MathExpr tex={String.raw`z(t) = Ae^{j(\omega t + \phi)}`} display />
 
       <p>
-        Magnitude <MathExpr tex="A" /> giữ nguyên. Góc của vector là <MathExpr tex={String.raw`\omega t+\phi`} />. Khi thời gian tăng, góc tăng và vector quay quanh gốc.
-        Tốc độ quay chính là angular frequency <MathExpr tex={String.raw`\omega`} />.
+        Đây là lý do polar form và exponential form khớp với nhau:
+        <MathExpr tex={String.raw`z=A\angle\phi=Ae^{j\phi}`} />.
+        Exponential form không tạo ra một object mới; nó chỉ là một cách viết khác của cùng complex point.
       </p>
+    </section>
 
-      <div class="projection-story">
-        <div class="technical-card formula-card formula-card-compact">
-          <small>VECTOR PHỨC</small>
+    <section class="concept-block" id="rotating">
+      <p class="concept-kicker">04 · KHI ANGLE PHỤ THUỘC THỜI GIAN</p>
+      <h2>Thay <MathExpr tex={String.raw`\theta`} /> bằng <MathExpr tex={String.raw`\omega t+\phi`} />, complex point trở thành một vector quay.</h2>
+
+      <MathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} display />
+
+      <div class="projection-story projection-story-v2" data-lesson-visual>
+        <div>
+          <small>COMPLEX EXPONENTIAL</small>
           <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
-          <span>quay trên mặt phẳng</span>
+          <span>magnitude cố định, angle tăng theo time</span>
         </div>
-        <b>→ lấy phần thực →</b>
-        <div class="technical-card formula-card formula-card-compact">
-          <small>PROJECTION</small>
+        <b>→ real projection →</b>
+        <div>
+          <small>REAL SINUSOID</small>
           <strong><MathExpr tex={String.raw`A\cos(\omega t+\phi)`} /></strong>
-          <span>sinusoid trên trục thực</span>
+          <span>projection của rotating vector lên real axis</span>
         </div>
       </div>
 
-      <aside class="mental-model">
-        <strong>Một hình dung đáng giữ lại</strong>
+      <MathExpr tex={String.raw`A\cos(\omega t+\phi)=\operatorname{Re}\!\left\{Ae^{j(\omega t+\phi)}\right\}`} display />
+
+      <aside class="precision-note">
+        <strong>Real sinusoid không “biến thành” một complex signal vì ta viết Euler</strong>
         <p>
-          Cosine có thể được xem như chiếc bóng của một vector quay lên trục thực.
-          Sine là projection của cùng vector đó lên trục ảo.
+          Complex exponential là representation toán học rất tiện.
+          Khi model physical quantity là real, ta có thể lấy real part để quay lại real sinusoid.
         </p>
       </aside>
     </section>
 
     <section class="concept-block lab-section" id="phasor-lab">
       <p class="concept-kicker">05 · INTERACTIVE LAB</p>
-      <h2>Thay magnitude, phase và góc quay để nhìn số phức thay đổi trực tiếp trên mặt phẳng.</h2>
+      <h2>Tách static complex number khỏi rotating complex exponential trước khi nói tới phasor.</h2>
+
       <p>
-        Lab dưới đây tách phase ban đầu <MathExpr tex={String.raw`\phi`} /> khỏi phần quay do thời gian <MathExpr tex={String.raw`\omega t`} />.
-        Tổng góc của complex exponential tại một thời điểm là <MathExpr tex={String.raw`\omega t+\phi`} />.
+        <strong>Static mode</strong> cho thấy một point cố định ở Cartesian và polar form.{" "}
+        <strong>Rotating mode</strong> giữ magnitude và initial phase, rồi thêm một angle <MathExpr tex={String.raw`\omega t`} /> để point quay theo time.
       </p>
+
       <ComplexPhasorExplorer client:load />
     </section>
 
     <section class="concept-block" id="phasor">
-      <p class="concept-kicker">06 · PHASOR THỰC SỰ LÀ GÌ?</p>
-      <h2>Vector quay là trực giác. Phasor thường là phần còn lại khi ta bỏ common time factor <MathExpr tex={String.raw`e^{j\omega t}`} />.</h2>
-      <p>
-        Giả sử:
-      </p>
+      <p class="concept-kicker">06 · PHASOR KHÔNG PHẢI VECTOR QUAY THEO THỜI GIAN</p>
+      <h2>Vector quay là trực giác. Phasor là complex amplitude cố định sau khi tách common time factor.</h2>
 
-      <div class="phasor-definition">
-        <div class="technical-card formula-card formula-card-compact">
-          <small>COMPLEX SINUSOID THEO THỜI GIAN</small>
-          <strong><MathExpr tex={String.raw`z(t)=Ae^{j(\omega t+\phi)}`} /></strong>
+      <div class="phasor-factorization" data-lesson-visual>
+        <div>
+          <small>TIME-DEPENDENT COMPLEX SIGNAL</small>
+          <strong><MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /></strong>
         </div>
-        <b><MathExpr tex="=" /></b>
-        <div class="technical-card formula-card formula-card-compact">
+        <b>=</b>
+        <div class="phasor-focus">
           <small>PHASOR</small>
-          <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
+          <strong><MathExpr tex={String.raw`\widetilde X=Ae^{j\phi}`} /></strong>
+          <span>fixed complex amplitude</span>
         </div>
-        <b><MathExpr tex={String.raw`\times`} /></b>
-        <div class="technical-card formula-card formula-card-compact">
+        <b>×</b>
+        <div>
           <small>COMMON ROTATION</small>
           <strong><MathExpr tex={String.raw`e^{j\omega t}`} /></strong>
         </div>
       </div>
 
       <p>
-        Khi nhiều sinusoid cùng frequency <MathExpr tex={String.raw`\omega`} /> được xử lý trong một bài toán steady-state,
-        factor <MathExpr tex={String.raw`e^{j\omega t}`} /> là giống nhau cho tất cả. Ta có thể tạm bỏ phần quay chung đó và chỉ làm việc với{" "}
-        <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>. Đại lượng complex cố định này chính là phasor theo convention đó.
+        Khi nhiều steady-state sinusoids có cùng angular frequency <MathExpr tex={String.raw`\omega`} />,
+        factor <MathExpr tex={String.raw`e^{j\omega t}`} /> là chung.
+        Ta có thể làm đại số với các complex amplitudes <MathExpr tex={String.raw`Ae^{j\phi}`} /> rồi gắn common time dependence trở lại khi cần.
       </p>
 
       <aside class="precision-note">
-        <strong>Đừng đồng nhất phasor với complex exponential theo thời gian</strong>
+        <strong>Phasor convention phải được đọc từ context</strong>
         <p>
-          Hình vector quay rất hữu ích để xây trực giác, nhưng về mặt notation,
-          <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /> vẫn còn phụ thuộc thời gian. Phasor <MathExpr tex={String.raw`Ae^{j\phi}`} /> là complex amplitude sau khi common time factor được tách ra.
-          Tùy convention, magnitude của phasor có thể dùng peak hoặc RMS, nên khi đọc tài liệu cần xem tác giả đang dùng convention nào.
+          Một số tài liệu dùng peak magnitude, một số dùng RMS magnitude.
+          Ngoài ra convention <MathExpr tex={String.raw`e^{+j\omega t}`} /> hoặc <MathExpr tex={String.raw`e^{-j\omega t}`} /> ảnh hưởng dấu phase trong các công thức.
+          Vì vậy đừng chỉ nhìn ký hiệu mà bỏ qua convention của tài liệu.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block" id="phep-nhan">
-      <p class="concept-kicker">07 · VÌ SAO BIỂU DIỄN NÀY MẠNH?</p>
-      <h2>Nhân hai số phức tương ứng với nhân magnitude và cộng phase.</h2>
+    <section class="concept-block" id="multiply">
+      <p class="concept-kicker">07 · COMPLEX MULTIPLICATION = SCALE + ROTATE</p>
+      <h2>Đây là một trong những lý do số phức mạnh trong signal processing.</h2>
 
-      <div class="complex-multiply">
-        <div class="technical-card formula-card formula-card-compact">
-          <small>SIGNAL</small>
-          <strong><MathExpr tex={String.raw`Ae^{j\phi}`} /></strong>
+      <div class="complex-multiply complex-multiply-v2" data-lesson-visual>
+        <div>
+          <small>INPUT</small>
+          <strong><MathExpr tex={String.raw`2e^{j30^\circ}`} /></strong>
+          <span>magnitude 2, phase 30°</span>
         </div>
-        <b><MathExpr tex={String.raw`\times`} /></b>
-        <div class="technical-card formula-card formula-card-compact">
-          <small>HỆ SỐ</small>
-          <strong><MathExpr tex={String.raw`Ge^{j\theta}`} /></strong>
+        <b>×</b>
+        <div>
+          <small>COMPLEX GAIN</small>
+          <strong><MathExpr tex={String.raw`0.5e^{-j20^\circ}`} /></strong>
+          <span>scale 0.5, rotate −20°</span>
         </div>
-        <b><MathExpr tex="=" /></b>
-        <div class="technical-card formula-card formula-card-compact">
-          <small>KẾT QUẢ</small>
-          <strong><MathExpr tex={String.raw`AGe^{j(\phi+\theta)}`} /></strong>
+        <b>=</b>
+        <div class="result">
+          <small>OUTPUT</small>
+          <strong><MathExpr tex={String.raw`1e^{j10^\circ}`} /></strong>
+          <span>magnitudes multiply, phases add</span>
         </div>
       </div>
 
+      <MathExpr tex={String.raw`A_1e^{j\phi_1}\,A_2e^{j\phi_2}=A_1A_2e^{j(\phi_1+\phi_2)}`} display />
+
       <p>
-        Đây là một lý do số phức xuất hiện tự nhiên trong signal processing.
-        Một phép nhân có thể đồng thời scale amplitude và rotate phase.
-        Sau này, một channel coefficient hay một frequency-domain response thường được hiểu theo đúng kiểu này.
+        Sau này một channel coefficient, equalizer coefficient hoặc frequency response thường được đọc chính xác theo mental model này:
+        <strong> một complex multiplication có thể đồng thời đổi gain và phase.</strong>
       </p>
     </section>
 
-    <section class="concept-block" id="noi-sang-iq">
-      <p class="concept-kicker">08 · NỐI SANG <MathExpr tex="I/Q" /></p>
-      <h2>Ở bài tiếp theo, hai tọa độ trên mặt phẳng phức sẽ có tên cụ thể: <MathExpr tex="I" /> và <MathExpr tex="Q" />.</h2>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">08 · ĐẾN ĐÂY TA ĐÃ CÓ TOÁN, NHƯNG CHƯA CÓ <MathExpr tex="I/Q" /></p>
+      <h2>Bài 4 chỉ xây representation. Bài 5 mới gắn hai coordinates này vào transmitter và receiver.</h2>
 
-      <div class="iq-preview">
-        <div class="technical-card formula-card formula-card-compact">
-          <small>PHẦN THỰC</small>
-          <strong><MathExpr tex="a" /></strong>
-          <span>sẽ trở thành <MathExpr tex="I" /></span>
-        </div>
-        <b><MathExpr tex="+" /></b>
-        <div class="technical-card formula-card formula-card-compact">
-          <small>PHẦN ẢO</small>
-          <strong><MathExpr tex="jb" /></strong>
-          <span><MathExpr tex="b" /> sẽ trở thành <MathExpr tex="Q" /></span>
-        </div>
-        <b>→</b>
-        <div class="technical-card formula-card formula-card-compact">
-          <small>COMPLEX BASEBAND</small>
+      <div class="complex-scope-grid">
+        <article>
+          <span class="card-label">ĐÃ CÓ</span>
+          <strong><MathExpr tex={String.raw`z=a+jb=Ae^{j\phi}`} /></strong>
+          <p>Cartesian, polar, Euler, rotating complex exponential và phasor.</p>
+        </article>
+        <article>
+          <span class="card-label">CHƯA GÁN TÊN</span>
+          <strong>real / imaginary coordinates</strong>
+          <p>Ta chưa cần gọi chúng là in-phase và quadrature branches.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 05</span>
           <strong><MathExpr tex="I+jQ" /></strong>
-          <span>magnitude + phase trong một sample</span>
-        </div>
+          <p>Hai coordinates trở thành một representation thực tế của complex baseband sample.</p>
+        </article>
       </div>
-
-      <p>
-        Bài này mới chỉ xây nền toán và hình học. Bài 05 sẽ trả lời câu hỏi thực tế hơn:
-        <MathExpr tex="I" /> và <MathExpr tex="Q" /> xuất hiện ở transmitter/receiver như thế nào, và tại sao một sample trong code thường có hai thành phần này.
-      </p>
     </section>
 
-    <section class="concept-block recap">
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
       <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
-      <h2>Tới đây, số phức có thể được nhìn như hình học chứ không chỉ là ký hiệu j.</h2>
       <ol class="recap-list">
-        <li><strong><MathExpr tex="z=a+jb" />:</strong> một số phức là một điểm trên mặt phẳng thực và ảo.</li>
-        <li><strong>Magnitude:</strong> <MathExpr tex={String.raw`A=\sqrt{a^2+b^2}`} /> là độ dài vector từ gốc tới điểm z.</li>
-        <li><strong>Phase:</strong> <MathExpr tex={String.raw`\phi`} /> là góc của vector so với trục thực.</li>
-        <li><strong>Euler:</strong> <MathExpr tex={String.raw`e^{j\theta}=\cos\theta+j\sin\theta`} /> nối số phức với sinusoid.</li>
-        <li><strong>Complex exponential:</strong> <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /> có thể được hình dung như một vector quay.</li>
-        <li><strong>Phasor:</strong> <MathExpr tex={String.raw`Ae^{j\phi}`} /> là complex amplitude khi common factor <MathExpr tex={String.raw`e^{j\omega t}`} /> được tách ra.</li>
-        <li><strong>Complex multiplication:</strong> magnitude nhân nhau, phase cộng nhau.</li>
+        <li><strong>Cartesian:</strong> <MathExpr tex="z=a+jb" /> mô tả một point bằng real và imaginary coordinates.</li>
+        <li><strong>Polar:</strong> cùng point có thể viết bằng magnitude <MathExpr tex="A=|z|" /> và phase <MathExpr tex={String.raw`\phi=\arg(z)`} />.</li>
+        <li><strong>Euler:</strong> <MathExpr tex={String.raw`e^{j\theta}=\cos\theta+j\sin\theta`} /> nối geometry với sinusoid.</li>
+        <li><strong>Complex exponential:</strong> <MathExpr tex={String.raw`Ae^{j(\omega t+\phi)}`} /> là time-dependent rotating vector.</li>
+        <li><strong>Projection:</strong> real sinusoid là <MathExpr tex={String.raw`\operatorname{Re}\{Ae^{j(\omega t+\phi)}\}`} />.</li>
+        <li><strong>Phasor:</strong> <MathExpr tex={String.raw`Ae^{j\phi}`} /> là fixed complex amplitude khi common factor <MathExpr tex={String.raw`e^{j\omega t}`} /> được tách ra.</li>
+        <li><strong>Complex multiplication:</strong> magnitudes nhân nhau, phases cộng nhau.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/amplitude-frequency-phase/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/amplitude-frequency-phase/">
         <span>← BÀI TRƯỚC</span>
         <strong>Amplitude, frequency và phase</strong>
-        <small>Một sinusoid được mô tả bởi <MathExpr tex="A" />, <MathExpr tex="f" /> và <MathExpr tex={String.raw`\phi`} /> như thế nào?</small>
+        <small>Một sinusoid real được đọc bằng magnitude, repetition rate và phase relative to a reference.</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/iq-va-complex-baseband/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/iq-va-complex-baseband/">
         <span>BÀI TIẾP THEO →</span>
         <strong><MathExpr tex="I/Q" /> và complex baseband</strong>
-        <small>Từ mặt phẳng phức tới samples mà transmitter và receiver thực sự xử lý.</small>
+        <small>Từ complex plane tới samples mà transmitter và receiver thực sự xử lý.</small>
       </a>
     </nav>
   </article>
