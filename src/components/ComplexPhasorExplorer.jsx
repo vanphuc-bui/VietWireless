@@ -164,25 +164,25 @@ export default function ComplexPhasorExplorer() {
       </div>
 
       <div className="phasor-readout metric-card-grid">
-        <div>
-          <small>REAL PART</small>
-          <strong><MathExpr tex={real.toFixed(3)} /></strong>
-          <span><MathExpr tex={String.raw`A\cos\theta`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">REAL PART</small>
+          <strong className="metric-card-value"><MathExpr tex={real.toFixed(3)} /></strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`A\cos\theta`} /></span>
         </div>
-        <div>
-          <small>IMAGINARY PART</small>
-          <strong><MathExpr tex={imag.toFixed(3)} /></strong>
-          <span><MathExpr tex={String.raw`A\sin\theta`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">IMAGINARY PART</small>
+          <strong className="metric-card-value"><MathExpr tex={imag.toFixed(3)} /></strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`A\sin\theta`} /></span>
         </div>
-        <div>
-          <small>MAGNITUDE</small>
-          <strong><MathExpr tex={magnitude.toFixed(2)} /></strong>
-          <span><MathExpr tex={String.raw`|z|=\sqrt{a^2+b^2}`} /></span>
+        <div className="metric-card">
+          <small className="metric-card-label">MAGNITUDE</small>
+          <strong className="metric-card-value"><MathExpr tex={magnitude.toFixed(2)} /></strong>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`|z|=\sqrt{a^2+b^2}`} /></span>
         </div>
-        <div>
-          <small>PRINCIPAL ANGLE</small>
-          <strong><MathExpr tex={principalAngle.toFixed(0) + '^\\circ'} /></strong>
-          <span>{mode === 'static' ? 'arg(z)' : 'wrapped current angle'}</span>
+        <div className="metric-card">
+          <small className="metric-card-label">PRINCIPAL ANGLE</small>
+          <strong className="metric-card-value"><MathExpr tex={principalAngle.toFixed(0) + '^\\circ'} /></strong>
+          <span className="metric-card-formula">{mode === 'static' ? 'arg(z)' : 'wrapped current angle'}</span>
         </div>
       </div>
 
