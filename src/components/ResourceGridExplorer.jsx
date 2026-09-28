@@ -41,7 +41,7 @@ function valueForCell(k, l, type) {
 }
 
 function formatComplex(value) {
-  if (!value) return String.raw`\\varnothing`;
+  if (!value) return String.raw`\varnothing`;
   const i = value.i.toFixed(2);
   const qAbs = Math.abs(value.q).toFixed(2);
   const sign = value.q >= 0 ? '+' : '-';
@@ -174,7 +174,7 @@ export default function ResourceGridExplorer() {
               })}
             </div>
 
-            <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex={String.raw`\\ell`} /> →</div>
+            <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex={String.raw`\ell`} /> →</div>
           </div>
         </div>
 
