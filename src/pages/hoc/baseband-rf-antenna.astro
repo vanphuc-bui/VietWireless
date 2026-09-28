@@ -10,106 +10,101 @@ import MathExpr from '../../components/Math.astro';
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 09 · WIRELESS LINK</p>
       <h1>Baseband → RF → antenna</h1>
       <p class="lesson-deck">
-        Sau Bài 08, ta đã có bits → complex symbols → complex samples. Nhưng antenna không phát một mảng số phức trong RAM.{" "}
-        <strong>Bài này theo cùng một tín hiệu từ <MathExpr tex="I/Q" /> samples trong DSP cho tới điện áp RF thực ở cổng antenna.</strong>
+        Sau Bài 08, ta đã hiểu mapper tạo complex symbols. Nhưng antenna không phát một số phức trong RAM.{" "}
+        <strong>Bài này theo representation từ digital complex samples tới analog baseband, real RF voltage/current và cuối cùng là electromagnetic fields.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI TOÁN CẦN GIẢI</p>
       <p class="map-intro">
-        Giả sử trong code tôi đang có một buffer:
-        <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Câu hỏi rất thực tế là: những con số này đi qua những khối nào để cuối cùng tạo ra một electromagnetic wave ở vài <MathExpr tex={String.raw`\mathrm{GHz}`} />?
+        Giả sử DSP đang có buffer <MathExpr tex="x[n]=I[n]+jQ[n]" />.
+        Ta cần phân biệt rõ ba object: <strong>digital representation</strong>, <strong>analog electrical waveform</strong> và <strong>radiated field</strong>.
       </p>
 
-      <div class="system-position">
-        <span>TỪ MEMORY TỚI ANTENNA</span>
-        <div class="system-position-flow" aria-label="Chuỗi từ complex samples tới antenna">
-          <strong><MathExpr tex="I/Q" /> samples</strong><b>→</b>
-          <span>DAC</span><b>→</b>
-          <span>analog <MathExpr tex="I/Q" /></span><b>→</b>
-          <span>quadrature mixer</span><b>→</b>
+      <div class="system-position concept-flow-card">
+        <span>TỪ MEMORY TỚI KHÔNG GIAN</span>
+        <div class="system-position-flow" aria-label="Chuỗi từ digital complex samples tới electromagnetic wave">
+          <strong><MathExpr tex="I[n]+jQ[n]" /></strong><b>→</b>
+          <span>DAC / reconstruction</span><b>→</b>
+          <span><MathExpr tex="I(t),Q(t)" /></span><b>→</b>
+          <span>I/Q upconversion</span><b>→</b>
           <span>RF filter + PA</span><b>→</b>
-          <span>antenna</span>
+          <span>antenna port</span><b>→</b>
+          <span>EM field</span>
         </div>
         <p>
-          Block diagram này là mental model. Radio thực tế có thể dùng direct-conversion, low-IF, digital upconversion
-          hoặc nhiều stage khác nhau, nhưng ý tưởng “baseband representation → RF waveform” vẫn giữ nguyên.
+          Đây là conceptual direct-conversion chain.
+          Radio thực có thể dùng digital upconversion, RF DAC, IF stages hoặc architecture khác,
+          nên đừng coi số lượng physical blocks trong hình là bắt buộc.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="complex-samples">
-      <p class="concept-kicker">01 · DIGITAL BASEBAND CHƯA CÓ CARRIER RF</p>
-      <h2>Trong DSP, ta thường xử lý phần modulation quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /> thay vì trực tiếp tạo một sinusoid vài GHz bằng software.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="complex-samples">
+      <p class="concept-kicker">01 · MỖI STAGE DÙNG MỘT REPRESENTATION KHÁC</p>
+      <h2>Complex sample là mathematical representation. RF port cuối cùng mang voltage/current thực theo thời gian.</h2>
 
       <p>
-        Một sample complex có dạng <MathExpr tex="x[n] = I[n] + jQ[n]" />.
-        Nếu tại một thời điểm <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> thì magnitude của complex value là 1 và phase xấp xỉ 36.9°.
-        Hai con số <MathExpr tex="I" /> và <MathExpr tex="Q" /> đã chứa đủ thông tin về amplitude và phase của signal baseband tại sample đó.
-      </p>
-
-      <p>
-        Điều quan trọng là <strong>sample này chưa phải điện áp RF ngoài antenna</strong>.
-        Nó là representation mà DSP dùng vì filtering, modulation, FFT, channel estimation và nhiều phép toán khác trở nên gọn hơn trên số phức.
+        Trong DSP ta viết <MathExpr tex="x[n]=I[n]+jQ[n]" />.
+        Hai coordinates giữ amplitude/phase information rất thuận tiện, nhưng chữ <MathExpr tex="j" /> không có nghĩa hardware phải tạo một “imaginary voltage”.
+        Physical I và Q paths, nếu architecture có chúng, đều là real electrical waveforms.
       </p>
 
       <div class="rf-chain-overview process-flow" aria-label="Từ digital baseband samples tới RF waveform thực">
         <article class="process-card">
-          <small class="process-card-step">01 · DIGITAL BASEBAND</small>
+          <small class="process-card-step">01 · DIGITAL</small>
           <strong><MathExpr tex={String.raw`I[n],\,Q[n]`} /></strong>
-          <p>Complex samples đang nằm trong DSP / memory.</p>
+          <p>Numbers trong DSP, indexed theo sample clock.</p>
         </article>
 
-        <b class="process-arrow" aria-label="Qua DAC">
-          <span class="process-op">DAC</span>
+        <b class="process-arrow" aria-label="Qua DAC và reconstruction">
+          <span class="process-op">DAC + FILTER</span>
           <span class="process-arrow-glyph" aria-hidden="true">→</span>
         </b>
 
         <article class="process-card">
           <small class="process-card-step">02 · ANALOG BASEBAND</small>
           <strong><MathExpr tex={String.raw`I(t),\,Q(t)`} /></strong>
-          <p>Hai waveform điện analog sau DAC và reconstruction filter.</p>
+          <p>Real analog voltages/currents representing the complex envelope.</p>
         </article>
 
-        <b class="process-arrow" aria-label="Qua quadrature mixer và local oscillator">
-          <span class="process-op">MIXER + LO</span>
+        <b class="process-arrow" aria-label="Qua ideal quadrature upconversion">
+          <span class="process-op">I/Q UPCONVERSION</span>
           <span class="process-op-math"><MathExpr tex="f_c" /></span>
           <span class="process-arrow-glyph" aria-hidden="true">→</span>
         </b>
 
         <article class="process-card process-card-rf">
-          <small class="process-card-step">03 · RF WAVEFORM</small>
+          <small class="process-card-step">03 · REAL RF</small>
           <strong><MathExpr tex={String.raw`s_{\mathrm{RF}}(t)`} /></strong>
-          <p>Một waveform thực có spectrum nằm quanh carrier <MathExpr tex="f_c" />.</p>
+          <p>Real passband waveform centered around RF carrier.</p>
         </article>
       </div>
 
       <p class="process-takeaway">
-        Tóm lại: <strong>DAC đổi samples rời rạc thành analog baseband</strong>; sau đó <strong>mixer + local oscillator mới dịch signal lên RF</strong>.
-        Carrier <MathExpr tex="f_c" /> là tham số của bước upconversion, không phải một “sample” khác nằm trong memory.
+        Representation đổi qua từng stage, nhưng information phải được bảo toàn trong wanted band.
+        Bài này quan tâm chính xác việc information đi từ complex coordinates sang physical waveform như thế nào.
       </p>
     </section>
 
     <section class="concept-block" id="dac">
       <p class="concept-kicker">02 · DAC BIẾN SAMPLE VALUE THÀNH ANALOG WAVEFORM</p>
-      <h2>DAC không “vẽ một đường cong” từ công thức; nó cập nhật output theo sample clock rồi analog filter xử lý phần ngoài dải.</h2>
+      <h2>DAC biến sequence theo sample clock thành một analog output; reconstruction filtering giữ wanted band và suppress images.</h2>
 
       <p>
-        Với mỗi nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" />, DAC nhận một chuỗi số theo thời gian.
-        Nếu sample rate là <MathExpr tex="f_s" />, mỗi <MathExpr tex="T_s = 1/f_s" /> giây DAC nhận một giá trị mới.
-        Output analog thô vì vậy liên quan trực tiếp tới các mức sample và cơ chế hold/update của DAC.
+        Với mỗi digital branch, samples tới theo rate <MathExpr tex="f_s" /> với spacing <MathExpr tex={String.raw`T_s=1/f_s`} />.
+        Một zero-order-hold model giúp hình dung output được giữ giữa các updates, nhưng converter thực có transfer function riêng và không bắt buộc đúng literal model đó.
       </p>
 
       <p>
-        Sampling tạo ra các spectral replicas cách nhau theo sample rate.
-        Vì thế sau DAC thường có reconstruction filter để giữ wanted analog bandwidth và làm suy giảm các ảnh phổ không mong muốn.
-        Ta không cần nhớ chi tiết circuit ở đây; chỉ cần hiểu rằng <strong>digital samples không nhảy thẳng thành một waveform RF sạch</strong>.
+        Discrete-to-continuous conversion tạo spectral images liên quan tới sample rate.
+        Reconstruction / anti-imaging filtering giúp giữ wanted analog band và suppress unwanted images.
+        Vì vậy <strong>DAC không đồng nghĩa với “RF carrier generator”</strong>; carrier translation là một operation khác.
       </p>
 
       <div class="dac-story">
@@ -137,9 +132,10 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">03 · I VÀ Q ĐIỀU KHIỂN HAI CARRIER VUÔNG PHA</p>
       <h2>Quadrature upconversion biến complex baseband thành một waveform RF thực.</h2>
 
-      <p>Với một convention thường gặp:</p>
+      <p>Với convention <MathExpr tex={String.raw`e^{+j2\pi f_ct}`} />:</p>
 
-      <MathExpr tex={String.raw`s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)`} display />
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=\operatorname{Re}\!\left\{x_{\mathrm{bb}}(t)e^{j2\pi f_ct}\right\}`} display />
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=I(t)\cos(2\pi f_ct)-Q(t)\sin(2\pi f_ct)`} display />
 
       <p>
         Nhánh I nhân với cosine. Nhánh Q nhân với sine lệch 90°. Sau đó hai nhánh được cộng lại.
@@ -147,9 +143,13 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Lấy ví dụ đơn giản <MathExpr tex="I=0.8" /> và <MathExpr tex="Q=0.6" /> trong một khoảng ngắn. Khi đó <MathExpr tex="A=1" /> và <MathExpr tex={String.raw`\phi\approx36.9^\circ`} />.
-        Công thức phía trên trở thành một sinusoid có cùng magnitude <MathExpr tex="A" /> và phase <MathExpr tex={String.raw`\phi`} /> quanh carrier <MathExpr tex="f_c" />.
-        Nói cách khác, <strong>tọa độ <MathExpr tex="I/Q" /> ở baseband quyết định amplitude và phase của RF carrier</strong>.
+        Với một complex tone <MathExpr tex={String.raw`x_{\mathrm{bb}}(t)=Ae^{j(2\pi f_bt+\phi)}`} />,
+        ideal upconversion cho:
+      </p>
+      <MathExpr tex={String.raw`s_{\mathrm{RF}}(t)=A\cos\!\left(2\pi(f_c+f_b)t+\phi\right)`} display />
+      <p>
+        Đây là cách rất trực quan để đọc signed complex-baseband frequency:
+        <MathExpr tex="f_b>0" /> đi lên phía trên carrier, còn <MathExpr tex="f_b<0" /> đi xuống phía dưới carrier.
       </p>
 
       <aside class="precision-note">
@@ -163,22 +163,21 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="rf-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thay amplitude và phase của một complex symbol rồi nhìn <MathExpr tex={String.raw`I\cos(\cdot)`} /> và <MathExpr tex={String.raw`-Q\sin(\cdot)`} /> cộng thành RF waveform.</h2>
+      <h2>Mode 1 nhìn sample sequence đi qua DAC. Mode 2 nhìn signed baseband frequency được dịch lên quanh carrier.</h2>
       <p>
-        Carrier trong demo chỉ là một số chu kỳ minh họa trên màn hình.
-        Điều cần quan sát là khi phase của điểm <MathExpr tex="I+jQ" /> thay đổi, cách hai nhánh <MathExpr tex="I" /> và <MathExpr tex="Q" /> phối hợp cũng thay đổi,
-        nhưng tổng cuối cùng vẫn là một waveform thực.
+        <strong>DAC & reconstruction</strong> tách discrete samples, held analog output và wanted in-band waveform.
+        <strong>Frequency translation</strong> dùng một complex tone để cho thấy negative/positive baseband offsets trở thành lower/upper RF offsets.
       </p>
       <RFChainExplorer client:load />
     </section>
 
     <section class="concept-block" id="frequency-translation">
       <p class="concept-kicker">05 · UPCONVERSION LÀ DỊCH SPECTRUM LÊN QUANH CARRIER</p>
-      <h2>Baseband mô tả nội dung quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />; mixer đặt cùng nội dung đó quanh <MathExpr tex="f_c" />.</h2>
+      <h2>Baseband dùng zero frequency làm reference; upconversion đổi reference đó sang carrier <MathExpr tex="f_c" />.</h2>
 
       <p>
-        Nếu complex baseband chiếm một bandwidth <MathExpr tex="B" /> quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, sau upconversion wanted RF signal nằm quanh carrier <MathExpr tex="f_c" />.
-        Carrier không tạo thêm information. Nó chuyển vị trí của spectrum tới band mà antenna và wireless channel sử dụng.
+        Nếu complex baseband chứa offsets trong một interval quanh <MathExpr tex={String.raw`0\,\mathrm{Hz}`} />, ideal multiplication bởi complex carrier dịch các offsets đó quanh <MathExpr tex="f_c" />.
+        Taking the real part tạo physical passband waveform và đồng thời real RF spectrum phải có conjugate symmetry quanh zero.
       </p>
 
       <div class="frequency-translation">
@@ -195,23 +194,27 @@ import MathExpr from '../../components/Math.astro';
         </div>
       </div>
 
-      <p>
-        Receiver làm chiều ngược lại. RF front-end chọn band cần thu, mixer đưa channel đó về complex baseband,
-        rồi ADC tạo lại các <MathExpr tex="I/Q" /> samples để DSP xử lý.
-      </p>
+      <aside class="precision-note">
+        <strong>“Baseband spectrum dịch lên RF” là statement về representation</strong>
+        <p>
+          Complex envelope giữ signed offsets quanh zero.
+          Physical RF signal là real-valued nên full two-sided RF spectrum còn có conjugate mirror ở negative absolute frequency.
+          Trong radio engineering ta thường chỉ vẽ positive-frequency band quanh <MathExpr tex="f_c" /> vì đó là wanted RF band.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="rf-front-end">
-      <p class="concept-kicker">06 · MIXER XONG VẪN CHƯA THỂ NỐI THẲNG ANTENNA</p>
-      <h2>Signal cần được lọc, khuếch đại và ghép đúng với RF path.</h2>
+      <p class="concept-kicker">06 · UPCONVERSION XONG VẪN CHƯA PHẢI MỘT TRANSMITTER HOÀN CHỈNH</p>
+      <h2>Wanted RF waveform còn phải đạt spectral, power và interface requirements trước antenna.</h2>
 
       <div class="rf-front-end-grid">
         <article>
           <span class="card-label">RF FILTER</span>
           <h3>Giữ wanted RF band</h3>
           <p>
-            Mixer và oscillator có thể tạo images, leakage và mixing products.
-            Filter giúp làm suy giảm các thành phần không mong muốn trước khi phát.
+            Upconverter, DAC/RF-DAC và nonlinear stages có thể để lại images, harmonics hoặc spurious products.
+            RF filtering giúp suppress unwanted content ngoài wanted transmit band.
           </p>
         </article>
 
@@ -220,7 +223,7 @@ import MathExpr from '../../components/Math.astro';
           <h3>Tăng công suất phát</h3>
           <p>
             PA nâng RF waveform tới power level cần thiết.
-            Nếu PA đi quá sâu vào vùng nonlinear, amplitude/phase của waveform bị méo và spectrum có thể regrow.
+            Nonlinearity có thể tạo in-band distortion và spectral regrowth, nên output power không thể tách rời linearity requirement.
           </p>
         </article>
 
@@ -228,7 +231,7 @@ import MathExpr from '../../components/Math.astro';
           <span class="card-label">RF NETWORK</span>
           <h3>Đưa power tới antenna</h3>
           <p>
-            Matching network, switch, duplexer hoặc filter bank tùy architecture giúp nối PA/LNA với antenna và band đang dùng.
+            Matching network, switch, duplexer hoặc filter bank tùy architecture route power và tạo interface phù hợp giữa RF chain với antenna port.
           </p>
         </article>
       </div>
@@ -244,12 +247,12 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="antenna">
       <p class="concept-kicker">07 · ANTENNA KHÔNG THỰC HIỆN MODULATION</p>
-      <h2>Modulation đã nằm trong RF voltage/current trước antenna; antenna biến năng lượng đó thành electromagnetic fields.</h2>
+      <h2>Data đã nằm trong RF voltage/current tại feed; antenna tạo spatial electromagnetic fields từ current distribution của cấu trúc.</h2>
 
       <p>
-        RF current phân bố trên cấu trúc antenna tạo electric và magnetic fields.
-        Hình học antenna, polarization, matching và môi trường quyết định radiation pattern và efficiency.
-        Nhưng data không được “gắn thêm” tại antenna. Nó đã nằm trong amplitude/phase/time structure của waveform từ các stage trước.
+        RF excitation ở feed tạo current/charge distribution trên antenna, từ đó hình thành radiated electric và magnetic fields.
+        Geometry, impedance match, polarization và surrounding structure ảnh hưởng efficiency/pattern.
+        Antenna không đọc bit labels và cũng không tự thực hiện QAM mapping.
       </p>
 
       <div class="antenna-story">
@@ -261,20 +264,53 @@ import MathExpr from '../../components/Math.astro';
       </div>
     </section>
 
-    <section class="concept-block" id="receiver">
-      <p class="concept-kicker">08 · RECEIVER ĐI NGƯỢC LẠI, NHƯNG KHÔNG HOÀN HẢO</p>
+    <section class="concept-block" id="rf-imperfections">
+      <p class="concept-kicker">08 · IDEAL EQUATIONS CHE GIẤU CÁC RF IMPAIRMENTS</p>
+      <h2>Real transmitter không tạo đúng tuyệt đối waveform mà DSP yêu cầu.</h2>
+
+      <div class="rf-impairment-grid">
+        <article>
+          <span class="card-label">I/Q IMBALANCE</span>
+          <strong>gain / phase mismatch</strong>
+          <p>Hai quadrature paths không perfectly matched có thể tạo mirror-image leakage.</p>
+        </article>
+        <article>
+          <span class="card-label">LO LEAKAGE</span>
+          <strong>carrier-center spur</strong>
+          <p>DC offset hoặc finite isolation có thể làm energy rò tại carrier center.</p>
+        </article>
+        <article>
+          <span class="card-label">PA NONLINEARITY</span>
+          <strong>distortion + spectral regrowth</strong>
+          <p>Amplitude-dependent gain/phase làm received constellation và spectrum méo.</p>
+        </article>
+        <article>
+          <span class="card-label">QUANTIZATION / CLOCKS</span>
+          <strong>finite precision + jitter</strong>
+          <p>DAC resolution và clock quality cũng giới hạn waveform fidelity.</p>
+        </article>
+      </div>
+
+      <p>
+        Bài này không đi sâu calibration hay RF impairment compensation.
+        Điều cần giữ là ideal complex-envelope equation là target model; hardware implementation luôn có error budget quanh target đó.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="receiver">
+      <p class="concept-kicker">09 · RECEIVER ĐI NGƯỢC LẠI, NHƯNG KHÔNG PHẢI CHỈ ĐẢO MŨI TÊN</p>
       <h2>Antenna thu một RF waveform đã bị channel và noise làm thay đổi, rồi radio đưa nó trở lại <MathExpr tex="I/Q" /> samples.</h2>
 
-      <div class="receiver-chain">
-        <div><strong>Antenna</strong><span>EM field → RF signal</span></div>
+      <div class="receiver-chain receiver-chain-v2" data-lesson-visual>
+        <div><strong>Antenna port</strong><span>received EM field excites RF voltage/current</span></div>
         <b>→</b>
-        <div><strong>Filter / LNA</strong><span>chọn band, low-noise gain</span></div>
+        <div><strong>Filter / LNA</strong><span>band selection + low-noise gain</span></div>
         <b>→</b>
-        <div><strong>Downconversion</strong><span>RF → analog <MathExpr tex="I/Q" /></span></div>
+        <div><strong>Downconversion</strong><span>RF band → analog complex-envelope representation</span></div>
         <b>→</b>
-        <div><strong>ADC</strong><span><MathExpr tex={String.raw`I[n],\,Q[n]`} /></span></div>
+        <div><strong>ADC</strong><span><MathExpr tex={String.raw`I[n],\,Q[n]`} /> or architecture-equivalent digital samples</span></div>
         <b>→</b>
-        <div><strong>DSP</strong><span>sync, FFT, equalization, decode</span></div>
+        <div><strong>DSP</strong><span>sync, estimation, equalization, demapping, decoding</span></div>
       </div>
 
       <p>
@@ -283,27 +319,27 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
-      <h2>Một sample trong code liên quan tới sóng ngoài antenna qua một chuỗi biến đổi có ý nghĩa vật lý rõ ràng.</h2>
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
+      <h2>Một complex sample chỉ là điểm bắt đầu của chuỗi representation → conversion → RF → radiation.</h2>
       <ol class="recap-list">
         <li><strong><MathExpr tex="I/Q" /> samples:</strong> representation số của complex baseband.</li>
-        <li><strong>DAC:</strong> tạo hai analog baseband waveforms <MathExpr tex="I(t)" /> và <MathExpr tex="Q(t)" />.</li>
-        <li><strong>Quadrature upconversion:</strong> đặt <MathExpr tex="I/Q" /> lên hai carrier vuông pha rồi cộng thành RF waveform thực.</li>
-        <li><strong>Local oscillator:</strong> quyết định signal được frequency-translate lên quanh carrier nào.</li>
-        <li><strong>Filter và PA:</strong> làm sạch spectrum và đưa waveform tới mức power cần thiết.</li>
-        <li><strong>Antenna:</strong> nối RF circuit với electromagnetic wave trong không gian.</li>
-        <li><strong>Receiver:</strong> làm chuỗi gần như ngược lại để quay về <MathExpr tex="I/Q" /> samples.</li>
+        <li><strong>DAC / reconstruction:</strong> biến discrete representation thành wanted analog baseband band.</li>
+        <li><strong>Quadrature upconversion:</strong> <MathExpr tex={String.raw`\operatorname{Re}\{x_{\mathrm{bb}}e^{j2\pi f_ct}\}`} /> tạo real RF waveform.</li>
+        <li><strong>Signed baseband frequency:</strong> positive/negative offsets map sang upper/lower offsets quanh carrier.</li>
+        <li><strong>RF filter + PA:</strong> enforce spectral/power requirements nhưng cũng có nonidealities.</li>
+        <li><strong>Antenna:</strong> RF excitation tạo current distribution và radiated electromagnetic fields.</li>
+        <li><strong>Receiver:</strong> chọn band, amplify, downconvert và digitize để trở lại DSP representation.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/modulation-bpsk-qpsk-qam/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/modulation-bpsk-qpsk-qam/">
         <span>← BÀI TRƯỚC</span>
         <strong>Modulation: BPSK → QPSK → QAM</strong>
         <small>Bits trở thành complex symbols như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/wireless-channel/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/wireless-channel/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Wireless channel</strong>
         <small>Waveform thay đổi thế nào sau khi rời antenna?</small>
