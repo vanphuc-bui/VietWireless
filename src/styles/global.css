@@ -15282,3 +15282,393 @@ body {
     min-width: 620px;
   }
 }
+
+
+/* --- Lesson 6 refresh: time vs frequency representation --- */
+.domain-question-grid-v2 article > strong,
+.domain-question-grid-v2 article > p,
+.tone-domain-story-v2 p,
+.domain-sum-flow-v2 > div > span,
+.frequency-coefficient-story > div > span,
+.real-complex-spectrum > article > p,
+.time-frequency-resolution-v2 > div > span,
+.wireless-domain-table-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.domain-question-grid-v2 article > strong,
+.tone-domain-story-v2 strong,
+.domain-sum-flow-v2 strong,
+.frequency-coefficient-story strong,
+.real-complex-spectrum > article > strong,
+.time-frequency-resolution-v2 strong {
+  font-family: var(--font-text);
+  font-weight: 600;
+}
+
+.domain-sum-flow-v2 {
+  grid-template-columns:
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 42px
+    minmax(0, 1.2fr) 32px
+    minmax(0, 1.2fr);
+}
+
+.domain-sum-flow-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.frequency-coefficient-story {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.15fr) 34px
+    minmax(0, 1fr) 34px
+    minmax(0, 1fr);
+  gap: 9px;
+  align-items: stretch;
+}
+
+.frequency-coefficient-story > div {
+  min-width: 0;
+  min-height: 130px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.frequency-coefficient-story > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.frequency-coefficient-story > div > strong {
+  margin: 7px 0 5px;
+  font-size: var(--lesson-prose-size);
+}
+
+.frequency-coefficient-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.real-complex-spectrum {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.real-complex-spectrum > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.real-complex-spectrum > article > strong {
+  display: block;
+  margin: 9px 0 12px;
+  font-size: var(--lesson-prose-size);
+}
+
+.real-complex-spectrum > article > p {
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
+.mini-spectrum-axis {
+  position: relative;
+  height: 120px;
+  margin: 10px 0 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.mini-spectrum-axis::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  bottom: 0;
+  border-left: 1px solid var(--line);
+}
+
+.mini-spectrum-axis > i {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 72px;
+  background: var(--blue);
+}
+
+.mini-spectrum-axis > i.left {
+  left: 27%;
+}
+
+.mini-spectrum-axis > i.right {
+  right: 27%;
+}
+
+.mini-spectrum-axis > span {
+  position: absolute;
+  bottom: -30px;
+  min-width: 42px;
+  text-align: center;
+}
+
+.mini-spectrum-axis > span.left-label {
+  left: calc(27% - 21px);
+}
+
+.mini-spectrum-axis > span.right-label {
+  right: calc(27% - 21px);
+}
+
+.mini-spectrum-axis.one-sided > i.right {
+  right: 27%;
+}
+
+.time-frequency-resolution-v2 {
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+}
+
+.wireless-domain-table-v2 {
+  max-width: none;
+}
+
+.wireless-domain-table-v2 > div {
+  grid-template-columns: 190px minmax(0, 1fr);
+}
+
+.domain-switch-preview {
+  margin: 26px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr) 36px minmax(0, 1.4fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.domain-switch-preview > span {
+  min-width: 0;
+  min-height: 86px;
+  padding: 14px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: center;
+  font-size: var(--lesson-prose-size);
+}
+
+.domain-switch-preview > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.time-frequency-lab {
+  margin-top: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+}
+
+.time-frequency-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.time-frequency-controls label {
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.time-frequency-controls label > span {
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.time-frequency-controls strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.time-frequency-readout > div {
+  min-height: 94px;
+}
+
+.time-frequency-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.time-frequency-panels > section {
+  min-width: 0;
+  padding: 18px;
+}
+
+.time-frequency-panels > section:first-child {
+  border-right: 1px solid var(--line);
+}
+
+.time-frequency-panels svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.time-frequency-panels > section > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.tf-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.tf-wave {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.1;
+}
+
+.tf-sample {
+  fill: var(--accent);
+  opacity: .78;
+}
+
+.tf-bin {
+  stroke: #c8c2ba;
+  stroke-width: 1.3;
+}
+
+.tf-bin.active {
+  stroke: var(--blue);
+  stroke-width: 2.4;
+}
+
+.tf-bin-dot {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1.2;
+}
+
+.tf-coefficient-strip {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tf-coefficient-strip > span {
+  min-width: 0;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  align-items: baseline;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.tf-coefficient-strip > span > small {
+  grid-column: 1 / -1;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.tf-coefficient-strip > span > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.tf-coefficient-strip > span > em {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+  font-style: normal;
+}
+
+.time-frequency-caption {
+  margin: 0;
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .domain-sum-flow-v2,
+  .frequency-coefficient-story,
+  .real-complex-spectrum,
+  .time-frequency-resolution-v2,
+  .domain-switch-preview,
+  .time-frequency-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .domain-sum-flow-v2 > b,
+  .frequency-coefficient-story > b,
+  .time-frequency-resolution-v2 > b,
+  .domain-switch-preview > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .time-frequency-panels > section:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 720px) {
+  .time-frequency-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .wireless-domain-table-v2 > div {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .time-frequency-panels > section {
+    padding: 12px 10px;
+    overflow-x: auto;
+  }
+
+  .time-frequency-panels svg {
+    min-width: 660px;
+  }
+
+  .tf-coefficient-strip {
+    grid-template-columns: 1fr;
+  }
+}
