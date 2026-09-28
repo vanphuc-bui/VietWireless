@@ -171,7 +171,7 @@ export default function RFChainExplorer() {
             </div>
             <div className="metric-card">
               <small className="metric-card-label">OTHER BRANCH</small>
-              <strong className="metric-card-value"><MathExpr tex={String.raw`Q[n]\\to Q(t)`} /></strong>
+              <strong className="metric-card-value"><MathExpr tex={String.raw`Q[n]\to Q(t)`} /></strong>
               <span className="metric-card-formula">same idea on quadrature path</span>
             </div>
           </div>
