@@ -6,7 +6,7 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Baseband → RF → antenna | VietWireless"
-  description="Theo một tín hiệu từ complex baseband I/Q qua DAC, quadrature upconversion, RF front-end và antenna để hiểu sample trong code liên quan gì tới sóng được phát ra."
+  description="Theo complex baseband qua DAC, quadrature upconversion, RF front-end và antenna để hiểu digital samples liên quan gì tới sóng được phát ra."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
@@ -32,7 +32,7 @@ import MathExpr from '../../components/Math.astro';
           <strong><MathExpr tex="I[n]+jQ[n]" /></strong><b>→</b>
           <span>DAC / reconstruction</span><b>→</b>
           <span><MathExpr tex="I(t),Q(t)" /></span><b>→</b>
-          <span>I/Q upconversion</span><b>→</b>
+          <span>quadrature upconversion</span><b>→</b>
           <span>RF filter + PA</span><b>→</b>
           <span>antenna port</span><b>→</b>
           <span>EM field</span>
@@ -74,7 +74,7 @@ import MathExpr from '../../components/Math.astro';
         </article>
 
         <b class="process-arrow" aria-label="Qua ideal quadrature upconversion">
-          <span class="process-op">I/Q UPCONVERSION</span>
+          <span class="process-op">QUADRATURE UPCONVERSION</span>
           <span class="process-op-math"><MathExpr tex="f_c" /></span>
           <span class="process-arrow-glyph" aria-hidden="true">→</span>
         </b>
@@ -270,7 +270,7 @@ import MathExpr from '../../components/Math.astro';
 
       <div class="rf-impairment-grid">
         <article>
-          <span class="card-label">I/Q IMBALANCE</span>
+          <span class="card-label">QUADRATURE IMBALANCE</span>
           <strong>gain / phase mismatch</strong>
           <p>Hai quadrature paths không perfectly matched có thể tạo mirror-image leakage.</p>
         </article>
