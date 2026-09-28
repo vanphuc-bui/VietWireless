@@ -187,7 +187,7 @@ export default function RFChainExplorer() {
               <path className="rfc-dac-hold" d={holdPath} />
               <path className="rfc-dac-ideal" d={idealIPath} />
               {dacSamples.map((value, n) => {
-                const x = PAD + ((n + 0.5) / sampleCount) * (W - 2 * PAD);
+                const x = PAD + (n / sampleCount) * (W - 2 * PAD);
                 const y = H / 2 - 70 * value;
                 return (
                   <g key={n}>
