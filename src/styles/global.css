@@ -16667,3 +16667,286 @@ body {
   opacity: .38;
   cursor: not-allowed;
 }
+
+
+/* --- Lesson 9 refresh: digital baseband to physical RF --- */
+.rf-chain-lab-v2 {
+  overflow: visible;
+}
+
+.rf-lab-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-lab-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.rf-lab-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.rf-lab-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.rf-chain-controls-v2 label {
+  font-size: var(--lesson-meta-size);
+}
+
+.rf-chain-controls-v2 strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.rf-dac-panel {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-dac-panel > svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.rfc-dac-hold {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.8;
+  opacity: .8;
+}
+
+.rfc-dac-ideal {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.3;
+}
+
+.rfc-dac-stem {
+  stroke: #d5cec5;
+  stroke-width: 1;
+}
+
+.rfc-dac-sample {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.rf-dac-legend,
+.modulation-constellation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.rf-dac-legend {
+  margin-top: 10px;
+}
+
+.rf-dac-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.rf-dac-legend > span > i {
+  width: 18px;
+  height: 2px;
+  display: inline-block;
+}
+
+.rf-dac-legend > span > i.sample {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.rf-dac-legend > span > i.hold {
+  background: var(--violet);
+}
+
+.rf-dac-legend > span > i.ideal {
+  height: 3px;
+  background: var(--blue);
+}
+
+.rf-translation-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.rf-wave-stack-v2 {
+  padding: 18px;
+  border-right: 1px solid var(--line);
+}
+
+.rf-spectrum-shift-panel {
+  min-width: 0;
+  padding: 18px;
+  background: var(--paper);
+}
+
+.rf-spectrum-shift-panel > svg {
+  width: 100%;
+  display: block;
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-spectrum-shift-panel > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.rfc-spectrum-guide {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.rfc-spectrum-bb {
+  stroke: var(--violet);
+  stroke-width: 2.2;
+}
+
+.rfc-spectrum-bb-dot {
+  fill: var(--violet);
+}
+
+.rfc-spectrum-rf {
+  stroke: var(--accent);
+  stroke-width: 2.6;
+}
+
+.rfc-spectrum-rf-dot {
+  fill: var(--accent);
+}
+
+.rf-lab-caption {
+  margin: 0;
+  padding: 14px 18px 18px;
+  color: var(--ink-soft);
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.rf-impairment-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rf-impairment-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.rf-impairment-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.rf-impairment-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.receiver-chain-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.receiver-chain-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+@media (max-width: 980px) {
+  .rf-translation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-wave-stack-v2 {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .rf-impairment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .rf-lab-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .rf-lab-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .rf-lab-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .rf-dac-panel,
+  .rf-wave-stack-v2,
+  .rf-spectrum-shift-panel {
+    padding: 12px 10px;
+    overflow-x: auto;
+  }
+
+  .rf-dac-panel > svg,
+  .rf-wave-stack-v2 svg,
+  .rf-spectrum-shift-panel > svg {
+    min-width: 660px;
+  }
+
+  .receiver-chain-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .receiver-chain-v2 > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+}
