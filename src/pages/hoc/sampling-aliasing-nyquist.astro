@@ -39,7 +39,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 02 · SIGNAL FOUNDATIONS</p>
       <h1>Sampling, aliasing và Nyquist</h1>
       <p class="lesson-deck">
@@ -130,15 +130,16 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
               <circle cx="268" cy="118" r="4" />
             </g>
           </svg>
-          <strong>Các mức số hữu hạn</strong>
-          <p>Quantization xử lý amplitude. Đây là bước khác với sampling.</p>
+          <strong><MathExpr tex={String.raw`x_q[n]`} /></strong>
+          <p>Quantization thay mỗi sample amplitude bằng một giá trị/code thuộc tập mức hữu hạn.</p>
         </article>
       </div>
 
       <aside class="precision-note">
         <strong>Sampling và quantization là hai việc khác nhau</strong>
         <p>
-          Sampling làm rời rạc trục thời gian. Quantization làm rời rạc amplitude.
+          Sampling làm rời rạc trục thời gian và tạo sequence <MathExpr tex="x[n]" />.
+          Quantization ánh xạ amplitude sang các mức hữu hạn, ta có thể ký hiệu đầu ra là <MathExpr tex={String.raw`x_q[n]`} />.
           Aliasing mà bài này nói tới xuất phát từ sampling theo thời gian, không phải từ số bit của ADC.
         </p>
       </aside>
@@ -195,10 +196,11 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
 
     <section class="concept-block lab-section" id="aliasing-lab">
       <p class="concept-kicker">03 · INTERACTIVE LAB</p>
-      <h2>Thay đổi tần số signal và sampling rate để nhìn aliasing xuất hiện.</h2>
+      <h2>Đi qua ba trạng thái Safe → Nyquist boundary → Aliasing, rồi nhìn cùng hiện tượng ở time domain và frequency domain.</h2>
       <p>
-        Demo dùng một cosine đơn để giữ hình dễ đọc. Khi tần số input vượt quá <MathExpr tex="f_s/2" />,
-        đường nét đứt cho thấy một waveform tần số thấp khác đi qua đúng cùng các sample.
+        Demo dùng một cosine đơn để giữ hình dễ đọc.
+        <strong>Time view</strong> cho thấy waveform và sample points.
+        <strong>Spectrum view</strong> cho thấy copies xuất hiện cách nhau <MathExpr tex="f_s" /> và frequency nào rơi vào principal Nyquist interval.
       </p>
       <SamplingAliasExplorer client:load />
     </section>
@@ -219,33 +221,40 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         Nếu <MathExpr tex="f_s" /> đủ lớn, các bản sao đứng tách nhau. Nếu <MathExpr tex="f_s" /> quá nhỏ, chúng chồng lên nhau và phần bị chồng chính là aliasing.
       </p>
 
-      <div class="nyquist-spectrum-grid">
+      <div class="nyquist-spectrum-grid nyquist-spectrum-grid-v2">
         <article>
-          <span class="sampling-stage-label"><MathExpr tex="f_s>2B" /> · TÁCH NHAU</span>
-          <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum không chồng lên nhau khi sampling đủ nhanh">
+          <span class="sampling-stage-label"><MathExpr tex="f_s>2B" /> · CÁC SUPPORT TÁCH NHAU</span>
+          <svg viewBox="0 0 480 180" role="img" aria-label="Spectrum support từ -B tới B và các copies quanh cộng trừ fs không chồng lên nhau">
             <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
-            <path class="spectrum-copy muted-copy" d="M36 132 L66 82 L96 132 Z" />
-            <path class="spectrum-copy main-copy" d="M210 132 L240 62 L270 132 Z" />
-            <path class="spectrum-copy muted-copy" d="M384 132 L414 82 L444 132 Z" />
-            <text class="sample-svg-label" x="230" y="151">0</text>
-            <foreignObject x="34" y="136" width="64" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-f_s" /></div></foreignObject>
-            <foreignObject x="387" y="136" width="64" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+f_s" /></div></foreignObject>
+            <path class="spectrum-copy muted-copy" d="M38 132 L76 82 L114 132 Z" />
+            <path class="spectrum-copy main-copy" d="M202 132 L240 58 L278 132 Z" />
+            <path class="spectrum-copy muted-copy" d="M366 132 L404 82 L442 132 Z" />
+            <foreignObject x="50" y="136" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-f_s" /></div></foreignObject>
+            <foreignObject x="186" y="136" width="42" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="-B" /></div></foreignObject>
+            <foreignObject x="230" y="136" width="26" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="0" /></div></foreignObject>
+            <foreignObject x="270" y="136" width="42" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+B" /></div></foreignObject>
+            <foreignObject x="388" y="136" width="58" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="+f_s" /></div></foreignObject>
           </svg>
-          <p>Mỗi copy còn khoảng trống với copy bên cạnh.</p>
+          <p>Baseband support nằm trong <MathExpr tex={String.raw`[-B,B]`} />. Copy gần nhất bắt đầu tại khoảng <MathExpr tex={String.raw`f_s-B`} />.</p>
         </article>
         <article>
-          <span class="sampling-stage-label"><MathExpr tex="f_s<2B" /> · CHỒNG LÊN NHAU</span>
-          <svg viewBox="0 0 480 170" role="img" aria-label="Các bản sao spectrum chồng lên nhau khi sampling quá chậm">
+          <span class="sampling-stage-label"><MathExpr tex="f_s<2B" /> · SUPPORT CHỒNG LÊN NHAU</span>
+          <svg viewBox="0 0 480 180" role="img" aria-label="Các spectral copies chồng lên baseband support khi sampling rate quá thấp">
             <line class="sample-axis" x1="20" y1="132" x2="460" y2="132" />
-            <path class="spectrum-copy muted-copy" d="M92 132 L178 66 L264 132 Z" />
+            <path class="spectrum-copy muted-copy" d="M82 132 L168 68 L254 132 Z" />
             <path class="spectrum-copy main-copy" d="M154 132 L240 52 L326 132 Z" />
-            <path class="spectrum-copy muted-copy" d="M216 132 L302 66 L388 132 Z" />
-            <rect class="spectrum-overlap" x="154" y="82" width="172" height="50" rx="4" />
-            <text class="sample-svg-label" x="207" y="108">overlap → aliasing</text>
+            <path class="spectrum-copy muted-copy" d="M226 132 L312 68 L398 132 Z" />
+            <rect class="spectrum-overlap" x="154" y="83" width="100" height="49" rx="4" />
+            <rect class="spectrum-overlap" x="226" y="83" width="100" height="49" rx="4" />
+            <text class="sample-svg-label" x="201" y="109">overlap</text>
+            <text class="sample-svg-label" x="282" y="109">overlap</text>
           </svg>
-          <p>Hai vùng spectrum khác nhau bị fold vào cùng dải tần sau sampling.</p>
+          <p>Khi copy kế bên chạm vào support chính, spectral information bị trộn và không thể tách lại chỉ từ samples.</p>
         </article>
       </div>
+
+      <MathExpr tex={String.raw`f_s-B>B\quad\Longrightarrow\quad f_s>2B`} display />
+      <p class="math-caption">Khoảng cách từ tâm copy kế bên tới mép support chính dẫn trực tiếp tới điều kiện Nyquist trong low-pass model này.</p>
 
       <aside class="mental-model">
         <strong>Một cách nhìn khác</strong>
@@ -273,7 +282,8 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
           <span class="card-label">NYQUIST FREQUENCY</span>
           <div class="math-card-formula"><MathExpr tex="f_s/2" /></div>
           <p>
-            Khi sampling ở <MathExpr tex="f_s" />, đây là biên tần số cao nhất của dải baseband không bị lặp theo cách nhìn discrete-time.
+            Với sampling rate <MathExpr tex="f_s" />, discrete-time frequency lặp theo chu kỳ <MathExpr tex="f_s" />.
+            Với signal real low-pass, ta thường chọn principal interval từ <MathExpr tex="0" /> tới <MathExpr tex="f_s/2" /> cho positive frequencies; thành phần cao hơn có thể fold về một frequency tương đương trong interval này.
           </p>
         </article>
       </div>
@@ -338,20 +348,20 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         ADC sau đó tạo time-domain samples để các khối như synchronization, FFT, channel estimation và demodulation xử lý.
       </p>
 
-      <div class="ofdm-rx-return sampling-wireless-flow">
-        <div><strong>RF</strong><span>continuous-time waveform</span></div>
-        <b>→ filter →</b>
-        <div><strong>ADC</strong><span>sampling</span></div>
+      <div class="sampling-receiver-flow" data-lesson-visual>
+        <div><small>ANALOG / RF FRONT-END</small><strong>band of interest</strong><span>continuous-time signal sau frequency selection/downconversion phù hợp</span></div>
         <b>→</b>
-        <div><strong>DSP</strong><span><MathExpr tex="x[n]" /> / <MathExpr tex="I,Q" /> samples</span></div>
-        <b>→ FFT →</b>
-        <div><strong>OFDM</strong><span>frequency bins</span></div>
+        <div class="filter-stage"><small>ANTI-ALIAS FILTER</small><strong>limit analog bandwidth</strong><span>giảm out-of-band energy trước sampling</span></div>
+        <b>→</b>
+        <div><small>ADC</small><strong>sample @ <MathExpr tex="f_s" /></strong><span>continuous-time → discrete-time</span></div>
+        <b>→</b>
+        <div><small>DIGITAL PROCESSING</small><strong><MathExpr tex="x[n]" /></strong><span>samples đi vào các thuật toán DSP ở những bài sau</span></div>
       </div>
 
       <p>
-        Trong bài này, điều kiện Nyquist được minh họa bằng signal real, low-pass để giữ trực giác đơn giản.
-        Khi tới complex baseband và <MathExpr tex="I/Q" />, cách nói về positive/negative frequency và bandwidth cần chính xác hơn.
-        Ta sẽ quay lại điểm này sau khi đã có phasor và số phức.
+        Trong bài này, Nyquist được minh họa bằng signal real, low-pass để giữ trực giác đơn giản.
+        Khi học complex baseband ở Bài 5, positive/negative frequency và bandwidth sẽ được diễn giải bằng một model phù hợp hơn.
+        Bài 2 chỉ cần giữ một nguyên tắc: <strong>ADC phải nhận một analog bandwidth phù hợp với sampling rate của nó.</strong>
       </p>
     </section>
 
@@ -362,7 +372,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
         <li><strong>Sampling</strong> làm rời rạc thời gian: <MathExpr tex="x[n]=x(nT_s)" />.</li>
         <li><strong>Sampling rate</strong> là <MathExpr tex="f_s=1/T_s" />.</li>
         <li><strong>Aliasing</strong> xảy ra khi những thành phần khác nhau trở nên không phân biệt được sau sampling.</li>
-        <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: <MathExpr tex="f_s" /> &gt; 2B.</li>
+        <li><strong>Nyquist-Shannon</strong> cho signal band-limited một điều kiện lý tưởng để tránh spectral overlap: <MathExpr tex="f_s" /> &gt; 2B; đúng tại biên <MathExpr tex="f_s/2" /> là một edge case nhạy với phase.</li>
         <li><strong>Nyquist frequency</strong> là <MathExpr tex="f_s/2" />, còn <strong>Nyquist rate</strong> của signal band-limited tới B là 2B.</li>
         <li><strong>Anti-alias filter</strong> phải xử lý out-of-band energy trước ADC.</li>
       </ol>
@@ -372,7 +382,7 @@ const aliasSamples = Array.from({ length: 11 }, (_, n) => {
       <a class="lesson-nav-card previous" href="/hoc/tin-hieu-la-gi/">
         <span>← BÀI TRƯỚC</span>
         <strong>Signal là gì?</strong>
-        <small>Từ thế giới thật tới samples, FFT và <MathExpr tex="I/Q" />.</small>
+        <small>Information, signal, waveform và cách continuous-time signal trở thành samples.</small>
       </a>
       <a class="lesson-nav-card next" href="/hoc/amplitude-frequency-phase/">
         <span>BÀI TIẾP THEO →</span>
