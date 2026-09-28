@@ -160,12 +160,12 @@ import MathExpr from '../../components/Math.astro';
 
       <div class="iq-basis-examples" data-lesson-visual>
         <article>
-          <span class="card-label"><MathExpr tex="I=1,\;Q=0" /></span>
+          <span class="card-label"><MathExpr tex={String.raw`I=1,\;Q=0`} /></span>
           <strong><MathExpr tex={String.raw`s(t)=\cos(\omega_ct)`} /></strong>
           <p>Chỉ cosine basis còn lại.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex="I=0,\;Q=1" /></span>
+          <span class="card-label"><MathExpr tex={String.raw`I=0,\;Q=1`} /></span>
           <strong><MathExpr tex={String.raw`s(t)=-\sin(\omega_ct)`} /></strong>
           <p>Chỉ quadrature basis còn lại.</p>
         </article>
@@ -299,18 +299,18 @@ import MathExpr from '../../components/Math.astro';
       <div class="iq-memory-layout" data-lesson-visual>
         <div>
           <small>INTERLEAVED MEMORY</small>
-          <code>I0 Q0 I1 Q1 I2 Q2 I3 Q3 ...</code>
+          <code>interleaved scalar values</code>
         </div>
         <b>or</b>
         <div>
           <small>SEPARATE BUFFERS</small>
-          <code>I[] = ...</code>
-          <code>Q[] = ...</code>
+          <code>one buffer for in-phase values</code>
+          <code>one buffer for quadrature values</code>
         </div>
         <b>or</b>
         <div>
           <small>COMPLEX TYPE</small>
-          <code>complex&lt;float&gt; x[n]</code>
+          <code>complex&lt;float&gt; buffer</code>
         </div>
       </div>
 
