@@ -6,300 +6,384 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Fourier, DFT và FFT trực quan | VietWireless"
-  description="Hiểu Fourier transform, DFT, FFT, frequency bins, resolution, leakage và windowing bằng trực giác, công thức và interactive lab."
+  description="Hiểu Fourier, DFT, FFT, frequency bins, basis projection, leakage, windowing, inverse DFT và zero-padding bằng trực giác và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 07 · SIGNAL FOUNDATIONS</p>
       <h1>Fourier, DFT và FFT</h1>
       <p class="lesson-deck">
-        Frequency domain ở Bài 06 không tự xuất hiện. Ta cần một phép biến đổi để hỏi:{" "}
-        <strong>nếu dùng các complex sinusoid làm “trục tọa độ”, signal này có bao nhiêu thành phần ở mỗi tần số?</strong>
+        Bài 06 nói rằng frequency-domain coefficient là complex. Bài này trả lời câu hỏi còn thiếu:{" "}
+        <strong>coefficient đó được tính bằng cách nào, tại sao lại có frequency bins, và FFT thực chất chỉ làm nhanh phần nào?</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY NỐI TỪ ĐÂU?</p>
       <p class="map-intro">
-        Bài 06 nói về hai representation. Bài này zoom vào chính cây cầu giữa chúng và phân biệt ba cụm từ rất hay bị dùng lẫn.
+        Ta đã có finite record <MathExpr tex="x[n]" /> và muốn đổi representation sang các complex frequency coefficients.
+        Ý tưởng cốt lõi không phải “FFT tìm tần số”, mà là <strong>đổi basis</strong>.
       </p>
-      <div class="system-position">
-        <span>BA KHÁI NIỆM, BA VAI TRÒ</span>
-        <div class="system-position-flow" aria-label="Fourier transform DFT và FFT">
-          <span>Fourier transform</span><b>→</b>
+
+      <div class="system-position concept-flow-card">
+        <span>ONE IDEA · THREE NAMES</span>
+        <div class="system-position-flow" aria-label="Fourier idea DFT transform và FFT algorithm">
+          <span>Fourier idea</span><b>→</b>
           <strong>DFT</strong><b>→</b>
           <span>FFT algorithm</span>
         </div>
         <p>
-          Fourier là ý tưởng/nhóm phép biến đổi. DFT là một phép biến đổi cụ thể cho <MathExpr tex="N" /> samples.
-          FFT là họ thuật toán tính DFT hiệu quả hơn, không phải một transform khác.
+          Fourier là family of representations dựa trên sinusoid/complex exponential.
+          DFT là một transform cụ thể cho <MathExpr tex="N" /> samples.
+          FFT là họ thuật toán tính DFT nhanh hơn, không phải một transform khác.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="y-tuong-fourier">
-      <p class="concept-kicker">01 · Ý TƯỞNG FOURIER</p>
-      <h2>Thay vì mô tả waveform bằng giá trị tại từng thời điểm, ta mô tả nó bằng các complex sinusoid.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="basis">
+      <p class="concept-kicker">01 · FOURIER LÀ MỘT BÀI TOÁN ĐỔI BASIS</p>
+      <h2>Thay vì hỏi “sample thứ <MathExpr tex="n" /> bằng bao nhiêu?”, ta hỏi “mỗi complex sinusoid cần hệ số bao nhiêu để dựng lại record?”.</h2>
 
-      <div class="fourier-basis-story">
+      <div class="fourier-basis-story fourier-basis-story-v2" data-lesson-visual>
         <div>
-          <small>TIME SAMPLES</small>
-          <strong><MathExpr tex="x[n]" /></strong>
-          <span>một vector gồm N giá trị</span>
+          <small>TIME COORDINATES</small>
+          <strong><MathExpr tex={String.raw`x[0],x[1],\ldots,x[N-1]`} /></strong>
+          <span>một vector trong sample basis</span>
         </div>
-        <b>đổi basis →</b>
+        <b>→ change basis →</b>
         <div>
-          <small>COMPLEX SINUSOIDS</small>
-          <strong><MathExpr tex={String.raw`e^{j\omega n}`} /></strong>
-          <span>các “hướng” dao động khác nhau</span>
+          <small>COMPLEX SINUSOID BASIS</small>
+          <strong><MathExpr tex={String.raw`e^{j2\pi kn/N}`} /></strong>
+          <span>mỗi <MathExpr tex="k" /> là một direction dao động khác</span>
         </div>
         <b>→</b>
-        <div>
-          <small>COEFFICIENTS</small>
+        <div class="result">
+          <small>FREQUENCY COORDINATES</small>
           <strong><MathExpr tex="X[k]" /></strong>
-          <span>mỗi frequency basis cần bao nhiêu</span>
+          <span>complex coefficient của từng basis vector</span>
         </div>
       </div>
 
-      <p>
-        Đây là một cách nhìn hữu ích hơn câu “FFT tìm tần số”. DFT thực chất đang chiếu vector samples lên một tập
-        complex exponential có frequency khác nhau, rồi trả về complex coefficient cho từng basis.
-      </p>
+      <aside class="mental-model">
+        <strong>“Có tone tại frequency này” nghĩa là coefficient của basis tương ứng lớn</strong>
+        <p>
+          DFT không cần đo period bằng mắt.
+          Nó so record với một tập complex sinusoids đã biết và đo mức alignment với từng basis.
+        </p>
+      </aside>
     </section>
 
-    <section class="concept-block" id="fourier-dft">
-      <p class="concept-kicker">02 · FOURIER TRANSFORM, DTFT VÀ DFT KHÁC NHAU Ở ĐÂU?</p>
-      <h2>Điểm khác nhau chủ yếu nằm ở loại signal đầu vào và cách frequency axis được biểu diễn.</h2>
+    <section class="concept-block" id="transform-family">
+      <p class="concept-kicker">02 · FOURIER TRANSFORM, DTFT VÀ DFT KHÔNG PHẢI CÙNG MỘT OBJECT</p>
+      <h2>Chúng dùng cùng family of ideas nhưng khác signal model và frequency variable.</h2>
 
-      <div class="transform-family">
+      <div class="transform-family transform-family-v2">
         <article>
           <span class="card-label">CONTINUOUS-TIME FOURIER TRANSFORM</span>
-          <h3><MathExpr tex={String.raw`x(t) \leftrightarrow X(f)`} /></h3>
-          <p>Đầu vào liên tục theo thời gian; frequency cũng là biến liên tục.</p>
+          <h3><MathExpr tex={String.raw`x(t)\leftrightarrow X(f)`} /></h3>
+          <p>Time liên tục, frequency variable cũng liên tục.</p>
         </article>
         <article>
           <span class="card-label">DTFT</span>
-          <h3><MathExpr tex={String.raw`x[n] \leftrightarrow X(e^{j\omega})`} /></h3>
-          <p>Đầu vào rời rạc theo thời gian; frequency vẫn liên tục nhưng tuần hoàn theo normalized frequency.</p>
+          <h3><MathExpr tex={String.raw`x[n]\leftrightarrow X(e^{j\omega})`} /></h3>
+          <p>Time rời rạc nhưng normalized frequency vẫn là biến liên tục và tuần hoàn.</p>
         </article>
         <article>
           <span class="card-label">DFT</span>
-          <h3><MathExpr tex="N" /> samples ↔ <MathExpr tex="N" /> bins</h3>
-          <p>Ta lấy một record hữu hạn <MathExpr tex="N" /> samples và nhận <MathExpr tex="N" /> complex coefficients rời rạc.</p>
+          <h3><MathExpr tex="N" /> samples ↔ <MathExpr tex="N" /> coefficients</h3>
+          <p>Một finite record cho một finite set frequency samples/bins.</p>
         </article>
       </div>
 
       <p>
-        Trong software receiver, khi nói “chạy FFT trên buffer <MathExpr tex="N" /> samples”, thứ ta đang tính về mặt toán học thường là DFT của buffer đó.
+        Khi software receiver “chạy FFT trên một buffer”, về mặt toán học nó thường đang tính DFT của buffer đó.
+        Vì vậy Bài 7 tập trung vào DFT, nhưng mental model vẫn nối về family Fourier rộng hơn.
       </p>
     </section>
 
-    <section class="concept-block" id="dft-formula">
-      <p class="concept-kicker">03 · DFT ĐANG TÍNH GÌ?</p>
-      <h2>Mỗi bin <MathExpr tex="k" /> hỏi signal khớp với complex sinusoid của bin đó tới mức nào.</h2>
+    <section class="concept-block" data-lesson-role="math" id="dft">
+      <p class="concept-kicker">03 · MỖI DFT BIN LÀ MỘT COMPLEX INNER PRODUCT</p>
+      <h2>Một candidate bin được de-rotate khỏi record. Nếu phase progression khớp, các contribution cộng coherent.</h2>
 
-      <MathExpr tex={String.raw`X[k] = \sum_{n=0}^{N-1} x[n]e^{-j2\pi kn/N}`} display />
+      <MathExpr tex={String.raw`X[k]=\sum_{n=0}^{N-1}x[n]e^{-j2\pi kn/N}`} display />
 
-      <div class="dft-symbols">
-        <div><strong><MathExpr tex="N" /></strong><span>số samples trong record</span></div>
+      <div class="dft-symbols dft-symbols-v2">
+        <div><strong><MathExpr tex="N" /></strong><span>số samples trong finite record</span></div>
         <div><strong><MathExpr tex="n" /></strong><span>sample index</span></div>
-        <div><strong><MathExpr tex="k" /></strong><span>frequency-bin index</span></div>
-        <div><strong><MathExpr tex="X[k]" /></strong><span>complex coefficient tại bin <MathExpr tex="k" /></span></div>
+        <div><strong><MathExpr tex="k" /></strong><span>basis / DFT-bin index</span></div>
+        <div><strong><MathExpr tex="X[k]" /></strong><span>complex projection coefficient</span></div>
+      </div>
+
+      <div class="dft-match-logic" data-lesson-visual>
+        <div>
+          <small>IF FREQUENCY MATCHES</small>
+          <strong>de-rotated vectors align</strong>
+          <span>vector sum lớn</span>
+        </div>
+        <b>vs</b>
+        <div>
+          <small>IF INTEGER BIN MISMATCHES</small>
+          <strong>vectors rotate around the circle</strong>
+          <span>vector sum lý tưởng triệt tiêu</span>
+        </div>
       </div>
 
       <p>
-        Có thể đọc phép nhân với <MathExpr tex={String.raw`e^{-j2\pi kn/N}`} /> như việc “de-rotate” một candidate frequency.
-        Nếu candidate khớp với thành phần trong <MathExpr tex="x[n]" />, các contribution cộng cùng hướng và magnitude của <MathExpr tex="X[k]" /> lớn.
-        Nếu không khớp, các vector có xu hướng triệt tiêu nhau.
+        Đây là cách đọc rất hữu ích của dấu âm trong exponent.
+        Ta nhân record với conjugate của candidate basis.
+        Component đúng frequency bị “đứng yên” sau de-rotation, còn component khác tiếp tục quay.
       </p>
-
-      <aside class="mental-model">
-        <strong>DFT gần với correlation hơn là một chiếc máy đo thần kỳ</strong>
-        <p>
-          Mỗi bin đang so record với một complex sinusoid đã biết. Ý tưởng này sẽ rất quen khi sau này ta dùng correlation để tìm PSS, PRACH hoặc sequence tham chiếu.
-        </p>
-      </aside>
     </section>
 
     <section class="concept-block" id="bins">
-      <p class="concept-kicker">04 · FREQUENCY BINS TỪ ĐÂU RA?</p>
-      <h2>Sampling rate và số samples quyết định khoảng cách giữa các bins.</h2>
+      <p class="concept-kicker">04 · BIN INDEX KHÔNG TỰ NÓ LÀ HERTZ</p>
+      <h2>Physical frequency của bin phụ thuộc sampling rate và FFT/DFT length.</h2>
 
-      <div class="bin-equations">
+      <div class="bin-equations bin-equations-v2">
         <div>
           <span class="card-label">BIN SPACING</span>
-          <strong><MathExpr tex={String.raw`\Delta f = f_s/N`} /></strong>
+          <strong><MathExpr tex={String.raw`\Delta f=f_s/N`} /></strong>
+          <span>Hz giữa hai adjacent bins</span>
         </div>
         <div>
-          <span class="card-label">RECORD DURATION</span>
-          <strong><MathExpr tex={String.raw`T_{\mathrm{obs}} = N/f_s`} /></strong>
+          <span class="card-label">OBSERVATION TIME</span>
+          <strong><MathExpr tex={String.raw`T_{\mathrm{obs}}=N/f_s`} /></strong>
+          <span>duration của record</span>
         </div>
         <div>
-          <span class="card-label">CÙNG MỘT QUAN HỆ</span>
-          <strong><MathExpr tex={String.raw`\Delta f = 1/T_{\mathrm{obs}}`} /></strong>
+          <span class="card-label">SAME RELATION</span>
+          <strong><MathExpr tex={String.raw`\Delta f=1/T_{\mathrm{obs}}`} /></strong>
+          <span>bin spacing gắn trực tiếp với record duration</span>
         </div>
       </div>
 
       <p>
-        Ví dụ <MathExpr tex={String.raw`f_s=64\,\mathrm{Hz}`} /> và <MathExpr tex="N=64" /> cho <MathExpr tex={String.raw`\Delta f=1\,\mathrm{Hz}`} />.
-        Tăng <MathExpr tex="N" /> lên 128 trong khi giữ <MathExpr tex="f_s" /> không đổi nghĩa là quan sát signal lâu gấp đôi và bin spacing giảm còn <MathExpr tex={String.raw`0.5\,\mathrm{Hz}`} />.
+        Với unshifted DFT ordering, index tăng từ zero tới <MathExpr tex="N-1" />.
+        Nhưng physical frequencies ở nửa sau thường đại diện cho negative frequencies.
       </p>
 
+      <div class="signed-bin-map" data-lesson-visual>
+        <div>
+          <small>LOW INDEX</small>
+          <strong><MathExpr tex={String.raw`0\le k<N/2`} /></strong>
+          <span><MathExpr tex={String.raw`f_k=k\,f_s/N`} /></span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>NYQUIST BIN</small>
+          <strong><MathExpr tex={String.raw`k=N/2`} /></strong>
+          <span>special even-<MathExpr tex="N" /> bin at the Nyquist boundary</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>UPPER INDEX</small>
+          <strong><MathExpr tex={String.raw`N/2<k<N`} /></strong>
+          <span><MathExpr tex={String.raw`f_k=(k-N)f_s/N`} /></span>
+        </div>
+      </div>
+
+      <div class="bin-index-example">
+        <span><MathExpr tex="k=0" /> → <MathExpr tex={String.raw`0\,\mathrm{Hz}`} /></span>
+        <span><MathExpr tex="k=1" /> → <MathExpr tex={String.raw`+1\,\mathrm{Hz}`} /></span>
+        <span><MathExpr tex="k=31" /> → <MathExpr tex={String.raw`+31\,\mathrm{Hz}`} /></span>
+        <span><MathExpr tex="k=32" /> → Nyquist bin</span>
+        <span><MathExpr tex="k=63" /> → <MathExpr tex={String.raw`-1\,\mathrm{Hz}`} /></span>
+      </div>
+
       <aside class="precision-note">
-        <strong>Bin spacing và khả năng phân giải hai tone không hoàn toàn đồng nghĩa trong mọi tình huống</strong>
+        <strong><MathExpr tex={String.raw`\Delta f=f_s/N`} /> là bin spacing, không phải guarantee rằng mọi hai tones cách nhau đúng <MathExpr tex={String.raw`\Delta f`} /> đều luôn phân giải được</strong>
         <p>
-          Window shape, SNR và độ dài quan sát đều ảnh hưởng việc hai spectral components có tách được hay không.
-          <MathExpr tex={String.raw`\Delta f=f_s/N`} /> là spacing của DFT bins, không phải một bảo đảm tuyệt đối về spectral resolution.
+          Window, SNR, relative amplitudes và estimator đều ảnh hưởng practical resolution.
+          Bin spacing chỉ nói grid frequency samples của DFT cách nhau bao nhiêu.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block" id="leakage">
-      <p class="concept-kicker">05 · TẠI SAO MỘT TONE CÓ THỂ TRẢI RA NHIỀU BINS?</p>
-      <h2>DFT nhìn một record hữu hạn và ngầm coi record đó lặp lại tuần hoàn.</h2>
+    <section class="concept-block lab-section" id="dft-lab">
+      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
+      <h2>Trước tiên nhìn DFT như vector projection. Sau đó chuyển sang leakage/window để thấy finite-record effects.</h2>
+
       <p>
-        Nếu đầu và cuối record nối với nhau không khớp, periodic extension tạo ra discontinuity.
-        Trong frequency domain, discontinuity đó làm energy của tone trải sang nhiều bins. Ta gọi hiện tượng này là spectral leakage.
+        <strong>Basis projection</strong> dùng complex tone đúng bin để cho thấy de-rotation và coherent sum.{" "}
+        <strong>Leakage & window</strong> dùng real tone, thay <MathExpr tex="N" />, fractional-bin offset và window để thấy spectral spreading.
       </p>
 
-      <div class="leakage-story">
+      <FourierDFTExplorer client:load />
+    </section>
+
+    <section class="concept-block" id="leakage">
+      <p class="concept-kicker">06 · LEAKAGE ĐẾN TỪ FINITE RECORD</p>
+      <h2>Một finite record tương đương signal bị nhân với một window theo time.</h2>
+
+      <p>
+        Rectangular window là trường hợp đơn giản nhất: giữ nguyên <MathExpr tex="N" /> samples rồi bỏ mọi thứ bên ngoài record.
+        Multiplication theo time tương ứng convolution theo frequency, nên một ideal spectral line bị “smear” theo spectrum của window.
+      </p>
+
+      <div class="leakage-story leakage-story-v2" data-lesson-visual>
         <div>
-          <small>BIN-CENTERED TONE</small>
+          <small>BIN-CENTERED</small>
           <strong><MathExpr tex={String.raw`7.0\,\mathrm{Hz}`} /></strong>
-          <span>record chứa số chu kỳ nguyên</span>
+          <span>integer cycles trong observation interval</span>
         </div>
         <b>→</b>
         <div class="leakage-bars clean" aria-hidden="true">
           <i></i><i></i><i class="peak"></i><i></i><i></i>
         </div>
         <div>
-          <small>OFF-BIN TONE</small>
+          <small>OFF-BIN</small>
           <strong><MathExpr tex={String.raw`7.5\,\mathrm{Hz}`} /></strong>
-          <span>biên record không nối trơn</span>
+          <span>basis grid không đi qua tone frequency</span>
         </div>
         <b>→</b>
         <div class="leakage-bars spread" aria-hidden="true">
           <i></i><i></i><i></i><i class="peak"></i><i></i><i></i><i></i>
         </div>
       </div>
-    </section>
 
-    <section class="concept-block lab-section" id="dft-lab">
-      <p class="concept-kicker">06 · INTERACTIVE LAB</p>
-      <h2>Thử đổi tone, N và window để thấy bin spacing và leakage thay đổi.</h2>
-      <p>
-        Chọn tone nguyên Hz khi <MathExpr tex={String.raw`\Delta f=1\,\mathrm{Hz}`} /> để thấy energy tập trung vào một bin, rồi chọn <MathExpr tex={String.raw`7.5\,\mathrm{Hz}`} />.
-        Sau đó đổi Rectangular sang Hann để quan sát tradeoff giữa sidelobes và main-lobe width.
-      </p>
-      <FourierDFTExplorer client:load />
+      <aside class="mental-model">
+        <strong>“DFT giả sử record lặp tuần hoàn” là một trực giác hữu ích, nhưng windowing là cách nhìn tổng quát hơn</strong>
+        <p>
+          Nếu periodic copies nối không trơn, discontinuity giải thích leakage rất trực quan.
+          Về mặt signal processing, finite observation là multiplication bởi window và đó mới là formulation dùng được cho mọi window.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="window">
-      <p class="concept-kicker">07 · WINDOW KHÔNG “SỬA FFT”</p>
-      <h2>Window thay cách ta cắt record, từ đó thay leakage pattern.</h2>
+      <p class="concept-kicker">07 · WINDOW THAY LEAKAGE TRADE-OFF</p>
+      <h2>Window không “sửa FFT”. Nó thay record trước khi DFT được tính.</h2>
 
-      <div class="window-compare">
+      <div class="window-compare window-compare-v2">
         <article>
           <span class="card-label">RECTANGULAR</span>
           <h3><MathExpr tex="w[n]=1" /></h3>
-          <p>Main lobe hẹp hơn, nhưng sidelobes tương đối cao. Khi tone đúng bin, đây có thể là lựa chọn rất sạch.</p>
+          <p>Main lobe hẹp hơn nhưng sidelobes tương đối cao. Khi tone đúng bin và record được kiểm soát, đây có thể là lựa chọn rất sạch.</p>
         </article>
         <article>
           <span class="card-label">HANN</span>
-          <h3>taper về gần 0 ở hai đầu</h3>
-          <p>Giảm discontinuity và sidelobes, đổi lại main lobe rộng hơn và amplitude cần được scale đúng nếu muốn đo chính xác.</p>
+          <h3><MathExpr tex={String.raw`w[n]=\frac12-\frac12\cos\!\left(\frac{2\pi n}{N-1}\right)`} /></h3>
+          <p>Taper hai đầu, hạ sidelobes nhưng làm main lobe rộng hơn. Amplitude measurement cần xử lý coherent gain đúng.</p>
         </article>
       </div>
 
       <p>
-        Không có một window tốt nhất cho mọi bài toán. Chọn window phụ thuộc mục tiêu: phát hiện tone nhỏ cạnh tone lớn,
-        đo amplitude, phân giải hai components gần nhau hay xử lý OFDM có cấu trúc riêng.
+        Không có “window tốt nhất” độc lập với bài toán.
+        Detect một weak tone cạnh strong tone, estimate amplitude và resolve hai close tones có thể ưu tiên các trade-off khác nhau.
       </p>
     </section>
 
-    <section class="concept-block" id="fft">
-      <p class="concept-kicker">08 · FFT THỰC SỰ LÀ GÌ?</p>
-      <h2>FFT tính cùng <MathExpr tex="X[k]" /> như DFT, nhưng tận dụng cấu trúc để giảm số phép toán.</h2>
+    <section class="concept-block" data-lesson-role="implementation" id="inverse-and-fft">
+      <p class="concept-kicker">08 · DFT CÓ THỂ ĐẢO NGƯỢC, FFT CHỈ LÀ CÁCH TÍNH NHANH</p>
+      <h2>Frequency coefficients không làm mất information nếu transform pair và normalization được giữ đầy đủ.</h2>
 
-      <div class="fft-complexity">
+      <MathExpr tex={String.raw`x[n]=\frac1N\sum_{k=0}^{N-1}X[k]e^{+j2\pi kn/N}`} display />
+
+      <p>
+        Công thức trên là một common normalization convention: forward DFT không chia <MathExpr tex="N" />, inverse DFT chia <MathExpr tex="N" />.
+        Libraries khác có thể chia ở forward, inverse hoặc chia đối xứng ở cả hai.
+      </p>
+
+      <div class="fft-complexity fft-complexity-v2">
         <div>
-          <span class="card-label">DFT TRỰC TIẾP</span>
-          <strong><MathExpr tex={String.raw`\mathcal{O}(N^2)`} /></strong>
-          <p>Mỗi trong <MathExpr tex="N" /> bins cộng contribution từ <MathExpr tex="N" /> samples.</p>
+          <span class="card-label">DIRECT DFT</span>
+          <strong><MathExpr tex={String.raw`\mathcal O(N^2)`} /></strong>
+          <p>Mỗi output bin cộng contributions từ toàn bộ input record.</p>
         </div>
-        <b>→ cấu trúc lại →</b>
+        <b>same transform<br/>faster algorithm</b>
         <div>
           <span class="card-label">FFT</span>
-          <strong><MathExpr tex={String.raw`\mathcal{O}(N\log N)`} /></strong>
-          <p>Reuse các phép tính có cấu trúc thay vì tính mọi thứ độc lập.</p>
+          <strong><MathExpr tex={String.raw`\mathcal O(N\log N)`} /></strong>
+          <p>Khai thác symmetry/factorization để reuse computation.</p>
         </div>
       </div>
 
       <aside class="precision-note">
-        <strong>FFT không cho một spectrum “khác” DFT</strong>
+        <strong>FFT output không phải một loại spectrum khác</strong>
         <p>
-          Với cùng input, normalization và convention, FFT phải cho cùng DFT coefficients, chỉ khác cách tính nhanh hơn.
-          Đây là lý do câu “DFT dùng để phân tích, FFT dùng để thực thi” là một mental model hữu ích.
+          Với cùng input, sign convention, ordering và normalization, một FFT implementation phải tính cùng DFT coefficients trong sai số số học.
+          “IFFT” tương tự là thuật toán nhanh để tính inverse DFT.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="zero-padding">
-      <p class="concept-kicker">09 · ZERO-PADDING VÀ MỘT HIỂU NHẦM PHỔ BIẾN</p>
-      <h2>Thêm zeros có thể làm spectrum trông mịn hơn, nhưng không tạo thêm thời gian quan sát.</h2>
-      <p>
-        Nếu record thật chỉ có <MathExpr tex="N" /> samples rồi ta append zeros trước FFT dài hơn, ta lấy thêm samples của DTFT trên frequency axis.
-        Các peak có thể được định vị bằng đồ thị mịn hơn, nhưng thông tin vật lý vẫn đến từ <MathExpr tex="N" /> samples ban đầu.
-      </p>
-      <p>
-        Muốn tăng khả năng phân biệt các components rất gần nhau trong điều kiện giống nhau, thường cần record quan sát dài hơn,
-        SNR tốt hơn hoặc estimator phù hợp, chứ không chỉ tăng FFT size bằng zero-padding.
-      </p>
-    </section>
+      <p class="concept-kicker">09 · ZERO-PADDING KHÔNG TẠO THÊM OBSERVATION TIME</p>
+      <h2>FFT dài hơn sau khi append zeros cho nhiều frequency samples hơn, không cho thêm measured data.</h2>
 
-    <section class="concept-block" id="ofdm">
-      <p class="concept-kicker">10 · TỪ DFT SANG OFDM</p>
-      <h2>Trong OFDM, các DFT bins không chỉ để “quan sát spectrum”; chúng trở thành các subcarriers có chủ đích.</h2>
-
-      <div class="dft-ofdm-bridge">
-        <div><small>DATA SYMBOLS</small><strong><MathExpr tex="X[k]" /></strong><span>một complex value trên mỗi bin/subcarrier</span></div>
-        <b>→ IFFT →</b>
-        <div><small>TIME SAMPLES</small><strong><MathExpr tex="x[n]" /></strong><span>OFDM waveform ở baseband</span></div>
-        <b>→ channel → FFT →</b>
-        <div><small>RECEIVED BINS</small><strong><MathExpr tex="Y[k]" /></strong><span>xử lý từng subcarrier</span></div>
+      <div class="zero-padding-story" data-lesson-visual>
+        <div>
+          <small>MEASURED RECORD</small>
+          <strong><MathExpr tex="N" /> real samples</strong>
+          <span>physical observation duration đã cố định</span>
+        </div>
+        <b>→ append zeros →</b>
+        <div>
+          <small>LONGER DFT GRID</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{FFT}}>N`} /></strong>
+          <span>frequency sampling của same finite-record spectrum dày hơn</span>
+        </div>
       </div>
 
       <p>
-        Bài 15 sau này sẽ đi sâu vào IFFT/FFT trong OFDM. Trước đó, Bài 08 cần trả lời một câu hỏi còn thiếu:
-        các complex values <MathExpr tex="X[k]" /> được tạo ra từ bits như thế nào?
+        Zero-padding rất hữu ích để interpolate spectrum display hoặc estimate peak position mượt hơn.
+        Nhưng nếu mục tiêu là có thêm independent information về hai components gần nhau, chỉ append zeros không thay được record dài hơn hoặc SNR tốt hơn.
       </p>
     </section>
 
-    <section class="concept-block recap">
+    <section class="concept-block" data-lesson-role="boundary" id="next">
+      <p class="concept-kicker">10 · DỪNG Ở ĐÂU TRƯỚC KHI SANG MODULATION?</p>
+      <h2><MathExpr tex="X[k]" /> là một complex coefficient. Nó chưa mặc định là một modulation symbol.</h2>
+
+      <div class="fourier-boundary-grid">
+        <article>
+          <span class="card-label">TRONG BÀI 7</span>
+          <strong><MathExpr tex="X[k]" /></strong>
+          <p>Coefficient sinh ra bởi transform của một finite record.</p>
+        </article>
+        <article>
+          <span class="card-label">TRONG BÀI 8</span>
+          <strong>complex modulation symbol</strong>
+          <p>Một deliberately chosen complex point đại diện cho bits.</p>
+        </article>
+        <article>
+          <span class="card-label">LATER IN OFDM</span>
+          <strong>frequency-domain input bins</strong>
+          <p>Modulation symbols sẽ được đặt có chủ đích lên bins/subcarriers trước IFFT.</p>
+        </article>
+      </div>
+
+      <p>
+        Ba objects có thể đều là complex numbers nhưng khác ý nghĩa vì chúng xuất hiện ở stage khác nhau.
+        Bài 08 sẽ tập trung vào việc bits chọn complex point như thế nào.
+      </p>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
-      <h2>DFT là phép biến đổi; FFT là cách tính nó nhanh.</h2>
       <ol class="recap-list">
-        <li><strong>Fourier:</strong> mô tả signal bằng các thành phần sinusoid/complex exponential.</li>
-        <li><strong>DFT:</strong> biến <MathExpr tex="N" /> samples thành <MathExpr tex="N" /> complex frequency bins.</li>
-        <li><strong><MathExpr tex={String.raw`\Delta f=f_s/N`} />:</strong> sampling rate và record length xác định bin spacing.</li>
-        <li><strong>Leakage:</strong> xuất hiện khi finite record không khớp tuần hoàn với DFT basis.</li>
-        <li><strong>Window:</strong> thay leakage tradeoff bằng cách taper record.</li>
-        <li><strong>FFT:</strong> thuật toán tính DFT hiệu quả, không phải transform khác.</li>
-        <li><strong>Zero-padding:</strong> nội suy frequency sampling dày hơn nhưng không tạo thêm information.</li>
+        <li><strong>Fourier idea:</strong> đổi từ sample coordinates sang sinusoid/complex-exponential coordinates.</li>
+        <li><strong>DFT:</strong> mỗi <MathExpr tex="X[k]" /> là complex projection coefficient của một basis frequency.</li>
+        <li><strong>Bin mapping:</strong> <MathExpr tex={String.raw`\Delta f=f_s/N=1/T_{\mathrm{obs}}`} /> và upper DFT indexes thường map sang negative frequencies.</li>
+        <li><strong>Leakage:</strong> finite observation/window làm spectral energy spread khi tone không align với DFT grid.</li>
+        <li><strong>Window:</strong> đổi main-lobe/sidelobe trade-off, không tạo thêm information.</li>
+        <li><strong>Inverse DFT:</strong> reconstruct record từ full complex coefficient set theo transform convention đã chọn.</li>
+        <li><strong>FFT:</strong> algorithm nhanh để tính DFT; IFFT là algorithm nhanh cho inverse DFT.</li>
+        <li><strong>Zero-padding:</strong> lấy frequency samples dày hơn nhưng không tăng physical observation time.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/mien-thoi-gian-va-mien-tan-so/">
         <span>← BÀI TRƯỚC</span>
         <strong>Miền thời gian và miền tần số</strong>
-        <small>Hai cách nhìn của cùng một signal.</small>
+        <small>Cùng một signal, hai representation; magnitude spectrum chưa phải toàn bộ coefficient.</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/modulation-bpsk-qpsk-qam/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/modulation-bpsk-qpsk-qam/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Modulation: BPSK → QPSK → QAM</strong>
-        <small>Bits trở thành complex symbols như thế nào?</small>
+        <small>Bits sẽ chọn complex points như thế nào?</small>
       </a>
     </nav>
   </article>
