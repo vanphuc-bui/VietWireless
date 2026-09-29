@@ -52,7 +52,7 @@ function spectrumPath(center, spacingScale, plotScale = 1) {
   const points = 420;
   return Array.from({ length: points + 1 }, (_, index) => {
     const f = -4 + (8 * index) / points;
-    const response = Math.abs(sinc((f - center * spacingScale) / spacingScale));
+    const response = Math.abs(sinc(f - center * spacingScale));
     const x = PAD + (index / points) * (W - 2 * PAD);
     const y = H - 34 - 145 * response * plotScale;
     return (index === 0 ? 'M' : 'L') + x.toFixed(2) + ' ' + y.toFixed(2);
@@ -236,9 +236,9 @@ export default function OFDMOrthogonalityExplorer() {
               <span className="metric-card-formula">fixed in this illustration</span>
             </div>
             <div className="metric-card">
-              <small className="metric-card-label">SUBCARRIER WIDTH</small>
+              <small className="metric-card-label">CONCEPTUAL BIN SPACING</small>
               <strong className="metric-card-value"><MathExpr tex={(binWidth).toFixed(3)} /></strong>
-              <span className="metric-card-formula"><MathExpr tex={String.raw`B/N`} /></span>
+              <span className="metric-card-formula"><MathExpr tex={String.raw`B/N`} /> in this normalized slicing view</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">CENTER CHANNEL MAGNITUDE</small>
