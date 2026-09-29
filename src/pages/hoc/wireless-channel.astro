@@ -6,95 +6,103 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Wireless channel trực quan | VietWireless"
-  description="Hiểu path loss, propagation delay, phase rotation, shadowing, fading và flat/frequency-selective channel bằng mental model từ waveform tới complex baseband."
+  description="Hiểu single-path wireless channel, path loss, propagation delay, phase rotation, shadowing, fading và flat versus frequency-selective response bằng complex-baseband model."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 10 · WIRELESS LINK</p>
       <h1>Wireless channel</h1>
       <p class="lesson-deck">
-        Signal rời antenna không đi tới receiver như một bản sao hoàn hảo.{" "}
-        <strong>Khoảng cách, vật cản và geometry của môi trường làm waveform bị suy hao, trễ, quay phase và đôi khi bị biến dạng khác nhau theo frequency.</strong>
+        Bài 9 đưa waveform ra khỏi antenna. Từ đó tới receiver, propagation không chỉ làm signal “nhỏ đi”.{" "}
+        <strong>Channel có thể đổi arrival time, amplitude, phase và cuối cùng làm các frequency components chịu tác động khác nhau.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">BẮT ĐẦU TỪ CÂU HỎI ĐƠN GIẢN</p>
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
+      <p class="concept-kicker">BÀI NÀY ĐỨNG Ở ĐÂU TRONG LINK?</p>
       <p class="map-intro">
-        Nếu transmitter phát <MathExpr tex="x(t)" />, receiver có nhận đúng <MathExpr tex="x(t)" /> chỉ nhỏ hơn một chút không?
-        Trong một số trường hợp hẹp băng và một path trội, gần đúng đó khá hữu ích.
-        Nhưng wireless thực tế thường phức tạp hơn vì signal có thể đi qua nhiều đường và môi trường thay đổi theo vị trí.
+        Ta bắt đầu bằng model đơn giản nhất: một dominant path.
+        Mục tiêu của Bài 10 là hiểu từng effect riêng trước khi Bài 12 cộng nhiều delayed paths lại thành một channel có memory.
       </p>
 
-      <div class="system-position">
-        <span>TX → CHANNEL → RX</span>
-        <div class="system-position-flow">
-          <span><MathExpr tex="x(t)" /></span><b>→</b>
-          <strong>wireless propagation</strong><b>→</b>
-          <span>attenuation</span><b>+</b>
+      <div class="system-position concept-flow-card">
+        <span>TX → PROPAGATION → RX</span>
+        <div class="system-position-flow" aria-label="Signal truyền qua wireless channel">
+          <span>TX waveform</span><b>→</b>
+          <strong>distance + environment</strong><b>→</b>
           <span>delay</span><b>+</b>
-          <span>phase</span><b>+</b>
-          <span>multipath</span><b>→</b>
-          <span><MathExpr tex="y(t)" /></span>
+          <span>complex gain</span><b>+</b>
+          <span>time variation</span><b>→</b>
+          <span>RX waveform</span>
         </div>
         <p>
-          Bài này xây từ single-path model trước. Bài 12 mới mở rộng thành nhiều delayed paths để thấy delay spread và frequency selectivity xuất hiện ra sao.
+          Noise được tách riêng ở Bài 11.
+          Multipath taps, delay spread và ISI được xử lý sâu ở Bài 12.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="single-path">
-      <p class="concept-kicker">01 · MÔ HÌNH MỘT PATH</p>
-      <h2>Với một path trội và signal đủ hẹp băng, channel có thể được tóm tắt bằng delay và một complex gain.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="single-path">
+      <p class="concept-kicker">01 · SINGLE-PATH MODEL: TÁCH DELAY KHỎI COMPLEX GAIN</p>
+      <h2>Một path có thể làm complex envelope tới muộn, nhỏ đi và quay phase.</h2>
 
-      <MathExpr tex={String.raw`y(t) = h\,x(t-\tau) + n(t)`} display />
+      <MathExpr tex={String.raw`y_{\mathrm{bb}}(t)=h\,x_{\mathrm{bb}}(t-\tau)+n_{\mathrm{bb}}(t)`} display />
 
-      <p>
-        <MathExpr tex={String.raw`\tau`} /> nói signal tới muộn bao nhiêu.
-        <MathExpr tex="h" /> là một complex number, thường viết <MathExpr tex={String.raw`h = Ge^{j\theta}`} />, mô tả amplitude scaling <MathExpr tex="G" /> và phase rotation <MathExpr tex={String.raw`\theta`} />.
-        <MathExpr tex="n(t)" /> đại diện cho noise, sẽ được tách riêng ở Bài 11.
-      </p>
-
-      <div class="channel-parameter-grid">
-        <article>
-          <span class="card-label"><MathExpr tex="G" /></span>
-          <h3>Amplitude gain</h3>
-          <p>Nếu <MathExpr tex="G<1" />, signal bị attenuate. Power scaling tương ứng là <MathExpr tex="G^2" /> nếu <MathExpr tex="G" /> là voltage/amplitude ratio.</p>
-        </article>
-        <article>
-          <span class="card-label"><MathExpr tex={String.raw`\theta`} /></span>
-          <h3>Phase rotation</h3>
-          <p>Trên complex plane, constellation bị quay một góc <MathExpr tex={String.raw`\theta`} /> nếu chưa equalize.</p>
-        </article>
+      <div class="channel-parameter-grid channel-parameter-grid-v2">
         <article>
           <span class="card-label"><MathExpr tex={String.raw`\tau`} /></span>
           <h3>Propagation delay</h3>
-          <p>Receiver nhìn thấy waveform muộn hơn vì electromagnetic wave cần thời gian để đi hết path.</p>
+          <p>Dịch toàn complex envelope trên time axis. Đây là arrival-time effect.</p>
+        </article>
+        <article>
+          <span class="card-label"><MathExpr tex={String.raw`|h|`} /></span>
+          <h3>Magnitude gain</h3>
+          <p>Scale amplitude của complex envelope. Power ratio tương ứng là <MathExpr tex={String.raw`|h|^2`} />.</p>
+        </article>
+        <article>
+          <span class="card-label"><MathExpr tex={String.raw`\angle h`} /></span>
+          <h3>Phase rotation</h3>
+          <p>Rotate complex sample sau khi timing đã được đặt đúng reference.</p>
         </article>
       </div>
+
+      <MathExpr tex={String.raw`h=|h|e^{j\theta}`} display />
+
+      <aside class="precision-note">
+        <strong>Với một pure tone, delay và phase có thể nhìn giống nhau</strong>
+        <p>
+          Delay <MathExpr tex={String.raw`\tau`} /> tạo phase shift phụ thuộc frequency.
+          Vì vậy lab của bài này dùng <strong>baseband envelope magnitude</strong> để nhìn delay,
+          và dùng <strong>complex plane</strong> để nhìn scalar gain <MathExpr tex="h" />.
+          Hai effect được cố tình tách ra để tránh double-counting mental model.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="path-loss">
-      <p class="concept-kicker">02 · TẠI SAO SIGNAL YẾU ĐI KHI ĐI XA?</p>
-      <h2>Ngay cả trong free space lý tưởng, năng lượng lan ra trên một vùng ngày càng lớn.</h2>
+      <p class="concept-kicker">02 · PATH LOSS: DISTANCE TỰ NÓ ĐÃ LÀM RECEIVED POWER GIẢM</p>
+      <h2>Trong ideal free-space far field, wavefront lan rộng làm power density giảm theo khoảng cách.</h2>
 
       <p>
-        Với isotropic free-space intuition, power density giảm theo khoảng cách vì wavefront mở rộng.
-        Friis equation cho một link lý tưởng có thể viết dưới dạng:
+        Với free-space link lý tưởng, antenna gains theo hướng propagation và polarization phù hợp, Friis relation có thể viết:
       </p>
 
-      <MathExpr tex={String.raw`\frac{P_r}{P_t} = G_tG_r\left(\frac{\lambda}{4\pi d}\right)^2`} display />
+      <MathExpr tex={String.raw`\frac{P_r}{P_t}=G_tG_r\left(\frac{\lambda}{4\pi d}\right)^2`} display />
 
       <p>
-        Nếu giữ antenna gains và wavelength cố định, received power có xu hướng giảm theo 1/d².
-        Đây không phải model đầy đủ cho city, indoor hay NLOS, nhưng nó giải thích vì sao distance tự nó đã tạo attenuation ngay cả trước khi nói tới building hay multipath.
+        Nếu giữ <MathExpr tex="G_t" />, <MathExpr tex="G_r" /> và wavelength cố định,
+        received power có xu hướng tỉ lệ với <MathExpr tex={String.raw`1/d^2`} />.
+        Equivalent free-space path loss là:
       </p>
 
-      <div class="path-loss-story">
+      <MathExpr tex={String.raw`\mathrm{FSPL}=\left(\frac{4\pi d}{\lambda}\right)^2`} display />
+      <MathExpr tex={String.raw`\mathrm{FSPL}_{\mathrm{dB}}=20\log_{10}\!\left(\frac{4\pi d}{\lambda}\right)`} display />
+
+      <div class="path-loss-story path-loss-story-v2" data-lesson-visual>
         <div class="path-loss-source">
           <strong>TX</strong>
-          <span>cùng power</span>
+          <span>same transmit power</span>
         </div>
         <div class="path-loss-rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <div class="path-loss-receivers">
@@ -102,152 +110,240 @@ import MathExpr from '../../components/Math.astro';
           <span class="far-rx">RX xa</span>
         </div>
       </div>
+
+      <aside class="mental-model">
+        <strong>Friis không phải propagation model cho mọi environment</strong>
+        <p>
+          Indoor, urban, terrain, blockage và antenna placement làm actual link khác free-space model.
+          Friis ở đây chỉ cho baseline vật lý để hiểu distance và wavelength đi vào link budget như thế nào.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="delay-phase">
-      <p class="concept-kicker">03 · CÙNG MỘT PATH LENGTH TẠO RA CẢ DELAY LẪN PHASE</p>
-      <h2>Delay là hiện tượng theo thời gian; phase là cách một sinusoid ở frequency cụ thể nhìn delay đó.</h2>
+      <p class="concept-kicker">03 · PATH LENGTH → DELAY, VÀ DELAY → PHASE Ở MỖI FREQUENCY</p>
+      <h2>Một thay đổi hình học rất nhỏ có thể tạo carrier-phase change lớn khi wavelength ngắn.</h2>
 
-      <MathExpr tex={String.raw`\tau \approx \frac{d}{c}`} display />
-      <p class="math-caption">Trong free space.</p>
-
-      <p>
-        Một mét propagation tương ứng khoảng 3.33 ns.
-        Với một pure sinusoid ở frequency <MathExpr tex="f" />, delay <MathExpr tex={String.raw`\tau`} /> tạo phase shift <MathExpr tex={String.raw`-2\pi f\tau`} />:
-      </p>
-
-      <MathExpr tex={String.raw`\cos\!\left[2\pi f(t-\tau)\right] = \cos(2\pi f t - 2\pi f\tau)`} display />
+      <MathExpr tex={String.raw`\tau\approx\frac{d}{c}`} display />
+      <p class="math-caption">Trong free space, <MathExpr tex="c" /> là tốc độ ánh sáng.</p>
 
       <p>
-        Vì carrier frequency cao, phase có thể đổi rất mạnh chỉ với thay đổi position nhỏ.
-        Ví dụ ở <MathExpr tex={String.raw`3.5\,\mathrm{GHz}`} />, wavelength trong free space chỉ khoảng <MathExpr tex={String.raw`8.6\,\mathrm{cm}`} />.
-        Di chuyển vài centimet đã là một phần đáng kể của một wavelength, nên relative phase giữa các paths có thể đổi rõ rệt.
+        Một mét propagation tương ứng khoảng <MathExpr tex={String.raw`3.34\,\mathrm{ns}`} />.
+        Với một sinusoid ở frequency <MathExpr tex="f" />:
       </p>
 
-      <div class="phase-distance-story">
-        <div><small>DISTANCE</small><strong><MathExpr tex="d" /></strong><span>path length</span></div>
+      <MathExpr tex={String.raw`x(t-\tau)=\cos\!\left(2\pi ft-2\pi f\tau\right)`} display />
+      <MathExpr tex={String.raw`\Delta\phi=-2\pi f\tau=-2\pi\frac{\Delta d}{\lambda}`} display />
+
+      <p>
+        Ở <MathExpr tex={String.raw`3.5\,\mathrm{GHz}`} />, free-space wavelength khoảng
+        <MathExpr tex={String.raw`8.57\,\mathrm{cm}`} />.
+        Thay path length khoảng một phần tư wavelength, tức xấp xỉ <MathExpr tex={String.raw`2.14\,\mathrm{cm}`} />,
+        tương ứng khoảng <MathExpr tex={String.raw`90^\circ`} /> carrier-phase change.
+      </p>
+
+      <div class="phase-distance-story phase-distance-story-v2" data-lesson-visual>
+        <div><small>PATH LENGTH CHANGE</small><strong><MathExpr tex={String.raw`\Delta d`} /></strong><span>geometry</span></div>
         <b>→</b>
-        <div><small>DELAY</small><strong><MathExpr tex={String.raw`\tau=d/c`} /></strong><span>arrival time</span></div>
+        <div><small>DELAY CHANGE</small><strong><MathExpr tex={String.raw`\Delta\tau=\Delta d/c`} /></strong><span>arrival time</span></div>
         <b>→</b>
-        <div><small>PHASE AT <MathExpr tex="f" /></small><strong><MathExpr tex={String.raw`-2\pi f\tau`} /></strong><span>frequency dependent</span></div>
+        <div><small>PHASE CHANGE</small><strong><MathExpr tex={String.raw`-2\pi f\Delta\tau`} /></strong><span>depends on frequency</span></div>
       </div>
     </section>
 
     <section class="concept-block lab-section" id="channel-lab">
       <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Thay attenuation, delay và phase để nhìn cùng một single-path channel ở time domain và complex plane.</h2>
+      <h2>Cô lập propagation delay trước, rồi cô lập complex gain.</h2>
+
       <p>
-        Bên trái, delay dịch waveform theo sample index và attenuation làm waveform nhỏ đi.
-        Bên phải, cùng coefficient h scale và rotate một transmitted complex symbol.
+        <strong>Focus delay</strong> giữ <MathExpr tex={String.raw`|h|=1`} /> và <MathExpr tex={String.raw`\theta=0`} /> để chỉ nhìn envelope tới muộn.{" "}
+        <strong>Focus complex gain</strong> đặt delay về zero để chỉ nhìn attenuation + phase rotation trên complex plane.
       </p>
+
       <WirelessChannelExplorer client:load />
     </section>
 
     <section class="concept-block" id="path-shadow-fade">
-      <p class="concept-kicker">05 · PATH LOSS, SHADOWING VÀ FADING LÀ BA SCALE KHÁC NHAU</p>
-      <h2>Ba từ này thường xuất hiện cùng nhau nhưng không mô tả cùng một hiện tượng.</h2>
+      <p class="concept-kicker">05 · PATH LOSS, SHADOWING VÀ SMALL-SCALE FADING KHÔNG PHẢI MỘT</p>
+      <h2>Chúng mô tả variation ở những spatial/time scales khác nhau.</h2>
 
-      <div class="rf-front-end-grid">
+      <div class="channel-scale-grid">
         <article>
           <span class="card-label">PATH LOSS</span>
-          <h3>xu hướng theo distance</h3>
-          <p>Average received power thường giảm khi TX-RX separation tăng và phụ thuộc propagation environment.</p>
+          <strong>large-scale distance trend</strong>
+          <p>Average received power thay đổi theo separation, frequency và propagation environment.</p>
         </article>
         <article>
           <span class="card-label">SHADOWING</span>
-          <h3>variation do vật cản lớn</h3>
-          <p>Hai UE cùng distance có thể khác power nhiều vì building, terrain hoặc blockage khác nhau.</p>
+          <strong>large-object variation</strong>
+          <p>Building, terrain hoặc blockage làm local average power lệch khỏi distance trend.</p>
         </article>
         <article>
           <span class="card-label">SMALL-SCALE FADING</span>
-          <h3>variation nhanh theo position/time</h3>
-          <p>Multipath copies đổi relative phase khi UE hoặc môi trường dịch chuyển một khoảng nhỏ.</p>
+          <strong>wavelength-scale variation</strong>
+          <p>Relative phases của propagation components đổi nhanh khi geometry thay đổi một phần wavelength.</p>
         </article>
       </div>
 
+      <div class="channel-scale-flow" data-lesson-visual>
+        <span>distance trend</span>
+        <b>+</b>
+        <span>local shadowing</span>
+        <b>+</b>
+        <span>fast complex fading</span>
+        <b>→</b>
+        <strong>received complex gain versus position/time</strong>
+      </div>
+
       <aside class="precision-note">
-        <strong>Path loss không phải fading</strong>
+        <strong>“Fading” không có nghĩa chỉ là received power giảm</strong>
         <p>
-          Một link có average path loss lớn vẫn có fading quanh mức trung bình đó.
-          Khi debug receiver, cần biết đang nhìn long-term power trend hay short-term fluctuation.
+          Complex channel coefficient có cả magnitude và phase.
+          Một vị trí khác có thể làm magnitude tăng hoặc giảm, đồng thời phase cũng đổi.
         </p>
       </aside>
     </section>
 
+    <section class="concept-block" id="time-variation">
+      <p class="concept-kicker">06 · CHANNEL CÓ THỂ THAY ĐỔI THEO THỜI GIAN</p>
+      <h2>Khi UE, scatterers hoặc cả hai chuyển động, complex gain không còn là một constant mãi mãi.</h2>
+
+      <MathExpr tex={String.raw`h\;\longrightarrow\;h(t)`} display />
+
+      <p>
+        Trong một interval đủ ngắn, receiver có thể coi channel gần như constant.
+        Trên interval dài hơn, magnitude/phase estimate cũ có thể trở nên stale.
+        Motion còn có thể tạo Doppler shift, nhưng bài này chỉ cần giữ mental model:
+        <strong>channel estimate luôn có một validity interval theo time.</strong>
+      </p>
+
+      <div class="channel-time-story" data-lesson-visual>
+        <div><small>TIME A</small><strong><MathExpr tex={String.raw`h(t_0)`} /></strong><span>one complex gain</span></div>
+        <b>→ motion / environment →</b>
+        <div><small>TIME B</small><strong><MathExpr tex={String.raw`h(t_1)`} /></strong><span>magnitude and/or phase changed</span></div>
+      </div>
+    </section>
+
     <section class="concept-block" id="flat-selective">
-      <p class="concept-kicker">06 · KHI NÀO MỘT COMPLEX NUMBER <MathExpr tex="h" /> LÀ ĐỦ?</p>
-      <h2>Nếu channel gần như không đổi trong signal bandwidth, ta gọi gần đúng đó là flat fading.</h2>
+      <p class="concept-kicker">07 · KHI NÀO MỘT SCALAR <MathExpr tex="h" /> LÀ ĐỦ?</p>
+      <h2>Flat-channel approximation đúng khi channel response gần như constant trên occupied signal bandwidth.</h2>
 
-      <p>
-        Khi bandwidth của signal nhỏ so với scale frequency mà channel thay đổi, mọi frequency component trong wanted band nhìn gần như cùng <MathExpr tex="h" />.
-        Khi bandwidth rộng hơn, các frequency components có thể thấy gain/phase khác nhau, và ta phải viết <MathExpr tex="H(f)" /> thay vì một scalar <MathExpr tex="h" />.
-      </p>
-
-      <div class="channel-model-compare">
+      <div class="channel-band-compare" data-lesson-visual>
         <article>
-          <span class="card-label">FLAT</span>
-          <h3><MathExpr tex={String.raw`Y(f)\approx hX(f)`} /></h3>
-          <p>Một complex coefficient có thể đại diện cho cả band ở thời điểm đang xét.</p>
+          <span class="card-label">FLAT APPROXIMATION</span>
+          <div class="channel-response-sketch flat">
+            <i></i>
+            <span class="wanted-band">wanted band</span>
+          </div>
+          <strong><MathExpr tex={String.raw`H(f)\approx h`} /></strong>
+          <p>Gain/phase variation trong wanted band đủ nhỏ để một complex scalar là useful model.</p>
         </article>
+
         <article>
-          <span class="card-label">FREQUENCY SELECTIVE</span>
-          <h3><MathExpr tex="Y(f)=H(f)X(f)" /></h3>
-          <p>Channel response thay đổi đáng kể trong wanted bandwidth.</p>
+          <span class="card-label">FREQUENCY-SELECTIVE</span>
+          <div class="channel-response-sketch selective">
+            <i></i>
+            <span class="wanted-band">wanted band</span>
+          </div>
+          <strong><MathExpr tex="H(f)" /></strong>
+          <p>Gain/phase thay đổi đáng kể trong occupied band, nên một scalar không còn mô tả đủ.</p>
         </article>
       </div>
 
       <p>
-        Multipath delay spread là một nguyên nhân cốt lõi tạo <MathExpr tex="H(f)" /> gợn theo frequency.
-        Đây là lý do Bài 12 cần đi từ “một path” tới một channel có nhiều taps.
+        Bài 10 dừng ở criterion này.
+        Bài 12 sẽ giải thích <strong>vì sao delayed multipath taps tạo ra frequency-selective <MathExpr tex="H(f)" /></strong>,
+        rồi nối sang delay spread và channel memory.
       </p>
     </section>
 
-    <section class="concept-block" id="implementation">
-      <p class="concept-kicker">07 · RECEIVER THỰC SỰ THẤY CHANNEL QUA SAMPLES</p>
-      <h2>Trong code, channel không xuất hiện như một object tên “wireless_channel”; nó xuất hiện qua cách samples bị thay đổi.</h2>
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">08 · RECEIVER KHÔNG “NHÌN THẤY CHANNEL”; NÓ ESTIMATE EFFECT CỦA CHANNEL</p>
+      <h2>Timing, channel estimation và equalization xử lý các phần khác nhau của model.</h2>
 
-      <p>
-        Timing estimator nhìn delay. Channel estimator nhìn complex gain trên reference symbols.
-        Equalizer dùng estimate <MathExpr tex="H[k]" /> để undo phần channel có thể bù.
-        AGC phản ứng với received level. Các khối khác nhau đang quan sát những mặt khác nhau của cùng physical propagation.
-      </p>
-
-      <div class="fading-story">
-        <div><small>TRANSMITTED</small><strong><MathExpr tex="X" /></strong><span>known/reference symbol</span></div>
-        <b>→ channel →</b>
-        <div><small>RECEIVED</small><strong><MathExpr tex="Y" /></strong><span>scale + rotate + noise</span></div>
+      <div class="channel-receiver-flow" data-lesson-visual>
+        <div>
+          <small>ARRIVAL TIME</small>
+          <strong><MathExpr tex={String.raw`\tau`} /></strong>
+          <span>timing/synchronization locates the useful observation</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>KNOWN REFERENCE</small>
+          <strong><MathExpr tex={String.raw`d_{\rm ref}`} /></strong>
+          <span>receiver knows what should have been transmitted</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>CHANNEL ESTIMATE</small>
+          <strong><MathExpr tex={String.raw`\hat h\approx y_{\rm ref}/d_{\rm ref}`} /></strong>
+          <span>simple flat-channel intuition</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>EQUALIZED SAMPLE</small>
+          <strong><MathExpr tex={String.raw`z\approx y/\hat h`} /></strong>
+          <span>undo estimated scale/rotation</span>
+        </div>
       </div>
 
-      <p>
-        Nếu <MathExpr tex="X" /> đã biết, ratio <MathExpr tex="Y/X" /> là trực giác đơn giản nhất cho một complex channel estimate trong flat, noise-free case.
-        Bài 47 sau này sẽ mở rộng chính ý tưởng này thành channel estimation thực tế.
-      </p>
+      <aside class="precision-note">
+        <strong><MathExpr tex={String.raw`\hat h=y/d`} /> không phải full channel-estimation algorithm</strong>
+        <p>
+          Noise, multiple pilots, interpolation, frequency selectivity, time variation và estimation bias đều làm practical estimator phức tạp hơn.
+          Công thức trên chỉ xây intuition cho một known reference trong flat-channel case.
+        </p>
+      </aside>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">08 · NỐI LẠI CÁC Ý</p>
-      <h2>Wireless channel làm nhiều hơn việc “giảm signal strength”.</h2>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">09 · NHỮNG GÌ CỐ TÌNH ĐỂ LẠI CHO HAI BÀI SAU</p>
+      <h2>Channel và noise là hai impairment khác nhau; multipath memory lại là bước phức tạp tiếp theo.</h2>
+
+      <div class="channel-boundary-grid">
+        <article>
+          <span class="card-label">BÀI 10</span>
+          <strong>propagation channel</strong>
+          <p>Delay, gain, phase, large/small-scale variation và flat/selective criterion.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 11</span>
+          <strong>noise, SNR, EVM</strong>
+          <p>Random receiver uncertainty và quality metrics.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 12</span>
+          <strong>multipath + delay spread</strong>
+          <p>Nhiều delayed copies tạo channel memory và frequency selectivity như thế nào.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Single-path model:</strong> delay <MathExpr tex={String.raw`\tau`} /> và complex gain <MathExpr tex="h" /> là điểm bắt đầu hữu ích.</li>
-        <li><strong>Path loss:</strong> mô tả xu hướng attenuation lớn theo distance/environment.</li>
-        <li><strong>Delay:</strong> xuất phát từ propagation time hữu hạn.</li>
-        <li><strong>Phase:</strong> một delay nhìn ở frequency <MathExpr tex="f" /> trở thành phase shift <MathExpr tex={String.raw`-2\pi f\tau`} />.</li>
-        <li><strong>Shadowing:</strong> variation do blockage và vật cản lớn.</li>
-        <li><strong>Small-scale fading:</strong> multipath phases thay đổi khi geometry thay đổi.</li>
-        <li><strong>Flat vs selective:</strong> phụ thuộc relation giữa channel variation theo frequency và signal bandwidth.</li>
+        <li><strong>Single-path baseband model:</strong> <MathExpr tex={String.raw`y_{\mathrm{bb}}(t)=h\,x_{\mathrm{bb}}(t-\tau)+n_{\mathrm{bb}}(t)`} />.</li>
+        <li><strong>Delay:</strong> arrival-time shift; path length approximately gives <MathExpr tex={String.raw`\tau=d/c`} /> in free space.</li>
+        <li><strong>Complex gain:</strong> <MathExpr tex={String.raw`h=|h|e^{j\theta}`} /> scales amplitude and rotates phase.</li>
+        <li><strong>Path loss:</strong> free-space baseline follows Friis; real environments require richer propagation models.</li>
+        <li><strong>Phase sensitivity:</strong> path-length changes on wavelength scale can strongly rotate carrier phase.</li>
+        <li><strong>Path loss / shadowing / fading:</strong> describe different scales of received variation.</li>
+        <li><strong>Time variation:</strong> practical channel estimates have finite validity as geometry changes.</li>
+        <li><strong>Flat vs selective:</strong> scalar <MathExpr tex="h" /> is useful only when <MathExpr tex="H(f)" /> is nearly constant across occupied bandwidth.</li>
+        <li><strong>Receiver view:</strong> timing estimates delay; reference signals estimate complex gain; equalization compensates what was estimated.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/baseband-rf-antenna/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/baseband-rf-antenna/">
         <span>← BÀI TRƯỚC</span>
         <strong>Baseband → RF → antenna</strong>
-        <small>Complex samples trở thành RF waveform như thế nào?</small>
+        <small>Digital complex samples trở thành physical RF waveform và radiated field như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/noise-snr-evm/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/noise-snr-evm/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Noise, SNR và EVM</strong>
-        <small>Receiver định lượng chất lượng signal bằng cách nào?</small>
+        <small>Random noise làm received samples phân tán và link quality được định lượng như thế nào?</small>
       </a>
     </nav>
   </article>
