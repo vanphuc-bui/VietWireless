@@ -19116,3 +19116,795 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Lesson 14 refresh: OFDM big picture --- */
+.ofdm-wideband-problem {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr);
+  gap: 14px;
+}
+
+.ofdm-wideband-channel,
+.ofdm-wideband-explanation {
+  min-width: 0;
+}
+
+.ofdm-wideband-channel {
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-selective-curve {
+  position: relative;
+  height: 220px;
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(90,90,90,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90,90,90,.035) 1px, transparent 1px),
+    #fcfcfb;
+  background-size: 34px 34px;
+}
+
+.ofdm-selective-curve > i {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 62px;
+  height: 80px;
+  border-radius: 50%;
+  border-top: 3px solid var(--blue);
+  transform: rotate(-4deg);
+}
+
+.ofdm-selective-curve > b {
+  position: absolute;
+  width: 72px;
+  height: 100px;
+  top: 78px;
+  border-radius: 50%;
+  border-bottom: 3px solid var(--accent);
+}
+
+.ofdm-selective-curve > b.notch-a {
+  left: 33%;
+}
+
+.ofdm-selective-curve > b.notch-b {
+  left: 61%;
+  width: 54px;
+  height: 72px;
+  top: 96px;
+}
+
+.ofdm-selective-curve > .band-label {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 16px;
+  padding: 7px 9px;
+  border: 1px solid #c7d7e2;
+  background: var(--blue-soft);
+  color: var(--muted);
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.ofdm-wideband-explanation {
+  display: grid;
+  gap: 10px;
+}
+
+.ofdm-wideband-explanation > div {
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-wideband-explanation > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.ofdm-wideband-explanation > div > strong {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-slicing-logic,
+.ofdm-orth-meaning,
+.ofdm-symbol-meaning,
+.ofdm-channel-chain,
+.ofdm-cp-preview {
+  margin: 28px 0;
+  display: grid;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ofdm-slicing-logic {
+  grid-template-columns:
+    minmax(0, 1fr) 74px
+    minmax(0, 1.2fr) 28px
+    minmax(0, 1.3fr);
+}
+
+.ofdm-orth-meaning {
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+}
+
+.ofdm-symbol-meaning {
+  grid-template-columns:
+    minmax(0, 1fr) 120px
+    minmax(0, 1fr) 80px
+    minmax(0, 1fr);
+}
+
+.ofdm-channel-chain {
+  grid-template-columns:
+    minmax(0, .85fr) 28px
+    minmax(0, .9fr) 28px
+    minmax(0, .85fr) 105px
+    minmax(0, 1fr);
+}
+
+.ofdm-cp-preview {
+  grid-template-columns:
+    minmax(0, 1fr) 150px
+    minmax(0, 1.15fr) 28px
+    minmax(0, 1.1fr);
+}
+
+.ofdm-slicing-logic > div,
+.ofdm-orth-meaning > div,
+.ofdm-symbol-meaning > div,
+.ofdm-channel-chain > div,
+.ofdm-cp-preview > div {
+  min-width: 0;
+  min-height: 126px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-slicing-logic > div.result,
+.ofdm-symbol-meaning > div.result,
+.ofdm-channel-chain > div.result,
+.ofdm-cp-preview > div.result,
+.ofdm-overview-chain-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.ofdm-slicing-logic > div > small,
+.ofdm-orth-meaning > div > small,
+.ofdm-symbol-meaning > div > small,
+.ofdm-channel-chain > div > small,
+.ofdm-cp-preview > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.ofdm-slicing-logic > div > strong,
+.ofdm-orth-meaning > div > strong,
+.ofdm-symbol-meaning > div > strong,
+.ofdm-channel-chain > div > strong,
+.ofdm-cp-preview > div > strong {
+  margin: 7px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-slicing-logic > div > span,
+.ofdm-orth-meaning > div > span,
+.ofdm-symbol-meaning > div > span,
+.ofdm-channel-chain > div > span,
+.ofdm-cp-preview > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.ofdm-slicing-logic > b,
+.ofdm-orth-meaning > b,
+.ofdm-symbol-meaning > b,
+.ofdm-channel-chain > b,
+.ofdm-cp-preview > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.ofdm-serial-parallel {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-serial-row > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ofdm-serial-slots {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  border: 1px solid var(--line);
+}
+
+.ofdm-serial-slots > i,
+.ofdm-parallel-grid > i {
+  min-height: 56px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--font-text);
+  font-style: normal;
+  font-size: var(--lesson-prose-size);
+}
+
+.ofdm-serial-slots > i:last-child {
+  border-right: 0;
+}
+
+.ofdm-serial-parallel > b {
+  min-height: 54px;
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.ofdm-parallel-grid {
+  display: grid;
+  grid-template-columns: 70px repeat(2, minmax(0, 1fr));
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.ofdm-parallel-grid > span,
+.ofdm-parallel-grid > i {
+  min-height: 56px;
+  padding: 8px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.ofdm-parallel-grid > span {
+  display: grid;
+  place-items: center;
+  background: var(--paper-2);
+  color: var(--accent);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.ofdm-parallel-grid > i {
+  background: #fff;
+}
+
+.ofdm-sinc-story {
+  margin: 28px 0;
+  overflow-x: auto;
+}
+
+.ofdm-sinc-story > svg {
+  width: 100%;
+  min-width: 720px;
+  display: block;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ofdm-sinc-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.ofdm-sinc {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.ofdm-sinc.one { stroke: var(--blue); }
+.ofdm-sinc.two { stroke: var(--violet); }
+.ofdm-sinc.three { stroke: var(--accent); }
+
+.ofdm-sinc-center {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.ofdm-overview-chain-v2 > div > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-overview-chain-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.ofdm-number-example {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ofdm-number-example > article,
+.ofdm-boundary-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-number-example > article > strong,
+.ofdm-boundary-grid > article > strong,
+.ofdm-tradeoff-grid-v2 > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-number-example > article > p,
+.ofdm-boundary-grid > article > p,
+.ofdm-tradeoff-grid-v2 > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ofdm-tradeoff-grid-v2 > article {
+  padding: 18px;
+}
+
+.ofdm-boundary-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ofdm-implementation-pipeline {
+  margin: 30px 0;
+}
+
+.ofdm-implementation-pipeline > article {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.ofdm-implementation-pipeline > article > div {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-implementation-pipeline > article.finish > div {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.ofdm-step-no {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.ofdm-implementation-pipeline > article > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.ofdm-implementation-pipeline > article > div > strong {
+  display: block;
+  margin: 6px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-implementation-pipeline > article > div > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ofdm-implementation-pipeline > b {
+  width: 52px;
+  min-height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.ofdm-overview-lab {
+  overflow: visible;
+}
+
+.ofdm-overview-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-overview-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.ofdm-overview-tabs > button:last-child {
+  border-right: 0;
+}
+
+.ofdm-overview-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.ofdm-overview-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.ofdm-overview-controls > label,
+.ofdm-phase-preset {
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ofdm-overview-controls > label > span,
+.ofdm-phase-preset > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.ofdm-overview-controls > label > span > strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.ofdm-phase-preset > div {
+  display: flex;
+  gap: 6px;
+}
+
+.ofdm-phase-preset button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.ofdm-phase-preset button.selected {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ofdm-overview-readout {
+  border-bottom: 1px solid var(--line);
+}
+
+.ofdm-channel-slicing-panel,
+.ofdm-sum-panel {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.ofdm-channel-slicing-panel > svg,
+.ofdm-sum-panel > svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ofdm-channel-slicing-panel > p,
+.ofdm-sum-panel > p,
+.ofdm-spectrum-overlap > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ofdm-overview-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.ofdm-slice-boundary {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.ofdm-selected-slice {
+  fill: var(--accent-soft);
+  opacity: .72;
+}
+
+.ofdm-channel-response {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.6;
+}
+
+.ofdm-bin-sample {
+  fill: var(--violet);
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.ofdm-orth-controls-v2 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ofdm-orth-controls-v2 > label {
+  font-size: var(--lesson-meta-size);
+}
+
+.ofdm-orth-controls-v2 > label > span > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.ofdm-good {
+  background: #f2f7f4 !important;
+}
+
+.ofdm-warning {
+  background: #fbf2ef !important;
+}
+
+.ofdm-orth-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.ofdm-orth-grid-v2 > div {
+  min-width: 0;
+  padding: 18px;
+}
+
+.ofdm-orth-grid-v2 > div:first-child {
+  border-right: 1px solid var(--line);
+}
+
+.ofdm-spectrum-overlap > svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ofdm-spectrum-a,
+.ofdm-spectrum-b {
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.ofdm-spectrum-a { stroke: var(--blue); }
+.ofdm-spectrum-b { stroke: var(--violet); }
+
+.ofdm-bin-strip {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.ofdm-bin-strip > span {
+  min-height: 72px;
+  padding: 9px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.ofdm-bin-strip > span > small {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ofdm-bin-strip > span > strong {
+  margin-top: 5px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ofdm-sum-arrow {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.ofdm-time-sum {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+}
+
+@media (max-width: 980px) {
+  .ofdm-wideband-problem,
+  .ofdm-orth-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .ofdm-orth-grid-v2 > div:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .ofdm-slicing-logic,
+  .ofdm-orth-meaning,
+  .ofdm-symbol-meaning,
+  .ofdm-channel-chain,
+  .ofdm-cp-preview,
+  .ofdm-boundary-grid,
+  .ofdm-number-example {
+    grid-template-columns: 1fr;
+  }
+
+  .ofdm-slicing-logic > b,
+  .ofdm-orth-meaning > b,
+  .ofdm-symbol-meaning > b,
+  .ofdm-channel-chain > b,
+  .ofdm-cp-preview > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .ofdm-overview-controls,
+  .ofdm-orth-controls-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .ofdm-overview-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .ofdm-overview-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .ofdm-overview-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .ofdm-serial-slots {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .ofdm-parallel-grid {
+    grid-template-columns: 60px repeat(2, minmax(0, 1fr));
+  }
+
+  .ofdm-channel-slicing-panel,
+  .ofdm-sum-panel,
+  .ofdm-orth-grid-v2 > div {
+    padding: 12px 10px;
+    overflow-x: auto;
+  }
+
+  .ofdm-channel-slicing-panel > svg,
+  .ofdm-sum-panel > svg,
+  .ofdm-orth-grid-v2 svg {
+    min-width: 620px;
+  }
+
+  .ofdm-phase-preset > div {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .ofdm-implementation-pipeline > article {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .ofdm-step-no {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ofdm-implementation-pipeline > b {
+    width: 42px;
+    min-height: 24px;
+  }
+}
