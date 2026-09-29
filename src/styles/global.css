@@ -18441,3 +18441,678 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* --- Lesson 13 refresh: correlation detector mechanics --- */
+.corr-alignment-example,
+.corr-normalization-story,
+.corr-complex-output,
+.corr-multipath-flow,
+.corr-decision-flow,
+.matched-filter-flow,
+.corr-search-space {
+  margin: 28px 0;
+  display: grid;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.corr-alignment-example,
+.corr-normalization-story,
+.corr-complex-output {
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+}
+
+.corr-multipath-flow {
+  grid-template-columns:
+    minmax(0, 1fr) 110px
+    minmax(0, 1.2fr) 28px
+    minmax(0, 1.2fr);
+}
+
+.corr-decision-flow {
+  grid-template-columns: minmax(0, 1fr) 58px minmax(0, 1.2fr);
+}
+
+.matched-filter-flow {
+  grid-template-columns:
+    minmax(0, 1fr) 150px
+    minmax(0, 1.3fr) 105px
+    minmax(0, 1fr);
+}
+
+.corr-search-space {
+  grid-template-columns:
+    minmax(0, .9fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1.25fr);
+}
+
+.corr-alignment-example > div,
+.corr-normalization-story > div,
+.corr-complex-output > div,
+.corr-multipath-flow > div,
+.corr-decision-flow > div,
+.matched-filter-flow > div,
+.corr-search-space > div {
+  min-width: 0;
+  min-height: 122px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.corr-multipath-flow > div.result,
+.matched-filter-flow > div.result,
+.corr-search-space > div.result,
+.correlation-story-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.corr-alignment-example > div > small,
+.corr-normalization-story > div > small,
+.corr-complex-output > div > small,
+.corr-multipath-flow > div > small,
+.corr-decision-flow > div > small,
+.matched-filter-flow > div > small,
+.corr-search-space > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.corr-alignment-example > div > strong,
+.corr-normalization-story > div > strong,
+.corr-complex-output > div > strong,
+.corr-multipath-flow > div > strong,
+.corr-decision-flow > div > strong,
+.matched-filter-flow > div > strong,
+.corr-search-space > div > strong {
+  margin: 7px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.corr-alignment-example > div > span,
+.corr-normalization-story > div > span,
+.corr-complex-output > div > span,
+.corr-multipath-flow > div > span,
+.corr-decision-flow > div > span,
+.matched-filter-flow > div > span,
+.corr-search-space > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.corr-alignment-example > b,
+.corr-normalization-story > b,
+.corr-complex-output > b,
+.corr-multipath-flow > b,
+.corr-decision-flow > b,
+.matched-filter-flow > b,
+.corr-search-space > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.correlation-story-v2 > div > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.correlation-story-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.corr-two-cards-v2 article > h3 {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.4;
+}
+
+.corr-two-cards-v2 article > p,
+.correlation-use-grid-v2 article > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.corr-outcome-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.corr-outcome-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.corr-outcome-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.corr-outcome-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.correlation-lab-v2 {
+  overflow: visible;
+}
+
+.correlation-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.correlation-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.correlation-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.correlation-controls-v2 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.correlation-controls-v2 > label {
+  font-size: var(--lesson-meta-size);
+}
+
+.correlation-controls-v2 > label > span > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.correlation-sample-matrix {
+  padding: 18px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-sample-row {
+  min-width: 940px;
+  display: grid;
+  grid-template-columns: 118px repeat(13, minmax(52px, 1fr));
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.correlation-sample-row:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.correlation-sample-row > span,
+.correlation-sample-row > b {
+  min-width: 0;
+  min-height: 42px;
+  padding: 7px 5px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  font-size: var(--lesson-meta-size);
+}
+
+.correlation-sample-row > span {
+  justify-content: start;
+  padding-left: 10px;
+  color: var(--muted);
+  background: var(--paper-2);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.correlation-sample-row > b {
+  color: var(--ink-soft);
+  background: #fff;
+  font-family: var(--font-text);
+  font-weight: 500;
+}
+
+.correlation-sample-row.header-row > b {
+  color: var(--muted);
+  background: var(--paper);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.correlation-sample-row > b.positive {
+  background: #f3f7fa;
+}
+
+.correlation-sample-row > b.negative {
+  background: #fbf3f1;
+}
+
+.correlation-sample-row.product-row > b {
+  font-weight: 600;
+}
+
+.correlation-sum-line {
+  min-width: 940px;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.correlation-sum-line > span {
+  min-height: 64px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+}
+
+.correlation-sum-line > span > strong {
+  color: var(--ink);
+  font-size: var(--lesson-prose-size);
+}
+
+.correlation-sum-line > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.correlation-curve-panel,
+.correlation-threshold-panel {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-bars-v2 {
+  height: 240px;
+}
+
+.correlation-bars-v2 i {
+  position: relative;
+}
+
+.correlation-bars-v2 i.selected {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.correlation-bars-v2 i.true-lag {
+  background: var(--violet);
+  opacity: 1;
+}
+
+.correlation-bars-v2 i.peak {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.correlation-curve-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.correlation-curve-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.correlation-curve-legend > span > i {
+  width: 16px;
+  height: 9px;
+  display: inline-block;
+}
+
+.correlation-curve-legend > span > i.selected {
+  border: 2px solid var(--blue);
+  background: #fff;
+}
+
+.correlation-curve-legend > span > i.true {
+  background: var(--violet);
+}
+
+.correlation-curve-legend > span > i.peak {
+  background: var(--accent);
+}
+
+.correlation-presence-toggle {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.correlation-presence-toggle > span {
+  color: var(--ink-soft);
+  font-size: var(--lesson-prose-size);
+}
+
+.correlation-presence-toggle > div {
+  display: flex;
+  gap: 6px;
+}
+
+.correlation-presence-toggle button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+  background: #fff;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.correlation-presence-toggle button.selected {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.correlation-good {
+  background: #f2f7f4 !important;
+}
+
+.correlation-bad {
+  background: #fbf2ef !important;
+}
+
+.correlation-threshold-plot {
+  position: relative;
+  height: 250px;
+  margin-top: 12px;
+  display: flex;
+  align-items: end;
+  gap: 3px;
+  padding: 12px 8px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.correlation-threshold-plot > i {
+  flex: 1 1 0;
+  min-width: 3px;
+  background: var(--violet);
+  opacity: .58;
+}
+
+.correlation-threshold-plot > i.true-lag {
+  background: var(--blue);
+  opacity: 1;
+}
+
+.correlation-threshold-plot > i.peak {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.correlation-threshold-line {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  z-index: 3;
+  border-top: 2px dashed var(--accent);
+  pointer-events: none;
+}
+
+.correlation-threshold-line > span {
+  position: absolute;
+  right: 2px;
+  top: -25px;
+  padding: 2px 5px;
+  background: #fff;
+  color: var(--accent);
+  font-size: var(--lesson-meta-size);
+}
+
+.correlation-threshold-panel > p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.correlation-cfo-controls {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.correlation-cfo-controls > label {
+  display: block;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.correlation-cfo-controls > label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.correlation-cfo-controls > label > span > strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.correlation-cfo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.correlation-cfo-curve,
+.correlation-cfo-phasors {
+  min-width: 0;
+  padding: 18px;
+  background: #fff;
+}
+
+.correlation-cfo-curve {
+  border-right: 1px solid var(--line);
+}
+
+.correlation-cfo-curve > svg,
+.correlation-cfo-phasors > svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.corr-cfo-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.corr-cfo-unit-circle {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.corr-cfo-response {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2.5;
+}
+
+.corr-cfo-probe {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.corr-cfo-contribution {
+  stroke: var(--violet);
+  stroke-width: 1.5;
+  opacity: .42;
+}
+
+.corr-cfo-sum {
+  stroke: var(--accent);
+  stroke-width: 3.2;
+}
+
+.corr-cfo-sum-dot {
+  fill: var(--accent);
+}
+
+.correlation-cfo-phasors > p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.correlation-use-grid-v2 > article > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .correlation-cfo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-cfo-curve {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .corr-alignment-example,
+  .corr-normalization-story,
+  .corr-complex-output,
+  .corr-multipath-flow,
+  .corr-decision-flow,
+  .matched-filter-flow,
+  .corr-search-space,
+  .corr-outcome-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .corr-alignment-example > b,
+  .corr-normalization-story > b,
+  .corr-complex-output > b,
+  .corr-multipath-flow > b,
+  .corr-decision-flow > b,
+  .matched-filter-flow > b,
+  .corr-search-space > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .correlation-controls-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .correlation-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .correlation-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .correlation-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .correlation-presence-toggle {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .correlation-sample-matrix,
+  .correlation-cfo-curve,
+  .correlation-cfo-phasors {
+    padding: 12px 10px;
+  }
+
+  .correlation-cfo-curve,
+  .correlation-cfo-phasors {
+    overflow-x: auto;
+  }
+
+  .correlation-cfo-curve > svg,
+  .correlation-cfo-phasors > svg {
+    min-width: 620px;
+  }
+
+  .correlation-use-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+}
