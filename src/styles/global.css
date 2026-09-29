@@ -16950,3 +16950,19 @@ body {
     transform: rotate(90deg);
   }
 }
+
+
+/* --- Global inline math optical sizing --- */
+:root {
+  --lesson-inline-math-size: 1.08em;
+}
+
+.lesson .math-inline .katex {
+  font-size: var(--lesson-inline-math-size);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --lesson-inline-math-size: 1.06em;
+  }
+}
