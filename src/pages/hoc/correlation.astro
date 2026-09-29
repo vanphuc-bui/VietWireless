@@ -6,238 +6,519 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Correlation trực quan trong receiver | VietWireless"
-  description="Hiểu correlation từ dot product tới sliding correlation, complex correlation, matched filter và cách receiver tìm known sequence trong noise."
+  description="Hiểu dot product, normalized sliding correlation, complex conjugate, matched filter, autocorrelation, detection threshold, multipath và CFO effects bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 13 · WIRELESS LINK</p>
       <h1>Correlation</h1>
       <p class="lesson-deck">
-        Receiver nhiều khi biết trước shape của một sequence nhưng không biết nó bắt đầu ở sample nào.{" "}
-        <strong>Correlation biến bài toán “pattern này nằm ở đâu trong buffer?” thành một curve theo candidate delay.</strong>
+        Receiver thường biết trước một pattern nhưng không biết nó xuất hiện ở đâu trong buffer.{" "}
+        <strong>Correlation biến bài toán “known pattern nằm ở vị trí nào?” thành một metric theo candidate lag, rồi dùng structure của peak để đưa ra timing hoặc detection hypothesis.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">VÌ SAO CORRELATION XUẤT HIỆN KHẮP RECEIVER?</p>
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
+      <p class="concept-kicker">CORRELATION NẰM Ở ĐÂU TRONG RECEIVER?</p>
       <p class="map-intro">
-        Synchronization, preamble detection, channel sounding và nhiều reference-signal procedures đều có chung một lợi thế:
-        transmitter và receiver cùng biết trước một pattern.
-        Khi đó receiver không cần đoán toàn bộ signal; nó chỉ cần hỏi pattern local của nó khớp received samples tới mức nào.
+        Bài 12 cho thấy multipath làm received buffer chứa delayed copies.
+        Bây giờ giả sử transmitter cố ý gửi một sequence mà receiver đã biết trước.
+        Receiver có thể dùng sequence đó như một template để tìm arrival timing, nhận dạng hypothesis hoặc quan sát channel.
       </p>
 
-      <div class="system-position">
-        <span>KNOWN PATTERN DETECTION</span>
-        <div class="system-position-flow">
-          <span>received buffer <MathExpr tex="r[n]" /></span><b>+</b>
-          <strong>reference <MathExpr tex="s[n]" /></strong><b>→</b>
-          <span>multiply + sum</span><b>→</b>
-          <span>metric theo lag</span><b>→</b>
-          <span>peak</span>
+      <div class="system-position concept-flow-card">
+        <span>KNOWN REFERENCE → SEARCH METRIC → DECISION</span>
+        <div class="system-position-flow" aria-label="Received buffer được so với known reference ở nhiều candidate lags">
+          <span>received buffer</span><b>+</b>
+          <strong>known reference</strong><b>→</b>
+          <span>slide + conjugate multiply + sum</span><b>→</b>
+          <span>metric vs lag</span><b>→</b>
+          <span>peak + threshold</span>
         </div>
         <p>
-          Bài này xây intuition chung. Khi sang PSS và PRACH, ta sẽ áp dụng cùng ý tưởng với sequence và search space cụ thể của 5G NR.
+          Bài này xây nền tảng chung.
+          Các bài synchronization sau sẽ áp dụng cùng tư duy với sequence, search space và impairments cụ thể hơn.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="dot-product">
-      <p class="concept-kicker">01 · CORRELATION BẮT ĐẦU TỪ DOT PRODUCT</p>
-      <h2>Nếu hai vectors có cùng pattern, các tích từng phần tử có xu hướng cộng cùng dấu.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="dot-product">
+      <p class="concept-kicker">01 · CORRELATION BẮT ĐẦU TỪ INNER PRODUCT</p>
+      <h2>Nếu hai vectors có cùng pattern, các contribution sau khi nhân có xu hướng cộng cùng hướng thay vì triệt tiêu nhau.</h2>
 
       <p>
-        Lấy một ví dụ rất nhỏ:
-        s = [1, -1, 1, 1].
-        Nếu received segment r cũng gần [1, -1, 1, 1], tích từng phần tử là [1, 1, 1, 1] và tổng lớn.
-        Nếu r có pattern khác, một số tích dương và âm sẽ cancel nhau.
+        Với ví dụ real-valued đơn giản:
       </p>
 
-      <MathExpr tex={String.raw`C = \sum_n r[n]s[n]`} display />
+      <MathExpr tex={String.raw`s=[1,-1,1,1]`} display />
 
       <p>
-        Đó là intuition cốt lõi:
-        correlation không cần “hiểu” meaning của sequence.
-        Nó chỉ đo mức alignment giữa hai vectors.
+        Nếu received segment đúng bằng reference:
       </p>
 
-      <aside class="precision-note">
-        <strong>Magnitude của raw correlation còn phụ thuộc amplitude</strong>
+      <MathExpr tex={String.raw`r=[1,-1,1,1]`} display />
+
+      <p>thì element-wise products là:</p>
+
+      <MathExpr tex={String.raw`r\odot s=[1,1,1,1]`} display />
+
+      <p>và dot product:</p>
+
+      <MathExpr tex={String.raw`C=\sum_n r[n]s[n]=4`} display />
+
+      <div class="corr-alignment-example" data-lesson-visual>
+        <div>
+          <small>ALIGNED PATTERN</small>
+          <strong>products mostly reinforce</strong>
+          <span><MathExpr tex={String.raw`+1,+1,+1,+1`} /></span>
+        </div>
+        <b>vs</b>
+        <div>
+          <small>MISMATCHED PATTERN</small>
+          <strong>positive and negative terms cancel</strong>
+          <span>sum magnitude tends to be smaller</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Correlation không “hiểu” bit meaning</strong>
         <p>
-          Nếu cùng một pattern được nhân lớn lên 10 lần, raw dot product cũng lớn lên.
-          Detector thực tế có thể normalize metric theo signal/reference energy hoặc dùng threshold phù hợp để tránh nhầm “mạnh hơn” với “giống hơn”.
+          Nó chỉ đo geometric alignment giữa vectors.
+          Sequence tốt cho detection được thiết kế sao cho đúng alignment nổi bật so với wrong alignments và competing sequences.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block" id="sliding">
-      <p class="concept-kicker">02 · KHÔNG BIẾT TIMING THÌ TRƯỢT REFERENCE QUA BUFFER</p>
-      <h2>Mỗi candidate offset <MathExpr tex={String.raw`\ell`} /> cho một correlation value <MathExpr tex={String.raw`C[\ell]`} />.</h2>
+    <section class="concept-block" id="normalization">
+      <p class="concept-kicker">02 · RAW CORRELATION TRỘN “GIỐNG NHAU” VỚI “MẠNH HƠN”</p>
+      <h2>Normalization giúp metric ít phụ thuộc vào amplitude của received segment.</h2>
 
-      <MathExpr tex={String.raw`C[\ell] = \sum_n r[n+\ell]s[n]`} display />
+      <p>Với một real-valued segment, normalized correlation magnitude có thể viết:</p>
+
+      <MathExpr
+        tex={String.raw`\gamma=\frac{\left|\sum_n r[n]s[n]\right|}{\sqrt{\left(\sum_n|r[n]|^2\right)\left(\sum_n|s[n]|^2\right)}}`}
+        display
+      />
+
+      <MathExpr tex={String.raw`0\le\gamma\le1`} display />
+
+      <div class="corr-normalization-story" data-lesson-visual>
+        <div>
+          <small>SAME SHAPE · SMALL AMPLITUDE</small>
+          <strong>raw correlation smaller</strong>
+          <span>normalized alignment can still be near 1</span>
+        </div>
+        <b>↔</b>
+        <div>
+          <small>SAME SHAPE · LARGE AMPLITUDE</small>
+          <strong>raw correlation larger</strong>
+          <span>normalization removes common scale</span>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Normalization cũng có trade-off</strong>
+        <p>
+          Nếu local segment energy rất nhỏ, normalized metrics có thể trở nên noisy hoặc numerically unstable.
+          Practical detector thường kết hợp correlation, energy gating, averaging và threshold design thay vì dùng một công thức độc lập với context.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="math" id="sliding">
+      <p class="concept-kicker">03 · KHÔNG BIẾT TIMING THÌ TRƯỢT TEMPLATE QUA BUFFER</p>
+      <h2>Mỗi candidate lag <MathExpr tex={String.raw`\ell`} /> tạo một inner product khác nhau.</h2>
+
+      <MathExpr
+        tex={String.raw`C[\ell]=\sum_{n=0}^{L-1}r[n+\ell]s^*[n]`}
+        display
+      />
 
       <p>
-        Nếu sequence bắt đầu thật ở sample 37, khi <MathExpr tex={String.raw`\ell=37`} /> reference và received segment align đúng nhất.
-        Correlation curve thường có một peak quanh đó.
-        Vì vậy timing search đơn giản có thể được hiểu như:
-        thử <MathExpr tex={String.raw`\ell=0,1,2,\ldots`} /> rồi tìm nơi metric lớn.
+        Với complex samples, conjugate <MathExpr tex={String.raw`s^*[n]`} /> là phần tự nhiên của complex inner product.
+        Nếu phase của reference đã biết đúng, contributions ở correct lag cộng coherent.
       </p>
 
-      <div class="correlation-story">
-        <div><small><MathExpr tex={String.raw`\ell`} /> NHỎ</small><strong>reference chưa align</strong><span>tích dương/âm cancel nhiều</span></div>
+      <div class="correlation-story correlation-story-v2" data-lesson-visual>
+        <div>
+          <small>WRONG LAG</small>
+          <strong>different samples are compared</strong>
+          <span>products rotate/cancel</span>
+        </div>
         <b>→ slide →</b>
-        <div><small><MathExpr tex={String.raw`\ell`} /> GẦN ĐÚNG</small><strong>pattern bắt đầu khớp</strong><span>metric tăng</span></div>
+        <div>
+          <small>NEAR ALIGNMENT</small>
+          <strong>more samples match the template</strong>
+          <span>metric rises</span>
+        </div>
         <b>→</b>
-        <div><small><MathExpr tex={String.raw`\ell=\hat{\tau}`} /></small><strong>correlation peak</strong><span>candidate timing</span></div>
+        <div class="result">
+          <small>CORRECT REGION</small>
+          <strong>coherent accumulation</strong>
+          <span>peak becomes a timing candidate</span>
+        </div>
+      </div>
+
+      <p>
+        Nếu sequence thật bắt đầu ở <MathExpr tex={String.raw`n_0`} />,
+        ideal detector kỳ vọng peak quanh <MathExpr tex={String.raw`\ell=n_0`} />.
+        Nhưng noise, multipath, CFO và competing sequences có thể làm peak shape hoặc peak location phức tạp hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="complex-gain">
+      <p class="concept-kicker">04 · COMPLEX CORRELATION CÒN MANG THÔNG TIN VỀ CHANNEL GAIN</p>
+      <h2>Ở đúng timing, correlation không chỉ nói “có match”; complex phase của output còn phản ánh common complex gain.</h2>
+
+      <p>Giả sử trong observation window:</p>
+
+      <MathExpr tex={String.raw`r[n+n_0]=h\,s[n]+w[n]`} display />
+
+      <p>Tại đúng lag:</p>
+
+      <MathExpr
+        tex={String.raw`C[n_0]=h\sum_n|s[n]|^2+\sum_n w[n+n_0]s^*[n]`}
+        display
+      />
+
+      <p>
+        Nếu noise term nhỏ và reference energy là <MathExpr tex={String.raw`E_s=\sum_n|s[n]|^2`} />,
+        thì:
+      </p>
+
+      <MathExpr tex={String.raw`C[n_0]\approx hE_s`} display />
+
+      <div class="corr-complex-output" data-lesson-visual>
+        <div>
+          <small>CORRELATION MAGNITUDE</small>
+          <strong><MathExpr tex={String.raw`|C[n_0]|`} /></strong>
+          <span>match strength × channel magnitude × reference energy</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>CORRELATION PHASE</small>
+          <strong><MathExpr tex={String.raw`\angle C[n_0]`} /></strong>
+          <span>contains common phase rotation under the simple model</span>
+        </div>
       </div>
     </section>
 
-    <section class="concept-block lab-section" id="correlation-lab">
-      <p class="concept-kicker">03 · INTERACTIVE LAB</p>
-      <h2>Giấu một known sequence trong noise rồi tăng noise cho tới khi false peak bắt đầu cạnh tranh với true peak.</h2>
-      <p>
-        Lab cố ý đơn giản để nhìn cơ chế.
-        Khi noise thấp, peak đúng rất rõ.
-        Khi noise cao, các candidate lags khác cũng có thể cho metric lớn ngẫu nhiên.
-        Vì thế real detector thường cần threshold, averaging hoặc thêm cấu trúc khác thay vì chỉ gọi argmax một lần.
-      </p>
-      <CorrelationExplorer client:load />
-    </section>
+    <section class="concept-block" id="multipath">
+      <p class="concept-kicker">05 · TRONG MULTIPATH, CORRELATION PEAK LÀ CHANNEL ĐƯỢC “BLUR” BỞI AUTOCORRELATION</p>
+      <h2>Đây là cầu nối trực tiếp từ Bài 12 sang sequence detection.</h2>
 
-    <section class="concept-block" id="complex">
-      <p class="concept-kicker">04 · VỚI <MathExpr tex="I/Q" />, CORRELATION DÙNG COMPLEX CONJUGATE</p>
-      <h2>Complex inner product cần conjugate reference để giữ đúng geometry amplitude/phase.</h2>
+      <p>Giả sử reference truyền qua discrete multipath channel:</p>
 
-      <MathExpr tex={String.raw`C[\ell] = \sum_n r[n+\ell]s^*[n]`} display />
+      <MathExpr tex={String.raw`r[n]=\sum_m h[m]s[n-m]+w[n]`} display />
 
-      <p>
-        Giả sử received sequence chỉ là một rotated/scaled copy:
-        <MathExpr tex={String.raw`r[n]=h\,s[n]`} />.
-        Khi align đúng, correlation trở thành gần <MathExpr tex={String.raw`h\sum_n |s[n]|^2`} />.
-        Magnitude của C lớn cho biết match mạnh; angle của C còn chứa phase của complex gain h.
-      </p>
+      <p>Thay vào sliding correlation:</p>
 
-      <p>
-        Đây là một lý do known reference rất mạnh:
-        cùng một phép matching có thể giúp timing acquisition và đồng thời để lộ information về complex channel/phase.
-      </p>
+      <MathExpr
+        tex={String.raw`C[\ell]=\sum_m h[m]R_{ss}[\ell-m]+\eta[\ell]`}
+        display
+      />
+
+      <p>với:</p>
+
+      <MathExpr tex={String.raw`R_{ss}[k]=\sum_n s[n+k]s^*[n]`} display />
+
+      <div class="corr-multipath-flow" data-lesson-visual>
+        <div>
+          <small>CHANNEL TAPS</small>
+          <strong><MathExpr tex="h[m]" /></strong>
+          <span>true delayed paths</span>
+        </div>
+        <b>convolved with</b>
+        <div>
+          <small>REFERENCE AUTOCORRELATION</small>
+          <strong><MathExpr tex={String.raw`R_{ss}[k]`} /></strong>
+          <span>main lobe + sidelobes</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>CORRELATION OUTPUT</small>
+          <strong><MathExpr tex={String.raw`C[\ell]`} /></strong>
+          <span>path structure blurred by sequence response + noise</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Một sharp autocorrelation peak giúp timing resolution tốt hơn</strong>
+        <p>
+          Nếu <MathExpr tex={String.raw`R_{ss}[k]`} /> gần impulse-like,
+          correlation output phản ánh channel taps rõ hơn.
+          Sidelobes lớn có thể che weak nearby paths hoặc tạo ambiguous timing candidates.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="auto-cross">
-      <p class="concept-kicker">05 · AUTOCORRELATION VÀ CROSS-CORRELATION NÓI HAI ĐIỀU KHÁC NHAU</p>
+      <p class="concept-kicker">06 · AUTOCORRELATION VÀ CROSS-CORRELATION QUYẾT ĐỊNH SEQUENCE “DỄ TÌM” TỚI MỨC NÀO</p>
 
-      <div class="corr-two-cards">
+      <div class="corr-two-cards corr-two-cards-v2">
         <article>
           <span class="card-label">AUTOCORRELATION</span>
-          <h3><MathExpr tex="s[n]" /> so với shifted <MathExpr tex="s[n]" /></h3>
+          <h3><MathExpr tex="s[n]" /> với shifted copy của chính nó</h3>
           <p>
-            Ta muốn một main peak rõ ở đúng alignment và sidelobes nhỏ ở các shifts khác.
-            Điều này giúp timing detector không tạo quá nhiều ambiguous peaks.
+            Ta muốn main peak mạnh và off-peak sidelobes nhỏ trong search region quan trọng.
+            Điều đó giảm ambiguity theo timing.
           </p>
         </article>
 
         <article>
           <span class="card-label">CROSS-CORRELATION</span>
-          <h3><MathExpr tex="s_1[n]" /> so với <MathExpr tex="s_2[n]" /></h3>
+          <h3><MathExpr tex="s_1[n]" /> với <MathExpr tex="s_2[n]" /></h3>
           <p>
-            Nếu receiver phải phân biệt nhiều candidate sequences, ta muốn các sequences khác nhau không correlate quá mạnh với nhau.
+            Nếu receiver phải phân biệt nhiều candidate sequences,
+            ta muốn wrong-sequence responses đủ nhỏ so với correct hypothesis.
           </p>
         </article>
       </div>
 
       <p>
-        Sequence design vì vậy thường quan tâm cả hai mặt:
-        tự nhận ra chính nó tốt và ít giống các sequences khác.
+        Không có một sequence family “tốt nhất cho mọi mục tiêu”.
+        Length, cyclic shifts, implementation cost, spectral constraints và robustness với channel/CFO đều có thể ảnh hưởng thiết kế.
       </p>
     </section>
 
-    <section class="concept-block" id="matched-filter">
-      <p class="concept-kicker">06 · MATCHED FILTER LÀ CÙNG Ý TƯỞNG NHÌN THEO FILTERING</p>
-      <h2>Time-reverse và conjugate reference rồi convolution với received signal sẽ tạo output tương ứng correlation theo lag.</h2>
+    <section class="concept-block" id="threshold">
+      <p class="concept-kicker">07 · ARGMAX KHÔNG PHẢI DETECTOR HOÀN CHỈNH</p>
+      <h2>Nếu không có sequence trong buffer, correlation curve vẫn luôn có một maximum.</h2>
 
-      <p>
-        Nếu known waveform là <MathExpr tex="s[n]" />, matched-filter impulse response thường liên hệ với <MathExpr tex="s^*[-n]" />.
-        Khi received waveform đi qua filter, output đạt peak khi waveform align với template.
-        Vì thế “correlator” và “matched filter” thường là hai cách mô tả gần nhau của cùng operation.
-      </p>
+      <div class="corr-decision-flow" data-lesson-visual>
+        <div>
+          <small>SEARCH</small>
+          <strong><MathExpr tex={String.raw`\hat\ell=\arg\max_\ell\gamma[\ell]`} /></strong>
+          <span>propose the strongest candidate</span>
+        </div>
+        <b>then</b>
+        <div>
+          <small>THRESHOLD TEST</small>
+          <strong><MathExpr tex={String.raw`\gamma[\hat\ell]\mathop{\gtrless}_{H_0}^{H_1}\gamma_{\rm th}`} /></strong>
+          <span>decide signal absent or present</span>
+        </div>
+      </div>
+
+      <div class="corr-outcome-grid">
+        <article>
+          <span class="card-label">DETECTION</span>
+          <strong>signal present + threshold crossed</strong>
+          <p>Candidate also needs acceptable timing/identity consistency.</p>
+        </article>
+        <article>
+          <span class="card-label">MISS</span>
+          <strong>signal present + metric too low</strong>
+          <p>Can happen when noise, fading, CFO or threshold is too severe.</p>
+        </article>
+        <article>
+          <span class="card-label">FALSE ALARM</span>
+          <strong>signal absent + noise peak crosses threshold</strong>
+          <p>Lower threshold usually increases sensitivity and false-alarm risk together.</p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Threshold không phải một universal constant</strong>
+        <p>
+          False-alarm probability phụ thuộc metric distribution, number of searched hypotheses, averaging, noise/interference statistics và normalization.
+          Searching nhiều lags/frequencies/sequences cũng tăng cơ hội xuất hiện một large random maximum.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="matched-filter">
+      <p class="concept-kicker">08 · MATCHED FILTER VÀ CORRELATOR LÀ HAI CÁCH NHÌN CÙNG OPERATION</p>
+      <h2>Time-reverse + conjugate reference rồi convolution tạo chính sliding correlation, chỉ khác indexing.</h2>
+
+      <p>Với reference dài <MathExpr tex="L" />:</p>
+
+      <MathExpr tex={String.raw`g[n]=s^*[L-1-n]`} display />
+
+      <MathExpr tex={String.raw`z[n]=(r*g)[n]`} display />
+
+      <p>thì:</p>
+
+      <MathExpr tex={String.raw`z[\ell+L-1]=C[\ell]`} display />
+
+      <div class="matched-filter-flow" data-lesson-visual>
+        <div>
+          <small>REFERENCE</small>
+          <strong><MathExpr tex="s[n]" /></strong>
+          <span>known template</span>
+        </div>
+        <b>→ conjugate + reverse →</b>
+        <div>
+          <small>FILTER</small>
+          <strong><MathExpr tex={String.raw`g[n]=s^*[L-1-n]`} /></strong>
+          <span>matched impulse response</span>
+        </div>
+        <b>→ convolve →</b>
+        <div class="result">
+          <small>OUTPUT</small>
+          <strong>correlation vs lag</strong>
+          <span>peak when template aligns</span>
+        </div>
+      </div>
 
       <aside class="mental-model">
-        <strong>Matched filter không có nghĩa receiver đã đồng bộ hoàn hảo</strong>
+        <strong>Matched filter có một optimality result rất cụ thể</strong>
         <p>
-          CFO, time scaling, multipath hoặc phase rotation có thể làm received waveform không còn giống reference template.
-          Practical detector có thể phải search thêm frequency hypotheses hoặc dùng noncoherent/segmented metrics.
+          Với known deterministic waveform trong additive white Gaussian noise,
+          matched filtering maximizes output SNR tại specified decision/sample time among linear filters.
+          Điều này không có nghĩa nó tự giải quyết CFO, multipath uncertainty hay unknown timing search.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="cfo">
-      <p class="concept-kicker">07 · FREQUENCY OFFSET LÀM CORRELATION PEAK GIẢM</p>
-      <h2>Nếu phase quay dần trong observation window, các contribution không còn cộng cùng hướng.</h2>
+      <p class="concept-kicker">09 · CFO LÀM COHERENT CONTRIBUTIONS XOAY DẦN</p>
+      <h2>Timing có thể đúng nhưng correlation gain vẫn giảm nếu phase drift đáng kể xuyên suốt reference.</h2>
+
+      <p>Giả sử constant-modulus reference và đúng timing:</p>
+
+      <MathExpr tex={String.raw`r[n+n_0]=h\,s[n]e^{j2\pi\Delta f nT_s}`} display />
+
+      <p>Khi correlate với <MathExpr tex={String.raw`s^*[n]`} />:</p>
+
+      <MathExpr
+        tex={String.raw`C[n_0]=h\sum_{n=0}^{L-1}e^{j2\pi\Delta f nT_s}`}
+        display
+      />
+
+      <p>Đặt normalized CFO:</p>
+
+      <MathExpr tex={String.raw`\epsilon=\Delta fT_s`} display />
+
+      <p>normalized coherent gain là:</p>
+
+      <MathExpr
+        tex={String.raw`G(\epsilon)=\frac1L\left|\frac{\sin(\pi L\epsilon)}{\sin(\pi\epsilon)}\right|`}
+        display
+      />
 
       <p>
-        Với CFO <MathExpr tex={String.raw`\Delta f`} />, received complex samples có thêm factor <MathExpr tex={String.raw`e^{j2\pi\Delta f\,nT_s}`} />.
-        Đầu sequence và cuối sequence vì vậy có phase khác nhau.
-        Correlator coherent dùng một reference “không quay” sẽ mất gain khi accumulated phase rotation lớn.
-      </p>
-
-      <p>
-        Đây là lý do acquisition algorithms thường phối hợp timing search và frequency search.
-        Đến Bài 22 PSS, ta sẽ thấy cùng câu chuyện này trong 5G initial synchronization.
+        Với <MathExpr tex={String.raw`\epsilon\to0`} />, gain tiến tới 1.
+        Khi phase drift tăng, per-sample vectors fan out và tổng vector ngắn lại.
+        Đây là lý do acquisition thường phải giới hạn hoặc search residual frequency error cùng với timing.
       </p>
     </section>
 
-    <section class="concept-block" id="receiver-use">
-      <p class="concept-kicker">08 · TRONG RECEIVER, CORRELATION KHÔNG CHỈ DÙNG MỘT LẦN</p>
-      <div class="correlation-use-grid">
+    <section class="concept-block lab-section" id="correlation-lab">
+      <p class="concept-kicker">10 · INTERACTIVE LAB</p>
+      <h2>Ba mode để nhìn correlation từ phép nhân từng sample tới detector threshold và CFO loss.</h2>
+
+      <p>
+        <strong>Sliding match</strong> cho phép tự kéo candidate lag và nhìn reference, received segment, từng product rồi mới ra normalized metric.{" "}
+        <strong>Threshold detector</strong> có cả signal-present và signal-absent cases để thấy vì sao argmax chưa đủ.{" "}
+        <strong>CFO coherence</strong> vẽ từng contribution phasor và coherent-gain curve.
+      </p>
+
+      <CorrelationExplorer client:load />
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · IMPLEMENTATION: SEARCH SPACE QUYẾT ĐỊNH COMPUTE COST</p>
+      <h2>Correlation không chỉ tốn theo sequence length; receiver còn phải nhân với số timing, frequency và identity hypotheses.</h2>
+
+      <div class="corr-search-space" data-lesson-visual>
+        <div>
+          <small>TIMING HYPOTHESES</small>
+          <strong><MathExpr tex={String.raw`N_\tau`} /></strong>
+          <span>candidate sample offsets</span>
+        </div>
+        <b>×</b>
+        <div>
+          <small>FREQUENCY HYPOTHESES</small>
+          <strong><MathExpr tex={String.raw`N_f`} /></strong>
+          <span>when CFO uncertainty is significant</span>
+        </div>
+        <b>×</b>
+        <div>
+          <small>SEQUENCE HYPOTHESES</small>
+          <strong><MathExpr tex={String.raw`N_s`} /></strong>
+          <span>candidate identities/templates</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>TOTAL SEARCH</small>
+          <strong>many correlation evaluations</strong>
+          <span>architecture matters</span>
+        </div>
+      </div>
+
+      <p>
+        Direct sliding evaluation of a length-<MathExpr tex="L" /> sequence over many lags costs roughly one inner product per lag.
+        For long buffers/templates, correlation can also be implemented through convolution and FFT-based methods.
+        SIMD, vectorization, hierarchical search and reuse across hypotheses can matter more than the textbook formula suggests.
+      </p>
+
+      <aside class="precision-note">
+        <strong>FFT-based correlation is not automatically faster for every problem size</strong>
+        <p>
+          Transform setup, zero-padding, latency, memory movement and short sequence lengths can make direct/vectorized correlation cheaper.
+          Implementation choice depends on actual search dimensions and hardware.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · CORRELATION LÀ TOOL; SEQUENCE CỤ THỂ SẼ ĐẾN SAU</p>
+      <h2>Bài 13 xây detector mechanics mà không gắn nó vào một standard-specific signal.</h2>
+
+      <div class="correlation-use-grid correlation-use-grid-v2">
         <article>
           <strong>Synchronization</strong>
-          <p>Tìm preamble hoặc sync sequence để có timing candidate.</p>
+          <p>Tìm timing candidate từ known sync structure.</p>
         </article>
         <article>
-          <strong>Identity detection</strong>
-          <p>So nhiều known references và chọn sequence hypothesis khớp nhất.</p>
+          <strong>Identity search</strong>
+          <p>So competing templates để nhận dạng sequence hypothesis.</p>
         </article>
         <article>
-          <strong>Channel estimation</strong>
-          <p>Known symbols cho phép tách effect của channel khỏi transmitted value.</p>
+          <strong>Channel sounding</strong>
+          <p>Known reference response tiết lộ delay/complex channel structure.</p>
         </article>
         <article>
           <strong>Random access</strong>
-          <p>Preamble detection là một use case quan trọng khi học PRACH.</p>
+          <p>Preamble search dùng cùng template-matching principle với search assumptions riêng.</p>
         </article>
       </div>
 
       <p>
-        Trong code, sliding correlation trực tiếp có complexity khá lớn nếu sequence/buffer dài.
-        Có thể dùng convolution/FFT-based methods, SIMD hoặc search hierarchy để giảm cost.
-        Nhưng optimization không thay đổi mental model: local pattern được so với received data theo nhiều hypotheses.
+        Những bài synchronization và reference-signal sau sẽ thêm standard-specific sequence construction,
+        resource mapping, CFO range, timing uncertainty và detection procedure.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">13 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Dot product:</strong> là hạt nhân của similarity metric.</li>
-        <li><strong>Sliding correlation:</strong> tạo một metric cho mỗi candidate timing lag.</li>
-        <li><strong>Normalization:</strong> giúp tách “giống nhau” khỏi đơn thuần “amplitude lớn”.</li>
-        <li><strong>Complex correlation:</strong> dùng conjugate reference.</li>
-        <li><strong>Autocorrelation:</strong> cho biết sequence phản ứng thế nào với chính nó khi bị shift.</li>
-        <li><strong>Cross-correlation:</strong> cho biết hai sequence candidates giống nhau tới mức nào.</li>
-        <li><strong>Matched filter:</strong> cách nhìn filtering của cùng bài toán pattern matching.</li>
-        <li><strong>CFO:</strong> làm coherent accumulation suy giảm nếu không được search/bù phù hợp.</li>
+        <li><strong>Inner product:</strong> correlation cộng per-sample alignment contributions.</li>
+        <li><strong>Normalization:</strong> giảm phụ thuộc vào common amplitude scaling và cho một bounded alignment metric.</li>
+        <li><strong>Sliding correlation:</strong> một metric được tính cho mỗi candidate lag <MathExpr tex={String.raw`\ell`} />.</li>
+        <li><strong>Complex correlation:</strong> dùng conjugate reference <MathExpr tex={String.raw`s^*[n]`} />.</li>
+        <li><strong>Correct-lag output:</strong> trong simple flat model, <MathExpr tex={String.raw`C[n_0]\approx hE_s`} />.</li>
+        <li><strong>Multipath:</strong> correlation output là channel taps shaped bởi sequence autocorrelation.</li>
+        <li><strong>Sequence design:</strong> autocorrelation sidelobes và cross-correlation ảnh hưởng ambiguity/discrimination.</li>
+        <li><strong>Detector:</strong> argmax proposes a candidate; threshold controls absent/present decision and false-alarm/miss trade-off.</li>
+        <li><strong>Matched filter:</strong> convolution với conjugate time-reversed template là sliding correlation theo cách nhìn filtering.</li>
+        <li><strong>CFO:</strong> phase drift làm coherent contributions fan out và giảm correlation gain.</li>
+        <li><strong>Implementation:</strong> total cost phụ thuộc cả timing, frequency và sequence search dimensions.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/multipath-delay-spread/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/multipath-delay-spread/">
         <span>← BÀI TRƯỚC</span>
         <strong>Multipath và delay spread</strong>
-        <small>Channel trở thành filter có memory như thế nào?</small>
+        <small>Nhiều delayed copies biến channel thành filter có memory và frequency-selective response như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/ofdm-buc-tranh-tong-the/">
+
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/ofdm-buc-tranh-tong-the/">
         <span>BÀI TIẾP THEO →</span>
         <strong>OFDM: bức tranh tổng thể</strong>
-        <small>Vì sao chia wideband signal thành nhiều subcarriers?</small>
+        <small>Vì sao một wideband frequency-selective channel lại gợi ý chia signal thành nhiều narrow subcarriers?</small>
       </a>
     </nav>
   </article>
