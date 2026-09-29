@@ -17403,3 +17403,424 @@ body {
     min-width: 620px;
   }
 }
+
+
+/* --- Lesson 11 refresh: noise SNR and EVM --- */
+.thermal-symbols-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.thermal-symbols-v2 > div > span,
+.snr-equations-v2 > div > p,
+.quality-ratio-grid > article > p,
+.evm-pattern-grid > article > p,
+.noise-boundary-grid > article > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.noise-budget-example {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, .85fr) 34px
+    minmax(0, 1.35fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.noise-budget-example > div,
+.evm-units-grid > div {
+  min-width: 0;
+  min-height: 118px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.noise-budget-example > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.noise-budget-example > div > small,
+.evm-units-grid > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.noise-budget-example > div > strong,
+.evm-units-grid > div > strong {
+  margin-top: 7px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.noise-budget-example > b,
+.evm-units-grid > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-weight: 500;
+}
+
+.constellation-noise-story-v2 > div > p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.snr-equations-v2 > div {
+  min-height: 145px;
+}
+
+.snr-equations-v2 > div > strong {
+  display: block;
+  margin: 9px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.snr-equations-v2 > div > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.quality-ratio-grid,
+.evm-pattern-grid,
+.noise-boundary-grid {
+  margin: 28px 0;
+  display: grid;
+  gap: 14px;
+}
+
+.quality-ratio-grid,
+.noise-boundary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.evm-pattern-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quality-ratio-grid > article,
+.evm-pattern-grid > article,
+.noise-boundary-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.quality-ratio-grid > article > strong,
+.evm-pattern-grid > article > strong,
+.noise-boundary-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.quality-ratio-grid > article > p,
+.evm-pattern-grid > article > p,
+.noise-boundary-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.evm-geometry-v2 {
+  overflow-x: auto;
+}
+
+.evm-units-grid {
+  margin: 26px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr) 36px minmax(0, 1.25fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.noise-evm-lab-v2 {
+  overflow: visible;
+}
+
+.noise-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.noise-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.noise-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.noise-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.noise-controls-v2 > label {
+  font-size: var(--lesson-meta-size);
+}
+
+.noise-controls-v2 > label.disabled {
+  opacity: .42;
+}
+
+.noise-controls-v2 > label.disabled > input {
+  cursor: not-allowed;
+}
+
+.noise-controls-v2 > label > span > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.noise-lab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(320px, 1.05fr);
+  align-items: stretch;
+}
+
+.noise-constellation-wrap {
+  border-right: 1px solid var(--line);
+}
+
+.noise-constellation-wrap > svg {
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.noise-bit-label {
+  fill: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 10px;
+}
+
+.noise-focus-error {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.noise-focus-point {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.noise-constellation-legend {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.noise-constellation-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.noise-constellation-legend > span > i {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+}
+
+.noise-constellation-legend > span > i.ideal {
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.noise-constellation-legend > span > i.received {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: .6;
+}
+
+.noise-constellation-legend > span > i.error {
+  width: 18px;
+  height: 0;
+  border-top: 2px dashed var(--accent);
+}
+
+.noise-relation-panel {
+  min-width: 0;
+  padding: 18px;
+  background: var(--paper);
+}
+
+.noise-relation-equation {
+  margin-top: 18px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.noise-relation-equation > small,
+.noise-relation-compare > span > small {
+  display: block;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.noise-relation-equation > strong {
+  display: block;
+  margin-top: 8px;
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.noise-relation-compare {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.noise-relation-compare > span {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.noise-relation-compare > span > strong {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.noise-relation-panel > p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.noise-lab-note-v2 {
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.measurement-chain-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.measurement-chain-v2 > div > strong {
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.measurement-chain-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+@media (max-width: 980px) {
+  .noise-lab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .noise-constellation-wrap {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .noise-budget-example,
+  .quality-ratio-grid,
+  .evm-pattern-grid,
+  .noise-boundary-grid,
+  .evm-units-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .noise-budget-example > b,
+  .evm-units-grid > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .noise-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .noise-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .noise-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .noise-controls-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .noise-constellation-wrap,
+  .noise-relation-panel,
+  .evm-geometry-v2 {
+    padding: 12px 10px;
+    overflow-x: auto;
+  }
+
+  .noise-constellation-wrap > svg,
+  .evm-geometry-v2 > svg {
+    min-width: 560px;
+  }
+
+  .noise-relation-compare {
+    grid-template-columns: 1fr;
+  }
+}
