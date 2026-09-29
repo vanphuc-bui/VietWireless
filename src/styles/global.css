@@ -16957,7 +16957,7 @@ body {
   --lesson-inline-math-size: 1.08em;
 }
 
-.lesson .math-inline .katex {
+.lesson :is(p, li, td, th, figcaption) .math-inline .katex {
   font-size: var(--lesson-inline-math-size);
 }
 
