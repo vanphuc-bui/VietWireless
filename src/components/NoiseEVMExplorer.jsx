@@ -161,7 +161,7 @@ export default function NoiseEVMExplorer() {
       <div className="noise-controls noise-controls-v2">
         <label className={!noiseEnabled ? 'disabled' : ''}>
           <span>
-            AWGN SNR
+            AWGN SNR{" "}
             <strong><MathExpr tex={snrDb.toFixed(0) + '\\,\\mathrm{dB}'} /></strong>
           </span>
           <input
@@ -177,7 +177,7 @@ export default function NoiseEVMExplorer() {
 
         <label className={!phaseEnabled ? 'disabled' : ''}>
           <span>
-            Common phase error
+            Common phase error{" "}
             <strong><MathExpr tex={'\\theta=' + phaseError.toFixed(0) + '^\\circ'} /></strong>
           </span>
           <input
