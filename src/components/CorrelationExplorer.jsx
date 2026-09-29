@@ -114,7 +114,10 @@ export default function CorrelationExplorer() {
     (sum, item) => sum + item.received * item.received,
     0
   );
-  const selectedMetric = Math.abs(selectedSignedDot) / Math.sqrt(L * selectedSegmentEnergy);
+  const selectedDenominator = Math.sqrt(L * selectedSegmentEnergy);
+  const selectedMetric = selectedDenominator > 0
+    ? Math.abs(selectedSignedDot) / selectedDenominator
+    : 0;
 
   const detectRx = useMemo(
     () => buildRx(delay, noiseStd, signalPresent),
