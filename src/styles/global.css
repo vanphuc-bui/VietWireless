@@ -16954,7 +16954,7 @@ body {
 
 /* --- Global inline math optical sizing --- */
 :root {
-  --lesson-inline-math-size: 1.08em;
+  --lesson-inline-math-size: 1.10em;
 }
 
 .lesson :is(p, li, td, th, figcaption) .math-inline .katex {
