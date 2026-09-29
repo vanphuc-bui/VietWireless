@@ -19908,3 +19908,662 @@ body {
     min-height: 24px;
   }
 }
+
+
+/* --- Lesson 15 refresh: IFFT FFT basis synthesis and projection --- */
+.ifft-object-map,
+.ifft-one-bin-meaning,
+.ifft-synthesis-story,
+.ifft-analysis-story {
+  margin: 28px 0;
+  display: grid;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ifft-object-map {
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr) 28px minmax(0, 1fr);
+}
+
+.ifft-one-bin-meaning {
+  grid-template-columns:
+    minmax(0, .85fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1.1fr);
+}
+
+.ifft-synthesis-story {
+  grid-template-columns:
+    minmax(0, .85fr) 28px
+    minmax(0, 1.15fr) 28px
+    minmax(0, 1.15fr) 28px
+    minmax(0, .9fr);
+}
+
+.ifft-analysis-story {
+  grid-template-columns:
+    minmax(0, .9fr) 28px
+    minmax(0, 1.35fr) 92px
+    minmax(0, 1fr);
+}
+
+.ifft-object-map > div,
+.ifft-one-bin-meaning > div,
+.ifft-synthesis-story > div,
+.ifft-analysis-story > div {
+  min-width: 0;
+  min-height: 122px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ifft-object-map > div.result,
+.ifft-one-bin-meaning > div.result,
+.ifft-synthesis-story > div.result,
+.ifft-analysis-story > div.result,
+.ifft-channel-flow-v2 > div.result {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.ifft-object-map > div > small,
+.ifft-one-bin-meaning > div > small,
+.ifft-synthesis-story > div > small,
+.ifft-analysis-story > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.ifft-object-map > div > strong,
+.ifft-one-bin-meaning > div > strong,
+.ifft-synthesis-story > div > strong,
+.ifft-analysis-story > div > strong {
+  margin: 7px 0 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ifft-object-map > div > span,
+.ifft-one-bin-meaning > div > span,
+.ifft-analysis-story > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.ifft-object-map > b,
+.ifft-one-bin-meaning > b,
+.ifft-synthesis-story > b,
+.ifft-analysis-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.ifft-n4-table {
+  margin: 26px 0;
+  max-width: 760px;
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.ifft-n4-table > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.ifft-n4-table > div > span {
+  min-height: 54px;
+  padding: 10px 12px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  font-size: var(--lesson-prose-size);
+}
+
+.ifft-n4-table > div.header > span {
+  background: var(--paper-2);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.ifft-two-domains-v2 > article > h3 {
+  font-size: var(--lesson-prose-size);
+}
+
+.ifft-two-domains-v2 > article > p {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ifft-bin-order {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ifft-bin-order > div > div {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.ifft-bin-order > div > div > i {
+  min-height: 54px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--font-text);
+  font-style: normal;
+  font-size: var(--lesson-prose-size);
+}
+
+.ifft-bin-order > div.shifted > div > i:nth-child(5) {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ifft-bin-order > b {
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+}
+
+.ifft-normalization-grid,
+.ifft-implementation-grid,
+.ifft-boundary-grid {
+  margin: 28px 0;
+  display: grid;
+  gap: 14px;
+}
+
+.ifft-normalization-grid,
+.ifft-boundary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ifft-implementation-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ifft-normalization-grid > article,
+.ifft-implementation-grid > article,
+.ifft-boundary-grid > article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ifft-normalization-grid > article > strong,
+.ifft-implementation-grid > article > strong,
+.ifft-boundary-grid > article > strong {
+  display: block;
+  margin: 8px 0 6px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ifft-normalization-grid > article > p,
+.ifft-implementation-grid > article > p,
+.ifft-boundary-grid > article > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ifft-channel-flow-v2 > div > strong {
+  font-size: var(--lesson-prose-size);
+  font-weight: 600;
+}
+
+.ifft-channel-flow-v2 > div > span {
+  font-size: var(--lesson-prose-size);
+  line-height: 1.45;
+}
+
+.ifft-fft-lab-v2 {
+  overflow: visible;
+}
+
+.ifft-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.ifft-mode-tabs > button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.ifft-mode-tabs > button:last-child {
+  border-right: 0;
+}
+
+.ifft-mode-tabs > button.selected {
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.ifft-basis-controls,
+.ifft-sum-controls {
+  padding: 18px;
+  display: grid;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.ifft-basis-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ifft-sum-controls {
+  grid-template-columns: minmax(260px, 1fr);
+}
+
+.ifft-basis-controls > label,
+.ifft-sum-controls > label,
+.ifft-qpsk-select {
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ifft-basis-controls > label > span,
+.ifft-sum-controls > label > span,
+.ifft-qpsk-select > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.ifft-basis-controls > label > span > strong,
+.ifft-sum-controls > label > span > strong {
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.ifft-qpsk-select > div {
+  display: flex;
+  gap: 6px;
+}
+
+.ifft-qpsk-select button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  cursor: pointer;
+}
+
+.ifft-qpsk-select button.selected {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ifft-readout {
+  border-bottom: 1px solid var(--line);
+}
+
+.ifft-basis-grid,
+.ifft-projection-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.ifft-basis-grid > div,
+.ifft-projection-grid > div {
+  min-width: 0;
+  padding: 18px;
+  background: #fff;
+}
+
+.ifft-basis-grid > div:first-child,
+.ifft-projection-grid > div:first-child {
+  border-right: 1px solid var(--line);
+}
+
+.ifft-basis-circle > svg,
+.ifft-projection-phasors > svg {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  background: #fcfcfb;
+}
+
+.ifft-axis {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.ifft-unit-circle {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+}
+
+.ifft-basis-vector {
+  stroke: var(--blue);
+  stroke-width: 1.6;
+  opacity: .62;
+}
+
+.ifft-basis-dot {
+  fill: var(--accent);
+}
+
+.ifft-basis-index {
+  fill: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 10px;
+}
+
+.ifft-sample-table {
+  margin-top: 10px;
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.ifft-sample-table > div {
+  display: grid;
+  grid-template-columns: 70px minmax(110px, .7fr) minmax(150px, 1fr);
+}
+
+.ifft-sample-table > div > span {
+  min-height: 45px;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  font-size: var(--lesson-meta-size);
+}
+
+.ifft-sample-table > div.header > span {
+  background: var(--paper-2);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.ifft-bin-editor-v2 {
+  border-bottom: 1px solid var(--line);
+}
+
+.ifft-contribution-panel {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.ifft-contribution-strip,
+.ifft-projection-strip {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.ifft-contribution-strip > div,
+.ifft-projection-strip > div {
+  min-width: 0;
+  min-height: 96px;
+  padding: 9px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: #fff;
+  text-align: center;
+}
+
+.ifft-contribution-strip > div.off {
+  opacity: .45;
+  background: var(--paper-2);
+}
+
+.ifft-contribution-strip > div.active {
+  border-color: #bfd4e1;
+  background: var(--blue-soft);
+}
+
+.ifft-contribution-strip > div > small,
+.ifft-projection-strip > div > small {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ifft-contribution-strip > div > strong,
+.ifft-projection-strip > div > strong {
+  margin: 5px 0;
+  font-family: var(--font-text);
+  font-size: var(--lesson-meta-size);
+  font-weight: 600;
+}
+
+.ifft-contribution-strip > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ifft-contribution-sum {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ifft-contribution-sum > span,
+.ifft-contribution-sum > strong {
+  min-height: 62px;
+  padding: 11px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: var(--lesson-prose-size);
+}
+
+.ifft-contribution-sum > strong {
+  border-top: 3px solid var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.ifft-contribution-sum > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 500;
+  text-align: center;
+}
+
+.ifft-time-panel-v2 {
+  border-bottom: 1px solid var(--line);
+}
+
+.ifft-time-panel-v2 .ifft-sample-grid > div.selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--accent-soft);
+}
+
+.ifft-projection-vector {
+  stroke: var(--violet);
+  stroke-width: 1.5;
+  opacity: .42;
+}
+
+.ifft-projection-sum {
+  stroke: var(--accent);
+  stroke-width: 3.2;
+}
+
+.ifft-projection-sum-dot {
+  fill: var(--accent);
+}
+
+.ifft-recovered-v2 > div.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ifft-recovered-v2 > div > strong {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--font-text);
+  font-size: var(--lesson-meta-size);
+  font-weight: 600;
+}
+
+.ifft-recovered-v2 > div > span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+@media (max-width: 980px) {
+  .ifft-basis-grid,
+  .ifft-projection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ifft-basis-grid > div:first-child,
+  .ifft-projection-grid > div:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 900px) {
+  .ifft-object-map,
+  .ifft-one-bin-meaning,
+  .ifft-synthesis-story,
+  .ifft-analysis-story,
+  .ifft-normalization-grid,
+  .ifft-boundary-grid,
+  .ifft-implementation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ifft-object-map > b,
+  .ifft-one-bin-meaning > b,
+  .ifft-synthesis-story > b,
+  .ifft-analysis-story > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .ifft-basis-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .ifft-mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .ifft-mode-tabs > button {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .ifft-mode-tabs > button:last-child {
+    border-bottom: 0;
+  }
+
+  .ifft-qpsk-select > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ifft-bin-order,
+  .ifft-basis-grid > div,
+  .ifft-projection-grid > div,
+  .ifft-contribution-panel,
+  .ifft-bin-editor-v2,
+  .ifft-time-panel-v2 {
+    overflow-x: auto;
+  }
+
+  .ifft-bin-order > div > div,
+  .ifft-contribution-strip,
+  .ifft-projection-strip,
+  .ifft-bin-row,
+  .ifft-sample-grid,
+  .ifft-recovered-v2 {
+    min-width: 720px;
+  }
+
+  .ifft-basis-circle > svg,
+  .ifft-projection-phasors > svg {
+    min-width: 560px;
+  }
+
+  .ifft-contribution-sum {
+    min-width: 620px;
+  }
+
+  .ifft-n4-table {
+    min-width: 560px;
+  }
+}
