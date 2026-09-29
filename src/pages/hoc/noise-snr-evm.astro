@@ -6,137 +6,214 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Noise, SNR và EVM trực quan | VietWireless"
-  description="Hiểu thermal noise, noise floor, SNR, constellation scatter và EVM bằng công thức, ví dụ số và interactive lab."
+  description="Hiểu thermal noise, noise density, receiver noise figure, SNR, complex Gaussian noise, EVM, EVM dB và giới hạn của quan hệ EVM-SNR bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 11 · WIRELESS LINK</p>
       <h1>Noise, SNR và EVM</h1>
       <p class="lesson-deck">
-        Sau channel, receiver không chỉ nhận một bản sao bị suy hao của signal. Nó còn nhận noise và nhiều residual errors khác.{" "}
-        <strong>SNR nhìn chất lượng theo power; EVM nhìn trực tiếp sai số của complex symbols trên constellation.</strong>
+        Bài 10 mô tả propagation channel. Bài 11 thêm một lớp khác: receiver luôn có uncertainty và residual errors.{" "}
+        <strong>SNR đo power ratio của wanted signal so với noise, còn EVM đo trực tiếp complex error giữa measured symbols và reference symbols.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
-      <p class="concept-kicker">TẠI SAO CẦN HAI CÁCH NHÌN?</p>
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
+      <p class="concept-kicker">BA OBJECT KHÔNG NÊN TRỘN VỚI NHAU</p>
       <p class="map-intro">
-        Giả sử receiver thấy constellation points không còn nằm đúng chỗ.
-        Một câu hỏi là: wanted signal mạnh bao nhiêu so với noise?
-        Câu hỏi khác là: measured symbol lệch reference symbol bao xa?
-        Hai câu đó dẫn tới SNR và EVM.
+        Một constellation cloud có thể rộng vì random noise, bị quay vì phase error, hoặc bị méo vì hardware/channel residuals.
+        EVM nhìn thấy tổng geometry error; SNR chỉ có nghĩa rõ khi ta đã xác định wanted-signal power và noise power tại cùng reference point.
       </p>
 
-      <div class="system-position">
-        <span>IDEAL SYMBOL → RECEIVED SYMBOL</span>
-        <div class="system-position-flow">
-          <span><MathExpr tex="X" /></span><b>→</b>
-          <span>channel</span><b>+</b>
-          <strong>noise / impairment</strong><b>→</b>
-          <span><MathExpr tex="Y" /></span><b>→</b>
-          <span>SNR + EVM</span>
+      <div class="system-position concept-flow-card">
+        <span>SIGNAL QUALITY FROM TWO VIEWPOINTS</span>
+        <div class="system-position-flow" aria-label="Wanted signal cộng noise và impairment rồi được đánh giá bằng SNR và EVM">
+          <span>wanted signal</span><b>+</b>
+          <span>random noise</span><b>+</b>
+          <span>structured residuals</span><b>→</b>
+          <strong>received samples</strong><b>→</b>
+          <span>SNR / EVM</span>
         </div>
         <p>
-          SNR và EVM liên quan trong một model lý tưởng chỉ có additive noise,
-          nhưng ngoài đời EVM còn có thể chứa CFO, phase noise, IQ imbalance, nonlinearity và channel-estimation error.
+          Bài này tách rõ power-domain metric và constellation-domain metric.
+          Multipath memory tiếp tục ở Bài 12.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="noise">
-      <p class="concept-kicker">01 · NOISE FLOOR KHÔNG BIẾN MẤT KHI TA KHÔNG PHÁT DATA</p>
-      <h2>Ngay cả receiver lý tưởng cũng có thermal noise; hardware thực tế còn làm noise tăng thêm.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="thermal-noise">
+      <p class="concept-kicker">01 · THERMAL NOISE BẮT ĐẦU TỪ POWER SPECTRAL DENSITY</p>
+      <h2>Noise power tăng khi measurement bandwidth rộng hơn.</h2>
 
-      <p>
-        Một model cơ bản cho available thermal-noise power là:
-      </p>
+      <MathExpr tex={String.raw`P_n=kTB_n`} display />
 
-      <MathExpr tex="P_n = kTB" display />
-
-      <div class="thermal-symbols">
-        <div><strong><MathExpr tex="k" /></strong><span>Boltzmann constant</span></div>
-        <div><strong><MathExpr tex="T" /></strong><span>absolute temperature</span></div>
-        <div><strong><MathExpr tex="B" /></strong><span>noise bandwidth</span></div>
+      <div class="thermal-symbols thermal-symbols-v2">
+        <div>
+          <strong><MathExpr tex="k" /></strong>
+          <span>Boltzmann constant</span>
+        </div>
+        <div>
+          <strong><MathExpr tex="T" /></strong>
+          <span>absolute temperature</span>
+        </div>
+        <div>
+          <strong><MathExpr tex="B_n" /></strong>
+          <span>effective noise bandwidth</span>
+        </div>
       </div>
 
       <p>
-        Ở khoảng <MathExpr tex={String.raw`290\,\mathrm{K}`} />, thermal noise density thường được nhớ gần đúng là <MathExpr tex={String.raw`-174\,\mathrm{dBm/Hz}`} />.
-        Nếu receiver bandwidth là <MathExpr tex={String.raw`20\,\mathrm{MHz}`} />, integrated thermal noise lý tưởng vào khoảng
-        <MathExpr tex={String.raw`-174 + 10\log_{10}(20\times10^6) \approx -101\,\mathrm{dBm}`} />, trước khi cộng noise figure của receiver.
+        Ở <MathExpr tex={String.raw`T\approx290\,\mathrm K`} />, available thermal-noise density xấp xỉ:
       </p>
 
+      <MathExpr tex={String.raw`N_0=kT\approx-174\,\mathrm{dBm/Hz}`} display />
+
+      <p>
+        Với effective bandwidth <MathExpr tex={String.raw`B_n=20\,\mathrm{MHz}`} />:
+      </p>
+
+      <MathExpr tex={String.raw`P_n\approx-174+10\log_{10}(20\times10^6)\approx-101\,\mathrm{dBm}`} display />
+
       <aside class="precision-note">
-        <strong>Bandwidth phải đi cùng con số noise</strong>
+        <strong><MathExpr tex={String.raw`-174\,\mathrm{dBm/Hz}`} /> là density, không phải noise power của mọi receiver</strong>
         <p>
-          Noise density có đơn vị trên Hz. Khi bandwidth rộng hơn, receiver tích lũy nhiều noise power hơn.
-          Vì vậy nói “noise là <MathExpr tex={String.raw`-100\,\mathrm{dBm}`} />” mà không biết measurement bandwidth thường chưa đủ context.
+          Integrated noise phải đi cùng bandwidth.
+          Filter shape còn làm effective noise bandwidth khác một chút so với một nominal channel width.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block" id="snr">
-      <p class="concept-kicker">02 · SNR LÀ TỈ SỐ POWER</p>
-      <h2>SNR so wanted-signal power với noise power tại cùng measurement point và cùng bandwidth.</h2>
+    <section class="concept-block" id="noise-figure">
+      <p class="concept-kicker">02 · RECEIVER HARDWARE LÀM SNR XẤU ĐI</p>
+      <h2>Noise figure mô tả SNR degradation do receiver chain thêm vào.</h2>
 
-      <div class="snr-equations">
+      <MathExpr tex={String.raw`F=\frac{\mathrm{SNR}_{\rm in}}{\mathrm{SNR}_{\rm out}}`} display />
+      <MathExpr tex={String.raw`\mathrm{NF}_{\rm dB}=10\log_{10}F`} display />
+
+      <p>
+        Trong link-budget intuition, effective input-referred receiver noise floor thường được viết:
+      </p>
+
+      <MathExpr tex={String.raw`N_{\rm floor,dBm}\approx-174+10\log_{10}(B_n)+\mathrm{NF}_{\rm dB}`} display />
+
+      <div class="noise-budget-example" data-lesson-visual>
+        <div>
+          <small>THERMAL DENSITY</small>
+          <strong><MathExpr tex={String.raw`-174\,\mathrm{dBm/Hz}`} /></strong>
+        </div>
+        <b>+</b>
+        <div>
+          <small><MathExpr tex={String.raw`20\,\mathrm{MHz}`} /> BANDWIDTH</small>
+          <strong><MathExpr tex={String.raw`+73\,\mathrm{dB}`} /></strong>
+        </div>
+        <b>+</b>
+        <div>
+          <small>EXAMPLE NF</small>
+          <strong><MathExpr tex={String.raw`+5\,\mathrm{dB}`} /></strong>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>EFFECTIVE INPUT-REFERRED FLOOR</small>
+          <strong><MathExpr tex={String.raw`\approx-96\,\mathrm{dBm}`} /></strong>
+        </div>
+      </div>
+
+      <p>
+        Con số trên chỉ là ví dụ arithmetic.
+        Actual noise figure phụ thuộc receiver architecture, gain distribution, operating point và frequency.
+      </p>
+    </section>
+
+    <section class="concept-block" id="complex-noise">
+      <p class="concept-kicker">03 · TRONG COMPLEX BASEBAND, AWGN LÀ NHIỄU TRÊN CẢ <MathExpr tex="I" /> VÀ <MathExpr tex="Q" /></p>
+      <h2>Random perturbation trên hai quadrature axes tạo point cloud quanh mỗi ideal constellation point.</h2>
+
+      <MathExpr tex={String.raw`n=n_I+jn_Q`} display />
+      <MathExpr tex={String.raw`n_I,n_Q\sim\mathcal N(0,\sigma^2)`} display />
+      <MathExpr tex={String.raw`\mathbb E[|n|^2]=2\sigma^2`} display />
+
+      <div class="constellation-noise-story constellation-noise-story-v2" data-lesson-visual>
+        <div>
+          <span class="card-label">HIGH SNR</span>
+          <div class="mini-cloud tight"><b></b><i></i><i></i><i></i><i></i><i></i></div>
+          <p>Noise variance nhỏ → cloud tập trung gần reference.</p>
+        </div>
+        <b>vs</b>
+        <div>
+          <span class="card-label">LOW SNR</span>
+          <div class="mini-cloud wide"><b></b><i></i><i></i><i></i><i></i><i></i></div>
+          <p>Noise variance lớn → cloud rộng và dễ crossing decision boundaries hơn.</p>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>AWGN là model, không phải tên cho mọi constellation error</strong>
+        <p>
+          “White” nói về flat power spectral density trong idealized bandwidth.
+          “Gaussian” nói về amplitude statistics.
+          Residual CFO, phase noise, quadrature imbalance và nonlinear distortion có structure khác.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="math" id="snr">
+      <p class="concept-kicker">04 · SNR LÀ POWER RATIO TẠI MỘT REFERENCE POINT CỤ THỂ</p>
+      <h2>Muốn con số SNR có nghĩa, signal power, noise power, bandwidth và measurement stage phải nhất quán.</h2>
+
+      <div class="snr-equations snr-equations-v2">
         <div>
           <span class="card-label">LINEAR</span>
           <strong><MathExpr tex={String.raw`\mathrm{SNR}=P_s/P_n`} /></strong>
+          <p>ratio không có đơn vị</p>
         </div>
         <div>
-          <span class="card-label">dB</span>
-          <strong><MathExpr tex={String.raw`\mathrm{SNR}_{\mathrm{dB}}=10\log_{10}(P_s/P_n)`} /></strong>
+          <span class="card-label">DECIBEL</span>
+          <strong><MathExpr tex={String.raw`\mathrm{SNR}_{\rm dB}=10\log_{10}(P_s/P_n)`} /></strong>
+          <p>power ratio expressed in dB</p>
         </div>
       </div>
 
       <p>
-        <MathExpr tex={String.raw`10\,\mathrm{dB}`} /> nghĩa là signal power gấp 10 lần noise power.
-        <MathExpr tex={String.raw`20\,\mathrm{dB}`} /> nghĩa là gấp 100 lần.
-        Nếu đang so amplitude hoặc voltage ratio với cùng impedance, hệ số log thường là <MathExpr tex={String.raw`20\log_{10}`} />, vì power tỉ lệ với amplitude bình phương.
+        Nếu wanted power là <MathExpr tex={String.raw`-80\,\mathrm{dBm}`} /> và noise là
+        <MathExpr tex={String.raw`-100\,\mathrm{dBm}`} /> tại cùng point/bandwidth:
       </p>
 
-      <p>
-        Ví dụ receiver đo wanted power <MathExpr tex={String.raw`-80\,\mathrm{dBm}`} /> và noise power <MathExpr tex={String.raw`-100\,\mathrm{dBm}`} /> trong cùng bandwidth.
-        Hiệu hai giá trị là <MathExpr tex={String.raw`20\,\mathrm{dB}`} />, nên <MathExpr tex={String.raw`\mathrm{SNR}=20\,\mathrm{dB}`} />.
-        Đây là lợi ích của dB: phép chia power ratio trở thành phép trừ.
-      </p>
-    </section>
+      <MathExpr tex={String.raw`\mathrm{SNR}_{\rm dB}=(-80)-(-100)=20\,\mathrm{dB}`} display />
 
-    <section class="concept-block" id="not-all-noise">
-      <p class="concept-kicker">03 · KHÔNG PHẢI MỌI ERROR ĐỀU LÀ THERMAL NOISE</p>
-      <h2>Một constellation xấu có thể đến từ random noise hoặc từ lỗi có cấu trúc.</h2>
-
-      <div class="impairment-grid">
+      <div class="quality-ratio-grid">
         <article>
-          <span class="card-label">ADDITIVE NOISE</span>
-          <h3>cloud rộng ra</h3>
-          <p>Random <MathExpr tex="I/Q" /> perturbations làm samples rải quanh ideal point.</p>
+          <span class="card-label">SNR</span>
+          <strong><MathExpr tex={String.raw`P_s/P_n`} /></strong>
+          <p>Chỉ noise ở denominator.</p>
         </article>
         <article>
-          <span class="card-label">COMMON PHASE ERROR</span>
-          <h3>cả cloud bị quay</h3>
-          <p>Residual phase/CFO có thể xoay toàn constellation theo cùng hướng trong một khoảng thời gian.</p>
+          <span class="card-label">SINR</span>
+          <strong><MathExpr tex={String.raw`P_s/(P_i+P_n)`} /></strong>
+          <p>Interference và noise cùng nằm ở denominator.</p>
         </article>
         <article>
-          <span class="card-label">NONLINEARITY / IQ ERROR</span>
-          <h3>shape bị méo</h3>
-          <p>Hardware distortion có thể làm outer points và inner points sai theo pattern khác nhau.</p>
+          <span class="card-label"><MathExpr tex={String.raw`E_s/N_0\;\text{or}\;E_b/N_0`} /></span>
+          <strong>energy-to-density ratios</strong>
+          <p>Không tự động bằng SNR nếu bandwidth/rate normalization khác nhau.</p>
         </article>
       </div>
 
-      <p>
-        Vì vậy khi một EVM measurement xấu, câu hỏi tiếp theo không nên tự động là “noise cao bao nhiêu?”.
-        Ta cần nhìn error pattern để đoán impairment nào đang chi phối.
-      </p>
+      <aside class="precision-note">
+        <strong>Đừng đổi tên các quality ratios cho nhau chỉ vì đều dùng dB</strong>
+        <p>
+          SNR, SINR, <MathExpr tex={String.raw`E_s/N_0`} /> và <MathExpr tex={String.raw`E_b/N_0`} /> có definitions khác nhau.
+          Muốn convert phải biết symbol/bit rate, bandwidth và normalization đang dùng.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="evm">
-      <p class="concept-kicker">04 · EVM ĐO KHOẢNG CÁCH TRÊN COMPLEX PLANE</p>
-      <h2>Reference symbol là điểm ta muốn có; measured symbol là điểm receiver hoặc instrument thực sự thấy.</h2>
+      <p class="concept-kicker">05 · EVM LÀ COMPLEX-DOMAIN ERROR METRIC</p>
+      <h2>Reference symbol và measured symbol tạo thành một error vector trên complex plane.</h2>
 
-      <div class="evm-geometry">
-        <svg viewBox="0 0 620 320" role="img" aria-label="Error vector giữa reference symbol và measured symbol">
+      <div class="evm-geometry evm-geometry-v2" data-lesson-visual>
+        <svg viewBox="0 0 620 320" role="img" aria-label="Reference vector measured vector and EVM error vector">
           <line class="evm-axis" x1="70" y1="225" x2="560" y2="225" />
           <line class="evm-axis" x1="250" y1="55" x2="250" y2="280" />
           <line class="evm-reference-vector" x1="250" y1="225" x2="410" y2="110" />
@@ -144,111 +221,189 @@ import MathExpr from '../../components/Math.astro';
           <line class="evm-error-vector" x1="410" y1="110" x2="445" y2="145" />
           <circle class="evm-ref-dot" cx="410" cy="110" r="7" />
           <circle class="evm-meas-dot" cx="445" cy="145" r="7" />
-          <foreignObject x="402" y="82" width="104" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>reference&nbsp;</span><MathExpr tex="X" /></div></foreignObject>
-          <foreignObject x="438" y="144" width="112" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>measured&nbsp;</span><MathExpr tex="Y" /></div></foreignObject>
-          <text class="evm-label accent" x="432" y="122">error vector</text>
+          <foreignObject x="390" y="78" width="128" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>reference&nbsp;</span><MathExpr tex="d_i" /></div></foreignObject>
+          <foreignObject x="438" y="143" width="118" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><span>measured&nbsp;</span><MathExpr tex="z_i" /></div></foreignObject>
+          <foreignObject x="425" y="113" width="112" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`e_i=z_i-d_i`} /></div></foreignObject>
           <foreignObject x="528" y="198" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="I" /></div></foreignObject>
           <foreignObject x="250" y="54" width="38" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="Q" /></div></foreignObject>
         </svg>
       </div>
 
-      <p>
-        Với nhiều symbols, một RMS definition phổ biến là:
-      </p>
+      <MathExpr tex={String.raw`\mathrm{EVM}_{\rm RMS}=\sqrt{\frac{\sum_i|z_i-d_i|^2}{\sum_i|d_i|^2}}`} display />
 
-      <MathExpr tex={String.raw`\mathrm{EVM}_{\mathrm{RMS}} = \sqrt{\frac{\sum_k |Y_k-X_k|^2}{\sum_k |X_k|^2}}`} display />
+      <div class="evm-units-grid">
+        <div>
+          <small>LINEAR</small>
+          <strong><MathExpr tex={String.raw`\mathrm{EVM}=0.05`} /></strong>
+        </div>
+        <b>↔</b>
+        <div>
+          <small>PERCENT</small>
+          <strong><MathExpr tex={String.raw`5\% `} /></strong>
+        </div>
+        <b>↔</b>
+        <div>
+          <small>DECIBEL</small>
+          <strong><MathExpr tex={String.raw`20\log_{10}(0.05)\approx-26.0\,\mathrm{dB}`} /></strong>
+        </div>
+      </div>
 
       <p>
-        Nếu <MathExpr tex={String.raw`\mathrm{EVM}=0.05`} />, ta thường viết <MathExpr tex={String.raw`5\%`} />.
-        Numerator là tổng error energy; denominator là reference-symbol energy dùng để normalize.
-        Exact standard measurement có thể quy định thêm reference reconstruction, averaging và normalization cụ thể.
+        EVM normalization phải được nói rõ.
+        Instrument hoặc standard còn có thể quy định reference reconstruction, which corrections are allowed, averaging và resource selection.
+        Vì vậy hai EVM numbers chỉ nên so trực tiếp khi measurement procedure tương thích.
       </p>
     </section>
 
+    <section class="concept-block" id="patterns">
+      <p class="concept-kicker">06 · CÙNG LÀ EVM XẤU NHƯNG ERROR PATTERN CÓ THỂ RẤT KHÁC</p>
+      <h2>Constellation shape giúp chẩn đoán nguyên nhân mà một scalar EVM không thể tự nói ra.</h2>
+
+      <div class="evm-pattern-grid">
+        <article>
+          <span class="card-label">AWGN-LIKE</span>
+          <strong>isotropic scatter</strong>
+          <p>Cloud mở rộng tương đối ngẫu nhiên quanh mỗi reference point.</p>
+        </article>
+        <article>
+          <span class="card-label">COMMON PHASE ERROR</span>
+          <strong>shared rotation</strong>
+          <p>Trong một interval ngắn, nhiều symbols cùng bị rotate theo một góc gần giống nhau.</p>
+        </article>
+        <article>
+          <span class="card-label">GAIN / PA ERROR</span>
+          <strong>radial or amplitude-dependent error</strong>
+          <p>Scale error hoặc compression làm displacement phụ thuộc amplitude.</p>
+        </article>
+        <article>
+          <span class="card-label">QUADRATURE IMPAIRMENT</span>
+          <strong>skew / image-related structure</strong>
+          <p>Gain/phase mismatch giữa quadrature paths tạo error có structure, không phải circular cloud đơn giản.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="concept-block lab-section" id="noise-lab">
-      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
-      <h2>Tăng random noise rồi thêm common phase error để thấy hai impairment tạo constellation khác nhau.</h2>
+      <p class="concept-kicker">07 · INTERACTIVE LAB</p>
+      <h2>Chuyển giữa AWGN-only, phase-only và combined để thấy khi nào EVM có thể liên hệ trực tiếp với SNR.</h2>
+
       <p>
-        Khi chỉ tăng noise, point cloud rộng dần quanh bốn QPSK references.
-        Khi tăng phase error, cả cloud cùng quay. EVM tăng trong cả hai trường hợp, dù physical cause không giống nhau.
+        AWGN mode dùng unit-energy QPSK và injected complex Gaussian noise.
+        Phase-only mode tắt additive noise nhưng EVM vẫn có thể lớn.
+        Combined mode cho thấy một EVM scalar không tự tách random error khỏi deterministic rotation.
       </p>
+
       <NoiseEVMExplorer client:load />
     </section>
 
     <section class="concept-block" id="snr-evm">
-      <p class="concept-kicker">06 · KHI NÀO CÓ THỂ NỐI EVM VỚI SNR?</p>
-      <h2>Trong model chỉ có additive error và normalization nhất quán, <MathExpr tex={String.raw`\mathrm{EVM}^2`} /> gần bằng error power / signal power.</h2>
+      <p class="concept-kicker">08 · QUAN HỆ EVM–SNR CHỈ ĐƠN GIẢN TRONG MỘT MODEL ĐƠN GIẢN</p>
+      <h2>Nếu residual error chỉ là additive uncorrelated noise và normalization nhất quán, error power chính là noise power.</h2>
 
-      <MathExpr tex={String.raw`\mathrm{EVM}_{\mathrm{linear}} \approx \frac{1}{\sqrt{\mathrm{SNR}_{\mathrm{linear}}}}`} display />
+      <MathExpr tex={String.raw`\mathrm{EVM}^2\approx\frac{P_n}{P_s}=\frac{1}{\mathrm{SNR}}`} display />
+      <MathExpr tex={String.raw`\mathrm{EVM}\approx10^{-\mathrm{SNR}_{\rm dB}/20}`} display />
+      <MathExpr tex={String.raw`\mathrm{EVM}_{\rm dB}\approx-\mathrm{SNR}_{\rm dB}`} display />
 
       <p>
-        Ví dụ <MathExpr tex={String.raw`\mathrm{SNR}=20\,\mathrm{dB}`} /> nghĩa là <MathExpr tex={String.raw`\mathrm{SNR}_{\mathrm{linear}}=100`} />.
-        Khi assumptions phù hợp, EVM xấp xỉ <MathExpr tex={String.raw`1/\sqrt{100}=0.1`} />, tức khoảng 10%.
-        Nhưng nếu error đến từ phase rotation hoặc nonlinear distortion, gọi toàn bộ error đó là “noise SNR” sẽ che mất nguyên nhân thật.
+        Ví dụ <MathExpr tex={String.raw`\mathrm{SNR}=20\,\mathrm{dB}`} /> cho
+        <MathExpr tex={String.raw`\mathrm{EVM}\approx10\%`} /> trong AWGN-only model.
+      </p>
+
+      <p>
+        Nhưng một pure common phase error <MathExpr tex={String.raw`\theta`} /> với unit-magnitude symbols đã cho:
+      </p>
+
+      <MathExpr tex={String.raw`\mathrm{EVM}_{\rm phase}=|e^{j\theta}-1|=2\left|\sin(\theta/2)\right|`} display />
+
+      <p>
+        Ở <MathExpr tex={String.raw`\theta=10^\circ`} />, EVM đã khoảng
+        <MathExpr tex={String.raw`17.4\%`} /> dù không cần thêm thermal noise nào.
+        Đây là lý do không được lấy mọi measured EVM rồi gọi <MathExpr tex={String.raw`1/\mathrm{EVM}^2`} /> là physical SNR.
       </p>
     </section>
 
-    <section class="concept-block" id="measurement-point">
-      <p class="concept-kicker">07 · ĐO Ở STAGE NÀO THÌ THẤY IMPAIRMENT KHÁC NHAU</p>
-      <h2>Raw ADC samples và equalized constellation không phải cùng một measurement point.</h2>
+    <section class="concept-block" data-lesson-role="implementation" id="measurement-point">
+      <p class="concept-kicker">09 · EVM PHỤ THUỘC VÀO REFERENCE VÀ STAGE ĐO</p>
+      <h2>Raw samples, equalized symbols và reference-aligned symbols không còn chứa cùng một tập impairments.</h2>
 
-      <div class="measurement-chain">
-        <div><small>ADC</small><strong>raw <MathExpr tex="I/Q" /></strong><span>channel + noise + sync error</span></div>
-        <b>→ sync / FFT →</b>
-        <div><small>SUBCARRIER</small><strong><MathExpr tex="Y[k]" /></strong><span>channel vẫn còn</span></div>
-        <b>→ equalize →</b>
-        <div><small>SYMBOL</small><strong><MathExpr tex={String.raw`\hat{X}[k]`} /></strong><span>residual error</span></div>
+      <div class="measurement-chain measurement-chain-v2" data-lesson-visual>
+        <div>
+          <small>RAW DIGITAL RX</small>
+          <strong>sample buffer</strong>
+          <span>timing + carrier + channel + noise + hardware errors</span>
+        </div>
+        <b>→ sync / estimate →</b>
+        <div>
+          <small>EQUALIZED SYMBOL</small>
+          <strong><MathExpr tex="z_i" /></strong>
+          <span>estimated channel largely removed</span>
+        </div>
+        <b>→ reference align →</b>
+        <div class="result">
+          <small>EVM ERROR</small>
+          <strong><MathExpr tex={String.raw`e_i=z_i-d_i`} /></strong>
+          <span>whatever residuals remain under the chosen procedure</span>
+        </div>
       </div>
 
-      <p>
-        Nếu EVM được đo sau equalization, một phần deterministic channel đã được loại bỏ.
-        Nếu đo trước equalization, channel rotation/attenuation sẽ chi phối error.
-        Khi debug, luôn ghi rõ metric được tính ở stage nào.
-      </p>
-    </section>
-
-    <section class="concept-block" id="implementation">
-      <p class="concept-kicker">08 · TRONG CODE, EVM CHỈ LÀ COMPLEX ERROR</p>
-      <h2>Sau khi đã có reference symbols và measured symbols tương ứng, phép tính rất thẳng.</h2>
-
-      <p>
-        Với mỗi k, tạo <MathExpr tex="e[k]=Y[k]-X[k]" />.
-        Cộng <MathExpr tex="|e[k]|^2" /> để lấy error energy, rồi normalize bằng <MathExpr tex={String.raw`\sum_k |X[k]|^2`} /> theo definition đang dùng.
-        Phần khó trong receiver thực tế thường không phải phép trừ này, mà là đảm bảo timing, CFO, channel estimate và reference mapping đều đúng trước khi tính.
-      </p>
-
-      <aside class="mental-model">
-        <strong>EVM là symptom metric rất mạnh</strong>
+      <aside class="precision-note">
+        <strong>EVM không tự cho biết BER</strong>
         <p>
-          Nó cho biết received constellation khác reference bao nhiêu, nhưng không tự nói nguyên nhân.
-          Muốn chẩn đoán, cần nhìn thêm pattern theo symbol, subcarrier, time, amplitude và phase.
+          BER còn phụ thuộc modulation order, coding, bit mapping, detector, channel statistics và decoder.
+          EVM là waveform/symbol-quality metric, không phải trực tiếp một packet-success metric.
         </p>
       </aside>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">09 · NỐI LẠI CÁC Ý</p>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">10 · BÀI 11 DỪNG Ở RANDOM/RESIDUAL ERROR; BÀI 12 QUAY LẠI CHANNEL MEMORY</p>
+      <h2>Noise làm samples phân tán. Multipath tạo delayed copies có structure theo thời gian.</h2>
+
+      <div class="noise-boundary-grid">
+        <article>
+          <span class="card-label">BÀI 10</span>
+          <strong>single-path channel</strong>
+          <p>Delay, complex gain, fading và flat/selective criterion.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 11</span>
+          <strong>noise + quality metrics</strong>
+          <p>Thermal noise, SNR, complex scatter và residual EVM.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 12</span>
+          <strong>multipath memory</strong>
+          <p>Nhiều delayed paths tạo convolution, delay spread và frequency selectivity.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Thermal noise:</strong> có noise floor cơ bản và tăng theo bandwidth qua <MathExpr tex="kTB" />.</li>
-        <li><strong>SNR:</strong> ratio giữa wanted-signal power và noise power tại cùng reference point.</li>
-        <li><strong>dB:</strong> biến power ratio thành phép cộng/trừ thuận tiện.</li>
-        <li><strong>EVM:</strong> normalized RMS complex error giữa measured và reference symbols.</li>
-        <li><strong>AWGN relation:</strong> <MathExpr tex={String.raw`\mathrm{EVM}\approx1/\sqrt{\mathrm{SNR}}`} /> chỉ dưới assumptions phù hợp.</li>
-        <li><strong>Structured errors:</strong> CFO, phase noise, IQ imbalance và nonlinearity cũng làm EVM tăng.</li>
-        <li><strong>Measurement point:</strong> quyết định những impairment nào còn xuất hiện trong metric.</li>
+        <li><strong>Thermal noise:</strong> available noise power tăng theo <MathExpr tex={String.raw`kTB_n`} />.</li>
+        <li><strong>Noise figure:</strong> quantifies receiver SNR degradation and raises the effective input-referred noise floor.</li>
+        <li><strong>Complex AWGN:</strong> random perturbation có components trên cả <MathExpr tex="I" /> và <MathExpr tex="Q" />.</li>
+        <li><strong>SNR:</strong> wanted-signal power / noise power tại cùng stage và bandwidth.</li>
+        <li><strong>SNR ≠ SINR ≠ energy ratios:</strong> definitions phải được giữ riêng.</li>
+        <li><strong>EVM:</strong> normalized RMS complex distance giữa measured symbols và reference symbols.</li>
+        <li><strong>EVM formats:</strong> có thể viết linear, percent hoặc dB.</li>
+        <li><strong>AWGN-only relation:</strong> <MathExpr tex={String.raw`\mathrm{EVM}\approx1/\sqrt{\mathrm{SNR}}`} /> khi assumptions phù hợp.</li>
+        <li><strong>Structured residuals:</strong> phase, gain, quadrature và nonlinear errors cũng làm EVM tăng mà không phải thermal noise.</li>
+        <li><strong>Measurement procedure:</strong> stage, reference và allowed corrections quyết định EVM đang bao gồm những error nào.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/wireless-channel/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/wireless-channel/">
         <span>← BÀI TRƯỚC</span>
         <strong>Wireless channel</strong>
-        <small>Channel làm waveform suy hao, trễ và quay phase thế nào?</small>
+        <small>Propagation làm complex envelope trễ, scale, rotate và thay đổi theo time/frequency như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/multipath-delay-spread/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/multipath-delay-spread/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Multipath và delay spread</strong>
-        <small>Nhiều delayed copies của cùng signal chồng lên nhau ra sao?</small>
+        <small>Nhiều delayed copies biến scalar channel thành một filter có memory như thế nào?</small>
       </a>
     </nav>
   </article>
