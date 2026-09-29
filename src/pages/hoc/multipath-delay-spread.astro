@@ -6,156 +6,273 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="Multipath và delay spread trực quan | VietWireless"
-  description="Hiểu multipath, channel taps, impulse response, power delay profile, RMS delay spread, ISI và frequency-selective fading bằng ví dụ cụ thể."
+  description="Hiểu multipath geometry, complex channel taps, convolution, power delay profile, RMS delay spread, frequency-selective fading, coherence bandwidth và ISI bằng hình ảnh và interactive lab."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 12 · WIRELESS LINK</p>
       <h1>Multipath và delay spread</h1>
       <p class="lesson-deck">
-        Trong wireless thực tế, receiver hiếm khi chỉ nhận đúng một copy của signal.{" "}
-        <strong>Reflection, diffraction và scattering tạo nhiều bản sao có amplitude, phase và arrival time khác nhau rồi cộng lại tại antenna.</strong>
+        Bài 10 dùng một scalar complex gain để mô tả flat channel. Ngoài thực tế, receiver thường nhận nhiều copies của cùng waveform.{" "}
+        <strong>Khi các copies có delays khác nhau, channel trở thành một filter có memory; cùng hiện tượng đó nhìn trong frequency domain trở thành frequency-selective fading.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">TỪ MỘT PATH TỚI MỘT CHANNEL CÓ MEMORY</p>
       <p class="map-intro">
-        Bài 10 dùng <MathExpr tex={String.raw`y(t)=h\,x(t-\tau)`} /> để xây trực giác.
-        Bây giờ thay vì một path, giả sử có direct path và vài reflected paths.
-        Mỗi path mang một copy của <MathExpr tex="x(t)" />, nhưng copy đó tới muộn và có complex gain riêng.
+        Với một dominant path, ta dùng <MathExpr tex={String.raw`y(t)=h\,x(t-\tau)`} />.
+        Với multipath, mỗi geometry path tạo một delayed complex copy riêng rồi tất cả cộng tại receiver.
       </p>
 
-      <div class="system-position">
-        <span>MULTIPATH SUPERPOSITION</span>
-        <div class="system-position-flow">
-          <span>direct copy</span><b>+</b>
-          <span>echo 1</span><b>+</b>
-          <span>echo 2</span><b>+</b>
-          <span>...</span><b>→</b>
-          <strong>received waveform</strong>
+      <div class="system-position concept-flow-card">
+        <span>SAME TRANSMITTED WAVEFORM · MULTIPLE ARRIVALS</span>
+        <div class="system-position-flow" aria-label="Nhiều propagation paths tạo nhiều delayed copies rồi cộng tại receiver">
+          <span>TX waveform</span><b>→</b>
+          <span>path 0</span><b>+</b>
+          <span>path 1</span><b>+</b>
+          <span>path 2…</span><b>→</b>
+          <strong>channel with memory</strong>
         </div>
         <p>
-          Khi delayed copies kéo dài qua nhiều samples, channel không còn là một scalar h.
-          Nó trở thành một filter có memory.
+          Bài 12 đi từ geometry → taps → convolution → delay spread → <MathExpr tex="H(f)" /> → ISI.
+          Cyclic Prefix và OFDM solution được để lại cho các bài waveform sau.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="where-paths">
+    <section class="concept-block" data-lesson-role="intuition" id="geometry">
       <p class="concept-kicker">01 · NHIỀU PATH ĐẾN TỪ GEOMETRY</p>
-      <h2>Một signal có thể đi thẳng, phản xạ qua building, nhiễu xạ quanh cạnh và tán xạ qua nhiều vật thể.</h2>
+      <h2>Direct propagation, reflection, diffraction và scattering tạo những đường đi có length và interaction khác nhau.</h2>
 
-      <div class="multipath-scene" role="img" aria-label="Transmitter receiver và nhiều đường multipath">
+      <div class="multipath-scene multipath-scene-v2" role="img" aria-label="Transmitter receiver và nhiều đường truyền multipath">
         <div class="mp-scene-tx">TX</div>
         <div class="mp-scene-rx">RX</div>
         <div class="mp-scene-wall">building</div>
-        <svg viewBox="0 0 900 300" aria-hidden="true">
+        <div class="mp-scene-object">scatterer</div>
+
+        <svg viewBox="0 0 900 320" aria-hidden="true">
           <path class="mp-scene-path direct" d="M105 205 C315 190 560 190 795 205" />
-          <path class="mp-scene-path reflected" d="M105 205 C260 70 500 65 795 205" />
-          <path class="mp-scene-path scattered" d="M105 205 C285 255 545 260 795 205" />
+          <path class="mp-scene-path reflected" d="M105 205 C260 58 500 58 795 205" />
+          <path class="mp-scene-path scattered" d="M105 205 C300 270 550 280 795 205" />
         </svg>
-        <span class="mp-scene-label direct-label">direct path</span>
+
+        <span class="mp-scene-label direct-label">direct</span>
         <span class="mp-scene-label reflect-label">reflection</span>
         <span class="mp-scene-label scatter-label">scattering / diffraction</span>
       </div>
 
+      <div class="path-to-tap-flow" data-lesson-visual>
+        <div>
+          <small>PATH LENGTH</small>
+          <strong><MathExpr tex={String.raw`d_\ell`} /></strong>
+          <span>sets propagation delay</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>INTERACTIONS</small>
+          <strong>reflection / diffraction / scattering</strong>
+          <span>change amplitude and phase</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>BASEBAND TAP</small>
+          <strong><MathExpr tex={String.raw`\alpha_\ell,\tau_\ell`} /></strong>
+          <span>one delayed complex copy</span>
+        </div>
+      </div>
+
       <p>
-        Path dài hơn có propagation delay lớn hơn.
-        Surface/material khác nhau tạo attenuation và phase shift khác nhau.
-        Tại receiver, electromagnetic fields chồng lên nhau tuyến tính trong model thông thường, nên các copies cùng cộng vào một waveform.
+        Trong equivalent-complex-baseband model, coefficient <MathExpr tex={String.raw`\alpha_\ell`} /> có thể absorb propagation carrier phase
+        và phase shifts do interactions với môi trường.
+        Delay <MathExpr tex={String.raw`\tau_\ell`} /> giữ vị trí arrival của copy trên baseband time axis.
       </p>
     </section>
 
-    <section class="concept-block" id="impulse-response">
-      <p class="concept-kicker">02 · MỖI PATH TRỞ THÀNH MỘT CHANNEL TAP</p>
-      <h2>Impulse response ghi lại “copy mạnh bao nhiêu” và “copy tới lúc nào”.</h2>
+    <section class="concept-block" data-lesson-role="math" id="impulse-response">
+      <p class="concept-kicker">02 · IMPULSE RESPONSE LÀ DANH SÁCH CÁC DELAYED COMPLEX COPIES</p>
+      <h2>Mỗi path trở thành một tap có complex gain và delay riêng.</h2>
 
-      <MathExpr tex={String.raw`h(\tau) = \sum_{\ell} \alpha_{\ell}\,\delta(\tau-\tau_{\ell})`} display />
+      <MathExpr tex={String.raw`h(\tau)=\sum_{\ell=0}^{L-1}\alpha_\ell\,\delta(\tau-\tau_\ell)`} display />
 
-      <div class="multipath-tap-grid">
+      <div class="multipath-tap-grid multipath-tap-grid-v2">
         <article>
-          <span class="card-label"><MathExpr tex={String.raw`\alpha_{\ell}`} /></span>
-          <h3>complex path gain</h3>
-          <p>Magnitude cho attenuation; angle cho phase rotation của path <MathExpr tex={String.raw`\ell`} />.</p>
+          <span class="card-label"><MathExpr tex={String.raw`|\alpha_\ell|`} /></span>
+          <h3>Tap magnitude</h3>
+          <p>Amplitude scaling của path. Path-power weight tương ứng tỉ lệ với <MathExpr tex={String.raw`|\alpha_\ell|^2`} />.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex={String.raw`\tau_{\ell}`} /></span>
-          <h3>path delay</h3>
-          <p>Copy <MathExpr tex={String.raw`\ell`} /> xuất hiện muộn bao nhiêu so với reference timing.</p>
+          <span class="card-label"><MathExpr tex={String.raw`\angle\alpha_\ell`} /></span>
+          <h3>Tap phase</h3>
+          <p>Complex rotation của path trong equivalent-baseband representation.</p>
         </article>
         <article>
-          <span class="card-label"><MathExpr tex={String.raw`\delta(\tau-\tau_{\ell})`} /></span>
-          <h3>tap location</h3>
-          <p>Đặt complex coefficient đúng vị trí trên delay axis.</p>
+          <span class="card-label"><MathExpr tex={String.raw`\tau_\ell`} /></span>
+          <h3>Tap delay</h3>
+          <p>Arrival time relative to the chosen channel-timing reference.</p>
         </article>
       </div>
 
       <p>
-        Trong discrete-time implementation, ta thường xấp xỉ <MathExpr tex={String.raw`h(\tau)`} /> bằng taps <MathExpr tex="h[m]" />.
-        Sample rate càng cao thì một sample tương ứng khoảng thời gian càng nhỏ, nên delay resolution của simple sampled representation cũng mịn hơn.
+        Continuous delay không phải lúc nào cũng nằm đúng sample grid.
+        Nếu <MathExpr tex={String.raw`\tau_\ell=m_\ell T_s`} /> thì sampled model có tap đúng ở integer index <MathExpr tex={String.raw`m_\ell`} />.
+        Fractional-sample delay cần interpolation/fractional-delay representation hoặc một finer internal sampling model.
       </p>
+
+      <aside class="precision-note">
+        <strong>Số “taps” trong implementation không nhất thiết bằng số physical rays ngoài môi trường</strong>
+        <p>
+          Nhiều physical components có thể rơi vào cùng delay bin, hoặc một physical fractional-delay component có thể trải lên nhiều discrete samples tùy representation.
+          Tap model là một signal-processing description, không phải camera chụp từng ray.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="convolution">
-      <p class="concept-kicker">03 · CHANNEL ÁP DỤNG CÙNG MỘT FILTER LÊN TOÀN WAVEFORM</p>
-      <h2>Received signal là tổng các copies bị scale và delay, tức convolution.</h2>
+      <p class="concept-kicker">03 · MULTIPATH BIẾN CHANNEL THÀNH MỘT FILTER</p>
+      <h2>Output tại thời điểm hiện tại phụ thuộc cả waveform hiện tại lẫn những input values trong quá khứ.</h2>
 
-      <MathExpr tex={String.raw`y(t) = (x*h)(t) = \sum_{\ell} \alpha_{\ell}x(t-\tau_{\ell})`} display />
+      <MathExpr tex={String.raw`y(t)=\int h(\tau)x(t-\tau)\,d\tau`} display />
+      <MathExpr tex={String.raw`y(t)=\sum_{\ell=0}^{L-1}\alpha_\ell x(t-\tau_\ell)`} display />
 
-      <div class="copy-sum-story">
-        <div><small>PATH 0</small><strong><MathExpr tex={String.raw`\alpha_0x(t)`} /></strong><span>direct / earliest</span></div>
+      <div class="copy-sum-story copy-sum-story-v2" data-lesson-visual>
+        <div>
+          <small>PATH 0</small>
+          <strong><MathExpr tex={String.raw`\alpha_0x(t-\tau_0)`} /></strong>
+          <span>earliest copy</span>
+        </div>
         <b>+</b>
-        <div><small>PATH 1</small><strong><MathExpr tex={String.raw`\alpha_1 x(t-\tau_1)`} /></strong><span>delayed echo</span></div>
+        <div>
+          <small>PATH 1</small>
+          <strong><MathExpr tex={String.raw`\alpha_1x(t-\tau_1)`} /></strong>
+          <span>later complex copy</span>
+        </div>
         <b>+</b>
-        <div><small>PATH 2…</small><strong>...</strong><span>more copies</span></div>
+        <div>
+          <small>MORE PATHS</small>
+          <strong>…</strong>
+          <span>more memory</span>
+        </div>
         <b>→</b>
-        <div><small>RX</small><strong><MathExpr tex="y(t)" /></strong><span>all copies overlap</span></div>
+        <div class="result">
+          <small>RECEIVER</small>
+          <strong><MathExpr tex="y(t)" /></strong>
+          <span>complex superposition</span>
+        </div>
       </div>
 
       <p>
-        Đây là lý do channel được gọi là có memory.
-        Output tại một thời điểm không chỉ phụ thuộc input ngay lúc đó, mà còn phụ thuộc input ở những thời điểm trước tương ứng các path delays.
+        “Channel has memory” nghĩa là cùng một output sample có thể chứa contribution từ nhiều earlier input samples.
+        Đây là bước khái niệm quan trọng trước khi nói tới ISI, equalization hay cyclic prefix.
       </p>
     </section>
 
-    <section class="concept-block" id="frequency-selective">
-      <p class="concept-kicker">04 · CÙNG MULTIPATH ĐÓ NHÌN TRONG FREQUENCY DOMAIN SẼ THÀNH <MathExpr tex="H(f)" /></p>
-      <h2>Mỗi delay tạo một phase slope theo frequency, nên các paths cộng khác nhau ở mỗi <MathExpr tex="f" />.</h2>
+    <section class="concept-block" id="two-tap">
+      <p class="concept-kicker">04 · TWO-TAP CHANNEL CHO THẤY RÕ NHẤT DELAY ↔ FREQUENCY SELECTIVITY</p>
+      <h2>Chỉ cần một direct path và một echo là đủ tạo peaks và notches theo frequency.</h2>
 
-      <MathExpr tex={String.raw`H(f) = \sum_{\ell} \alpha_{\ell}e^{-j2\pi f\tau_{\ell}}`} display />
+      <p>Xét channel:</p>
+
+      <MathExpr tex={String.raw`h(\tau)=\delta(\tau)+a e^{j\phi}\delta(\tau-\tau_e)`} display />
+
+      <p>Fourier transform theo delay cho:</p>
+
+      <MathExpr tex={String.raw`H(f)=1+a e^{j(\phi-2\pi f\tau_e)}`} display />
+
+      <p>Do đó:</p>
+
+      <MathExpr tex={String.raw`|H(f)|^2=1+a^2+2a\cos(\phi-2\pi f\tau_e)`} display />
+
+      <div class="two-tap-logic" data-lesson-visual>
+        <div>
+          <small>DELAY DOMAIN</small>
+          <strong><MathExpr tex={String.raw`\tau_e`} /></strong>
+          <span>echo is shifted in time</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>RELATIVE PHASE</small>
+          <strong><MathExpr tex={String.raw`\phi-2\pi f\tau_e`} /></strong>
+          <span>changes linearly with frequency</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>FREQUENCY RESPONSE</small>
+          <strong>peaks + notches</strong>
+          <span>constructive/destructive addition depends on <MathExpr tex="f" /></span>
+        </div>
+      </div>
 
       <p>
-        Đây là một kết quả rất quan trọng.
-        Một path delay <MathExpr tex={String.raw`\tau`} /> tạo phase <MathExpr tex={String.raw`-2\pi f\tau`} />, tức phase thay đổi theo <MathExpr tex="f" />.
-        Vì vậy hai paths có thể cộng constructive ở frequency này nhưng destructive ở frequency khác.
-        Khi vẽ <MathExpr tex="|H(f)|" />, ta có thể thấy peaks và notches.
+        Khi frequency tăng thêm <MathExpr tex={String.raw`\Delta f`} /> sao cho relative phase đổi đúng <MathExpr tex={String.raw`2\pi`} />,
+        response lặp lại:
       </p>
 
-      <div class="interference-cases">
-        <article>
-          <span class="card-label">FREQUENCY A</span>
-          <div class="phasor-pair same"><i></i><i></i></div>
-          <h3>paths gần cùng phase</h3>
-          <p>Vector sum lớn, channel gain cao hơn.</p>
-        </article>
-        <article>
-          <span class="card-label">FREQUENCY B</span>
-          <div class="phasor-pair opposite"><i></i><i></i></div>
-          <h3>paths gần đối phase</h3>
-          <p>Vector sum nhỏ, có thể xuất hiện deep fade/notch.</p>
-        </article>
+      <MathExpr tex={String.raw`\Delta f_{\rm ripple}=\frac{1}{\tau_e}`} display />
+
+      <aside class="mental-model">
+        <strong>Đây là cầu nối trực tiếp giữa delay spread và frequency selectivity</strong>
+        <p>
+          Echo càng trễ thì <MathExpr tex={String.raw`1/\tau_e`} /> càng nhỏ,
+          tức response có thể thay đổi đáng kể trên khoảng frequency hẹp hơn.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="numerical-example">
+      <p class="concept-kicker">05 · VÍ DỤ SỐ: MỘT ECHO CÓ THỂ TẠO DEEP FADE</p>
+      <h2>Một channel không cần “mất signal” về power tổng thể để có một frequency gần như bị triệt tiêu.</h2>
+
+      <p>
+        Chọn <MathExpr tex={String.raw`a=0.8`} />, <MathExpr tex={String.raw`\tau_e=2\,\mu\mathrm{s}`} /> và
+        <MathExpr tex={String.raw`\phi=0`} />.
+        Ripple period là:
+      </p>
+
+      <MathExpr tex={String.raw`\Delta f_{\rm ripple}=\frac{1}{2\,\mu\mathrm{s}}=0.5\,\mathrm{MHz}`} display />
+
+      <p>Tại baseband frequency zero:</p>
+
+      <MathExpr tex={String.raw`|H(0)|=|1+0.8|=1.8`} display />
+
+      <p>
+        Tại <MathExpr tex={String.raw`f=0.25\,\mathrm{MHz}`} />, delay term tạo
+        <MathExpr tex={String.raw`2\pi f\tau_e=\pi`} />, nên echo gần đối phase với direct path:
+      </p>
+
+      <MathExpr tex={String.raw`|H(0.25\,\mathrm{MHz})|=|1-0.8|=0.2`} display />
+
+      <div class="two-tap-example-bars" data-lesson-visual>
+        <div>
+          <small>CONSTRUCTIVE POINT</small>
+          <strong><MathExpr tex="1.8" /></strong>
+          <span>direct and echo reinforce</span>
+        </div>
+        <div>
+          <small>DESTRUCTIVE POINT</small>
+          <strong><MathExpr tex="0.2" /></strong>
+          <span>direct and echo nearly cancel</span>
+        </div>
       </div>
+
+      <p>
+        Cùng một channel geometry có thể vì vậy rất tốt ở một sub-band nhưng rất xấu ở sub-band khác.
+        Đây chính là physical intuition phía sau frequency-selective fading.
+      </p>
     </section>
 
     <section class="concept-block" id="pdp">
-      <p class="concept-kicker">05 · POWER DELAY PROFILE BỎ PHASE ĐỂ NHÌN POWER THEO DELAY</p>
-      <h2>PDP giúp tóm tắt channel energy trải rộng bao xa theo thời gian.</h2>
+      <p class="concept-kicker">06 · POWER DELAY PROFILE BỎ PHASE ĐỂ NHÌN ENERGY THEO DELAY</p>
+      <h2>PDP hữu ích cho delay statistics, nhưng nó không còn giữ đủ information để reconstruct complex <MathExpr tex="H(f)" />.</h2>
 
-      <div class="pdp-visual">
-        <div class="visual-caption"><span>POWER DELAY PROFILE</span><strong><MathExpr tex={String.raw`P(\tau)`} /></strong></div>
-        <svg viewBox="0 0 760 270" role="img" aria-label="Power delay profile với nhiều paths">
+      <div class="pdp-visual pdp-visual-v2">
+        <div class="visual-caption">
+          <span>POWER DELAY PROFILE</span>
+          <strong><MathExpr tex={String.raw`P(\tau)`} /></strong>
+        </div>
+
+        <svg viewBox="0 0 760 270" role="img" aria-label="Power delay profile với bốn delayed components">
           <line class="pdp-axis" x1="55" y1="220" x2="720" y2="220" />
           <line class="pdp-axis" x1="55" y1="35" x2="55" y2="220" />
           <line class="pdp-stem strongest" x1="105" y1="220" x2="105" y2="68" />
@@ -166,124 +283,232 @@ import MathExpr from '../../components/Math.astro';
           <circle class="pdp-dot" cx="370" cy="155" r="5" />
           <line class="pdp-stem" x1="575" y1="220" x2="575" y2="188" />
           <circle class="pdp-dot" cx="575" cy="188" r="5" />
-          <foreignObject x="622" y="228" width="92" height="30"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex={String.raw`\mathrm{delay}\;\tau`} /></div></foreignObject>
+          <foreignObject x="622" y="228" width="92" height="30">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="svg-math">
+              <MathExpr tex={String.raw`\mathrm{delay}\;\tau`} />
+            </div>
+          </foreignObject>
           <text class="pdp-label" x="62" y="52">power</text>
         </svg>
       </div>
 
-      <p>
-        Nếu path coefficient là <MathExpr tex={String.raw`\alpha_{\ell}`} />, power weight thường tỉ lệ với <MathExpr tex={String.raw`|\alpha_{\ell}|^2`} />.
-        PDP không giữ phase của path, nhưng rất hữu ích để định nghĩa mean delay và RMS delay spread.
-      </p>
+      <MathExpr tex={String.raw`P_\ell=|\alpha_\ell|^2`} display />
+
+      <aside class="precision-note">
+        <strong>PDP biết power-vs-delay, nhưng không biết complex tap phase</strong>
+        <p>
+          Hai channels có cùng PDP vẫn có thể có instantaneous <MathExpr tex="H(f)" /> khác nhau nếu tap phases khác nhau.
+          PDP rất tốt cho delay-spread statistics, nhưng không thay thế full complex impulse response.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="delay-spread">
-      <p class="concept-kicker">06 · RMS DELAY SPREAD ĐO ĐỘ RỘNG CỦA POWER THEO DELAY</p>
-      <h2>Nó giống một độ lệch chuẩn của path delays, nhưng có trọng số theo path power.</h2>
+      <p class="concept-kicker">07 · MEAN EXCESS DELAY VÀ RMS DELAY SPREAD LÀ POWER-WEIGHTED STATISTICS</p>
+      <h2>RMS delay spread đo energy trải rộng quanh delay centroid, không phải “delay của path cuối cùng”.</h2>
 
-      <div class="delay-metric-grid">
+      <MathExpr tex={String.raw`\bar\tau=\frac{\sum_\ell P_\ell\tau_\ell}{\sum_\ell P_\ell}`} display />
+
+      <MathExpr tex={String.raw`\sigma_\tau=\sqrt{\frac{\sum_\ell P_\ell(\tau_\ell-\bar\tau)^2}{\sum_\ell P_\ell}}`} display />
+
+      <div class="delay-metric-grid delay-metric-grid-v2">
         <article>
-          <span class="card-label">MEAN DELAY</span>
-          <h3><MathExpr tex={String.raw`\bar{\tau} = \frac{\sum_{\ell}P_{\ell}\tau_{\ell}}{\sum_{\ell}P_{\ell}}`} /></h3>
-          <p>Center of mass của PDP trên delay axis.</p>
+          <span class="card-label">MEAN EXCESS DELAY</span>
+          <h3><MathExpr tex={String.raw`\bar\tau`} /></h3>
+          <p>Power centroid của arrivals trên delay axis.</p>
         </article>
         <article>
           <span class="card-label">RMS DELAY SPREAD</span>
-          <h3><MathExpr tex={String.raw`\sigma_{\tau}`} /></h3>
-          <p>Power-weighted spread của delays quanh mean delay.</p>
+          <h3><MathExpr tex={String.raw`\sigma_\tau`} /></h3>
+          <p>Power-weighted standard deviation quanh centroid.</p>
         </article>
         <article>
           <span class="card-label">MAX EXCESS DELAY</span>
-          <h3>latest - earliest</h3>
-          <p>Phụ thuộc threshold/definition dùng để quyết định path nào còn được tính.</p>
+          <h3>latest significant − earliest</h3>
+          <p>Phụ thuộc threshold dùng để quyết định path nào còn “significant”.</p>
         </article>
       </div>
 
-      <MathExpr tex={String.raw`\sigma_{\tau} = \sqrt{\frac{\sum_{\ell} P_{\ell}(\tau_{\ell}-\bar{\tau})^2}{\sum_{\ell}P_{\ell}}}`} display />
-
       <p>
-        Ví dụ có hai paths tại <MathExpr tex={String.raw`0\,\mu\mathrm{s}`} /> và <MathExpr tex={String.raw`2\,\mu\mathrm{s}`} />, với power tương ứng 1 và 0.25.
-        Mean delay là <MathExpr tex={String.raw`0.4\,\mu\mathrm{s}`} /> và RMS delay spread là <MathExpr tex={String.raw`0.8\,\mu\mathrm{s}`} />.
-        Điểm quan trọng là path yếu hơn vẫn ảnh hưởng metric, nhưng ảnh hưởng theo power chứ không theo amplitude trực tiếp.
+        Ví dụ hai paths tại <MathExpr tex={String.raw`0\,\mu\mathrm{s}`} /> và
+        <MathExpr tex={String.raw`2\,\mu\mathrm{s}`} />, có powers 1 và 0.25:
       </p>
+
+      <MathExpr tex={String.raw`\bar\tau=0.4\,\mu\mathrm{s},\qquad\sigma_\tau=0.8\,\mu\mathrm{s}`} display />
+
+      <aside class="precision-note">
+        <strong>RMS delay spread không phải trực tiếp “channel length” dùng để đặt guard interval</strong>
+        <p>
+          Guard design phải quan tâm support/significant tail của effective impulse response và design reliability target.
+          Một weak late path có thể ít ảnh hưởng RMS statistic nhưng vẫn quan trọng nếu requirement rất nghiêm ngặt.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block lab-section" id="multipath-lab">
-      <p class="concept-kicker">07 · INTERACTIVE LAB</p>
-      <h2>Thay echo magnitude, excess delay và phase để nhìn cùng một two-tap channel ở delay domain và time domain.</h2>
+      <p class="concept-kicker">08 · INTERACTIVE LAB</p>
+      <h2>Nhìn cùng một two-tap channel ở delay domain, frequency domain và symbol timeline.</h2>
+
       <p>
-        Tăng delay để thấy echo tách xa direct path.
-        Đổi phase để thấy received waveform có thể mạnh lên hoặc yếu đi ở các đoạn khác nhau dù echo magnitude không đổi.
+        Thay <MathExpr tex={String.raw`|\alpha_1|`} />, excess delay và echo phase.
+        Sau đó chuyển giữa ba view để thấy cùng parameters tạo delayed copy, spectral ripple/notch và channel memory như thế nào.
       </p>
+
       <MultipathExplorer client:load />
     </section>
 
     <section class="concept-block" id="isi">
-      <p class="concept-kicker">08 · KHI CHANNEL MEMORY DÀI SO VỚI SYMBOL, CÁC SYMBOL CHỒNG LÊN NHAU</p>
-      <h2>Delayed energy của symbol trước có thể rơi vào thời gian của symbol sau và tạo ISI.</h2>
+      <p class="concept-kicker">09 · CHANNEL MEMORY CÓ THỂ TẠO INTER-SYMBOL INTERFERENCE</p>
+      <h2>Energy do một symbol tạo ra có thể vẫn còn trong observation interval của symbol sau.</h2>
 
-      <div class="isi-story">
+      <div class="isi-story isi-story-v2" data-lesson-visual>
         <div>
-          <span class="card-label">SHORT CHANNEL MEMORY</span>
-          <strong>echo kết thúc sớm</strong>
-          <p>Phần lớn delayed energy vẫn nằm trong guard/interval có thể xử lý.</p>
+          <span class="card-label">SHORT EFFECTIVE MEMORY</span>
+          <strong>delayed tail dies early</strong>
+          <p>Receiver dễ tách contributions của successive symbols hơn.</p>
         </div>
-        <b>delay tăng →</b>
-        <div>
-          <span class="card-label">LONG CHANNEL MEMORY</span>
-          <strong>echo tràn sang symbol sau</strong>
-          <p>Receiver không còn thấy từng symbol như một block tách biệt.</p>
+        <b>memory grows →</b>
+        <div class="result">
+          <span class="card-label">SIGNIFICANT OVERLAP</span>
+          <strong>previous-symbol energy enters current decision</strong>
+          <p>Nếu không có suitable pulse design, equalization hoặc guard strategy, ISI xuất hiện.</p>
         </div>
       </div>
 
       <p>
-        OFDM không làm multipath biến mất.
-        Nó dùng long useful symbols và Cyclic Prefix để biến channel convolution thành một bài toán thuận tiện hơn cho FFT,
-        miễn channel memory nằm trong guard assumptions phù hợp.
+        Không nên dùng rule quá đơn giản “delay lớn hơn symbol duration thì mới có ISI”.
+        Actual ISI phụ thuộc effective transmit pulse, physical channel, receive filtering, sampling instant và equalizer.
+        Điều đúng về mặt hệ thống là: <strong>effective channel memory càng dài so với signaling time scale, việc tách symbols càng khó.</strong>
       </p>
     </section>
 
     <section class="concept-block" id="coherence">
-      <p class="concept-kicker">09 · DELAY SPREAD VÀ FREQUENCY SELECTIVITY LÀ HAI MẶT CỦA CÙNG CHANNEL</p>
-      <h2>Channel trải rộng hơn theo delay thường thay đổi nhanh hơn theo frequency.</h2>
+      <p class="concept-kicker">10 · COHERENCE BANDWIDTH LÀ MỘT CÁCH TÓM TẮT FREQUENCY CORRELATION</p>
+      <h2>Delay spread lớn thường đi cùng một frequency response thay đổi nhanh hơn theo frequency.</h2>
 
-      <div class="delay-frequency-duality">
-        <div><small>DELAY DOMAIN</small><strong>nhiều taps cách xa nhau</strong><span>large delay spread</span></div>
+      <div class="delay-frequency-duality delay-frequency-duality-v2" data-lesson-visual>
+        <div>
+          <small>DELAY DOMAIN</small>
+          <strong>energy spread over larger delays</strong>
+          <span>larger temporal dispersion</span>
+        </div>
         <b>↔ Fourier ↔</b>
-        <div><small>FREQUENCY DOMAIN</small><strong><MathExpr tex="H(f)" /> có nhiều gợn/notches</strong><span>smaller coherence scale</span></div>
+        <div>
+          <small>FREQUENCY DOMAIN</small>
+          <strong><MathExpr tex="H(f)" /> varies over smaller frequency scales</strong>
+          <span>stronger frequency selectivity over a wideband signal</span>
+        </div>
       </div>
 
       <p>
-        Coherence bandwidth là một cách định lượng khoảng frequency mà channel response còn tương quan cao.
-        Nó có quan hệ nghịch với delay spread về mặt trực giác, nhưng coefficient cụ thể phụ thuộc definition và correlation threshold,
-        nên không nên học thuộc một hằng số duy nhất như công thức tuyệt đối.
+        Coherence bandwidth thường được định nghĩa từ correlation của channel response giữa hai frequencies.
+        Vì phải chọn một correlation threshold, không có một universal exact identity kiểu
+        <MathExpr tex={String.raw`B_c=1/\sigma_\tau`} /> cho mọi definition.
+      </p>
+
+      <div class="flat-selective-criterion">
+        <div>
+          <small>SIGNAL BANDWIDTH</small>
+          <strong><MathExpr tex="B_{m sig}" /></strong>
+        </div>
+        <b>compared with</b>
+        <div>
+          <small>CHANNEL COHERENCE SCALE</small>
+          <strong><MathExpr tex="B_c" /></strong>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>INTERPRETATION</small>
+          <strong><MathExpr tex={String.raw`B_{\rm sig}\ll B_c`} /> → approximately flat</strong>
+          <span>wide signal relative to <MathExpr tex="B_c" /> sees stronger frequency selectivity</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · TRONG CODE, CHANNEL CÓ MEMORY TRỞ THÀNH FIR-LIKE COMPLEX FILTER</p>
+      <h2>Integer-grid tap model dẫn trực tiếp tới discrete convolution.</h2>
+
+      <MathExpr tex={String.raw`y[n]=\sum_{m=0}^{M-1}h[m]x[n-m]`} display />
+
+      <div class="multipath-implementation-flow" data-lesson-visual>
+        <div>
+          <small>INPUT BUFFER</small>
+          <strong><MathExpr tex="x[n]" /></strong>
+          <span>complex baseband samples</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>CHANNEL TAPS</small>
+          <strong><MathExpr tex="h[m]" /></strong>
+          <span>complex coefficients + memory</span>
+        </div>
+        <b>→ convolution →</b>
+        <div class="result">
+          <small>OUTPUT BUFFER</small>
+          <strong><MathExpr tex="y[n]" /></strong>
+          <span>overlapping delayed contributions</span>
+        </div>
+      </div>
+
+      <p>
+        Simulation phải đặc biệt cẩn thận với units:
+        path delays có thể được cho bằng seconds nhưng convolution index dùng samples.
+        Mapping đơn giản là <MathExpr tex={String.raw`m\approx\tau/T_s`} />, nhưng rounding delay về integer samples có thể làm mất fractional-delay behavior.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · BÀI 12 GIẢI THÍCH PROBLEM; CÁC BÀI SAU GIẢI THÍCH CÁCH RECEIVER/WAVEFORM XỬ LÝ NÓ</p>
+      <h2>Multipath không biến mất. Ta thay cách biểu diễn và thiết kế waveform để làm nó dễ xử lý hơn.</h2>
+
+      <div class="multipath-boundary-grid">
+        <article>
+          <span class="card-label">BÀI 13</span>
+          <strong>Correlation</strong>
+          <p>Cách receiver tìm known patterns và timing trong noisy/distorted observations.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 14–15</span>
+          <strong>OFDM + FFT/IFFT</strong>
+          <p>Tách wideband frequency-selective problem thành nhiều narrow frequency bins/subcarriers.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 16</span>
+          <strong>Cyclic Prefix</strong>
+          <p>Tạo guard structure để delayed channel convolution tương thích với circular-convolution model dưới điều kiện phù hợp.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">13 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Multipath:</strong> nhiều delayed/scaled/rotated copies của cùng signal.</li>
-        <li><strong>Impulse response:</strong> mô tả channel bằng complex taps <MathExpr tex={String.raw`\alpha_{\ell}`} /> tại delays <MathExpr tex={String.raw`\tau_{\ell}`} />.</li>
-        <li><strong>Convolution:</strong> received waveform là tổng các delayed copies.</li>
-        <li><strong><MathExpr tex="H(f)" />:</strong> các path delays tạo phase khác nhau theo frequency, dẫn tới peaks/notches.</li>
-        <li><strong>PDP:</strong> giữ path power theo delay và bỏ phase.</li>
-        <li><strong>RMS delay spread:</strong> power-weighted spread của channel energy theo thời gian.</li>
-        <li><strong>ISI:</strong> xuất hiện khi channel memory đáng kể so với symbol/guard interval.</li>
-        <li><strong>Frequency selectivity:</strong> chính là multipath channel nhìn từ frequency domain.</li>
+        <li><strong>Multipath:</strong> nhiều delayed complex copies của cùng transmitted waveform.</li>
+        <li><strong>Tap:</strong> mỗi component được mô tả bằng <MathExpr tex={String.raw`\alpha_\ell`} /> và <MathExpr tex={String.raw`\tau_\ell`} />.</li>
+        <li><strong>Impulse response:</strong> <MathExpr tex={String.raw`h(\tau)=\sum_\ell\alpha_\ell\delta(\tau-\tau_\ell)`} />.</li>
+        <li><strong>Convolution:</strong> channel memory làm output phụ thuộc nhiều past input values.</li>
+        <li><strong>Frequency response:</strong> <MathExpr tex={String.raw`H(f)=\sum_\ell\alpha_\ell e^{-j2\pi f\tau_\ell}`} />.</li>
+        <li><strong>Two-tap intuition:</strong> excess delay tạo frequency ripple scale khoảng <MathExpr tex={String.raw`1/\tau_e`} />.</li>
+        <li><strong>PDP:</strong> giữ path power theo delay nhưng bỏ complex tap phase.</li>
+        <li><strong>RMS delay spread:</strong> power-weighted spread quanh mean excess delay, không phải maximum channel delay.</li>
+        <li><strong>ISI:</strong> effective channel memory làm neighboring symbols overlap nếu waveform/receiver không xử lý phù hợp.</li>
+        <li><strong>Frequency selectivity:</strong> chính là delayed multipath nhìn trong frequency domain.</li>
+        <li><strong>Discrete implementation:</strong> sampled taps dẫn tới FIR-like complex convolution; fractional delays cần xử lý cẩn thận.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/noise-snr-evm/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/noise-snr-evm/">
         <span>← BÀI TRƯỚC</span>
         <strong>Noise, SNR và EVM</strong>
-        <small>Power ratio và complex error nói gì về link quality?</small>
+        <small>Random và structured errors được nhìn bằng power ratio và complex error geometry như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/correlation/">
+
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/correlation/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Correlation</strong>
-        <small>Receiver tìm một known pattern trong noise như thế nào?</small>
+        <small>Receiver tìm một known pattern và timing trong noisy observations như thế nào?</small>
       </a>
     </nav>
   </article>
