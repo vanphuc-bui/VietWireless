@@ -6,234 +6,560 @@ import MathExpr from '../../components/Math.astro';
 
 <BaseLayout
   title="OFDM: bức tranh tổng thể | VietWireless"
-  description="Hiểu vấn đề mà OFDM giải quyết, subcarriers trực giao, quan hệ Δf=1/Tu, IFFT/FFT, cyclic prefix và vì sao OFDM hợp với multipath."
+  description="Hiểu vì sao OFDM chia wideband channel thành nhiều narrow subcarriers, orthogonality, spectral overlap, IFFT/FFT, per-subcarrier equalization, CP preview và các tradeoff chính."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
-      <p class="eyebrow">GHI CHÉP 14 · WIRELESS LINK</p>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
+      <p class="eyebrow">GHI CHÉP 14 · OFDM FOUNDATIONS</p>
       <h1>OFDM: bức tranh tổng thể</h1>
       <p class="lesson-deck">
-        Multipath làm wideband channel thay đổi theo frequency, nên một symbol nhanh trên cả bandwidth có thể rất khó equalize.{" "}
-        <strong>OFDM chia data thành nhiều luồng song song trên các narrowband subcarriers trực giao để biến bài toán đó thành nhiều bài toán nhỏ hơn.</strong>
+        Bài 12 cho thấy multipath biến một wideband link thành channel có memory và <MathExpr tex="H(f)" /> thay đổi theo frequency.{" "}
+        <strong>OFDM đổi bài toán đó thành nhiều narrowband subchannels trực giao, rồi xử lý mỗi frequency bin gần như một complex scalar khi các điều kiện phù hợp.</strong>
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">OFDM KHÔNG BẮT ĐẦU TỪ IFFT</p>
       <p class="map-intro">
-        Nếu chỉ học “OFDM = IFFT ở TX, FFT ở RX”, ta biết block diagram nhưng chưa biết tại sao hệ thống lại chọn kiến trúc đó.
-        Câu hỏi đúng hơn là:
-        multipath đang làm wideband signal khó xử lý ở điểm nào, và nhiều subcarriers giúp điều gì?
+        Nếu chỉ nhớ “TX dùng IFFT, RX dùng FFT”, ta biết implementation block nhưng chưa biết vì sao architecture đó có ý nghĩa.
+        Câu hỏi gốc là: <strong>làm thế nào để xử lý một frequency-selective wideband channel bằng nhiều bài toán hẹp và đơn giản hơn?</strong>
       </p>
 
-      <div class="system-position">
-        <span>ONE WIDEBAND STREAM → MANY NARROWBAND CARRIERS</span>
-        <div class="system-position-flow">
-          <span>high-rate symbols</span><b>→</b>
-          <strong>parallelize</strong><b>→</b>
-          <span><MathExpr tex={String.raw`X[0],\,X[1],\,\ldots`} /></span><b>→</b>
+      <div class="system-position concept-flow-card">
+        <span>THE BIG IDEA</span>
+        <div class="system-position-flow" aria-label="Wideband selective channel được chia thành nhiều narrow orthogonal subchannels">
+          <span>wideband data</span><b>→</b>
+          <strong>many narrow subcarriers</strong><b>→</b>
+          <span>one complex coefficient per bin</span><b>→</b>
           <span>IFFT</span><b>→</b>
-          <span>one time waveform</span>
+          <span>one time-domain block</span><b>→</b>
+          <span>FFT + per-bin equalization</span>
         </div>
         <p>
-          Bài 14 nhìn kiến trúc và intuition.
-          Bài 15 mới zoom vào phép IFFT/FFT.
+          Bài 14 dựng toàn bộ mental model.
+          Bài 15 mới đi sâu vào IFFT/FFT; Bài 16 giải thích Cyclic Prefix; Bài 17–18 chuyển sang resource grid và numerology.
         </p>
       </div>
     </section>
 
-    <section class="concept-block" id="single-carrier">
-      <p class="concept-kicker">01 · TẠI SAO WIDEBAND SINGLE-CARRIER CÓ THỂ KHÓ?</p>
-      <h2>Symbol duration ngắn trong khi channel memory do multipath vẫn tồn tại.</h2>
+    <section class="concept-block" data-lesson-role="intuition" id="problem">
+      <p class="concept-kicker">01 · VẤN ĐỀ GỐC: WIDEBAND CHANNEL KHÔNG CÓ MỘT GAIN DUY NHẤT</p>
+      <h2>Một scalar <MathExpr tex="h" /> không đủ nếu <MathExpr tex="H(f)" /> thay đổi đáng kể trên occupied bandwidth.</h2>
 
-      <p>
-        Giả sử data rate cao làm symbol chỉ dài một vài microsecond.
-        Nếu channel có delayed energy kéo dài gần bằng symbol duration, tail của symbol trước dễ chồng vào symbol sau.
-        Equalizer phải undo một channel filter có nhiều taps trên một stream chạy nhanh.
-      </p>
+      <div class="ofdm-wideband-problem" data-lesson-visual>
+        <div class="ofdm-wideband-channel">
+          <span class="card-label">WIDEBAND SIGNAL</span>
+          <div class="ofdm-selective-curve">
+            <i></i>
+            <b class="notch-a"></b>
+            <b class="notch-b"></b>
+            <span class="band-label">occupied bandwidth</span>
+          </div>
+        </div>
 
-      <div class="ofdm-problem-flow">
-        <div><small>HIGH RATE</small><strong>symbol ngắn</strong><span>wide occupied bandwidth</span></div>
-        <b>+</b>
-        <div><small>MULTIPATH</small><strong>channel memory</strong><span>nhiều delayed copies</span></div>
-        <b>→</b>
-        <div><small>RECEIVER</small><strong>ISI + selective channel</strong><span>time-domain equalization khó hơn</span></div>
+        <div class="ofdm-wideband-explanation">
+          <div>
+            <small>LOW FREQUENCY REGION</small>
+            <strong>channel gain A</strong>
+          </div>
+          <div>
+            <small>MIDDLE REGION</small>
+            <strong>deep fade</strong>
+          </div>
+          <div>
+            <small>HIGH FREQUENCY REGION</small>
+            <strong>channel gain B</strong>
+          </div>
+        </div>
       </div>
 
       <p>
-        OFDM không xóa delay spread.
-        Nó đổi cách đóng gói symbols để channel memory trở nên nhỏ hơn tương đối so với useful symbol interval.
+        Nếu ta xử lý cả bandwidth như một symbol stream duy nhất, equalizer phải undo một channel filter có memory.
+        OFDM không làm multipath biến mất.
+        Nó chọn một representation khác, nơi channel dễ gần với phép nhân hơn phép convolution.
       </p>
+    </section>
+
+    <section class="concept-block" id="slice">
+      <p class="concept-kicker">02 · CHIA BANDWIDTH THÀNH NHIỀU LÁT HẸP</p>
+      <h2>Nếu mỗi subcarrier đủ hẹp, local channel response quanh center của nó có thể gần như constant.</h2>
+
+      <div class="ofdm-slicing-logic" data-lesson-visual>
+        <div>
+          <small>WHOLE BAND</small>
+          <strong><MathExpr tex="H(f)" /></strong>
+          <span>strong variation across a wide bandwidth</span>
+        </div>
+        <b>→ split →</b>
+        <div>
+          <small>ONE NARROW BIN</small>
+          <strong><MathExpr tex={String.raw`H(f)\approx H(f_k)`} /></strong>
+          <span>local flat-channel approximation</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>PER-SUBCARRIER MODEL</small>
+          <strong><MathExpr tex={String.raw`Y[k]\approx H[k]X[k]+W[k]`} /></strong>
+          <span>one complex scalar per bin</span>
+        </div>
+      </div>
+
+      <p>
+        Một cách diễn đạt định tính là subcarrier bandwidth nên nhỏ so với frequency scale mà channel thay đổi đáng kể.
+        Nếu dùng coherence bandwidth <MathExpr tex="B_c" /> làm summary scale, ta muốn một subcarrier nằm trong vùng channel gần flat.
+        Đây là approximation, không phải một hard universal inequality với cùng threshold cho mọi system.
+      </p>
+
+      <aside class="mental-model">
+        <strong>OFDM không làm toàn bộ carrier trở thành flat fading</strong>
+        <p>
+          <MathExpr tex="H[k]" /> có thể khác rất nhiều giữa các bins.
+          Điều ta cần là <strong>mỗi bin riêng lẻ đủ hẹp</strong> để một scalar complex gain mô tả tốt response trong bin đó.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="parallel">
-      <p class="concept-kicker">02 · CHIA DATA RA NHIỀU LUỒNG SONG SONG LÀM MỖI SYMBOL “CHẬM” HƠN</p>
-      <h2>Mỗi subcarrier chỉ mang một phần data, nên symbol trên từng subcarrier tồn tại lâu hơn.</h2>
+      <p class="concept-kicker">03 · PARALLELIZATION LÀM SYMBOL TRÊN MỖI SUBCARRIER DÀI HƠN</p>
+      <h2>Aggregate data vẫn cao vì nhiều subcarriers truyền đồng thời trong cùng useful interval.</h2>
 
-      <div class="parallel-subcarriers">
-        <article><span><MathExpr tex="k=0" /></span><strong><MathExpr tex="X[0]" /></strong><p>một complex symbol</p></article>
-        <article><span><MathExpr tex="k=1" /></span><strong><MathExpr tex="X[1]" /></strong><p>một complex symbol</p></article>
-        <article><span><MathExpr tex="k=2" /></span><strong><MathExpr tex="X[2]" /></strong><p>một complex symbol</p></article>
-        <article><span><MathExpr tex={String.raw`\ldots`} /></span><strong><MathExpr tex="X[k]" /></strong><p>nhiều carriers song song</p></article>
+      <div class="ofdm-serial-parallel" data-lesson-visual>
+        <div class="ofdm-serial-row">
+          <span class="card-label">SERIAL INTUITION</span>
+          <div class="ofdm-serial-slots">
+            <i>d0</i><i>d1</i><i>d2</i><i>d3</i><i>d4</i><i>d5</i><i>d6</i><i>d7</i>
+          </div>
+          <p>Nhiều symbol decisions nối tiếp trên một high-rate stream.</p>
+        </div>
+
+        <b>parallelize ↓</b>
+
+        <div class="ofdm-parallel-grid">
+          <span><MathExpr tex="k=0" /></span><i>d0</i><i>d4</i>
+          <span><MathExpr tex="k=1" /></span><i>d1</i><i>d5</i>
+          <span><MathExpr tex="k=2" /></span><i>d2</i><i>d6</i>
+          <span><MathExpr tex="k=3" /></span><i>d3</i><i>d7</i>
+        </div>
       </div>
 
       <p>
-        Nếu total data rate được chia qua N active subcarriers, mỗi subcarrier không cần thay symbol nhanh như một single-carrier stream mang toàn bộ data.
-        Đây là trực giác khiến OFDM symbol duration có thể dài trong khi aggregate throughput vẫn cao.
+        Đây chỉ là rate intuition, không phải tuyên bố rằng OFDM luôn hiệu quả hơn single-carrier về spectral efficiency.
+        Coding, guards, pilots, occupied bandwidth và implementation constraints mới quyết định throughput thực.
       </p>
     </section>
 
-    <section class="concept-block" id="orthogonality">
-      <p class="concept-kicker">03 · “NHIỀU SUBCARRIERS” CHƯA ĐỦ, CHÚNG PHẢI ĐƯỢC ĐẶT ĐÚNG SPACING</p>
-      <h2>Trong basic CP-OFDM construction, subcarrier spacing và useful symbol duration liên hệ bởi <MathExpr tex={String.raw`\Delta f = 1/T_u`} />.</h2>
+    <section class="concept-block" data-lesson-role="math" id="orthogonality">
+      <p class="concept-kicker">04 · NHIỀU SUBCARRIERS CHỈ HỮU ÍCH NẾU RECEIVER TÁCH ĐƯỢC CHÚNG</p>
+      <h2>Trong basic OFDM basis, spacing <MathExpr tex={String.raw`\Delta f=1/T_u`} /> làm different integer-index subcarriers orthogonal trên useful interval.</h2>
 
-      <MathExpr tex={String.raw`\Delta f = \frac{1}{T_u}`} display />
+      <MathExpr tex={String.raw`\Delta f=\frac{1}{T_u}`} display />
 
-      <p>
-        Trong useful interval <MathExpr tex="T_u" />, subcarrier k hoàn thành một số nguyên chu kỳ tương đối với basis.
-        Hai complex exponentials khác integer index có inner product bằng zero trên interval đó.
-        Đây là orthogonality.
-      </p>
+      <p>Subcarrier <MathExpr tex="k" /> dùng basis:</p>
 
-      <p>
-        Điều hay là spectrum của từng rectangularly-windowed subcarrier có dạng sinc và overlap mạnh.
-        Ta không cần chừa guard band giữa từng subcarrier.
-        At the FFT sampling points, zero crossings của một subcarrier rơi đúng vào centers của các subcarriers khác trong ideal case.
-      </p>
+      <MathExpr tex={String.raw`\phi_k(t)=e^{j2\pi k\Delta f t},\qquad 0\le t<T_u`} display />
+
+      <p>Inner product giữa subcarriers <MathExpr tex="k" /> và <MathExpr tex="m" /> là:</p>
+
+      <MathExpr
+        tex={String.raw`\int_0^{T_u}\phi_k(t)\phi_m^*(t)\,dt=\int_0^{T_u}e^{j2\pi(k-m)t/T_u}\,dt`}
+        display
+      />
+
+      <p>Do đó:</p>
+
+      <MathExpr
+        tex={String.raw`\frac{1}{T_u}\int_0^{T_u}\phi_k(t)\phi_m^*(t)\,dt=\begin{cases}1,&k=m\\0,&k\ne m\end{cases}`}
+        display
+      />
+
+      <div class="ofdm-orth-meaning" data-lesson-visual>
+        <div>
+          <small>SAME BASIS</small>
+          <strong><MathExpr tex="k=m" /></strong>
+          <span>projection survives</span>
+        </div>
+        <b>vs</b>
+        <div>
+          <small>DIFFERENT BASIS</small>
+          <strong><MathExpr tex={String.raw`k\ne m`} /></strong>
+          <span>full-interval complex contributions cancel</span>
+        </div>
+      </div>
     </section>
 
-    <section class="concept-block lab-section" id="orthogonality-lab">
-      <p class="concept-kicker">04 · INTERACTIVE LAB</p>
-      <h2>Giữ spacing đúng <MathExpr tex="1/T_u" /> rồi kéo lệch nó để thấy inner product từ gần 0 tăng lên.</h2>
+    <section class="concept-block" id="spectral-overlap">
+      <p class="concept-kicker">05 · ORTHOGONAL KHÔNG CÓ NGHĨA SPECTRA KHÔNG OVERLAP</p>
+      <h2>Rectangularly observed subcarriers có sinc-like spectra, nhưng FFT samples chúng tại những vị trí được thiết kế để tách basis coefficients.</h2>
+
+      <div class="ofdm-sinc-story" data-lesson-visual>
+        <svg viewBox="0 0 820 300" role="img" aria-label="Overlapping idealized sinc spectra of OFDM subcarriers">
+          <line class="ofdm-sinc-axis" x1="45" y1="238" x2="780" y2="238" />
+          <path class="ofdm-sinc one" d="M55 232 C105 224 145 220 180 238 C215 255 250 230 300 78 C350 230 385 255 420 238 C455 221 500 226 545 236" />
+          <path class="ofdm-sinc two" d="M185 236 C230 226 275 221 310 238 C345 255 385 230 435 78 C485 230 520 255 555 238 C590 221 635 226 680 236" />
+          <path class="ofdm-sinc three" d="M320 236 C365 226 410 221 445 238 C480 255 520 230 570 78 C620 230 655 255 690 238 C725 221 750 228 777 235" />
+
+          <line class="ofdm-sinc-center" x1="300" y1="56" x2="300" y2="245" />
+          <line class="ofdm-sinc-center" x1="435" y1="56" x2="435" y2="245" />
+          <line class="ofdm-sinc-center" x1="570" y1="56" x2="570" y2="245" />
+
+          <foreignObject x="279" y="248" width="50" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_{k-1}" /></div></foreignObject>
+          <foreignObject x="420" y="248" width="42" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_k" /></div></foreignObject>
+          <foreignObject x="549" y="248" width="50" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="svg-math"><MathExpr tex="f_{k+1}" /></div></foreignObject>
+        </svg>
+      </div>
+
       <p>
-        Lab không mô phỏng toàn bộ OFDM modem.
-        Nó chỉ cô lập một ý:
-        orthogonality phụ thuộc relation giữa frequency spacing và observation interval.
+        Spectral overlap là một phần của efficiency của OFDM, không phải bug.
+        Orthogonality là statement về inner products trên đúng observation interval và đúng basis frequencies.
       </p>
-      <OFDMOrthogonalityExplorer client:load />
+
+      <aside class="precision-note">
+        <strong>CFO, timing error, Doppler và window mismatch có thể phá orthogonality</strong>
+        <p>
+          Khi receiver không còn project trên đúng basis/interval, contribution từ neighboring subcarriers không triệt tiêu hoàn toàn và xuất hiện inter-carrier interference.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="symbols">
+      <p class="concept-kicker">06 · QAM SYMBOLS ĐƯỢC ĐẶT VÀO CÁC FREQUENCY-DOMAIN COEFFICIENTS</p>
+      <h2>Đây là chỗ Bài 8 và Bài 7 gặp nhau.</h2>
+
+      <div class="ofdm-symbol-meaning" data-lesson-visual>
+        <div>
+          <small>MODULATION MAPPER</small>
+          <strong><MathExpr tex="d[m]" /></strong>
+          <span>complex constellation symbols from bits</span>
+        </div>
+        <b>→ assign to bins →</b>
+        <div>
+          <small>OFDM FREQUENCY VECTOR</small>
+          <strong><MathExpr tex="X[k]" /></strong>
+          <span>one complex coefficient per IFFT bin</span>
+        </div>
+        <b>→ IFFT →</b>
+        <div class="result">
+          <small>TIME BLOCK</small>
+          <strong><MathExpr tex="x[n]" /></strong>
+          <span>all active subcarriers summed together</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Ở Bài 8, modulation symbol và DFT coefficient là hai object khác nhau; trong OFDM ta chủ động nối chúng lại</strong>
+        <p>
+          Mapper tạo <MathExpr tex="d[m]" />.
+          Resource mapping chọn symbol nào đi vào bin nào.
+          Sau mapping, giá trị tại active IFFT bin <MathExpr tex="X[k]" /> có thể chính là một QAM/PSK symbol hoặc một known/reference value.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" id="ifft">
-      <p class="concept-kicker">05 · IFFT LÀ CÁCH TỔNG HỢP TẤT CẢ SUBCARRIERS CÙNG LÚC</p>
-      <h2>Ta không cần tạo hàng trăm oscillators riêng trong software.</h2>
+      <p class="concept-kicker">07 · IFFT LÀ DIGITAL SYNTHESIZER CỦA CẢ BANK SUBCARRIERS</p>
+      <h2>Một IFFT block tạo đúng discrete superposition của các orthogonal complex exponentials.</h2>
 
-      <div class="ofdm-overview-chain">
-        <div><small>BITS</small><strong>QAM mapper</strong><span>complex symbols</span></div>
+      <MathExpr
+        tex={String.raw`x[n]=\frac{1}{N}\sum_{k=0}^{N-1}X[k]e^{j2\pi kn/N},\qquad n=0,\ldots,N-1`}
+        display
+      />
+
+      <div class="ofdm-overview-chain ofdm-overview-chain-v2" data-lesson-visual>
+        <div>
+          <small>BITS</small>
+          <strong>mapper</strong>
+          <span>QPSK / QAM labels</span>
+        </div>
         <b>→</b>
-        <div><small>FREQUENCY</small><strong><MathExpr tex="X[k]" /></strong><span>one value per subcarrier/bin</span></div>
+        <div>
+          <small>FREQUENCY-DOMAIN VECTOR</small>
+          <strong><MathExpr tex="X[k]" /></strong>
+          <span>data + reference + unused bins</span>
+        </div>
         <b>→ IFFT →</b>
-        <div><small>TIME</small><strong><MathExpr tex="x[n]" /></strong><span>summed OFDM samples</span></div>
-        <b>→ CP / RF →</b>
-        <div><small>TX</small><strong>waveform</strong><span>phát qua channel</span></div>
+        <div>
+          <small>USEFUL TIME BLOCK</small>
+          <strong><MathExpr tex="x[n]" /></strong>
+          <span>one sample sequence containing all subcarriers</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>DAC / RF CHAIN</small>
+          <strong>physical waveform</strong>
+          <span>as explained in Bài 9</span>
+        </div>
       </div>
 
       <p>
-        IFFT thực hiện đúng phép cộng các complex exponentials mà block diagram “many subcarriers” gợi ý.
-        Receiver FFT làm projection ngược để lấy lại mỗi coefficient <MathExpr tex="Y[k]" />.
+        Bài 15 sẽ mở từng term của tổng này, cho phép sửa từng bin rồi nhìn trực tiếp time waveform thay đổi và FFT recover coefficients ra sao.
       </p>
     </section>
 
     <section class="concept-block" id="channel">
-      <p class="concept-kicker">06 · SAU FFT, WIDEBAND CHANNEL TRỞ THÀNH NHIỀU COMPLEX GAINS <MathExpr tex="H[k]" /></p>
-      <h2>Đây là payoff lớn nhất về equalization.</h2>
+      <p class="concept-kicker">08 · PAYOFF: FFT CÓ THỂ BIẾN CHANNEL CONVOLUTION THÀNH PER-BIN MULTIPLICATION</p>
+      <h2>Nhưng kết quả đẹp <MathExpr tex={String.raw`Y[k]=H[k]X[k]+W[k]`} /> cần các điều kiện block-circulant phù hợp.</h2>
 
-      <MathExpr tex="Y[k] = <MathExpr tex="H[k]X[k]" /> + W[k]" display />
+      <div class="ofdm-channel-chain" data-lesson-visual>
+        <div>
+          <small>TX BIN</small>
+          <strong><MathExpr tex="X[k]" /></strong>
+          <span>one assigned complex symbol</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>CHANNEL AT BIN</small>
+          <strong><MathExpr tex="H[k]" /></strong>
+          <span>local complex gain</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>RX FFT BIN</small>
+          <strong><MathExpr tex="Y[k]" /></strong>
+          <span>observed coefficient</span>
+        </div>
+        <b>→ equalize →</b>
+        <div class="result">
+          <small>SYMBOL ESTIMATE</small>
+          <strong><MathExpr tex={String.raw`\hat X[k]`} /></strong>
+          <span>one-tap equalization intuition</span>
+        </div>
+      </div>
+
+      <MathExpr tex={String.raw`Y[k]=H[k]X[k]+W[k]`} display />
 
       <p>
-        Nếu mỗi subcarrier đủ hẹp để channel gần như flat trong bandwidth của nó,
-        <MathExpr tex="H[k]" /> chỉ là một complex scalar tại subcarrier <MathExpr tex="k" />.
-        Equalization có thể gần như <MathExpr tex="Y[k]/H[k]" /> trong zero-forcing intuition.
+        Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là:
       </p>
 
+      <MathExpr tex={String.raw`\hat X[k]=\frac{Y[k]}{\hat H[k]}`} display />
+
+      <aside class="precision-note">
+        <strong>Division này không phải universal optimal equalizer</strong>
+        <p>
+          Deep fades làm zero forcing khuếch đại noise mạnh.
+          Practical receivers có thể dùng MMSE-like equalization, reliability weighting, coding và link adaptation.
+          Bài này chỉ nhấn mạnh lợi ích kiến trúc: equalization trở thành per-bin scalar processing thay vì một long time-domain inverse filter.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="cp-preview">
+      <p class="concept-kicker">09 · TẠI SAO CẦN CYCLIC PREFIX NẾU ĐÃ CÓ FFT?</p>
+      <h2>FFT diagonalizes circular convolution; physical multipath tạo linear convolution.</h2>
+
+      <div class="ofdm-cp-preview" data-lesson-visual>
+        <div>
+          <small>PHYSICAL CHANNEL</small>
+          <strong>linear convolution</strong>
+          <span>late samples from previous block can spill into current block</span>
+        </div>
+        <b>→ add guard structure →</b>
+        <div>
+          <small>CP-OFDM CONDITION</small>
+          <strong>discard CP, keep useful block</strong>
+          <span>under sufficient CP + timing assumptions</span>
+        </div>
+        <b>→</b>
+        <div class="result">
+          <small>FFT VIEW</small>
+          <strong><MathExpr tex={String.raw`Y[k]=H[k]X[k]`} /></strong>
+          <span>circular-convolution model on useful samples</span>
+        </div>
+      </div>
+
       <p>
-        Tất nhiên channel vẫn khác nhau giữa <MathExpr tex="k=10" /> và <MathExpr tex="k=200" />.
-        OFDM không làm <MathExpr tex="H[k]" /> phẳng trên toàn carrier.
-        Nó chỉ chia carrier thành các pieces đủ hẹp để từng piece dễ xử lý hơn.
+        Bài 16 sẽ minh họa bằng sample indices chính xác vì đây là chỗ rất dễ học thuộc sai.
+        Ở Bài 14 chỉ cần nhớ: <strong>longer OFDM symbol giúp về relative channel memory; CP mới là cấu trúc giúp FFT model với multipath trở nên sạch dưới điều kiện phù hợp.</strong>
       </p>
     </section>
 
-    <section class="concept-block" id="cp">
-      <p class="concept-kicker">07 · CYCLIC PREFIX LÀ MẢNH GHÉP GIÚP FFT MODEL HOẠT ĐỘNG VỚI MULTIPATH</p>
-      <h2>Long symbol thôi chưa đủ; receiver còn cần một useful block có circular-convolution structure.</h2>
+    <section class="concept-block lab-section" id="overview-lab">
+      <p class="concept-kicker">10 · INTERACTIVE LAB</p>
+      <h2>Ba view cho ba ý cốt lõi: channel slicing, orthogonality và many bins → one waveform.</h2>
 
       <p>
-        CP copy phần cuối của OFDM symbol lên phía trước.
-        Nếu channel memory đủ ngắn so với CP và timing hợp lý, receiver bỏ CP rồi FFT useful samples.
-        Linear convolution qua multipath channel khi đó được nhìn như circular convolution trên block,
-        và DFT biến nó thành multiplication <MathExpr tex="H[k]X[k]" />.
+        <strong>Channel slicing</strong> chia cùng một illustrative <MathExpr tex="H(f)" /> thành nhiều bins và đo local variation.{" "}
+        <strong>Orthogonality</strong> cho phép phá spacing lý tưởng và nhìn inner-product coupling xuất hiện.{" "}
+        <strong>Parallel → one waveform</strong> cho thấy nhiều frequency coefficients cùng tồn tại trong một time block, đồng thời preview time-domain peaks.
       </p>
 
-      <p>
-        Bài 16 sẽ đi chậm qua cơ chế này bằng một block samples cụ thể.
-      </p>
+      <OFDMOrthogonalityExplorer client:load />
     </section>
 
-    <section class="concept-block" id="numbers">
-      <p class="concept-kicker">08 · MỘT VÍ DỤ SỐ ĐỂ GẮN <MathExpr tex={String.raw`\Delta f`} /> VỚI <MathExpr tex="T_u" /></p>
-      <h2><MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> spacing cho useful symbol khoảng <MathExpr tex={String.raw`66.67\,\mu\mathrm{s}`} />; <MathExpr tex={String.raw`120\,\mathrm{kHz}`} /> spacing chỉ còn khoảng <MathExpr tex={String.raw`8.33\,\mu\mathrm{s}`} />.</h2>
+    <section class="concept-block" data-lesson-role="example" id="numbers">
+      <p class="concept-kicker">11 · VÍ DỤ SỐ: SUBCARRIER SPACING ĐẶT TIME SCALE CỦA USEFUL SYMBOL</p>
+      <h2>Vì <MathExpr tex={String.raw`T_u=1/\Delta f`} />, frequency grid và useful-symbol duration là hai mặt của cùng một design choice.</h2>
 
-      <p>
-        Vì <MathExpr tex={String.raw`T_u=1/\Delta f`} />, tăng subcarrier spacing lên 8 lần làm useful symbol ngắn đi 8 lần.
-        Đây chính là nền tảng của 5G NR numerology ở Bài 18.
-        Nó cũng cho thấy tradeoff:
-        symbol ngắn hơn có lợi cho một số timing/latency và relative-CFO conditions,
-        nhưng channel delay spread chiếm tỷ lệ lớn hơn so với useful duration.
-      </p>
-    </section>
-
-    <section class="concept-block" id="tradeoffs">
-      <p class="concept-kicker">09 · OFDM GIẢI MỘT SỐ BÀI TOÁN VÀ TẠO RA MỘT SỐ BÀI TOÁN KHÁC</p>
-
-      <div class="ofdm-tradeoff-grid">
+      <div class="ofdm-number-example">
         <article>
-          <strong>CP overhead</strong>
-          <p>Guard interval tiêu tốn time/energy nhưng không tạo thêm data symbols.</p>
+          <span class="card-label"><MathExpr tex={String.raw`\Delta f=15\,\mathrm{kHz}`} /></span>
+          <strong><MathExpr tex={String.raw`T_u\approx66.67\,\mu\mathrm{s}`} /></strong>
+          <p>Longer useful interval; a fixed delay spread occupies a smaller fraction of <MathExpr tex="T_u" />.</p>
         </article>
         <article>
-          <strong>High PAPR</strong>
-          <p>Nhiều subcarriers có thể cộng đồng pha và tạo time-domain peaks lớn.</p>
-        </article>
-        <article>
-          <strong>CFO / Doppler</strong>
-          <p>Frequency mismatch phá orthogonality và tạo inter-carrier interference.</p>
-        </article>
-        <article>
-          <strong>Phase noise</strong>
-          <p>Oscillator phase instability tạo common phase error và ICI.</p>
+          <span class="card-label"><MathExpr tex={String.raw`\Delta f=120\,\mathrm{kHz}`} /></span>
+          <strong><MathExpr tex={String.raw`T_u\approx8.33\,\mu\mathrm{s}`} /></strong>
+          <p>Eight-times wider spacing gives an eight-times shorter useful interval.</p>
         </article>
       </div>
 
       <p>
-        Vì thế OFDM không phải “waveform hoàn hảo”.
-        Nó là một engineering tradeoff rất mạnh vì equalization và flexible resource allocation trở nên thuận tiện.
+        Đây chưa phải full 5G NR numerology discussion.
+        Bài 18 sẽ thêm CP, slot timing và system-level tradeoffs.
       </p>
     </section>
 
-    <section class="concept-block recap">
-      <p class="concept-kicker">10 · NỐI LẠI CÁC Ý</p>
+    <section class="concept-block" id="tradeoffs">
+      <p class="concept-kicker">12 · OFDM ĐƠN GIẢN HÓA EQUALIZATION NHƯNG KHÔNG MIỄN PHÍ</p>
+      <h2>Mỗi ưu điểm kiến trúc kéo theo một nhóm implementation constraints.</h2>
+
+      <div class="ofdm-tradeoff-grid ofdm-tradeoff-grid-v2">
+        <article>
+          <span class="card-label">CYCLIC PREFIX</span>
+          <strong>guard overhead</strong>
+          <p>CP consumes time and transmit energy but does not add new independent QAM data.</p>
+        </article>
+        <article>
+          <span class="card-label">PAPR</span>
+          <strong>large time-domain peaks</strong>
+          <p>Many subcarriers can add constructively, stressing PA backoff and converter dynamic range.</p>
+        </article>
+        <article>
+          <span class="card-label">CFO / DOPPLER</span>
+          <strong>loss of orthogonality</strong>
+          <p>Frequency mismatch causes energy to leak across FFT bins as inter-carrier interference.</p>
+        </article>
+        <article>
+          <span class="card-label">PHASE NOISE</span>
+          <strong>common rotation + ICI</strong>
+          <p>Oscillator phase variation disturbs the ideal basis relation over time.</p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>OFDM là một representation và waveform architecture, không phải “thuật toán chống multipath” đơn lẻ</strong>
+        <p>
+          Lợi ích đến từ combination của parallel narrow subcarriers, orthogonal basis, FFT implementation, CP/block structure, reference signals và per-bin receiver processing.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">13 · BLOCK DIAGRAM TỐI THIỂU CỦA MỘT OFDM MODEM</p>
+      <h2>Nhìn đúng thứ tự giúp không nhầm frequency-domain object với time-domain object.</h2>
+
+      <div class="ofdm-implementation-pipeline" data-lesson-visual>
+        <article>
+          <span class="ofdm-step-no">01</span>
+          <div>
+            <small>BIT MAPPING</small>
+            <strong>bits → QPSK/QAM symbols</strong>
+            <p>Tạo modulation symbols <MathExpr tex="d[m]" />.</p>
+          </div>
+        </article>
+        <b>↓</b>
+        <article>
+          <span class="ofdm-step-no">02</span>
+          <div>
+            <small>RESOURCE / BIN MAPPING</small>
+            <strong>symbols → <MathExpr tex="X[k]" /></strong>
+            <p>Đặt data/reference/zeros vào frequency-domain vector.</p>
+          </div>
+        </article>
+        <b>↓</b>
+        <article>
+          <span class="ofdm-step-no">03</span>
+          <div>
+            <small>IFFT</small>
+            <strong><MathExpr tex="X[k]" /> → <MathExpr tex="x[n]" /></strong>
+            <p>Synthesize useful time-domain OFDM block.</p>
+          </div>
+        </article>
+        <b>↓</b>
+        <article>
+          <span class="ofdm-step-no">04</span>
+          <div>
+            <small>CP + RF</small>
+            <strong>block protection + physical transmission</strong>
+            <p>CP details are deferred to Bài 16.</p>
+          </div>
+        </article>
+        <b>↓</b>
+        <article>
+          <span class="ofdm-step-no">05</span>
+          <div>
+            <small>RX: REMOVE CP + FFT</small>
+            <strong>samples → <MathExpr tex="Y[k]" /></strong>
+            <p>Project useful block back onto frequency-domain basis.</p>
+          </div>
+        </article>
+        <b>↓</b>
+        <article class="finish">
+          <span class="ofdm-step-no">06</span>
+          <div>
+            <small>ESTIMATE + EQUALIZE + DEMAP</small>
+            <strong><MathExpr tex="Y[k]" /> → symbol/bit estimates</strong>
+            <p>Use channel/reference information to recover transmitted data.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">14 · BÀI 14 DỰNG BỨC TRANH; CÁC BÀI SAU ZOOM VÀO TỪNG CƠ CHẾ</p>
+
+      <div class="ofdm-boundary-grid">
+        <article>
+          <span class="card-label">BÀI 15</span>
+          <strong>IFFT / FFT</strong>
+          <p>Từng frequency bin đóng góp vào time samples như thế nào và FFT recover coefficients ra sao.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 16</span>
+          <strong>Cyclic Prefix</strong>
+          <p>Linear convolution được biến thành circular-convolution view trên useful block dưới điều kiện nào.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 17</span>
+          <strong>Resource grid</strong>
+          <p>Frequency bins và OFDM symbols trở thành một time-frequency coordinate system để mapping resources.</p>
+        </article>
+        <article>
+          <span class="card-label">BÀI 18</span>
+          <strong>Numerology</strong>
+          <p>Subcarrier spacing thay đổi time scales, CP durations và slot structure như thế nào.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">15 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Parallelization:</strong> chia data qua nhiều narrowband subcarriers.</li>
-        <li><strong>Longer symbol duration:</strong> làm channel memory nhỏ hơn tương đối so với useful interval.</li>
-        <li><strong>Orthogonality:</strong> <MathExpr tex={String.raw`\Delta f = 1/T_u`} /> trong ideal basis construction.</li>
-        <li><strong>IFFT:</strong> tổng hợp all subcarrier coefficients thành one time-domain block.</li>
-        <li><strong>FFT:</strong> project received block trở lại từng frequency basis.</li>
-        <li><strong><MathExpr tex="H[k]" />:</strong> wideband selective channel trở thành per-subcarrier complex gains.</li>
-        <li><strong>CP:</strong> giúp tạo circular-convolution condition dưới assumptions phù hợp.</li>
-        <li><strong>Tradeoffs:</strong> CP overhead, PAPR và sensitivity với frequency/phase errors.</li>
+        <li><strong>Problem:</strong> wideband multipath channel có <MathExpr tex="H(f)" /> thay đổi theo frequency và memory trong time.</li>
+        <li><strong>Channel slicing:</strong> nhiều narrow subcarriers cho phép local flat-channel approximation.</li>
+        <li><strong>Parallelization:</strong> nhiều subcarriers coexist trong cùng useful interval nên aggregate data rate vẫn cao.</li>
+        <li><strong>Orthogonality:</strong> ideal grid dùng <MathExpr tex={String.raw`\Delta f=1/T_u`} /> để different basis functions có zero inner product.</li>
+        <li><strong>Spectral overlap:</strong> sinc-like spectra có thể overlap trong frequency mà vẫn orthogonal trên đúng interval/basis.</li>
+        <li><strong>Mapping:</strong> modulation symbols được đặt vào IFFT coefficients <MathExpr tex="X[k]" />.</li>
+        <li><strong>IFFT:</strong> synthesize all active frequency coefficients thành một time-domain block <MathExpr tex="x[n]" />.</li>
+        <li><strong>FFT receiver:</strong> dưới block/cyclic-convolution conditions phù hợp, channel trở thành <MathExpr tex={String.raw`Y[k]=H[k]X[k]+W[k]`} />.</li>
+        <li><strong>CP:</strong> guard/cyclic structure là mảnh ghép giúp physical linear convolution tương thích với FFT model.</li>
+        <li><strong>Tradeoffs:</strong> CP overhead, PAPR, CFO/Doppler và phase noise là costs quan trọng của OFDM.</li>
       </ol>
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/correlation/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/correlation/">
         <span>← BÀI TRƯỚC</span>
         <strong>Correlation</strong>
-        <small>Receiver tìm known pattern trong samples như thế nào?</small>
+        <small>Receiver biến known reference thành timing/detection metric như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/ifft-fft-trong-ofdm/">
+
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/ifft-fft-trong-ofdm/">
         <span>BÀI TIẾP THEO →</span>
         <strong>IFFT/FFT trong OFDM</strong>
-        <small><MathExpr tex="X[k]" /> thật sự trở thành <MathExpr tex="x[n]" /> như thế nào?</small>
+        <small>Từng coefficient <MathExpr tex="X[k]" /> thật sự được tổng hợp thành <MathExpr tex="x[n]" /> và recover như thế nào?</small>
       </a>
     </nav>
   </article>
