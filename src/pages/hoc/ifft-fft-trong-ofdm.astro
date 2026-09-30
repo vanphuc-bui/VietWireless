@@ -14,52 +14,69 @@ import MathExpr from '../../components/Math.astro';
       <p class="eyebrow">GHI CHÉP 15 · OFDM FOUNDATIONS</p>
       <h1>IFFT/FFT trong OFDM</h1>
       <p class="lesson-deck">
-        Bài 14 cho thấy OFDM muốn đặt information lên nhiều orthogonal frequency bins rồi phát tất cả cùng lúc.{" "}
-        <strong>IFFT là phép synthesis biến các coefficients <MathExpr tex="X[k]" /> thành một block samples <MathExpr tex="x[n]" />; FFT là phép projection ngược để hỏi received block chứa bao nhiêu của từng basis.</strong>
+        Sau mapper, transmitter đang có một dãy số phức nằm trên các subcarrier, nhưng DAC không thể phát “các ô tần số”. Nó cần một chuỗi sample theo thời gian.{" "}
+        <strong>IFFT là cây cầu biến các hệ số <MathExpr tex="X[k]" /> trong miền tần số thành một block sample <MathExpr tex="x[n]" /> trong miền thời gian; FFT ở receiver làm phép ngược để lấy lại từng hệ số subcarrier.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context">
-      <p class="concept-kicker">CÙNG MỘT OFDM BLOCK, HAI HỆ TỌA ĐỘ</p>
+      <p class="concept-kicker">BÀI NÀY GIẢI QUYẾT VẤN ĐỀ GÌ?</p>
+      <h2>Ta đã có các QAM symbols trên các subcarrier. Làm sao biến chúng thành một waveform thật để phát qua DAC?</h2>
 
-      <div class="system-position concept-flow-card">
-        <span>FREQUENCY COORDINATES ↔ TIME COORDINATES</span>
-        <div class="system-position-flow" aria-label="Một OFDM block được biểu diễn bằng frequency coefficients và time samples">
+      <p>
+        Sau Bài 14, hãy tưởng tượng transmitter đã quyết định giá trị cần đặt lên từng subcarrier.
+        Ví dụ bin <MathExpr tex="k=1" /> mang một symbol QPSK, bin <MathExpr tex="k=2" /> mang một symbol khác.
+        Những giá trị đó tạo thành vector <MathExpr tex={String.raw`X[0],\ldots,X[N-1]`} />.
+        Nhưng phần cứng phát không xuất ra “bin tần số”; nó xuất ra các sample nối tiếp theo thời gian.
+      </p>
+
+      <div class="system-position concept-flow-card" data-lesson-role="problem">
+        <span>TỪ SYMBOL TRÊN SUBCARRIER ĐẾN SAMPLE ĐỂ PHÁT</span>
+        <div class="system-position-flow" aria-label="Luồng OFDM từ các hệ số miền tần số qua IFFT tới các sample miền thời gian rồi FFT ở receiver">
           <strong><MathExpr tex={String.raw`X[0],\ldots,X[N-1]`} /></strong><b>→ IFFT →</b>
-          <span><MathExpr tex={String.raw`x[0],\ldots,x[N-1]`} /></span><b>→ channel →</b>
+          <span><MathExpr tex={String.raw`x[0],\ldots,x[N-1]`} /></span><b>→ DAC / RF / channel →</b>
           <span><MathExpr tex={String.raw`y[0],\ldots,y[N-1]`} /></span><b>→ FFT →</b>
           <strong><MathExpr tex={String.raw`Y[0],\ldots,Y[N-1]`} /></strong>
         </div>
         <p>
-          Không có “data frequency-domain” và “data time-domain” độc lập.
-          Trong ideal transform pair, chúng là hai coordinate descriptions của cùng một finite-dimensional complex vector.
+          IFFT không “tạo thêm dữ liệu”. Nó chỉ đổi cách biểu diễn: từ <strong>các hệ số trên những basis tần số</strong>
+          sang <strong>các sample của cùng một OFDM block theo thời gian</strong>.
+          FFT thực hiện phép đổi ngược tại receiver.
         </p>
       </div>
 
       <div class="ifft-object-map" data-lesson-visual>
         <div>
-          <small>FREQUENCY INDEX</small>
+          <small>CHỈ SỐ TẦN SỐ</small>
           <strong><MathExpr tex="k" /></strong>
-          <span>which basis / FFT bin?</span>
+          <span>đang nói tới basis / FFT bin nào?</span>
         </div>
         <b>↔</b>
         <div>
-          <small>TIME INDEX</small>
+          <small>CHỈ SỐ THỜI GIAN</small>
           <strong><MathExpr tex="n" /></strong>
-          <span>which sample inside the useful block?</span>
+          <span>đang nói tới sample nào trong useful block?</span>
         </div>
         <b>·</b>
         <div class="result">
-          <small>BLOCK SIZE</small>
+          <small>KÍCH THƯỚC BLOCK</small>
           <strong><MathExpr tex="N" /></strong>
-          <span><MathExpr tex="N" /> complex bins ↔ <MathExpr tex="N" /> complex samples</span>
+          <span><MathExpr tex="N" /> hệ số phức ↔ <MathExpr tex="N" /> sample phức</span>
         </div>
       </div>
+
+      <aside class="mental-model">
+        <strong>Mental model quan trọng nhất của Bài 15</strong>
+        <p>
+          Một subcarrier không tương ứng với một sample duy nhất.
+          Mỗi <MathExpr tex="X[k]" /> điều khiển một waveform kéo dài trên toàn block, và mỗi <MathExpr tex="x[n]" /> là tổng vector của contribution từ tất cả các bin đang hoạt động.
+        </p>
+      </aside>
     </section>
 
     <section class="concept-block" data-lesson-role="intuition" id="one-bin">
-      <p class="concept-kicker">01 · MỘT IFFT BIN KHÔNG PHẢI “MỘT Ô SỐ”; NÓ LÀ TRỌNG SỐ CỦA MỘT BASIS WAVEFORM</p>
-      <h2>Nếu chỉ bật bin <MathExpr tex="k" />, toàn bộ time block là một complex exponential với phase advance cố định giữa các samples.</h2>
+      <p class="concept-kicker">01 · MỘT BIN THỰC RA ĐẠI DIỆN CHO MỘT WAVEFORM CƠ SỞ</p>
+      <h2>Nếu chỉ bật bin <MathExpr tex="k" />, toàn bộ block thời gian trở thành một complex exponential quay đều qua từng sample.</h2>
 
       <MathExpr
         tex={String.raw`x_k[n]=\frac{1}{N}X[k]e^{j2\pi kn/N}`}
@@ -91,15 +108,16 @@ import MathExpr from '../../components/Math.astro';
       <MathExpr tex={String.raw`\Delta\phi_k=\frac{2\pi k}{N}`} display />
 
       <p>
-        Với <MathExpr tex="k=0" />, phase increment bằng zero nên basis là constant complex DC sequence.
-        Với larger positive <MathExpr tex="k" />, phasor quay nhanh hơn theo sample index.
-        Các raw indexes ở nửa cuối FFT array sẽ được diễn giải như negative frequencies khi ta map sang signed frequency ordering.
+        Với <MathExpr tex="k=0" />, góc không đổi nên basis là một chuỗi DC phức không quay.
+        Khi <MathExpr tex="k" /> tăng, phasor quay nhanh hơn qua từng sample.
+        Nghĩa là chỉ số bin quyết định <strong>tốc độ quay</strong>, còn hệ số <MathExpr tex="X[k]" /> quyết định <strong>biên độ và pha ban đầu</strong> của basis đó.
+        Các index ở nửa sau của FFT array sẽ được diễn giải thành tần số âm khi ta chuyển sang signed-frequency ordering.
       </p>
     </section>
 
     <section class="concept-block" data-lesson-role="example" id="n4-example">
       <p class="concept-kicker">02 · VÍ DỤ <MathExpr tex="N=4" />: TỰ TÍNH TỪNG SAMPLE</p>
-      <h2>Chỉ bật <MathExpr tex="X[1]=1" /> để nhìn IFFT như một dãy phasors, không cần coi nó là hộp đen.</h2>
+      <h2>Chỉ bật <MathExpr tex="X[1]=1" /> để tự tay nhìn thấy IFFT tạo ra từng sample như thế nào.</h2>
 
       <MathExpr tex={String.raw`x[n]=\frac14e^{j2\pi n/4}`} display />
 
@@ -116,14 +134,15 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Nếu thêm <MathExpr tex="X[0]=1" />, mỗi sample chỉ nhận thêm contribution <MathExpr tex="1/4" /> từ DC basis.
-        Nếu thêm nhiều bins hơn, nguyên tắc không đổi: <strong>tính contribution của từng basis tại cùng <MathExpr tex="n" />, rồi cộng complex vectors.</strong>
+        Bốn sample trên không phải bốn symbol khác nhau. Chúng là bốn điểm lấy mẫu của <strong>cùng một basis waveform</strong>.
+        Nếu thêm <MathExpr tex="X[0]=1" />, mỗi sample nhận thêm contribution <MathExpr tex="1/4" /> từ DC basis.
+        Nếu bật thêm nhiều bin, nguyên tắc vẫn y hệt: tại mỗi <MathExpr tex="n" />, tính contribution của từng basis rồi cộng các vector phức lại.
       </p>
     </section>
 
     <section class="concept-block" data-lesson-role="math" id="idft">
-      <p class="concept-kicker">03 · IFFT SYNTHESIS: MỖI TIME SAMPLE NHÌN THẤY TẤT CẢ BINS</p>
-      <h2>Một sample <MathExpr tex="x[n]" /> không thuộc riêng subcarrier nào.</h2>
+      <p class="concept-kicker">03 · IFFT: MỖI SAMPLE LÀ TỔNG CỦA TẤT CẢ SUBCARRIER</p>
+      <h2>Một sample <MathExpr tex="x[n]" /> không “thuộc” riêng subcarrier nào; nó là tổng vector của toàn bộ các basis tại thời điểm đó.</h2>
 
       <MathExpr
         tex={String.raw`x[n]=\frac1N\sum_{k=0}^{N-1}X[k]e^{j2\pi kn/N},\qquad n=0,\ldots,N-1`}
@@ -153,17 +172,17 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <aside class="mental-model">
-        <strong>Changing one frequency bin changes every time sample</strong>
+        <strong>Đổi một bin sẽ làm thay đổi toàn bộ block sample</strong>
         <p>
-          Một coefficient <MathExpr tex="X[k]" /> multiplies a basis sequence that spans the whole useful block.
-          Vì vậy “sửa một subcarrier” không tương đương “sửa một sample” ở time domain.
+          Một hệ số <MathExpr tex="X[k]" /> nhân lên một basis sequence kéo dài trên toàn useful block.
+          Vì vậy “sửa một subcarrier” không tương đương với “sửa một sample” trong miền thời gian.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="fft">
-      <p class="concept-kicker">04 · FFT ANALYSIS: MỖI OUTPUT BIN NHÌN THẤY TẤT CẢ TIME SAMPLES</p>
-      <h2>FFT bin <MathExpr tex="q" /> de-rotate received samples theo candidate basis rồi coherent-sum chúng.</h2>
+      <p class="concept-kicker">04 · FFT: THỬ TỪNG BASIS VÀ ĐO XEM NÓ CÓ MẶT BAO NHIÊU</p>
+      <h2>FFT bin <MathExpr tex="q" /> quay ngược các sample theo basis ứng viên rồi cộng coherent để lấy lại hệ số của bin đó.</h2>
 
       <MathExpr
         tex={String.raw`Y[q]=\sum_{n=0}^{N-1}y[n]e^{-j2\pi qn/N}`}
@@ -171,9 +190,9 @@ import MathExpr from '../../components/Math.astro';
       />
 
       <p>
-        Hệ số negative exponent làm receiver “quay ngược” candidate basis.
-        Nếu block thực sự chứa basis <MathExpr tex="q" />, contribution của component đó trở thành constant phase sau de-rotation và cộng coherent.
-        Components thuộc basis khác tiếp tục rotate và tổng bằng zero trong ideal full-block observation.
+        Dấu âm trong số mũ làm receiver “quay ngược” theo basis đang kiểm tra.
+        Nếu block thật sự chứa basis <MathExpr tex="q" />, component tương ứng sẽ đứng gần như cùng hướng sau phép quay ngược và cộng lại một cách coherent.
+        Các basis khác vẫn tiếp tục quay qua các sample nên trong điều kiện lý tưởng, tổng của chúng triệt tiêu về zero trên toàn block.
       </p>
 
       <div class="ifft-analysis-story" data-lesson-visual>
@@ -200,7 +219,8 @@ import MathExpr from '../../components/Math.astro';
         <strong>FFT trong OFDM không chỉ là “vẽ spectrum”</strong>
         <p>
           Bài 7 dùng DFT để phân tích frequency content nói chung.
-          Trong OFDM, transmitter cố ý chọn DFT basis làm communication coordinates, nên FFT output bins chính là nơi receiver lấy lại các transmitted coefficients.
+          Trong OFDM, transmitter chủ động dùng các DFT basis làm trục mang dữ liệu.
+          Vì vậy output của FFT không chỉ để “xem phổ”; đó chính là nơi receiver lấy lại các hệ số đã được đặt lên từng subcarrier.
         </p>
       </aside>
     </section>
@@ -261,14 +281,14 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="two-views">
       <p class="concept-kicker">07 · TRANSFORM GIỮ NGUYÊN SỐ BẬC TỰ DO</p>
-      <h2><MathExpr tex="N" /> complex coefficients và <MathExpr tex="N" /> complex samples là hai representations của cùng một vector.</h2>
+      <h2><MathExpr tex="N" /> hệ số phức và <MathExpr tex="N" /> sample phức chỉ là hai cách biểu diễn của cùng một OFDM block.</h2>
 
       <div class="ifft-two-domains ifft-two-domains-v2">
         <article>
           <span class="card-label">FREQUENCY-DOMAIN COORDINATES</span>
           <h3><MathExpr tex="X[k]" /></h3>
           <p>
-            Mỗi coordinate nói signal có bao nhiêu amplitude/phase trên một DFT basis vector.
+            Mỗi phần tử cho biết block có biên độ và pha bao nhiêu trên một DFT basis.
           </p>
         </article>
 
@@ -276,15 +296,15 @@ import MathExpr from '../../components/Math.astro';
           <span class="card-label">TIME-DOMAIN COORDINATES</span>
           <h3><MathExpr tex="x[n]" /></h3>
           <p>
-            Mỗi coordinate nói complex sample value tại một position trong useful block.
+            Mỗi phần tử cho biết giá trị sample phức tại một vị trí trong useful block.
           </p>
         </article>
       </div>
 
       <p>
-        Ideal DFT matrix là invertible.
-        Transform không tự tạo information và cũng không tự bỏ information.
-        Điều thay đổi là coordinate system làm một số operations dễ nhìn hơn: multiplication by <MathExpr tex="H[k]" /> ở frequency domain, sample-window operations ở time domain.
+        Ma trận DFT lý tưởng là khả nghịch.
+        Phép biến đổi không tự tạo thêm thông tin và cũng không tự làm mất thông tin.
+        Ta chỉ đổi hệ biểu diễn để từng phép xử lý trở nên tự nhiên hơn: channel thường dễ nhìn bằng <MathExpr tex="H[k]" /> trong miền tần số, còn DAC, CP và cửa sổ sample lại diễn ra trong miền thời gian.
       </p>
     </section>
 
@@ -486,23 +506,23 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" data-lesson-role="boundary" id="boundary">
-      <p class="concept-kicker">13 · BÀI 15 GIẢI THÍCH TRANSFORM; BÀI 16 GIẢI THÍCH BLOCK PROTECTION</p>
+      <p class="concept-kicker">13 · ĐỪNG GÁN CHO IFFT/FFT NHỮNG VIỆC CHÚNG KHÔNG LÀM</p>
 
       <div class="ifft-boundary-grid">
         <article>
           <span class="card-label">BÀI 15</span>
-          <strong>IFFT / FFT basis change</strong>
-          <p><MathExpr tex="X[k]" /> ↔ <MathExpr tex="x[n]" />, bin ordering, scaling và projection.</p>
+          <strong>IFFT / FFT đổi cách biểu diễn</strong>
+          <p><MathExpr tex="X[k]" /> ↔ <MathExpr tex="x[n]" />. Chúng không tự chống multipath, không tự equalize channel và không tự quyết định resource mapping.</p>
         </article>
         <article>
           <span class="card-label">BÀI 16</span>
           <strong>Cyclic Prefix</strong>
-          <p>Physical linear convolution được made compatible với circular block model như thế nào.</p>
+          <p>Bài 16 mới giải thích cách bảo vệ FFT window để multipath phù hợp với circular-convolution model.</p>
         </article>
         <article>
           <span class="card-label">BÀI 17</span>
           <strong>Resource grid</strong>
-          <p>Những <MathExpr tex="X[k]" /> values được tổ chức theo time-frequency resources ra sao.</p>
+          <p>Bài 17 mới giải thích các giá trị <MathExpr tex="X[k]" /> được tổ chức trên trục thời gian–tần số như thế nào.</p>
         </article>
       </div>
     </section>
