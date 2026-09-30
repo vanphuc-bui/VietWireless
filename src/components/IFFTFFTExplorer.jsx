@@ -39,7 +39,7 @@ function dft(x) {
   });
 }
 
-function contributionForBin(Xk, k, n) {
+function đóng gópForBin(Xk, k, n) {
   const angle = 2 * Math.PI * k * n / N;
   return {
     re: (Xk.re * Math.cos(angle) - Xk.im * Math.sin(angle)) / N,
@@ -75,19 +75,19 @@ export default function IFFTFFTExplorer() {
   const x = useMemo(() => idft(X), [bins]);
   const Y = useMemo(() => dft(x), [x]);
 
-  const basisCoefficient = qpsk[basisQpsk];
+  const basisHệ số = qpsk[basisQpsk];
   const basisVector = useMemo(
     () => Array.from(
       { length: N },
-      (_, n) => contributionForBin(basisCoefficient, basisK, n)
+      (_, n) => đóng gópForBin(basisHệ số, basisK, n)
     ),
-    [basisCoefficient, basisK]
+    [basisHệ số, basisK]
   );
 
   const basisPhaseStepDeg = 360 * basisK / N;
 
   const selectedContributions = useMemo(
-    () => X.map((value, k) => contributionForBin(value, k, inspectN)),
+    () => X.map((value, k) => đóng gópForBin(value, k, inspectN)),
     [X, inspectN]
   );
 
@@ -146,7 +146,7 @@ export default function IFFTFFTExplorer() {
           className={mode === 'basis' ? 'selected' : ''}
           onClick={() => chooseMode('basis')}
         >
-          One bin → basis
+          Một bin → một basis
         </button>
         <button
           type="button"
@@ -155,7 +155,7 @@ export default function IFFTFFTExplorer() {
           className={mode === 'sum' ? 'selected' : ''}
           onClick={() => chooseMode('sum')}
         >
-          Many bins → one sample
+          Nhiều bin → một sample
         </button>
         <button
           type="button"
@@ -173,7 +173,7 @@ export default function IFFTFFTExplorer() {
           <div className="ifft-basis-controls">
             <label>
               <span>
-                Bin index{" "}
+                Chỉ số bin{" "}
                 <strong><MathExpr tex={'k=' + basisK} /></strong>
               </span>
               <input
@@ -187,7 +187,7 @@ export default function IFFTFFTExplorer() {
             </label>
 
             <div className="ifft-qpsk-select">
-              <span>Coefficient <MathExpr tex="X[k]" /></span>
+              <span>Hệ số <MathExpr tex="X[k]" /></span>
               <div>
                 {qpsk.map((item, index) => (
                   <button
@@ -207,12 +207,12 @@ export default function IFFTFFTExplorer() {
             <div className="metric-card">
               <small className="metric-card-label">FFT SIZE</small>
               <strong className="metric-card-value"><MathExpr tex={'N=' + N} /></strong>
-              <span className="metric-card-formula">samples / bins</span>
+              <span className="metric-card-formula">sample / bin</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">ACTIVE BIN</small>
               <strong className="metric-card-value"><MathExpr tex={'k=' + basisK} /></strong>
-              <span className="metric-card-formula">one basis frequency</span>
+              <span className="metric-card-formula">một tần số basis</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">PHASE ADVANCE / SAMPLE</small>
@@ -221,16 +221,16 @@ export default function IFFTFFTExplorer() {
             </div>
             <div className="metric-card">
               <small className="metric-card-label">COEFFICIENT</small>
-              <strong className="metric-card-value"><MathExpr tex={complexText(basisCoefficient)} /></strong>
-              <span className="metric-card-formula">sets common scale + initial phase</span>
+              <strong className="metric-card-value"><MathExpr tex={complexText(basisHệ số)} /></strong>
+              <span className="metric-card-formula">quyết định scale và pha ban đầu</span>
             </div>
           </div>
 
           <div className="ifft-basis-grid">
             <div className="ifft-basis-circle">
               <div className="visual-caption">
-                <span>BASIS PHASOR SAMPLES</span>
-                <strong>each sample advances by the same phase increment</strong>
+                <span>CÁC SAMPLE PHASOR CỦA BASIS</span>
+                <strong>mỗi sample tiến thêm cùng một lượng pha</strong>
               </div>
 
               <svg viewBox="0 0 370 330" role="img" aria-label="Eight IFFT basis samples plotted on the complex plane">
@@ -265,12 +265,12 @@ export default function IFFTFFTExplorer() {
 
             <div className="ifft-basis-table">
               <div className="visual-caption">
-                <span>ONE TERM OF THE IDFT</span>
+                <span>MỘT HẠNG TỬ TRONG IDFT</span>
                 <strong><MathExpr tex={String.raw`x_k[n]=\frac{1}{N}X[k]e^{j2\pi kn/N}`} /></strong>
               </div>
 
               <div className="ifft-sample-table">
-                <div className="header"><span><MathExpr tex="n" /></span><span>phase advance</span><span>contribution</span></div>
+                <div className="header"><span><MathExpr tex="n" /></span><span>góc pha tích lũy</span><span>đóng góp</span></div>
                 {basisVector.map((value, n) => (
                   <div key={n}>
                     <span><MathExpr tex={String(n)} /></span>
@@ -288,8 +288,8 @@ export default function IFFTFFTExplorer() {
         <>
           <div className="ifft-bin-editor ifft-bin-editor-v2">
             <div className="visual-caption">
-              <span>FREQUENCY-DOMAIN VECTOR</span>
-              <strong>click each bin to cycle OFF / QPSK</strong>
+              <span>VECTOR MIỀN TẦN SỐ</span>
+              <strong>bấm từng bin để chuyển OFF / QPSK</strong>
             </div>
 
             <div className="ifft-bin-row">
@@ -311,7 +311,7 @@ export default function IFFTFFTExplorer() {
           <div className="ifft-sum-controls">
             <label>
               <span>
-                Inspect time sample{" "}
+                Xem sample thời gian{" "}
                 <strong><MathExpr tex={'n=' + inspectN} /></strong>
               </span>
               <input
@@ -329,12 +329,12 @@ export default function IFFTFFTExplorer() {
             <div className="metric-card">
               <small className="metric-card-label">ACTIVE BINS</small>
               <strong className="metric-card-value"><MathExpr tex={String(bins.filter((value) => value >= 0).length)} /></strong>
-              <span className="metric-card-formula">nonzero coefficients</span>
+              <span className="metric-card-formula">hệ số khác zero</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">INSPECTED SAMPLE</small>
               <strong className="metric-card-value"><MathExpr tex={'n=' + inspectN} /></strong>
-              <span className="metric-card-formula">one column of the synthesis sum</span>
+              <span className="metric-card-formula">một vị trí trong phép tổng IFFT</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">SUM RESULT</small>
@@ -344,37 +344,37 @@ export default function IFFTFFTExplorer() {
             <div className="metric-card">
               <small className="metric-card-label">MAX |TIME SAMPLE|</small>
               <strong className="metric-card-value"><MathExpr tex={maxTimeMagnitude.toFixed(3)} /></strong>
-              <span className="metric-card-formula">depends on vector addition</span>
+              <span className="metric-card-formula">phụ thuộc tổng vector</span>
             </div>
           </div>
 
-          <div className="ifft-contribution-panel">
+          <div className="ifft-đóng góp-panel">
             <div className="visual-caption">
-              <span>WHAT CREATES ONE TIME SAMPLE?</span>
-              <strong>one complex contribution from every active frequency bin</strong>
+              <span>MỘT SAMPLE THỜI GIAN ĐƯỢC TẠO RA TỪ ĐÂU?</span>
+              <strong>one complex đóng góp from every active frequency bin</strong>
             </div>
 
-            <div className="ifft-contribution-strip">
+            <div className="ifft-đóng góp-strip">
               {selectedContributions.map((value, k) => (
                 <div key={k} className={bins[k] >= 0 ? 'active' : 'off'}>
                   <small><MathExpr tex={'k=' + k} /></small>
                   <strong><MathExpr tex={complexText(value)} /></strong>
-                  <span>{bins[k] >= 0 ? 'contributes' : 'zero'}</span>
+                  <span>{bins[k] >= 0 ? 'có đóng góp' : 'zero'}</span>
                 </div>
               ))}
             </div>
 
-            <div className="ifft-contribution-sum">
-              <span>all contributions</span>
-              <b>→ complex vector sum →</b>
+            <div className="ifft-đóng góp-sum">
+              <span>all đóng góps</span>
+              <b>→ tổng vector phức →</b>
               <strong><MathExpr tex={'x[' + inspectN + ']=' + complexText(selectedSum)} /></strong>
             </div>
           </div>
 
           <div className="ifft-time-panel ifft-time-panel-v2">
             <div className="visual-caption">
-              <span>FULL TIME-DOMAIN BLOCK</span>
-              <strong><MathExpr tex={'N=' + N} /> complex samples</strong>
+              <span>TOÀN BỘ BLOCK MIỀN THỜI GIAN</span>
+              <strong><MathExpr tex={'N=' + N} /> sample phức</strong>
             </div>
 
             <div className="ifft-sample-grid">
@@ -407,8 +407,8 @@ export default function IFFTFFTExplorer() {
         <>
           <div className="ifft-bin-editor ifft-bin-editor-v2">
             <div className="visual-caption">
-              <span>SAME OFDM BLOCK</span>
-              <strong>frequency coefficients used to generate the time samples</strong>
+              <span>CÙNG MỘT OFDM BLOCK</span>
+              <strong>các hệ số miền tần số đã tạo ra block sample</strong>
             </div>
 
             <div className="ifft-bin-row">
@@ -430,7 +430,7 @@ export default function IFFTFFTExplorer() {
           <div className="ifft-sum-controls">
             <label>
               <span>
-                Inspect FFT output bin{" "}
+                Xem output bin FFT{" "}
                 <strong><MathExpr tex={'q=' + inspectQ} /></strong>
               </span>
               <input
@@ -448,7 +448,7 @@ export default function IFFTFFTExplorer() {
             <div className="metric-card">
               <small className="metric-card-label">SELECTED FFT BIN</small>
               <strong className="metric-card-value"><MathExpr tex={'q=' + inspectQ} /></strong>
-              <span className="metric-card-formula">projection basis index</span>
+              <span className="metric-card-formula">chỉ số basis đang projection</span>
             </div>
             <div className="metric-card">
               <small className="metric-card-label">EXPECTED COEFFICIENT</small>
@@ -463,14 +463,14 @@ export default function IFFTFFTExplorer() {
             <div className="metric-card">
               <small className="metric-card-label">MAX ROUND-TRIP ERROR</small>
               <strong className="metric-card-value"><MathExpr tex={roundTripError.toExponential(1)} /></strong>
-              <span className="metric-card-formula">floating-point numerical error</span>
+              <span className="metric-card-formula">sai số số học floating-point</span>
             </div>
           </div>
 
           <div className="ifft-projection-grid">
             <div className="ifft-projection-terms">
               <div className="visual-caption">
-                <span>FFT PROJECTION TERMS</span>
+                <span>CÁC HẠNG TỬ FFT PROJECTION</span>
                 <strong><MathExpr tex={String.raw`x[n]e^{-j2\pi qn/N}`} /></strong>
               </div>
 
@@ -483,20 +483,20 @@ export default function IFFTFFTExplorer() {
                 ))}
               </div>
 
-              <div className="ifft-contribution-sum">
+              <div className="ifft-đóng góp-sum">
                 <span>sum across all <MathExpr tex="n" /></span>
-                <b>→ coherent projection →</b>
+                <b>→ cộng coherent →</b>
                 <strong><MathExpr tex={'Y[' + inspectQ + ']=' + complexText(fftSum)} /></strong>
               </div>
             </div>
 
             <div className="ifft-projection-phasors">
               <div className="visual-caption">
-                <span>AFTER DE-ROTATION FOR THE SELECTED BIN</span>
-                <strong>matching basis contributions line up coherently</strong>
+                <span>SAU KHI QUAY NGƯỢC THEO BIN ĐANG CHỌN</span>
+                <strong>matching basis đóng góps line up coherently</strong>
               </div>
 
-              <svg viewBox="0 0 370 330" role="img" aria-label="FFT projection contribution vectors and their coherent sum">
+              <svg viewBox="0 0 370 330" role="img" aria-label="FFT projection đóng góp vectors and their coherent sum">
                 <line className="ifft-axis" x1="34" y1={phCy} x2="338" y2={phCy} />
                 <line className="ifft-axis" x1={phCx} y1="28" x2={phCx} y2="302" />
 
