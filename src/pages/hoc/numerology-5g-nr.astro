@@ -241,7 +241,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Với <MathExpr tex={String.raw`15\,\mathrm{kHz`} /> SCS, <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> tương đương khoảng <MathExpr tex="0.067" /> subcarrier spacing.
+        Với <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> SCS, <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> tương đương khoảng <MathExpr tex="0.067" /> subcarrier spacing.
         Với <MathExpr tex={String.raw`120\,\mathrm{kHz}`} /> SCS, cùng <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> chỉ khoảng <MathExpr tex="0.0083" /> spacing.
         Relative CFO nhỏ hơn thường nghĩa orthogonality ít bị phá hơn, nếu các yếu tố khác giữ nguyên.
       </p>
@@ -265,6 +265,7 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Điều cần giữ trong mental model:
         CP type là một phần của OFDM time structure.
+        <strong>Numerology không chỉ là một con số SCS</strong>; khi áp dụng vào waveform thực tế còn phải xét CP option, frequency range, band/channel rules và UE capability.
         Không nên mặc định mọi numerology luôn có cả normal lẫn extended CP.
       </p>
     </section>
@@ -275,16 +276,17 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Bài này dùng slot để xây time-grid structure.
-        Khi học PDSCH/PUSCH sau này, ta sẽ thấy actual allocation có start symbol và number of symbols,
-        nên “slot duration” không nên bị nhầm với “minimum possible packet duration”.
+        Khi học PDSCH/PUSCH sau này, ta sẽ thấy allocation có start symbol và number of symbols riêng.
+        Vì vậy <strong>slot duration là đơn vị cấu trúc của grid</strong>, không phải lời khẳng định rằng mọi packet hay mọi transmission phải kéo dài đúng một slot.
       </p>
     </section>
 
     <section class="concept-block" data-lesson-role="specification" id="spec">
       <p class="concept-kicker">10 · SPECIFICATION LAYER</p>
       <p>
-        Các con số SCS, cyclic-prefix options và slot/frame structure trong bài được lấy từ TS 38.211.
-        Website dùng các con số đó để xây intuition, còn applicability cụ thể phải đọc cùng band/channel/configuration specifications liên quan.
+        Các giá trị SCS, cyclic-prefix option và slot/frame structure trong bài dựa trên TS 38.211.
+        Công thức <MathExpr tex={String.raw`T_u=1/\Delta f`} /> là OFDM relation dùng để xây trực giác; timing sample-level chi tiết của NR được specification định nghĩa riêng.
+        Numerology nào thực sự dùng được cho một band/channel còn phụ thuộc specification và capability liên quan.
       </p>
 
       <p class="spec-source">
@@ -311,12 +313,12 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/resource-grid/">
         <span>← BÀI TRƯỚC</span>
         <strong>Resource grid</strong>
-        <small>Frequency-time resources được tổ chức như thế nào?</small>
+        <small>Các resource time–frequency được tổ chức như thế nào?</small>
       </a>
       <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/ue-bat-nguon/">
         <span>BÀI TIẾP THEO →</span>
         <strong>UE bật nguồn thì chuyện gì xảy ra?</strong>
-        <small>Từ OFDM foundations sang initial cell search 5G NR.</small>
+        <small>Từ nền tảng OFDM sang quá trình UE tìm và đồng bộ với cell 5G NR.</small>
       </a>
     </nav>
   </article>
