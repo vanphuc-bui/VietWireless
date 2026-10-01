@@ -45,7 +45,7 @@ export default function NumerologyExplorer() {
         <div className="metric-card">
           <small className="metric-card-label">ĐỘ RỘNG 1 RB</small>
           <strong className="metric-card-value"><MathExpr tex={rbKhz >= 1000 ? `${(rbKhz / 1000).toFixed(2)}\\,\\mathrm{MHz}` : `${rbKhz}\\,\\mathrm{kHz}`} /></strong>
-          <span className="metric-card-formula"><MathExpr tex="12\\Delta f" /></span>
+          <span className="metric-card-formula"><MathExpr tex={String.raw`12\Delta f`} /></span>
         </div>
         <div className="metric-card">
           <small className="metric-card-label">1 kHz / SCS</small>
