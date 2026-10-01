@@ -253,7 +253,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </section>
 
-    <section class="concept-block" id="extended-cp">
+    <section class="concept-block" data-lesson-role="boundary" id="extended-cp">
       <p class="concept-kicker">08 · EXTENDED CP LÀ MỘT TRƯỜNG HỢP RIÊNG</p>
       <h2>Trong Release 18 table hiện tại, extended CP được định nghĩa cho <MathExpr tex={String.raw`\mu=2`} /> và có 12 OFDM symbols per slot.</h2>
 
@@ -298,14 +298,14 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap" data-lesson-role="recap">
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Numerology:</strong> scale OFDM lattice bằng <MathExpr tex={String.raw`\mu`} />.</li>
-        <li><strong>SCS:</strong> <MathExpr tex={String.raw`\Delta f=15\cdot2^{\mu}\,\mathrm{kHz}`} />.</li>
+        <li><strong>Grid scale:</strong> tăng <MathExpr tex={String.raw`\mu`} /> làm ô rộng hơn theo tần số và ngắn hơn theo thời gian.</li>
+        <li><strong>SCS:</strong> <MathExpr tex={String.raw`\Delta f=15\cdot2^{\mu}\,\mathrm{kHz`} />; một RB rộng <MathExpr tex={String.raw`180\cdot2^{\mu}\,\mathrm{kHz`} />.</li>
         <li><strong>Useful duration:</strong> <MathExpr tex={String.raw`T_u=1/\Delta f`} />, chưa gồm CP.</li>
-        <li><strong>Frame:</strong> <MathExpr tex={String.raw`10\,\mathrm{ms}`} /> và gồm 10 subframes <MathExpr tex={String.raw`1\,\mathrm{ms}`} />.</li>
-        <li><strong>Normal CP:</strong> 14 OFDM symbols/slot và <MathExpr tex={String.raw`2^{\mu}`} /> slots/subframe.</li>
-        <li><strong>Tradeoff:</strong> larger SCS giảm relative CFO nhưng rút ngắn useful symbol so với absolute delay spread.</li>
-        <li><strong>Extended CP:</strong> current Release 18 table liệt kê cho <MathExpr tex={String.raw`\mu=2`} /> với 12 symbols/slot.</li>
-        <li><strong>Slot:</strong> là time structure, không phải bắt buộc mọi allocation phải dùng đủ cả slot.</li>
+        <li><strong>Frame/subframe:</strong> vẫn là <MathExpr tex={String.raw`10\,\mathrm{ms`} /> và <MathExpr tex={String.raw`1\,\mathrm{ms`} />; numerology chỉ chia phần bên trong mịn hơn.</li>
+        <li><strong>Normal CP:</strong> 14 OFDM symbols/slot, <MathExpr tex={String.raw`2^{\mu}`} /> slots/subframe và <MathExpr tex={String.raw`T_{\mathrm{slot}}=1\,\mathrm{ms}/2^{\mu}`} />.</li>
+        <li><strong>Tradeoff:</strong> larger SCS giảm normalized frequency error <MathExpr tex={String.raw`\epsilon_f`} /> nhưng tăng normalized delay <MathExpr tex={String.raw`\rho_\tau`} />.</li>
+        <li><strong>Extended CP:</strong> Release 18 định nghĩa trường hợp <MathExpr tex={String.raw`\mu=2`} /> với 12 symbols/slot.</li>
+        <li><strong>Slot:</strong> là đơn vị cấu trúc time-grid, không bắt buộc mọi allocation phải chiếm trọn slot.</li>
       </ol>
     </section>
 
