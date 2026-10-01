@@ -17,43 +17,43 @@ export default function CyclicPrefixExplorer() {
     <div className="cp-lab">
       <div className="cp-controls">
         <label>
-          <span>CP length <strong><MathExpr tex={String.raw`N_{\mathrm{CP}}=${cpLength}`} /></strong></span>
+          <span>Độ dài CP <strong className="metric-card-value"><MathExpr tex={String.raw`N_{\mathrm{CP}}=${cpLength}`} /></strong></span>
           <input type="range" min="0" max="8" step="1" value={cpLength}
             onChange={(e) => setCpLength(Number(e.target.value))} />
         </label>
         <label>
-          <span>Maximum delay <strong><MathExpr tex={String.raw`D=${channelDelay}`} /></strong></span>
+          <span>Delay cực đại <strong className="metric-card-value"><MathExpr tex={String.raw`D=${channelDelay}`} /></strong></span>
           <input type="range" min="0" max="10" step="1" value={channelDelay}
             onChange={(e) => setChannelDelay(Number(e.target.value))} />
         </label>
       </div>
 
-      <div className="cp-readout">
-        <div>
-          <small>USEFUL BLOCK</small>
-          <strong><MathExpr tex="N=16" /></strong>
-          <span>samples đưa vào FFT</span>
+      <div className="cp-readout metric-card-grid">
+        <div className="metric-card">
+          <small className="metric-card-label">BLOCK HỮU ÍCH</small>
+          <strong className="metric-card-value"><MathExpr tex="N=16" /></strong>
+          <span className="metric-card-formula">sample đưa vào FFT</span>
         </div>
-        <div>
-          <small>CYCLIC PREFIX</small>
-          <strong><MathExpr tex={String.raw`N_{\mathrm{CP}}=${cpLength}`} /></strong>
-          <span>copy từ cuối current symbol</span>
+        <div className="metric-card">
+          <small className="metric-card-label">CYCLIC PREFIX</small>
+          <strong className="metric-card-value"><MathExpr tex={String.raw`N_{\mathrm{CP}}=${cpLength}`} /></strong>
+          <span className="metric-card-formula">copy từ cuối symbol hiện tại</span>
         </div>
-        <div>
-          <small>MAX DELAY</small>
-          <strong><MathExpr tex={String.raw`D=${channelDelay}`} /></strong>
-          <span>simplified channel memory</span>
+        <div className="metric-card">
+          <small className="metric-card-label">DELAY CỰC ĐẠI</small>
+          <strong className="metric-card-value"><MathExpr tex={String.raw`D=${channelDelay}`} /></strong>
+          <span className="metric-card-formula">channel memory minh họa</span>
         </div>
-        <div className={sufficient ? 'ok' : 'warning'}>
-          <small>RESIDUAL ISI</small>
-          <strong><MathExpr tex={String.raw`\max(0,D-N_{\mathrm{CP}})=${residual}`} /></strong>
-          <span>{sufficient ? 'không còn trong useful window' : 'samples vẫn có thể bị nhiễu'}</span>
+        <div className={`metric-card ${sufficient ? 'ok' : 'warning'}`}>
+          <small className="metric-card-label">ISI CÒN LẠI</small>
+          <strong className="metric-card-value"><MathExpr tex={String.raw`\max(0,D-N_{\mathrm{CP}})=${residual}`} /></strong>
+          <span className="metric-card-formula">{sufficient ? 'không còn trong useful window' : 'sample vẫn có thể bị nhiễu'}</span>
         </div>
       </div>
 
       <div className="cp-visual">
         <div className="visual-caption">
-          <span>1 · TRANSMITTED SYMBOL</span>
+          <span>1 · SYMBOL ĐƯỢC PHÁT</span>
           <strong>CP là copy của tail, không phải zero guard</strong>
         </div>
 
@@ -67,30 +67,30 @@ export default function CyclicPrefixExplorer() {
         </div>
 
         <div className="cp-copy-note">
-          <span>CP copy</span>
-          <b>← last <MathExpr tex={String.raw`${cpLength}`} /> samples of useful symbol</b>
+          <span>CP được copy</span>
+          <b>← <MathExpr tex={String.raw`${cpLength}`} /> sample cuối của useful symbol</b>
         </div>
 
         <div className="cp-lab-comparison">
           <div className="visual-caption">
-            <span>2 · MULTIPATH OVERLAP</span>
+            <span>2 · MULTIPATH CHỒNG LÊN BOUNDARY</span>
             <strong>Delay ăn vào đâu?</strong>
           </div>
 
           <div className="cp-lab-track">
             <small>không CP</small>
-            <div className="cp-lab-prev">previous symbol</div>
-            <div className="cp-lab-useful">useful current symbol</div>
+            <div className="cp-lab-prev">symbol trước</div>
+            <div className="cp-lab-useful">useful symbol hiện tại</div>
             <i className="cp-lab-echo bad" style={{ width: `${delayWidth}%` }}>
-              delayed tail
+              đuôi đến muộn
             </i>
           </div>
 
           <div className="cp-lab-track with-cp">
             <small>có CP</small>
-            <div className="cp-lab-prev">previous symbol</div>
+            <div className="cp-lab-prev">symbol trước</div>
             <div className="cp-lab-prefix" style={{ flexBasis: `${Math.max(7, cpLength * 2.2)}%` }}>CP</div>
-            <div className="cp-lab-useful">useful FFT window</div>
+            <div className="cp-lab-useful">cửa sổ FFT hữu ích</div>
             <i className="cp-lab-echo protected" style={{ width: `${protectedWidth}%` }}>
               echo trong CP
             </i>
@@ -103,32 +103,79 @@ export default function CyclicPrefixExplorer() {
         </div>
 
         <div className="cp-channel-memory">
-          <span>Channel needs samples as far back as</span>
-          <strong><MathExpr tex={String.raw`D=${channelDelay}`} /> samples</strong>
+          <span>Channel cần nhìn lùi tối đa</span>
+          <strong><MathExpr tex={String.raw`D=${channelDelay}`} /> sample</strong>
           <i style={{ width: `${Math.min(100, channelDelay / 10 * 100)}%` }}></i>
         </div>
 
         <div className={`cp-fft-window ${sufficient ? 'safe' : 'unsafe'}`}>
           <strong>
-            Receiver removes CP → FFT uses <MathExpr tex="N=16" /> useful samples
+            Receiver bỏ CP → FFT dùng <MathExpr tex="N=16" /> sample hữu ích
           </strong>
           <p>
             {sufficient
-              ? 'CP cover toàn bộ maximum delay trong model này. Delayed tail rơi vào prefix và bị bỏ trước FFT.'
-              : `Channel dài hơn CP ${residual} sample(s). Phần vượt quá prefix vẫn tràn vào useful FFT window.`}
+              ? 'CP cover toàn bộ channel memory trong mô hình này. Phần overlap nằm trong prefix và bị bỏ trước FFT.'
+              : `Channel dài hơn CP ${residual} sample. Phần vượt quá prefix vẫn tràn vào cửa sổ FFT hữu ích.`}
           </p>
         </div>
 
         <div className="cp-lab-rule">
-          <small>SIMPLIFIED CONDITION</small>
+          <small>ĐIỀU KIỆN MINH HỌA</small>
           <strong><MathExpr tex={String.raw`N_{\mathrm{CP}}\ge D`} /></strong>
           <span>
             {sufficient
               ? 'Đang thỏa: useful block có thể giữ circular-convolution structure.'
-              : 'Chưa thỏa: boundary vẫn chứa contribution từ previous symbol.'}
+              : 'Chưa thỏa: boundary vẫn chứa contribution từ symbol trước.'}
           </span>
         </div>
       </div>
+      <style>{`
+        .cp-lab .cp-readout.metric-card-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .cp-lab .cp-readout .metric-card {
+          min-width: 0;
+          min-height: 0;
+        }
+
+        .cp-lab .cp-readout .metric-card-value,
+        .cp-lab .cp-readout .metric-card-value .katex,
+        .cp-lab .cp-readout .metric-card-formula {
+          font-size: var(--lesson-box-content-size);
+        }
+
+        .cp-lab .cp-readout .metric-card-formula,
+        .cp-lab .cp-fft-window p,
+        .cp-lab .cp-lab-rule > span {
+          line-height: 1.55;
+        }
+
+        .cp-lab .cp-fft-window p,
+        .cp-lab .cp-lab-rule > span,
+        .cp-lab .cp-copy-note,
+        .cp-lab .cp-channel-memory {
+          font-size: var(--lesson-box-content-size);
+        }
+
+        .cp-lab .cp-lab-prev,
+        .cp-lab .cp-lab-prefix,
+        .cp-lab .cp-lab-useful {
+          font-size: 0.9rem;
+        }
+
+        @media (max-width: 820px) {
+          .cp-lab .cp-readout.metric-card-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 520px) {
+          .cp-lab .cp-readout.metric-card-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }
