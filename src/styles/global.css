@@ -20710,7 +20710,7 @@ body {
   font-size: var(--lesson-meta-size);
 }
 
-.channel-estimation-legend span {
+.channel-estimation-legend > span {
   display: flex;
   align-items: center;
   gap: 7px;
