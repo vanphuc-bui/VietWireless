@@ -60,7 +60,7 @@ import MathExpr from '../../components/Math.astro';
         <article class="math-card">
           <span class="card-label"><MathExpr tex={String.raw`\mu=3`} /></span>
           <div class="math-card-formula"><MathExpr tex={String.raw`\Delta f=120\,\mathrm{kHz}`} /></div>
-          <p>Một RB rộng <MathExpr tex={String.raw`1.44\,\mathrm{MHz}`} /> — rộng gấp 8 lần.</p>
+          <p>Một RB rộng <MathExpr tex={String.raw`1.44\,\mathrm{MHz}`} />, rộng gấp 8 lần.</p>
         </article>
       </div>
 
@@ -264,7 +264,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Điều cần giữ trong mental model:
-        CP type là một phần của OFDM time structure.
+        CP type là một phần của OFDM time structure.{" "}
         <strong>Numerology không chỉ là một con số SCS</strong>; khi áp dụng vào waveform thực tế còn phải xét CP option, frequency range, band/channel rules và UE capability.
         Không nên mặc định mọi numerology luôn có cả normal lẫn extended CP.
       </p>
