@@ -193,8 +193,8 @@ export default function ChannelEstimationExplorer() {
           <span className="metric-card-formula">pilot noise + interpolation error</span>
         </div>
         <div className="metric-card">
-          <small className="metric-card-label">SUBCARRIER k=5</small>
-          <strong className="metric-card-value"><MathExpr tex="|\widehat H[5]|" /> = {cAbs(estInspect).toFixed(3)}</strong>
+          <small className="metric-card-label">SUBCARRIER</small>
+          <strong className="metric-card-value"><MathExpr tex={String.raw`|\widehat H[5]|`} /> = {cAbs(estInspect).toFixed(3)}</strong>
           <span className="metric-card-formula">true magnitude {cAbs(trueInspect).toFixed(3)}</span>
         </div>
       </div>
@@ -248,19 +248,19 @@ export default function ChannelEstimationExplorer() {
 
         <div className="channel-estimation-legend">
           <span><i className="true"></i>channel thật <MathExpr tex="|H[k]|" /></span>
-          <span><i className="estimate"></i>estimate <MathExpr tex="|\widehat H[k]|" /></span>
+          <span><i className="estimate"></i>estimate <MathExpr tex={String.raw`|\widehat H[k]|`} /></span>
           <span><i className="pilot"></i>DM-RS sample</span>
         </div>
       </div>
 
       <div className="channel-estimation-inspect">
         <div>
-          <small>TRUE AT k=5</small>
+          <small>TRUE CHANNEL</small>
           <strong><MathExpr tex={'H[5]=' + formatComplex(trueInspect)} /></strong>
         </div>
         <b>→ estimate từ pilots →</b>
         <div>
-          <small>ESTIMATED AT k=5</small>
+          <small>ESTIMATED CHANNEL</small>
           <strong><MathExpr tex={'\\widehat H[5]=' + formatComplex(estInspect)} /></strong>
         </div>
       </div>
