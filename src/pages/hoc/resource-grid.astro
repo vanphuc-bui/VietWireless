@@ -87,7 +87,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">02 · RESOURCE ELEMENT LÀ ĐƠN VỊ NHỎ NHẤT TRÊN GRID</p>
       <h2>Một RE là giao điểm giữa một subcarrier và một OFDM-symbol position — tức một “địa chỉ” duy nhất trên grid.</h2>
 
-      <div class="grid-coordinate-story">
+      <div class="grid-coordinate-story" data-lesson-visual>
         <div><small>FREQUENCY INDEX</small><strong><MathExpr tex="k" /></strong><span>subcarrier nào?</span></div>
         <b>+</b>
         <div><small>TIME INDEX</small><strong><MathExpr tex={String.raw`\ell`} /></strong><span>OFDM symbol nào?</span></div>
@@ -140,6 +140,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>Chọn một RE để xem giá trị phức, bật bản đồ signal, rồi chuyển sang CRB/PRB để thấy ba lớp thông tin khác nhau trên cùng một grid.</h2>
       <p>
         Demo chỉ dùng 24 subcarrier và 14 OFDM-symbol positions để hình đủ lớn mà vẫn đọc được.
+        Mặc định lab chọn đúng RE <MathExpr tex={String.raw`(k,\ell)=(7,3)`} /> của ví dụ phía trên để bạn thấy cùng một tọa độ trên grid và constellation.
         Tab đầu nối một ô với constellation value, tab signal map minh họa data/reference/control cùng chia grid, còn CRB/PRB tập trung vào cách đánh số và reference point.
       </p>
       <ResourceGridExplorer client:load />
