@@ -20,24 +20,25 @@ import MathExpr from '../../components/Math.astro';
     </header>
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context">
-      <p class="concept-kicker">TỪ <MathExpr tex="X[k]" /> CỦA MỘT OFDM SYMBOL TỚI GRID <MathExpr tex={String.raw`a_{k,\ell}`} /></p>
+      <p class="concept-kicker">TẠI SAO OFDM CẦN THÊM MỘT “BẢN ĐỒ” SAU MODULATION?</p>
       <p class="map-intro">
-        Ở Bài 15, ta dùng <MathExpr tex="X[k]" /> để nhìn frequency-domain vector của một OFDM symbol.
-        Khi transmission kéo dài qua nhiều OFDM symbols, ta cần thêm time index <MathExpr tex={String.raw`\ell`} />.
-        Trong bài này, <MathExpr tex={String.raw`(k,\ell)`} /> là coordinate trên grid và <MathExpr tex={String.raw`a_{k,\ell}`} /> là complex value nằm tại coordinate đó.
+        Bài 15 chỉ nhìn một OFDM symbol tại một thời điểm: một vector <MathExpr tex="X[k]" /> theo tần số.
+        Nhưng transmission thực tế kéo dài qua nhiều OFDM symbols và nhiều loại signal cùng chia sẻ tài nguyên.
+        Ta cần trả lời đồng thời hai câu hỏi: <strong>giá trị này nằm trên subcarrier nào?</strong> và <strong>nó được phát ở OFDM symbol nào?</strong>
+        Resource grid chính là câu trả lời.
       </p>
 
       <div class="system-position technical-card concept-flow-card" data-lesson-role="problem">
-        <span>FREQUENCY × TIME</span>
-        <div class="system-position-flow">
-          <span>subcarrier <MathExpr tex="k" /></span><b>×</b>
-          <span>OFDM-symbol position <MathExpr tex={String.raw`\ell`} /></span><b>→</b>
-          <strong>coordinate <MathExpr tex={String.raw`(k,\ell)`} /></strong><b>→</b>
-          <span>RE value <MathExpr tex={String.raw`a_{k,\ell}`} /></span>
+        <span>TỪ MODULATION SYMBOL TỚI WAVEFORM</span>
+        <div class="system-position-flow" aria-label="Luồng từ modulation symbols tới resource grid và OFDM waveform">
+          <span>complex symbols</span><b>→ resource mapping →</b>
+          <strong>grid <MathExpr tex={String.raw`a_{k,\ell}`} /></strong><b>→ lấy một cột <MathExpr tex={String.raw`\ell`} /> →</b>
+          <span>IFFT bins</span><b>→ IFFT →</b>
+          <strong>một OFDM symbol</strong>
         </div>
         <p>
-          Grid không phải waveform.
-          Nó là frequency-domain organization trước khi từng OFDM-symbol column được map vào IFFT bins.
+          Grid không phải waveform và cũng không phải một ảnh spectrum.
+          Nó là <strong>cấu trúc dữ liệu miền tần số–thời gian</strong>; mỗi cột cung cấp các hệ số tần số cho một lần IFFT.
         </p>
       </div>
     </section>
@@ -55,13 +56,13 @@ import MathExpr from '../../components/Math.astro';
         <b>→</b>
         <div>
           <small>RESOURCE MAPPING</small>
-          <strong><MathExpr tex={String.raw`(k,ell)`} /></strong>
+          <strong><MathExpr tex={String.raw`(k,\ell)`} /></strong>
           <span>chọn subcarrier và OFDM-symbol position</span>
         </div>
         <b>→</b>
         <div>
           <small>RESOURCE GRID</small>
-          <strong><MathExpr tex={String.raw`a_{k,ell}`} /></strong>
+          <strong><MathExpr tex={String.raw`a_{k,\ell}`} /></strong>
           <span>giá trị phức tại đúng tọa độ đó</span>
         </div>
       </div>
@@ -108,28 +109,28 @@ import MathExpr from '../../components/Math.astro';
       <div class="math-card-grid" data-lesson-role="example">
         <article class="math-card">
           <span class="card-label">VÍ DỤ MINH HỌA · TỌA ĐỘ</span>
-          <div class="math-card-formula"><MathExpr tex={String.raw`(k,ell)=(7,3)`} /></div>
+          <div class="math-card-formula"><MathExpr tex={String.raw`(k,\ell)=(7,3)`} /></div>
           <p>Hàng subcarrier <MathExpr tex="7" />, cột OFDM symbol <MathExpr tex="3" />.</p>
         </article>
         <article class="math-card">
           <span class="card-label">VÍ DỤ MINH HỌA · GIÁ TRỊ</span>
-          <div class="math-card-formula"><MathExpr tex={String.raw`a_{7,3}=rac{1+j}{sqrt{10}}`} /></div>
+          <div class="math-card-formula"><MathExpr tex={String.raw`a_{7,3}=\frac{1+j}{\sqrt{10}}`} /></div>
           <p>Một điểm 16-QAM chuẩn hóa có thể được đặt tại RE này nếu mapping chọn nó cho data.</p>
         </article>
       </div>
 
       <p>
-        Khi giữ <MathExpr tex={String.raw`ell=3`} /> cố định, <MathExpr tex={String.raw`a_{7,3}`} /> chỉ là <strong>một</strong> trong nhiều hệ số miền tần số
+        Khi giữ <MathExpr tex={String.raw`\ell=3`} /> cố định, <MathExpr tex={String.raw`a_{7,3}`} /> chỉ là <strong>một</strong> trong nhiều hệ số miền tần số
         sẽ cùng được đưa vào IFFT để tạo OFDM symbol thứ <MathExpr tex="3" />.
-        Khi chuyển sang <MathExpr tex={String.raw`ell=4`} />, ta có một tập hệ số mới và chạy IFFT cho OFDM symbol tiếp theo.
+        Khi chuyển sang <MathExpr tex={String.raw`\ell=4`} />, ta có một tập hệ số mới và chạy IFFT cho OFDM symbol tiếp theo.
       </p>
 
       <aside class="precision-note">
         <strong>Ký hiệu trong bài đã được rút gọn để dễ học</strong>
         <p>
           Trong 3GPP, resource grid còn gắn với antenna port, numerology và hướng truyền.
-          Ta viết gọn <MathExpr tex={String.raw`a_{k,ell}`} /> để tập trung vào geometry; khi cần đầy đủ có thể nghĩ tới dạng
-          <MathExpr tex={String.raw`a_{k,ell}^{(p,mu)}`} /> cùng context DL/UL/SL.
+          Ta viết gọn <MathExpr tex={String.raw`a_{k,\ell}`} /> để tập trung vào geometry; khi cần đầy đủ có thể nghĩ tới dạng
+          <MathExpr tex={String.raw`a_{k,\ell}^{(p,\mu)}`} /> cùng context DL/UL/SL.
         </p>
       </aside>
     </section>
