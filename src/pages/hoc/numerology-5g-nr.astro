@@ -14,31 +14,30 @@ import MathExpr from '../../components/Math.astro';
       <p class="eyebrow">GHI CHÉP 18 · WIRELESS LINK</p>
       <h1>Numerology trong 5G NR</h1>
       <p class="lesson-deck">
-        OFDM chỉ yêu cầu một relation giữa subcarrier spacing và useful symbol duration; nó không bắt buộc mọi deployment phải dùng cùng một spacing.{" "}
-        <strong>5G NR đưa relation đó thành một họ numerology, nơi <MathExpr tex={String.raw`\mu`} /> scale SCS, OFDM time scale và số slots trong mỗi <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> subframe.</strong>
+        Bài 17 cho ta resource grid; numerology quyết định <strong>grid đó “co giãn” như thế nào trên hai trục tần số và thời gian</strong>.{" "}
+        <strong>Khi <MathExpr tex={String.raw`\mu`} /> tăng, subcarrier spacing rộng hơn, useful OFDM symbol ngắn hơn và nhiều slot hơn được đặt vào cùng một subframe <MathExpr tex={String.raw`1\,\mathrm{ms}`} />.</strong>
       </p>
     </header>
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">TẠI SAO 5G KHÔNG CHỈ DÙNG <MathExpr tex={String.raw`15\,\mathrm{kHz}`} />?</p>
       <p class="map-intro">
-        Carrier frequency, expected Doppler, delay spread, bandwidth và latency target khác nhau giữa use cases.
-        Một OFDM time-frequency lattice duy nhất không phải lúc nào cũng là tradeoff tốt.
-        NR vì vậy cho phép scale subcarrier spacing theo powers of two.
+        Một grid dùng ô rất hẹp theo tần số sẽ có symbol dài theo thời gian; một grid dùng ô rộng hơn theo tần số sẽ có symbol ngắn hơn.
+        Hai lựa chọn này phản ứng khác nhau trước Doppler/CFO, multipath delay và yêu cầu latency.
+        5G NR vì vậy không khóa OFDM vào một subcarrier spacing duy nhất mà cho phép scale toàn bộ lattice theo <MathExpr tex={String.raw`\mu`} />.
       </p>
 
       <div class="system-position technical-card concept-flow-card" data-lesson-role="problem">
-        <span>NUMEROLOGY <MathExpr tex={String.raw`\mu`} /></span>
-        <div class="system-position-flow">
-          <strong><MathExpr tex={String.raw`\mu`} /></strong><b>→</b>
-          <span><MathExpr tex={String.raw`\Delta f = 15\cdot 2^{\mu}\,\mathrm{kHz}`} /></span><b>→</b>
-          <span><MathExpr tex={String.raw`T_u=1/\Delta f`} /></span><b>→</b>
-          <span>OFDM symbol scale</span><b>→</b>
-          <span>slots / <MathExpr tex={String.raw`1\,\mathrm{ms}`} /></span>
+        <span>MỖI KHI <MathExpr tex={String.raw`\mu`} /> TĂNG 1</span>
+        <div class="system-position-flow" aria-label="Numerology scale subcarrier spacing và time structure">
+          <strong><MathExpr tex={String.raw`\Delta f\times2`} /></strong><b>→</b>
+          <span><MathExpr tex={String.raw`T_u/2`} /></span><b>→</b>
+          <span><MathExpr tex={String.raw`T_{\mathrm{slot}}/2`} /></span><b>→</b>
+          <strong>slots/subframe ×2</strong>
         </div>
         <p>
-          Frame và subframe duration không co lại theo <MathExpr tex={String.raw`\mu`} />.
-          Phần nằm bên trong <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> subframe mới được chia thành nhiều slots hơn.
+          <MathExpr tex={String.raw`10\,\mathrm{ms}`} /> radio frame và <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> subframe vẫn giữ nguyên.
+          Numerology thay <strong>độ phân giải bên trong</strong> hai khoảng thời gian cố định đó.
         </p>
       </div>
     </section>
@@ -48,6 +47,22 @@ import MathExpr from '../../components/Math.astro';
       <h2>Reference <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> được nhân đôi mỗi khi <MathExpr tex={String.raw`\mu`} /> tăng một đơn vị.</h2>
 
       <MathExpr tex={String.raw`\Delta f = 15\cdot 2^{\mu}\,\mathrm{kHz}`} display />
+
+      <p>Vì một RB luôn có 12 subcarrier, numerology đồng thời làm thay đổi độ rộng tần số của một RB:</p>
+      <MathExpr tex={String.raw`B_{\mathrm{RB}}=12\Delta f=180\cdot2^{\mu}\,\mathrm{kHz}`} display />
+
+      <div class="math-card-grid" data-lesson-visual>
+        <article class="math-card">
+          <span class="card-label"><MathExpr tex={String.raw`\mu=0`} /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`\Delta f=15\,\mathrm{kHz}`} /></div>
+          <p>Một RB rộng <MathExpr tex={String.raw`180\,\mathrm{kHz}`} />.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label"><MathExpr tex={String.raw`\mu=3`} /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`\Delta f=120\,\mathrm{kHz}`} /></div>
+          <p>Một RB rộng <MathExpr tex={String.raw`1.44\,\mathrm{MHz}`} /> — rộng gấp 8 lần.</p>
+        </article>
+      </div>
 
       <div class="math-data-table-wrap">
         <table class="math-data-table">
@@ -76,7 +91,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">02 · SCS TĂNG THÌ USEFUL SYMBOL NGẮN LẠI</p>
       <h2>OFDM orthogonality relation vẫn là <MathExpr tex={String.raw`T_u=1/\Delta f`} />.</h2>
 
-      <MathExpr tex={String.raw`T_u = \frac{1}{\Delta f}`} display />
+      <MathExpr tex={String.raw`T_u = \frac{1}{\Delta f}=\frac{66.67}{2^{\mu}}\,\mu\mathrm{s}`} display />
 
       <div class="math-data-table-wrap">
         <table class="math-data-table">
@@ -96,9 +111,9 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Đây là useful interval, chưa cộng CP.
-        Total OFDM-symbol interval dài hơn <MathExpr tex="T_u" />.
-        Khi <MathExpr tex={String.raw`\mu`} /> tăng, cả useful duration và CP time scale đều ngắn lại theo numerology structure.
+        Đây là phần hữu ích, chưa cộng CP.
+        Cùng một bước tăng <MathExpr tex={String.raw`\mu\to\mu+1`} /> vừa làm subcarrier spacing gấp đôi vừa làm useful duration giảm một nửa.
+        CP cũng co theo time scale của numerology, nhưng normal-CP duration không hoàn toàn giống nhau ở mọi symbol position.
       </p>
     </section>
 
@@ -114,13 +129,13 @@ import MathExpr from '../../components/Math.astro';
         <div><small>SLOTS</small><strong><MathExpr tex={String.raw`2^{\mu}`} /></strong><span>normal CP, per subframe</span></div>
       </div>
 
+      <MathExpr tex={String.raw`N_{\mathrm{slot/subframe}}=2^{\mu},\qquad T_{\mathrm{slot}}=\frac{1\,\mathrm{ms}}{2^{\mu}}`} display />
+
       <p>
-        Với normal CP:
-        <MathExpr tex={String.raw`\mu=0`} /> có 1 slot trong <MathExpr tex={String.raw`1\,\mathrm{ms}`} />,
-        <MathExpr tex={String.raw`\mu=1`} /> có 2 slots,
-        <MathExpr tex={String.raw`\mu=2`} /> có 4,
-        <MathExpr tex={String.raw`\mu=3`} /> có 8.
-        Slot duration vì vậy lần lượt là <MathExpr tex={String.raw`1,\,0.5,\,0.25,\,0.125\,\mathrm{ms}`} />.
+        Vì vậy normal CP với <MathExpr tex={String.raw`\mu=0,1,2,3`} /> lần lượt có
+        <MathExpr tex={String.raw`1,2,4,8`} /> slot trong mỗi subframe,
+        còn slot duration lần lượt là <MathExpr tex={String.raw`1,\,0.5,\,0.25,\,0.125\,\mathrm{ms}`} />.
+        <strong>Subframe không ngắn đi; nó chỉ được chia mịn hơn.</strong>
       </p>
     </section>
 
