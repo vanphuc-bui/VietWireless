@@ -137,20 +137,23 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="grid-lab">
       <p class="concept-kicker">03 · INTERACTIVE GRID</p>
-      <h2>Explore một RE, bật signal map, rồi chuyển sang CRB/PRB để thấy cùng một grid nhưng ba câu hỏi hoàn toàn khác nhau.</h2>
+      <h2>Chọn một RE để xem giá trị phức, bật bản đồ signal, rồi chuyển sang CRB/PRB để thấy ba lớp thông tin khác nhau trên cùng một grid.</h2>
       <p>
-        Demo chỉ dùng 24 subcarriers và 14 OFDM-symbol positions để geometry đủ lớn mà vẫn đọc được.
-        Tab <strong>Explore RE</strong> nối một ô với constellation value, <strong>Signal map</strong> minh họa data/reference/control cùng chia grid, còn <strong>CRB / PRB</strong> tập trung vào indexing reference.
+        Demo chỉ dùng 24 subcarrier và 14 OFDM-symbol positions để hình đủ lớn mà vẫn đọc được.
+        Tab đầu nối một ô với constellation value, tab signal map minh họa data/reference/control cùng chia grid, còn CRB/PRB tập trung vào cách đánh số và reference point.
       </p>
       <ResourceGridExplorer client:load />
     </section>
 
     <section class="concept-block" id="rb">
       <p class="concept-kicker">04 · RESOURCE BLOCK CHỈ ĐƯỢC ĐỊNH NGHĨA THEO FREQUENCY</p>
-      <h2>Trong NR, một resource block là 12 consecutive subcarriers.</h2>
+      <h2>Trong NR, một resource block là 12 subcarrier liên tiếp trong miền tần số.</h2>
 
       <MathExpr tex={String.raw`N_{\mathrm{sc}}^{\mathrm{RB}} = 12`} display />
-      <p class="math-caption">Một resource block gồm 12 consecutive subcarriers trong frequency domain.</p>
+      <p class="math-caption">Một resource block gồm 12 subcarrier liên tiếp trong miền tần số.</p>
+
+      <p>Nếu subcarrier spacing là <MathExpr tex={String.raw`\Delta f`} />, độ rộng tần số tương ứng của một RB là:</p>
+      <MathExpr tex={String.raw`B_{\mathrm{RB}}=12\,\Delta f`} display />
 
       <div class="rb-frequency-definition" data-lesson-visual>
         <div class="rb-frequency-axis">frequency ↑</div>
@@ -173,11 +176,10 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Bandwidth tương ứng của 12 subcarriers phụ thuộc numerology:
-        với <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> SCS là <MathExpr tex={String.raw`180\,\mathrm{kHz}`} />,
-        <MathExpr tex={String.raw`30\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`360\,\mathrm{kHz}`} />,
-        <MathExpr tex={String.raw`60\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`720\,\mathrm{kHz}`} />,
-        trước khi nói tới guard bands hoặc occupied-carrier edges.
+        Vì vậy với <MathExpr tex={String.raw`\Delta f=15\,\mathrm{kHz}`} />, một RB rộng <MathExpr tex={String.raw`180\,\mathrm{kHz}`} />;
+        với <MathExpr tex={String.raw`30\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`360\,\mathrm{kHz}`} />;
+        và với <MathExpr tex={String.raw`60\,\mathrm{kHz}`} /> là <MathExpr tex={String.raw`720\,\mathrm{kHz}`} />.
+        Đây là độ rộng của 12 subcarrier, chưa phải toàn occupied bandwidth của carrier.
       </p>
     </section>
 
@@ -186,9 +188,15 @@ import MathExpr from '../../components/Math.astro';
       <h2>Vì scheduler và mapping thường được nhìn trong một slot, còn normal CP có 14 OFDM symbols per slot.</h2>
 
       <p>
-        Nếu lấy một RB frequency span 12 subcarriers và đặt cạnh một normal-CP slot gồm 14 symbols,
-        rectangle đó có 12×14 = 168 RE positions.
-        Nhưng 168 không có nghĩa tất cả 168 đều mang user data.
+        Nếu lấy một RB frequency span 12 subcarrier và nhìn nó trong một slot normal CP gồm 14 OFDM symbols, ta có:
+      </p>
+
+      <MathExpr tex={String.raw`N_{\mathrm{RE,pos}}=12\times14=168`} display />
+      <p class="math-caption">Đây là 168 <strong>vị trí RE</strong> trong rectangle 12 × 14, không phải 168 data symbols chắc chắn khả dụng.</p>
+
+      <p>
+        Với extended CP, số OFDM symbols trong slot có thể khác; trong NR, extended CP tại <MathExpr tex={String.raw`\mu=2`} /> dùng 12 symbols/slot.
+        Vì vậy “RB = 12 × 14” là cách vẽ tiện cho normal CP, <strong>không phải định nghĩa của RB</strong>.
       </p>
 
       <p>
@@ -219,20 +227,30 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Resource grid vì vậy là một cách nhìn rất mạnh khi debug PHY:
-        chỉ cần biết RE nào được kỳ vọng là data, DM-RS hay control,
-        ta có thể so received grid với mapping expected từ configuration.
+        Điều quan trọng là <strong>loại của một RE là semantics của mapping, không phải thuộc tính cố định của tọa độ</strong>.
+        Cùng một tọa độ tương đối trong transmission khác có thể được dùng khác tùy physical channel, allocation và configuration.
+      </p>
+
+      <p>
+        Resource grid vì vậy rất mạnh khi debug PHY: từ configuration ta dựng “expected grid”, rồi so với received grid sau FFT.
+        Nếu DM-RS xuất hiện sai cột, data bị dịch 12 subcarrier, hoặc một vùng control bị ghi đè bởi data, lỗi mapping thường lộ ra ngay trên hình grid.
       </p>
     </section>
 
     <section class="concept-block" id="column">
       <p class="concept-kicker">07 · MỘT CỘT THEO TIME SẼ TRỞ THÀNH MỘT OFDM SYMBOL</p>
-      <h2>Giữ <MathExpr tex={String.raw`\ell`} /> cố định, lấy toàn bộ frequency-domain values rồi map chúng vào IFFT bins.</h2>
+      <h2>Giữ <MathExpr tex={String.raw`\ell`} /> cố định, toàn bộ RE trong cột đó tạo thành “frequency snapshot” cho đúng một OFDM symbol.</h2>
+
+      <p>Ta có thể gom một cột thành vector khái niệm:</p>
+      <MathExpr tex={String.raw`\mathbf{a}_{\ell}=[a_{0,\ell},a_{1,\ell},\ldots,a_{K-1,\ell}]^{\mathrm T}`} display />
+      <p>
+        Vector này chưa nhất thiết có cùng indexing với array IFFT trong code. Resource mapping/bin mapping còn phải đặt các giá trị vào đúng positive/negative-frequency bins, DC convention và guard bins của implementation.
+      </p>
 
       <div class="grid-to-ifft-story" data-lesson-visual>
         <div class="grid-column-slice">
           <small>FIX <MathExpr tex={String.raw`\ell`} /></small>
-          <strong>one grid column</strong>
+          <strong>một cột grid</strong>
           <div class="grid-column-cells">
             {Array.from({ length: 12 }, (_, index) => <i class={index === 4 || index === 9 ? 'reference' : 'data'}></i>)}
           </div>
@@ -243,7 +261,7 @@ import MathExpr from '../../components/Math.astro';
 
         <div class="ifft-bin-map">
           <small>IFFT INPUT ARRAY</small>
-          <strong>guards + active bins + DC convention</strong>
+          <strong>guard + active bins + quy ước DC</strong>
           <div class="ifft-bin-strip">
             <i class="guard"></i><i class="guard"></i>
             <i class="active"></i><i class="active"></i><i class="active"></i>
@@ -251,7 +269,7 @@ import MathExpr from '../../components/Math.astro';
             <i class="active"></i><i class="active"></i><i class="active"></i>
             <i class="guard"></i><i class="guard"></i>
           </div>
-          <span>logical grid coordinates must be mapped to implementation FFT-bin indexes</span>
+          <span>tọa độ logical trên grid phải được đổi sang đúng FFT-bin index của implementation</span>
         </div>
 
         <div class="grid-transform-op"><span>IFFT</span><b>→</b></div>
@@ -263,13 +281,14 @@ import MathExpr from '../../components/Math.astro';
             <line x1="8" y1="45" x2="252" y2="45"></line>
             <path d="M8 47 C20 12,30 78,44 43 S70 20,82 51 S106 73,120 38 S145 16,158 48 S184 70,198 38 S228 23,252 48"></path>
           </svg>
-          <span>useful samples for one OFDM symbol, before CP is prepended</span>
+          <span>các sample hữu ích của một OFDM symbol, trước khi chèn CP</span>
         </div>
       </div>
 
       <p>
-        Điểm quan trọng là logical grid index không nhất thiết bằng raw array index trong FFT library.
-        Implementation phải map frequency coordinates vào đúng positive/negative-frequency IFFT bins theo convention của codebase.
+        Điểm quan trọng là grid coordinate <MathExpr tex="k" /> không nhất thiết bằng raw array index trong FFT library.
+        Đây là hai hệ đánh số khác nhau: một bên là resource coordinate của PHY, một bên là memory/bin convention của implementation.
+        Mapping sai ở bước này có thể làm cả waveform “đúng công thức IFFT” nhưng sai vị trí tần số.
       </p>
     </section>
 
@@ -278,8 +297,16 @@ import MathExpr from '../../components/Math.astro';
       <h2>Một Bandwidth Part là một contiguous subset của common resource blocks cho một numerology trên carrier.</h2>
 
       <p>
-        NR cho phép một carrier rộng, nhưng UE có thể được cấu hình hoạt động trên một BWP nhỏ hơn.
-        Điều này ảnh hưởng cách PRB được đánh số và resource allocation được diễn giải.
+        NR cho phép carrier rộng, nhưng UE có thể được cấu hình hoạt động trên một BWP nhỏ hơn.
+        Physical Resource Block được đánh số bên trong BWP, còn Common Resource Block dùng common reference liên quan Point A.
+      </p>
+
+      <p>Quan hệ cơ bản trong một BWP là:</p>
+      <MathExpr tex={String.raw`n_{\mathrm{CRB}}=n_{\mathrm{PRB}}+N_{\mathrm{BWP},i}^{\mathrm{start},\mu}`} display />
+
+      <p>
+        Ví dụ minh họa trong hình dưới chọn BWP bắt đầu tại CRB 42. Khi đó PRB 0 tương ứng CRB 42, PRB 1 tương ứng CRB 43.
+        Con số 42 chỉ để minh họa cách đổi reference, không phải một cấu hình carrier bắt buộc.
       </p>
 
       <div class="bwp-reference-map" data-lesson-visual>
@@ -295,7 +322,7 @@ import MathExpr from '../../components/Math.astro';
           <span>CRB 44</span>
           <span>CRB 45</span>
         </div>
-        <div class="bwp-bracket"><span>BWP</span><strong>PRB numbering restarts inside this span</strong></div>
+        <div class="bwp-bracket"><span>BWP</span><strong>PRB numbering bắt đầu lại trong BWP này</strong></div>
       </div>
 
       <aside class="precision-note">
@@ -310,7 +337,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" data-lesson-role="implementation" id="coordinates">
       <p class="concept-kicker">09 · “<MathExpr tex="k=10" />” CHỈ CÓ Ý NGHĨA KHI BIẾT REFERENCE</p>
-      <h2>Subcarrier index có thể là local index trong hình minh họa, trong resource grid, trong RB hoặc trong FFT array.</h2>
+      <h2>Một con số subcarrier chỉ có nghĩa khi ta biết nó đang được đo từ reference nào: local RB, BWP/common grid hay raw FFT array.</h2>
 
       <p>
         Khi viết code PHY, nên đặt tên biến rõ:
@@ -322,9 +349,18 @@ import MathExpr from '../../components/Math.astro';
       </p>
 
       <p>
-        Bài này dùng <MathExpr tex={String.raw`(k,\ell)`} /> như coordinate khái niệm trên grid.
-        Khi đi sâu vào 3GPP channels, từng clause sẽ định nghĩa reference/indexing cụ thể hơn.
+        Bài này dùng <MathExpr tex={String.raw`(k,\ell)`} /> như tọa độ khái niệm trên grid.
+        Khi đi sâu vào từng physical channel/signal, 3GPP sẽ quy định resource mapping và reference cụ thể hơn.
+        Vì vậy không nên copy một công thức indexing từ PDSCH sang PUCCH, SSB hay PRACH chỉ vì cùng thấy ký hiệu <MathExpr tex="k" />.
       </p>
+
+      <aside class="precision-note" data-lesson-role="boundary">
+        <strong>Resource grid là abstraction PHY, không phải FFT buffer</strong>
+        <p>
+          Một implementation có thể dùng FFT size lớn hơn số occupied subcarrier, có guard bins, DC handling và memory ordering riêng.
+          Grid nói <em>resource nằm ở đâu về mặt PHY</em>; FFT buffer nói <em>giá trị nằm ở đâu trong array của code</em>.
+        </p>
+      </aside>
 
       <div class="grid-index-name-table">
         <div><small>CONCEPTUAL GRID</small><strong><MathExpr tex="k" /></strong><span>frequency coordinate đang dùng để giải thích</span></div>
@@ -338,12 +374,13 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block" data-lesson-role="specification" id="spec">
       <p class="concept-kicker">10 · SPECIFICATION LAYER</p>
       <p>
-        3GPP TS 38.211 định nghĩa resource grid, resource element, resource block và Point A/CRB concepts trong phần general physical resources.
-        Bài này dùng một grid nhỏ để dạy geometry, không thay thế indexing rules của từng physical channel.
+        3GPP TS 38.211 định nghĩa resource grid theo numerology/carrier và antenna port, resource element bằng tọa độ <MathExpr tex={String.raw`(k,\ell)`} />,
+        resource block gồm 12 subcarrier liên tiếp, PRB trong BWP, CRB theo common reference và Bandwidth Part là một tập CRB liên tiếp cho numerology tương ứng.
+        Bài này dùng grid nhỏ để xây mental model; mapping cụ thể của từng physical channel/signal vẫn phải theo clause tương ứng.
       </p>
 
       <p class="spec-source">
-        Nguồn chuẩn: 3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 4.4.2–4.4.4 ·
+        Nguồn chuẩn: 3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 4.3.2 và 4.4.2–4.4.5 ·
         <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">ETSI TS 138 211 V18.8.0 ↗</a>
       </p>
     </section>
@@ -351,14 +388,13 @@ import MathExpr from '../../components/Math.astro';
     <section class="concept-block recap" data-lesson-role="recap">
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
-        <li><strong>Resource element:</strong> một frequency-time position <MathExpr tex={String.raw`(k,\ell)`} /> chứa một complex value khi được sử dụng.</li>
-        <li><strong>Resource block:</strong> 12 consecutive subcarriers, không phải bản thân một 12×14 rectangle.</li>
-        <li><strong>Slot:</strong> cung cấp time span để ta thường vẽ RB resources thành rectangle.</li>
-        <li><strong>Data/reference/control:</strong> cùng chia sẻ grid theo mapping rules khác nhau.</li>
-        <li><strong>One grid column:</strong> map vào IFFT bins rồi biến thành one OFDM symbol.</li>
-        <li><strong>BWP:</strong> giới hạn phần carrier resources mà UE đang hoạt động trên.</li>
-        <li><strong>CRB vs PRB:</strong> khác reference numbering và không nên dùng lẫn.</li>
-        <li><strong>Implementation:</strong> logical grid indexes phải được map cẩn thận sang raw FFT indexes.</li>
+        <li><strong>Resource grid:</strong> là bản đồ time–frequency, không phải waveform hay FFT buffer.</li>
+        <li><strong>Resource element:</strong> một tọa độ <MathExpr tex={String.raw`(k,\ell)`} /> chứa một complex value khi được sử dụng.</li>
+        <li><strong>Resource block:</strong> 12 subcarrier liên tiếp theo tần số; 12×14 chỉ là rectangle thường thấy khi ghép RB với một normal-CP slot.</li>
+        <li><strong>Mapping:</strong> data, reference signal, control và unused positions cùng chia sẻ grid theo cấu hình cụ thể.</li>
+        <li><strong>Một cột grid:</strong> tạo frequency snapshot, được map sang IFFT bins rồi sinh một OFDM symbol.</li>
+        <li><strong>BWP / CRB / PRB:</strong> cùng nói về resource theo tần số nhưng dùng các reference khác nhau.</li>
+        <li><strong>Implementation:</strong> logical grid index phải được đổi cẩn thận sang raw FFT-bin index của code.</li>
       </ol>
     </section>
 
@@ -366,12 +402,12 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/cyclic-prefix/">
         <span>← BÀI TRƯỚC</span>
         <strong>Cyclic Prefix</strong>
-        <small>OFDM time-domain block được bảo vệ trước channel memory thế nào?</small>
+        <small>Block OFDM miền thời gian được bảo vệ trước channel memory như thế nào?</small>
       </a>
       <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/numerology-5g-nr/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Numerology trong 5G NR</strong>
-        <small>SCS và time structure của grid thay đổi với <MathExpr tex={String.raw`\mu`} /> ra sao?</small>
+        <small>SCS và cấu trúc thời gian của grid thay đổi với <MathExpr tex={String.raw`\mu`} /> ra sao?</small>
       </a>
     </nav>
   </article>
