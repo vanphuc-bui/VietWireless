@@ -85,7 +85,7 @@ export const curriculum = [
       { number: 44, title: 'PUSCH', slug: 'pusch', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 45, title: 'PUCCH', slug: 'pucch', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 46, title: 'DMRS', slug: 'dmrs', status: 'planned', kind: 'deep-dive', specRequired: true },
-      { number: 47, title: 'Channel estimation', slug: 'channel-estimation', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 47, title: 'Channel estimation', slug: 'channel-estimation', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 48, title: 'Equalization', slug: 'equalization', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 49, title: 'HARQ', slug: 'harq', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 50, title: 'MCS và link adaptation', slug: 'mcs-link-adaptation', status: 'planned', kind: 'deep-dive', specRequired: true },
