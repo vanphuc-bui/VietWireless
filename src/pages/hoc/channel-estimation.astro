@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MathExpr from '../../components/Math.astro';
 import ChannelEstimationExplorer from '../../components/ChannelEstimationExplorer.jsx';
+import ChannelEstimatorComparison from '../../components/ChannelEstimatorComparison.jsx';
 
 const lessonMeta = {
   number: 47,
@@ -303,8 +304,223 @@ const lessonMeta = {
       </p>
     </section>
 
+    <section class="concept-block" id="estimator-families">
+      <p class="concept-kicker">07 · LS CHỈ LÀ BASELINE, CHANNEL ESTIMATION CÓ NHIỀU HỌ PHƯƠNG PHÁP</p>
+      <h2>Khác biệt chính nằm ở việc estimator dùng thêm thông tin gì ngoài received pilots.</h2>
+
+      <p>
+        LS chỉ dùng observation hiện tại và known reference.
+        Các estimator khác có thể dùng thêm <strong>delay support</strong>, <strong>power-delay profile</strong>,
+        correlation theo frequency/time, estimate của OFDM symbol trước hoặc thậm chí detected data.
+        Thêm prior thường giúp giảm noise, nhưng đồng thời tăng complexity và tạo rủi ro nếu prior không đúng với channel thật.
+      </p>
+
+      <div class="estimator-family-grid">
+        <article class="technical-card">
+          <span class="card-label">LS · LEAST SQUARES</span>
+          <h3>Ít giả định nhất</h3>
+          <MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}=\frac{Y}{X}`} display />
+          <p>
+            Dùng trực tiếp received pilot và known pilot.
+            Không cần channel covariance hay delay profile.
+            Điểm yếu là noise đi gần như trực tiếp vào estimate.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">LMMSE / WIENER</span>
+          <h3>Dùng correlation hoặc channel statistics</h3>
+          <MathExpr
+            tex={String.raw`\widehat{\mathbf H}_{\mathrm{LMMSE}}
+            =\mathbf R_{HH}
+            \left(\mathbf R_{HH}+\sigma_w^2\mathbf I\right)^{-1}
+            \widehat{\mathbf H}_{\mathrm{LS}}`}
+            display
+          />
+          <p>
+            Công thức trên là dạng minh họa khi observations đã được chuẩn hóa.
+            Estimator giảm noise bằng cách ưu tiên những directions mà channel statistics cho là có khả năng xảy ra.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">DFT-BASED</span>
+          <h3>Khai thác channel có delay support hữu hạn</h3>
+          <MathExpr
+            tex={String.raw`\widehat H_{\mathrm{LS}}[k]
+            \xrightarrow{\mathrm{IFFT}}
+            \widehat h_{\mathrm{LS}}[n]
+            \xrightarrow{\mathrm{window}}
+            \widetilde h[n]
+            \xrightarrow{\mathrm{FFT}}
+            \widetilde H[k]`}
+            display
+          />
+          <p>
+            Noise trong frequency domain thường trải ra nhiều taps sau IFFT.
+            Nếu receiver biết channel chỉ tồn tại trong một delay window hợp lý, nó có thể bỏ phần taps ngoài window rồi FFT trở lại.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">KALMAN / TRACKING</span>
+          <h3>Dùng estimate trước đó để theo channel biến thiên theo thời gian</h3>
+          <MathExpr
+            tex={String.raw`\mathbf h_{\ell}
+            =\mathbf A\mathbf h_{\ell-1}+\mathbf q_{\ell}`}
+            display
+          />
+          <p>
+            Hữu ích khi channel có temporal correlation.
+            Receiver kết hợp prediction từ symbol/slot trước với observation DM-RS mới thay vì estimate mỗi thời điểm hoàn toàn độc lập.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">DECISION-DIRECTED</span>
+          <h3>Dùng data đã detect đủ tin cậy như pseudo-pilot</h3>
+          <MathExpr
+            tex={String.raw`\widehat H_{\mathrm{DD}}[k]
+            \approx\frac{Y[k]}{\widehat X[k]}`}
+            display
+          />
+          <p>
+            Có thể tăng mật độ observations mà không cần thêm pilot.
+            Đổi lại, một quyết định data sai có thể đưa lỗi ngược vào channel tracker và tạo error propagation.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">SPARSE / BAYESIAN / LEARNING-BASED</span>
+          <h3>Khai thác structure mạnh hơn</h3>
+          <p>
+            Sparse estimators khai thác việc channel chỉ có một số dominant paths.
+            Bayesian methods dùng prior distributions.
+            Learning-based estimators học mapping từ observations sang channel estimate từ data huấn luyện.
+          </p>
+          <p>
+            Những phương pháp này có thể rất mạnh trong đúng scenario, nhưng performance phụ thuộc nhiều hơn vào model, training distribution hoặc prior assumptions.
+          </p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Interpolation và estimation không hoàn toàn là cùng một khái niệm</strong>
+        <p>
+          LS hay LMMSE có thể tạo estimate tại pilot positions.
+          Linear, spline, Wiener hoặc 2D interpolation lại trả lời câu hỏi tiếp theo: từ sparse pilot estimates,
+          làm sao suy ra channel tại data RE.
+          Một receiver thực tế thường ghép nhiều bước thay vì chọn đúng một nhãn estimator duy nhất.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="estimator-comparison">
+      <p class="concept-kicker">08 · CÙNG MỘT CHANNEL, CÙNG NOISE, NHƯNG MỖI ESTIMATOR DÙNG MỘT MỨC PRIOR KHÁC NHAU</p>
+      <h2>Ví dụ này tách riêng bài toán denoising để so LS, DFT-based và một PDP-aware LMMSE-style estimator.</h2>
+
+      <p>
+        Giả sử channel minh họa có ba taps khác zero:
+      </p>
+
+      <MathExpr
+        tex={String.raw`h[0]=1,\qquad
+        h[2]=0.55e^{-j0.8},\qquad
+        h[5]=0.30e^{j0.9}`}
+        display
+      />
+
+      <p>
+        Ta dùng một snapshot có pilot trên toàn bộ <MathExpr tex={String.raw`N=16`} /> subcarrier.
+        Đây không phải DM-RS mapping của NR, mà là một controlled example để mọi estimator nhận <strong>cùng observation</strong>
+        và ta chỉ so khác biệt do estimator.
+      </p>
+
+      <div class="estimator-comparison-story" data-lesson-visual>
+        <article>
+          <small>STEP 1 · LS</small>
+          <strong><MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}[k]=H[k]+W[k]`} /></strong>
+          <p>Không thêm prior, nên curve bám cả channel thật lẫn noise.</p>
+        </article>
+        <b>→</b>
+        <article>
+          <small>STEP 2 · DFT-BASED</small>
+          <strong>IFFT → delay window → FFT</strong>
+          <p>Giả định energy channel chỉ tồn tại trong một vùng delay hữu hạn.</p>
+        </article>
+        <b>→</b>
+        <article>
+          <small>STEP 3 · PDP-AWARE</small>
+          <strong>shrink taps theo assumed power</strong>
+          <p>Tap có prior power lớn được giữ mạnh hơn tap mà model cho là ít khả năng.</p>
+        </article>
+      </div>
+
+      <div data-lesson-visual>
+        <ChannelEstimatorComparison client:load />
+      </div>
+
+      <h3>Vì sao DFT-based có thể tốt hơn LS?</h3>
+      <p>
+        Sau IFFT của noisy LS estimate, noise không chỉ nằm ở các taps thật mà trải ra toàn delay axis.
+        Nếu receiver biết maximum relevant delay chỉ nằm trong <MathExpr tex={String.raw`0\le n<L_{\mathrm{win}}`} />,
+        nó đặt các taps bên ngoài vùng đó về zero:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\widetilde h[n]=
+        \begin{cases}
+        \widehat h_{\mathrm{LS}}[n], & 0\le n<L_{\mathrm{win}},\\
+        0, & \text{otherwise}.
+        \end{cases}`}
+        display
+      />
+
+      <p>
+        Sau đó FFT trở lại để thu được <MathExpr tex={String.raw`\widetilde H[k]`} />.
+        Khi delay window đúng, một phần noise bị loại mà channel paths thật vẫn được giữ.
+      </p>
+
+      <h3>Vì sao estimator có prior cũng có thể tệ hơn LS?</h3>
+      <p>
+        Trong example, path cuối nằm tại <MathExpr tex={String.raw`n=5`} />.
+        Nếu kéo delay window xuống nhỏ hơn hoặc bằng <MathExpr tex={String.raw`5`} /> samples,
+        DFT-based estimator cắt mất path thật đó.
+        MSE lúc này tăng vì estimator đã tạo <strong>model bias</strong>, không phải vì noise tăng.
+      </p>
+
+      <div class="math-card-grid">
+        <article class="math-card">
+          <span class="card-label">LS</span>
+          <div class="math-card-formula">ít prior</div>
+          <p>Robust trước model mismatch hơn, nhưng giữ nhiều noise hơn.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">DFT-BASED</span>
+          <div class="math-card-formula">delay-support prior</div>
+          <p>Tốt khi delay window hợp lý; tệ nếu cắt mất physical path.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">LMMSE-STYLE</span>
+          <div class="math-card-formula">covariance / PDP prior</div>
+          <p>Có thể giảm MSE mạnh hơn, nhưng cần statistics hoặc approximation đủ chính xác.</p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Không có estimator “tốt nhất” độc lập với scenario</strong>
+        <p>
+          LS đổi performance lấy simplicity.
+          LMMSE/Wiener đổi complexity và statistical knowledge lấy MSE thấp hơn.
+          DFT-based đổi một assumption về delay support lấy khả năng denoise.
+          Kalman đổi state model lấy khả năng tracking.
+          Quyết định phù hợp phụ thuộc SNR, Doppler, delay spread, pilot density, antenna count, latency và compute budget.
+        </p>
+      </aside>
+    </section>
+
     <section class="concept-block" id="multipath-link">
-      <p class="concept-kicker">07 · CHANNEL ESTIMATION NỐI TRỰC TIẾP VỚI MULTIPATH ĐÃ HỌC Ở BÀI 12</p>
+      <p class="concept-kicker">09 · CHANNEL ESTIMATION NỐI TRỰC TIẾP VỚI MULTIPATH ĐÃ HỌC Ở BÀI 12</p>
       <h2>Time-domain taps và frequency-domain <MathExpr tex="H[k]" /> chỉ là hai cách nhìn của cùng channel.</h2>
 
       <p>
@@ -338,7 +554,7 @@ const lessonMeta = {
     </section>
 
     <section class="concept-block" data-lesson-role="implementation" id="implementation">
-      <p class="concept-kicker">08 · NẾU NHÌN TỪ CODE RECEIVER, CHANNEL ESTIMATION TRÔNG RA SAO?</p>
+      <p class="concept-kicker">10 · NẾU NHÌN TỪ CODE RECEIVER, CHANNEL ESTIMATION TRÔNG RA SAO?</p>
       <h2>Flow đi từ resource mapping tới một <MathExpr tex={String.raw`\widehat H`} /> grid mà equalizer có thể đọc.</h2>
 
       <div class="implementation-pipeline" data-lesson-visual>
@@ -408,7 +624,7 @@ const lessonMeta = {
     </section>
 
     <section class="concept-block" data-lesson-role="boundary" id="boundary">
-      <p class="concept-kicker">09 · NĂM CHỖ DỄ HIỂU NHẦM</p>
+      <p class="concept-kicker">11 · NĂM CHỖ DỄ HIỂU NHẦM</p>
 
       <div class="boundary-grid">
         <article class="technical-card">
@@ -435,7 +651,7 @@ const lessonMeta = {
     </section>
 
     <section class="concept-block" data-lesson-role="specification" id="specification">
-      <p class="concept-kicker">10 · SPECIFICATION LAYER</p>
+      <p class="concept-kicker">12 · SPECIFICATION LAYER</p>
       <h2>3GPP quy định reference signal và mapping. Cách receiver estimate/interpolate channel là implementation.</h2>
 
       <div class="spec-separation">
@@ -471,11 +687,12 @@ const lessonMeta = {
     </section>
 
     <section class="concept-block recap" data-lesson-role="recap" id="recap">
-      <p class="concept-kicker">11 · NỐI LẠI TOÀN BỘ FLOW</p>
+      <p class="concept-kicker">13 · NỐI LẠI TOÀN BỘ FLOW</p>
       <ol class="recap-list">
         <li><strong>Received RE:</strong> sau FFT, receiver thấy <MathExpr tex={String.raw`Y=HX+W`} />, không trực tiếp thấy transmitted symbol.</li>
         <li><strong>Known DM-RS:</strong> tại reference RE, <MathExpr tex="X" /> đã biết nên receiver có thể isolate channel.</li>
         <li><strong>LS:</strong> <MathExpr tex={String.raw`\widehat H=Y/X`} /> cho estimate đơn giản tại pilot và đồng thời mang theo noise error.</li>
+        <li><strong>Estimator families:</strong> LS là baseline; LMMSE/Wiener, DFT-based, tracking, decision-directed và sparse/Bayesian methods dùng thêm những loại prior khác nhau.</li>
         <li><strong>Interpolation:</strong> sparse pilot estimates phải được mở rộng sang data RE bằng assumption về channel variation.</li>
         <li><strong>Multipath:</strong> time-domain taps tạo frequency-selective <MathExpr tex="H[k]" />, nên mỗi subcarrier có thể cần channel coefficient khác nhau.</li>
         <li><strong>Time variation:</strong> mobility làm channel thay đổi thêm theo OFDM-symbol index <MathExpr tex={String.raw`\ell`} />.</li>
