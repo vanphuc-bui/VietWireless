@@ -20567,3 +20567,253 @@ body {
     min-width: 560px;
   }
 }
+
+
+/* --- Lesson 47: channel estimation interactive --- */
+.channel-estimation-lab {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.channel-estimation-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.channel-estimation-controls label {
+  min-width: 0;
+}
+
+.channel-estimation-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.channel-estimation-controls input {
+  width: 100%;
+}
+
+.channel-estimation-readout.metric-card-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.channel-estimation-readout .metric-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.channel-estimation-readout .metric-card-value,
+.channel-estimation-readout .metric-card-value .katex,
+.channel-estimation-readout .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+}
+
+.channel-estimation-grid-strip {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.channel-estimation-grid-strip > div {
+  min-width: 48px;
+  padding: 9px 4px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  text-align: center;
+}
+
+.channel-estimation-grid-strip > div.pilot {
+  border-color: #c9b6dc;
+  background: #f4eef9;
+}
+
+.channel-estimation-grid-strip small,
+.channel-estimation-grid-strip strong {
+  display: block;
+  font-family: var(--font-ui);
+}
+
+.channel-estimation-grid-strip small {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.channel-estimation-grid-strip strong {
+  margin-top: 4px;
+  font-size: var(--lesson-meta-size);
+}
+
+.channel-estimation-chart {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.channel-estimation-chart svg {
+  width: 100%;
+  min-height: 260px;
+  margin-top: 14px;
+  overflow: visible;
+}
+
+.ce-gridline {
+  stroke: #e7e1d9;
+  stroke-width: 1;
+}
+
+.ce-axis-label {
+  fill: #817b73;
+  font-family: var(--font-ui);
+  font-size: 11px;
+}
+
+.ce-true-line,
+.ce-est-line {
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ce-true-line {
+  stroke: #315f78;
+}
+
+.ce-est-line {
+  stroke: #b64031;
+  stroke-dasharray: 7 5;
+}
+
+.ce-pilot-point {
+  fill: #fff;
+  stroke: #6c4f8d;
+  stroke-width: 3;
+}
+
+.channel-estimation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.channel-estimation-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.channel-estimation-legend i {
+  width: 24px;
+  height: 3px;
+  display: inline-block;
+}
+
+.channel-estimation-legend i.true {
+  background: #315f78;
+}
+
+.channel-estimation-legend i.estimate {
+  background: #b64031;
+}
+
+.channel-estimation-legend i.pilot {
+  width: 9px;
+  height: 9px;
+  border: 2px solid #6c4f8d;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.channel-estimation-inspect {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.channel-estimation-inspect > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.channel-estimation-inspect small,
+.channel-estimation-inspect strong {
+  display: block;
+}
+
+.channel-estimation-inspect small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.channel-estimation-inspect strong {
+  margin-top: 7px;
+  font-size: var(--lesson-box-content-size);
+  overflow-wrap: anywhere;
+}
+
+.channel-estimation-inspect > b {
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  text-align: center;
+}
+
+.channel-estimation-lab-note {
+  margin: 0;
+  padding: 16px 18px;
+  color: var(--muted);
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .channel-estimation-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .channel-estimation-readout.metric-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .channel-estimation-readout.metric-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .channel-estimation-inspect {
+    grid-template-columns: 1fr;
+  }
+
+  .channel-estimation-inspect > b {
+    transform: rotate(90deg);
+  }
+
+  .channel-estimation-chart {
+    overflow-x: auto;
+  }
+
+  .channel-estimation-chart svg {
+    min-width: 560px;
+  }
+}
