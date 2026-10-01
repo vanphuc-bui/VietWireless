@@ -6,8 +6,8 @@ const N_SYM = 14;
 const BWP_START_CRB = 42;
 
 const MODES = [
-  { id: 're', label: 'Explore RE' },
-  { id: 'signals', label: 'Signal map' },
+  { id: 're', label: 'Xem một RE' },
+  { id: 'signals', label: 'Bản đồ signal' },
   { id: 'indexing', label: 'CRB / PRB' },
 ];
 
@@ -109,32 +109,32 @@ export default function ResourceGridExplorer() {
         ))}
       </div>
 
-      <div className="resource-grid-readout rg-readout-v2">
-        <div>
-          <small>SELECTED RE</small>
-          <strong><MathExpr tex={coordTex} /></strong>
-          <span>frequency × time coordinate</span>
+      <div className="resource-grid-readout rg-readout-v2 metric-card-grid">
+        <div className="metric-card">
+          <small className="metric-card-label">RE ĐANG CHỌN</small>
+          <strong className="metric-card-value"><MathExpr tex={coordTex} /></strong>
+          <span className="metric-card-formula">tọa độ tần số × thời gian</span>
         </div>
-        <div>
-          <small>FREQUENCY GROUP</small>
-          <strong><MathExpr tex={prbTex} /></strong>
-          <span>12-subcarrier span in this demo BWP</span>
+        <div className="metric-card">
+          <small className="metric-card-label">NHÓM TẦN SỐ</small>
+          <strong className="metric-card-value"><MathExpr tex={prbTex} /></strong>
+          <span className="metric-card-formula">nhóm 12 subcarrier trong BWP minh họa</span>
         </div>
-        <div>
-          <small>CRB / LOCAL SUBCARRIER</small>
-          <strong><MathExpr tex={indexTex} /></strong>
-          <span>different references, different indexes</span>
+        <div className="metric-card">
+          <small className="metric-card-label">CRB / SUBCARRIER TRONG RB</small>
+          <strong className="metric-card-value"><MathExpr tex={indexTex} /></strong>
+          <span className="metric-card-formula">reference khác nhau → index khác nhau</span>
         </div>
-        <div>
-          <small>RE CONTENT</small>
-          <strong>{typeLabel}</strong>
-          <span>{selectedValue ? selectedValue.modulation : 'no value in demo mapping'}</span>
+        <div className="metric-card">
+          <small className="metric-card-label">NỘI DUNG RE</small>
+          <strong className="metric-card-value">{typeLabel}</strong>
+          <span className="metric-card-formula">{selectedValue ? selectedValue.modulation : 'không có giá trị trong mapping minh họa'}</span>
         </div>
       </div>
 
       <div className="rg-explorer-layout">
         <div className="resource-grid-interactive-wrap">
-          <div className="resource-grid-y-label">frequency ↑</div>
+          <div className="resource-grid-y-label">tần số ↑</div>
           <div className="resource-grid-interactive">
             <div className="resource-grid-top-axis">
               {cols.map((l) => <span key={l}><MathExpr tex={String(l)} /></span>)}
@@ -174,17 +174,17 @@ export default function ResourceGridExplorer() {
               })}
             </div>
 
-            <div className="resource-grid-x-label">OFDM symbol index <MathExpr tex={String.raw`\ell`} /> →</div>
+            <div className="resource-grid-x-label">chỉ số OFDM symbol <MathExpr tex={String.raw`\ell`} /> →</div>
           </div>
         </div>
 
         <aside className="rg-detail-panel">
           {mode === 're' && (
             <>
-              <span className="card-label">RE → COMPLEX VALUE</span>
+              <span className="card-label">RE → GIÁ TRỊ PHỨC</span>
               <h3><MathExpr tex={'a_{' + selectedK + ',' + selectedL + '}'} /></h3>
               <p>
-                Một ô grid là một coordinate. Nếu coordinate đang được dùng, PHY đặt một complex modulation/reference value vào đó.
+                Một ô grid là một tọa độ. Nếu tọa độ đang được sử dụng, PHY đặt một giá trị phức của modulation/reference signal vào đó.
               </p>
 
               <div className="rg-constellation">
@@ -214,14 +214,14 @@ export default function ResourceGridExplorer() {
               <div className="rg-value-equation">
                 <MathExpr tex={valueTex} />
               </div>
-              <small>{selectedValue?.modulation || 'Unused RE'} in the demo mapping</small>
+              <small>{selectedValue?.modulation || 'Unused RE'} trong mapping minh họa</small>
             </>
           )}
 
           {mode === 'signals' && (
             <>
-              <span className="card-label">ILLUSTRATIVE SIGNAL MAP</span>
-              <h3>Data, reference, control và unused REs cùng chia sẻ grid.</h3>
+              <span className="card-label">BẢN ĐỒ SIGNAL MINH HỌA</span>
+              <h3>Data, reference, control và các RE không dùng cùng chia sẻ một grid.</h3>
               <div className="rg-signal-legend">
                 <span><i className="data"></i>Data</span>
                 <span><i className="dmrs"></i>DM-RS</span>
@@ -233,7 +233,7 @@ export default function ResourceGridExplorer() {
                 Nó không phải mapping của một physical channel cụ thể trong 3GPP.
               </p>
               <div className="rg-selected-type">
-                <small>SELECTED TYPE</small>
+                <small>LOẠI RE ĐANG CHỌN</small>
                 <strong>{typeLabel}</strong>
               </div>
             </>
@@ -241,11 +241,11 @@ export default function ResourceGridExplorer() {
 
           {mode === 'indexing' && (
             <>
-              <span className="card-label">INDEXING VIEW</span>
+              <span className="card-label">GÓC NHÌN INDEXING</span>
               <h3>PRB và CRB đang trả lời hai câu hỏi khác nhau.</h3>
               <div className="rg-index-equations">
                 <div>
-                  <small>BWP-RELATIVE</small>
+                  <small>THEO BWP</small>
                   <strong><MathExpr tex={prbTex} /></strong>
                 </div>
                 <div>
@@ -253,7 +253,7 @@ export default function ResourceGridExplorer() {
                   <strong><MathExpr tex={'n_{\\mathrm{CRB}}=' + crb} /></strong>
                 </div>
                 <div>
-                  <small>WITHIN RB</small>
+                  <small>TRONG RB</small>
                   <strong><MathExpr tex={'k_{\\mathrm{RB}}=' + kInRb} /></strong>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function ResourceGridExplorer() {
                 className={'rg-crb-box' + (inBwp ? ' in-bwp' : '') + (crbIndex === crb ? ' selected' : '')}
               >
                 <small>CRB {crbIndex}</small>
-                <strong>{inBwp ? 'PRB ' + prbIndex : 'outside BWP'}</strong>
+                <strong>{inBwp ? 'PRB ' + prbIndex : 'ngoài BWP'}</strong>
               </div>
             );
           })}
@@ -286,9 +286,63 @@ export default function ResourceGridExplorer() {
       )}
 
       <p className="resource-grid-lab-note">
-        RB highlight nằm trên frequency labels để nhấn mạnh đúng định nghĩa: một RB là 12 consecutive subcarriers.
-        Time axis chỉ tạo thêm các RE positions khi ta nhìn resource usage qua nhiều OFDM symbols.
+        Phần highlight RB nằm trên trục tần số để nhấn mạnh đúng định nghĩa: một RB là 12 subcarrier liên tiếp. Trục thời gian chỉ tạo thêm các vị trí RE khi ta nhìn resource usage qua nhiều OFDM symbols.
       </p>
+      <style>{`
+        .resource-grid-lab-v2 .rg-readout-v2.metric-card-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .resource-grid-lab-v2 .rg-readout-v2 .metric-card {
+          min-width: 0;
+          min-height: 0;
+        }
+
+        .resource-grid-lab-v2 .rg-readout-v2 .metric-card-value,
+        .resource-grid-lab-v2 .rg-readout-v2 .metric-card-value .katex,
+        .resource-grid-lab-v2 .rg-readout-v2 .metric-card-formula,
+        .resource-grid-lab-v2 .rg-detail-panel > p,
+        .resource-grid-lab-v2 .resource-grid-lab-note {
+          font-size: var(--lesson-box-content-size);
+          line-height: 1.55;
+        }
+
+        .resource-grid-lab-v2 .rg-readout-v2 .metric-card > span {
+          font-size: var(--lesson-box-content-size);
+          line-height: 1.45;
+        }
+
+        .resource-grid-lab-v2 .rg-mode-tabs {
+          overflow-x: auto;
+        }
+
+        .resource-grid-lab-v2 .rg-mode-tabs > button {
+          white-space: nowrap;
+        }
+
+        @media (max-width: 980px) {
+          .resource-grid-lab-v2 .rg-explorer-layout {
+            grid-template-columns: 1fr;
+          }
+
+          .resource-grid-lab-v2 .rg-explorer-layout > .resource-grid-interactive-wrap {
+            border-right: 0;
+            border-bottom: 1px solid var(--line);
+          }
+        }
+
+        @media (max-width: 820px) {
+          .resource-grid-lab-v2 .rg-readout-v2.metric-card-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 520px) {
+          .resource-grid-lab-v2 .rg-readout-v2.metric-card-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }
