@@ -38,7 +38,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <p>
           CP không làm multipath biến mất và cũng không bù propagation delay tuyệt đối.
-          Sau khi máy thu đã đồng bộ vị trí symbol, CP tạo một cyclic extension để <strong>channel memory / excess delay giữa các path</strong>
+          Sau khi máy thu đã đồng bộ vị trí symbol, CP tạo một cyclic extension để <strong>channel memory / excess delay giữa các path</strong>{" "}
           không phá useful FFT window, miễn là phần trễ liên quan nằm trong độ dài CP.
         </p>
       </div>
@@ -127,7 +127,7 @@ import MathExpr from '../../components/Math.astro';
         <strong>CP không cần dài bằng thời gian tín hiệu bay từ máy phát tới máy thu</strong>
         <p>
           Một link có thể có propagation delay tuyệt đối rất lớn nhưng delay spread nhỏ.
-          Synchronization/timing alignment quyết định máy thu đặt cửa sổ FFT ở đâu; CP chỉ cần bảo vệ trước <em>relative channel memory</em>
+          Synchronization/timing alignment quyết định máy thu đặt cửa sổ FFT ở đâu; CP chỉ cần bảo vệ trước <em>relative channel memory</em>{" "}
           quanh cửa sổ đã được căn chỉnh. Đây là lý do không được lấy khoảng cách TX–RX rồi so trực tiếp với CP.
         </p>
       </aside>
@@ -536,7 +536,7 @@ import MathExpr from '../../components/Math.astro';
             <li>CFO hoặc phase noise;</li>
             <li>timing error lớn;</li>
             <li>channel tail dài hơn CP;</li>
-            <li>propagation delay tuyệt đối — việc đặt timing/window thuộc synchronization.</li>
+            <li>propagation delay tuyệt đối, việc đặt timing/window thuộc synchronization.</li>
           </ul>
         </article>
       </div>
@@ -567,7 +567,7 @@ import MathExpr from '../../components/Math.astro';
       </div>
 
       <p>
-        Vì vậy câu “CP chỉ là khoảng nghỉ giữa hai OFDM symbols” là chưa đủ.
+        Vì vậy câu “CP chỉ là khoảng nghỉ giữa hai OFDM symbols” là chưa đủ.{" "}
         <strong>Guard time</strong> giải thích phần chống ISI, còn <strong>copy tail</strong> giải thích vì sao channel nhiều taps trở thành per-bin multiplication sau FFT.
       </p>
     </section>
