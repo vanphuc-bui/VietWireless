@@ -48,12 +48,12 @@ export default function NumerologyExplorer() {
           <span className="metric-card-formula"><MathExpr tex={String.raw`12\Delta f`} /></span>
         </div>
         <div className="metric-card">
-          <small className="metric-card-label">1 kHz / SCS</small>
+          <small className="metric-card-label"><MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> / SCS</small>
           <strong className="metric-card-value"><MathExpr tex={normalized1kHz.toFixed(4)} /></strong>
           <span className="metric-card-formula">normalized frequency error</span>
         </div>
         <div className="metric-card">
-          <small className="metric-card-label">5 μs / <MathExpr tex="T_u" /></small>
+          <small className="metric-card-label"><MathExpr tex={String.raw`5\,\mu\mathrm{s}`} /> / <MathExpr tex="T_u" /></small>
           <strong className="metric-card-value"><MathExpr tex={`${(delayFraction5us * 100).toFixed(1)}\\%`} /></strong>
           <span className="metric-card-formula">fixed-delay fraction minh họa</span>
         </div>
