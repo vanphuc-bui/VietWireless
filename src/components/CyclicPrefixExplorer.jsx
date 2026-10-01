@@ -47,14 +47,14 @@ export default function CyclicPrefixExplorer() {
         <div className={`metric-card ${sufficient ? 'ok' : 'warning'}`}>
           <small className="metric-card-label">ISI CÒN LẠI</small>
           <strong className="metric-card-value"><MathExpr tex={String.raw`\max(0,D-N_{\mathrm{CP}})=${residual}`} /></strong>
-          <span className="metric-card-formula">{sufficient ? 'không còn trong useful window' : 'sample vẫn có thể bị nhiễu'}</span>
+          <span className="metric-card-formula">{sufficient ? 'không còn trong cửa sổ FFT hữu ích' : 'sample vẫn có thể bị nhiễu'}</span>
         </div>
       </div>
 
       <div className="cp-visual">
         <div className="visual-caption">
           <span>1 · SYMBOL ĐƯỢC PHÁT</span>
-          <strong>CP là copy của tail, không phải zero guard</strong>
+          <strong>CP là bản copy của phần đuôi, không phải zero guard</strong>
         </div>
 
         <div className="cp-cell-row tx-row">
@@ -74,7 +74,7 @@ export default function CyclicPrefixExplorer() {
         <div className="cp-lab-comparison">
           <div className="visual-caption">
             <span>2 · MULTIPATH CHỒNG LÊN BOUNDARY</span>
-            <strong>Delay ăn vào đâu?</strong>
+            <strong>Phần trễ chồng vào đâu?</strong>
           </div>
 
           <div className="cp-lab-track">
@@ -92,18 +92,18 @@ export default function CyclicPrefixExplorer() {
             <div className="cp-lab-prefix" style={{ flexBasis: `${Math.max(7, cpLength * 2.2)}%` }}>CP</div>
             <div className="cp-lab-useful">cửa sổ FFT hữu ích</div>
             <i className="cp-lab-echo protected" style={{ width: `${protectedWidth}%` }}>
-              echo trong CP
+              bản trễ trong CP
             </i>
             {!sufficient && (
               <i className="cp-lab-echo residual" style={{ width: `${Math.max(7, residual * 2.8)}%` }}>
-                residual ISI
+                ISI còn lại
               </i>
             )}
           </div>
         </div>
 
         <div className="cp-channel-memory">
-          <span>Channel cần nhìn lùi tối đa</span>
+          <span>Kênh cần nhìn lùi tối đa</span>
           <strong><MathExpr tex={String.raw`D=${channelDelay}`} /> sample</strong>
           <i style={{ width: `${Math.min(100, channelDelay / 10 * 100)}%` }}></i>
         </div>
@@ -114,7 +114,7 @@ export default function CyclicPrefixExplorer() {
           </strong>
           <p>
             {sufficient
-              ? 'CP cover toàn bộ channel memory trong mô hình này. Phần overlap nằm trong prefix và bị bỏ trước FFT.'
+              ? 'CP bao phủ toàn bộ channel memory trong mô hình này. Phần overlap nằm trong prefix và bị bỏ trước FFT.'
               : `Channel dài hơn CP ${residual} sample. Phần vượt quá prefix vẫn tràn vào cửa sổ FFT hữu ích.`}
           </p>
         </div>
@@ -124,8 +124,8 @@ export default function CyclicPrefixExplorer() {
           <strong><MathExpr tex={String.raw`N_{\mathrm{CP}}\ge D`} /></strong>
           <span>
             {sufficient
-              ? 'Đang thỏa: useful block có thể giữ circular-convolution structure.'
-              : 'Chưa thỏa: boundary vẫn chứa contribution từ symbol trước.'}
+              ? 'Đang thỏa: block hữu ích có thể giữ circular-convolution structure.'
+              : 'Chưa thỏa: biên block vẫn còn đóng góp từ symbol trước.'}
           </span>
         </div>
       </div>
