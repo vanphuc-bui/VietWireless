@@ -24,7 +24,7 @@ import MathExpr from '../../components/Math.astro';
       <p class="map-intro">
         Bài 15 chỉ nhìn một OFDM symbol tại một thời điểm: một vector <MathExpr tex="X[k]" /> theo tần số.
         Nhưng transmission thực tế kéo dài qua nhiều OFDM symbols và nhiều loại signal cùng chia sẻ tài nguyên.
-        Ta cần trả lời đồng thời hai câu hỏi: <strong>giá trị này nằm trên subcarrier nào?</strong> và <strong>nó được phát ở OFDM symbol nào?</strong>
+        Ta cần trả lời đồng thời hai câu hỏi: <strong>giá trị này nằm trên subcarrier nào?</strong> và <strong>nó được phát ở OFDM symbol nào?</strong>{" "}
         Resource grid chính là câu trả lời.
       </p>
 
@@ -69,7 +69,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Hãy tưởng tượng grid như một bảng tính: hàng là subcarrier, cột là OFDM symbol.
-        Một giá trị QAM không tự biết mình phải phát ở tần số nào; <strong>resource mapper đặt nó vào một ô cụ thể</strong>.
+        Một giá trị QAM không tự xác định vị trí phát trên trục tần số; <strong>resource mapper đặt nó vào một ô cụ thể</strong>.
         Sau khi toàn bộ một cột đã được điền, cột đó mới được chuyển sang cách đánh số bin của implementation và đưa vào IFFT.
       </p>
 
@@ -85,7 +85,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="resource-element">
       <p class="concept-kicker">02 · RESOURCE ELEMENT LÀ ĐƠN VỊ NHỎ NHẤT TRÊN GRID</p>
-      <h2>Một RE là giao điểm giữa một subcarrier và một OFDM-symbol position — tức một “địa chỉ” duy nhất trên grid.</h2>
+      <h2>Một RE là giao điểm giữa một subcarrier và một OFDM-symbol position, tức một “địa chỉ” duy nhất trên grid.</h2>
 
       <div class="grid-coordinate-story" data-lesson-visual>
         <div><small>FREQUENCY INDEX</small><strong><MathExpr tex="k" /></strong><span>subcarrier nào?</span></div>
