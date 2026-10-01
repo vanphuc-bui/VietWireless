@@ -164,11 +164,24 @@ import MathExpr from '../../components/Math.astro';
           Spec định nghĩa sample counts/timing chi tiết; average interval chỉ dùng để xây intuition.
         </p>
       </aside>
+
+      <div class="math-card-grid" data-lesson-role="example">
+        <article class="math-card">
+          <span class="card-label">CÙNG <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> SUBFRAME · <MathExpr tex={String.raw`\mu=0`} /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`1\ \text{slot}\times14\ \text{symbols}`} /></div>
+          <p><MathExpr tex={String.raw`\Delta f=15\,\mathrm{kHz}`} />, slot dài <MathExpr tex={String.raw`1\,\mathrm{ms}`} />.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">CÙNG <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> SUBFRAME · <MathExpr tex={String.raw`\mu=3`} /></span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`8\ \text{slots}\times14\ \text{symbols}`} /></div>
+          <p><MathExpr tex={String.raw`\Delta f=120\,\mathrm{kHz}`} />, mỗi slot chỉ <MathExpr tex={String.raw`0.125\,\mathrm{ms}`} />.</p>
+        </article>
+      </div>
     </section>
 
     <section class="concept-block lab-section" id="numerology-lab">
       <p class="concept-kicker">05 · INTERACTIVE LAB</p>
-      <h2>Kéo <MathExpr tex={String.raw`\mu`} /> từ 0 tới 6 để thấy SCS tăng, <MathExpr tex="T_u" /> giảm và <MathExpr tex={String.raw`1\,\mathrm{ms}`} /> subframe chứa ngày càng nhiều slots.</h2>
+      <h2>Kéo <MathExpr tex={String.raw`\mu`} /> để nhìn cùng lúc ba thứ co giãn: độ rộng subcarrier, useful symbol duration và số slot trong một subframe cố định.</h2>
       <p>
         Hãy đặc biệt so <MathExpr tex={String.raw`\mu=0`} /> với <MathExpr tex={String.raw`\mu=3`} />:
         spacing tăng từ <MathExpr tex="15" /> lên <MathExpr tex={String.raw`120\,\mathrm{kHz}`} />, useful symbol ngắn đi 8 lần và slot duration cũng ngắn đi 8 lần.
@@ -177,12 +190,24 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="tradeoff">
-      <p class="concept-kicker">06 · TĂNG SCS GIẢI QUYẾT MỘT SỐ VẤN ĐỀ NHƯNG LÀM MỘT SỐ TỈ LỆ KHÁC XẤU ĐI</p>
+      <p class="concept-kicker">06 · NUMEROLOGY THAY ĐỔI CÁC TỈ LỆ, KHÔNG LÀM CFO HAY MULTIPATH TỰ BIẾN MẤT</p>
+      <h2>Hai tỷ số hữu ích là frequency error so với SCS và delay so với useful symbol duration.</h2>
+
+      <MathExpr
+        tex={String.raw`\epsilon_f=\frac{|\Delta f_{\mathrm{err}}|}{\Delta f},\qquad \rho_\tau=\frac{\tau}{T_u}=\tau\Delta f`}
+        display
+      />
+
+      <p>
+        Khi tăng <MathExpr tex={String.raw`\Delta f`} />, cùng một frequency error cho <MathExpr tex={String.raw`\epsilon_f`} /> nhỏ hơn,
+        nhưng cùng một absolute delay <MathExpr tex={String.raw`\tau`} /> lại chiếm phần lớn hơn của useful symbol vì <MathExpr tex="T_u" /> ngắn đi.
+        Đây là cách nhìn định lượng cho tradeoff dưới đây.
+      </p>
 
       <div class="numerology-tradeoff">
         <article>
-          <span class="card-label">SMALLER SCS</span>
-          <h3>longer useful symbol</h3>
+          <span class="card-label">SCS NHỎ HƠN</span>
+          <h3>Useful symbol dài hơn</h3>
           <p>
             Fixed delay spread chiếm tỷ lệ nhỏ hơn so với <MathExpr tex="T_u" />,
             nhưng một fixed CFO/Doppler chiếm tỷ lệ lớn hơn so với subcarrier spacing.
@@ -190,8 +215,8 @@ import MathExpr from '../../components/Math.astro';
         </article>
 
         <article>
-          <span class="card-label">LARGER SCS</span>
-          <h3>shorter useful symbol</h3>
+          <span class="card-label">SCS LỚN HƠN</span>
+          <h3>Useful symbol ngắn hơn</h3>
           <p>
             Fixed frequency error trở thành fraction nhỏ hơn của <MathExpr tex={String.raw`\Delta f`} />,
             nhưng cùng một absolute delay spread chiếm tỷ lệ lớn hơn so với useful symbol duration.
@@ -210,7 +235,13 @@ import MathExpr from '../../components/Math.astro';
       <h2>Cùng một absolute <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> offset tác động tương đối khác nhau ở <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> và <MathExpr tex={String.raw`120\,\mathrm{kHz}`} /> SCS.</h2>
 
       <p>
-        Với <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> SCS, <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> tương đương khoảng <MathExpr tex="0.067" /> subcarrier spacing.
+        Doppler là một nguồn frequency shift có thể ước lượng bởi <MathExpr tex={String.raw`f_D\approx\frac{v}{c}f_c`} />:
+        cùng vận tốc, carrier frequency cao hơn tạo Doppler theo Hz lớn hơn.
+        CFO từ oscillator và Doppler có nguyên nhân khác nhau, nhưng khi xét ảnh hưởng lên OFDM ta đều quan tâm tới frequency error so với <MathExpr tex={String.raw`\Delta f`} />.
+      </p>
+
+      <p>
+        Với <MathExpr tex={String.raw`15\,\mathrm{kHz`} /> SCS, <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> tương đương khoảng <MathExpr tex="0.067" /> subcarrier spacing.
         Với <MathExpr tex={String.raw`120\,\mathrm{kHz}`} /> SCS, cùng <MathExpr tex={String.raw`1\,\mathrm{kHz}`} /> chỉ khoảng <MathExpr tex="0.0083" /> spacing.
         Relative CFO nhỏ hơn thường nghĩa orthogonality ít bị phá hơn, nếu các yếu tố khác giữ nguyên.
       </p>
