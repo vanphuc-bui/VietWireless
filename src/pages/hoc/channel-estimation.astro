@@ -1,0 +1,500 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import ChannelEstimationExplorer from '../../components/ChannelEstimationExplorer.jsx';
+
+const lessonMeta = {
+  number: 47,
+  part: 6,
+  slug: 'channel-estimation',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="Channel estimation trong OFDM và 5G NR | VietWireless"
+  description="Hiểu receiver dùng DM-RS để ước lượng channel H[k,l] như thế nào, từ LS tại pilot tới interpolation trên data RE, ảnh hưởng của noise và mối liên hệ với equalization."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-6">← Phần VI · Truyền dữ liệu sau khi kết nối</a>
+      <p class="eyebrow">GHI CHÉP 47 · CONNECTED-MODE PHY</p>
+      <h1>Channel estimation</h1>
+      <p class="lesson-deck">
+        Sau FFT, receiver có các giá trị phức <MathExpr tex={String.raw`Y[k,\ell]`} />, nhưng data đã bị channel làm thay đổi cả biên độ lẫn pha.{" "}
+        <strong>Channel estimation dùng các reference symbols mà receiver biết trước để suy ra <MathExpr tex={String.raw`\widehat H[k,\ell]`} />, rồi cung cấp estimate đó cho equalizer ở bước tiếp theo.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>Receiver thấy một điểm constellation bị lệch. Làm sao biết đó là data gì nếu chưa biết channel đã làm gì với nó?</h2>
+
+      <p>
+        Giả sử transmitter gửi một QAM symbol <MathExpr tex="X[k]" /> trên một subcarrier.
+        Qua wireless channel, symbol có thể bị suy hao, quay pha và cộng noise.
+        Sau FFT, receiver nhìn thấy <MathExpr tex="Y[k]" />, không phải trực tiếp <MathExpr tex="X[k]" />.
+      </p>
+
+      <MathExpr tex={String.raw`Y[k]=H[k]X[k]+W[k]`} display />
+
+      <p>
+        Nếu <MathExpr tex="X[k]" /> là user data chưa decode, receiver có hai unknown cùng lúc:
+        transmitted symbol là gì và channel <MathExpr tex="H[k]" /> là gì.
+        Chỉ nhìn <MathExpr tex="Y[k]" /> thì không thể tách hai unknown đó một cách trực tiếp.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Channel estimation giải bài toán “channel đã làm gì?”, không giải trực tiếp bài toán “data là gì?”</strong>
+        <p>
+          Receiver cần một vài resource elements mà transmitted value đã biết trước.
+          Trong NR, DM-RS đóng vai trò reference đó cho nhiều physical channels.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">CHANNEL ESTIMATION NẰM Ở ĐÂU TRONG RECEIVER?</p>
+      <h2>Input là received grid và known DM-RS. Output là channel estimate mà equalizer sẽ dùng cho data RE.</h2>
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>RECEIVER STATE TRANSITION</span>
+        <div class="system-position-flow" aria-label="Từ FFT grid và DM-RS tới channel estimate rồi equalization">
+          <span>FFT grid <MathExpr tex={String.raw`Y[k,\ell]`} /></span><b>+</b>
+          <span>known DM-RS <MathExpr tex={String.raw`X_{\mathrm{DMRS}}[k,\ell]`} /></span><b>→</b>
+          <strong>estimate <MathExpr tex={String.raw`\widehat H[k,\ell]`} /></strong><b>→</b>
+          <span>equalize data</span>
+        </div>
+        <p>
+          Trước bước này, receiver đã biết vị trí DM-RS và giá trị reference cần tái tạo từ configuration của transmission.
+          Nó chưa biết channel cụ thể trên từng data RE.
+          Sau bước này, receiver có một approximation của channel để đưa sang equalizer.
+        </p>
+      </div>
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead>
+            <tr>
+              <th>Receiver đã có</th>
+              <th>Receiver đang cần</th>
+              <th>Output của bài này</th>
+              <th>Dùng ở bước sau</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>FFT output, resource mapping, DM-RS sequence</td>
+              <td>complex channel response quanh data RE</td>
+              <td><MathExpr tex={String.raw`\widehat H[k,\ell]`} /></td>
+              <td>equalization, demapping và một số receiver metrics</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="concept-block" id="per-re-model">
+      <p class="concept-kicker">01 · SAU CP VÀ FFT, CHANNEL CÓ THỂ ĐƯỢC NHÌN THEO TỪNG RE</p>
+      <h2>Mỗi channel coefficient là một complex number mô tả scale và phase rotation tại một vị trí time-frequency.</h2>
+
+      <MathExpr
+        tex={String.raw`Y[k,\ell]=H[k,\ell]X[k,\ell]+W[k,\ell]`}
+        display
+      />
+
+      <div class="math-card-grid">
+        <article class="math-card">
+          <span class="card-label">MAGNITUDE</span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`|H[k,\ell]|`} /></div>
+          <p>Cho biết signal bị attenuate hoặc amplify bao nhiêu ở RE đang xét.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">PHASE</span>
+          <div class="math-card-formula"><MathExpr tex={String.raw`\angle H[k,\ell]`} /></div>
+          <p>Cho biết constellation bị quay bao nhiêu bởi channel và các phase effects còn nằm trong model.</p>
+        </article>
+      </div>
+
+      <p>
+        Trong một channel frequency-selective, <MathExpr tex="H[k]" /> thay đổi theo subcarrier.
+        Nếu channel còn thay đổi theo thời gian, ta cần cả index <MathExpr tex={String.raw`\ell`} />.
+        Vì vậy mục tiêu thực tế thường là xây một <strong>channel estimate trên vùng resource grid liên quan tới transmission</strong>, không chỉ tìm một số phức duy nhất cho cả bandwidth.
+      </p>
+    </section>
+
+    <section class="concept-block" id="known-reference">
+      <p class="concept-kicker">02 · KNOWN REFERENCE BIẾN BÀI TOÁN HAI UNKNOWN THÀNH MỘT UNKNOWN</p>
+      <h2>Tại DM-RS RE, receiver biết <MathExpr tex="X" />, nên phép chia đơn giản đã tạo được LS channel estimate.</h2>
+
+      <p>
+        Tại một DM-RS position, transmitter và receiver đều biết reference symbol <MathExpr tex={String.raw`X_{\mathrm{DMRS}}`} />.
+        Với model:
+      </p>
+
+      <MathExpr tex={String.raw`Y_{\mathrm{DMRS}}=H X_{\mathrm{DMRS}}+W`} display />
+
+      <p>Least-Squares estimate cơ bản là:</p>
+
+      <MathExpr
+        tex={String.raw`\widehat H_{\mathrm{LS}}=\frac{Y_{\mathrm{DMRS}}}{X_{\mathrm{DMRS}}}`}
+        display
+      />
+
+      <p>
+        Nếu không có noise và model khớp hoàn toàn, phép chia này trả lại đúng <MathExpr tex="H" />.
+        Với noise:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\widehat H_{\mathrm{LS}}=H+\frac{W}{X_{\mathrm{DMRS}}}`}
+        display
+      />
+
+      <p>
+        Công thức thứ hai cho thấy một điều rất quan trọng:
+        LS không làm noise biến mất.
+        Noise trên DM-RS đi thẳng vào channel estimate và sau đó có thể ảnh hưởng equalization.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="worked-example">
+      <p class="concept-kicker">03 · VÍ DỤ SỐ: MỘT DM-RS ĐỦ ĐỂ THẤY CHANNEL SCALE VÀ ROTATE RA SAO</p>
+      <h2>Ta chọn một ví dụ minh họa có channel gain 0.6 và phase rotation <MathExpr tex={String.raw`-35^\circ`} />.</h2>
+
+      <p>
+        Đây là giá trị tự chọn để xây trực giác, không phải parameter bắt buộc của NR.
+        Giả sử known reference là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`X_{\mathrm{DMRS}}=\frac{1+j}{\sqrt{2}}\approx0.707+j0.707`}
+        display
+      />
+
+      <p>Channel thật:</p>
+
+      <MathExpr
+        tex={String.raw`H=0.6e^{-j35^\circ}\approx0.491-j0.344`}
+        display
+      />
+
+      <p>Nếu tạm bỏ noise:</p>
+
+      <MathExpr
+        tex={String.raw`Y=HX\approx0.591+j0.104`}
+        display
+      />
+
+      <p>Receiver chia received reference cho known reference:</p>
+
+      <MathExpr
+        tex={String.raw`\widehat H=\frac{0.591+j0.104}{0.707+j0.707}\approx0.491-j0.344`}
+        display
+      />
+
+      <div class="receiver-chain-mini" data-lesson-visual>
+        <div>
+          <small>KNOWN DM-RS</small>
+          <strong><MathExpr tex={String.raw`X_{\mathrm{DMRS}}`} /></strong>
+          <span>receiver biết trước</span>
+        </div>
+        <b>×</b>
+        <div>
+          <small>UNKNOWN CHANNEL</small>
+          <strong><MathExpr tex="H" /></strong>
+          <span>scale + rotate</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>OBSERVED</small>
+          <strong><MathExpr tex="Y" /></strong>
+          <span>receiver đo được</span>
+        </div>
+        <b>÷ known X →</b>
+        <div>
+          <small>ESTIMATE</small>
+          <strong><MathExpr tex={String.raw`\widehat H`} /></strong>
+          <span>gần channel thật nếu noise nhỏ</span>
+        </div>
+      </div>
+
+      <p>
+        Nếu thêm noise minh họa <MathExpr tex={String.raw`W=0.04-j0.03`} />, received DM-RS trở thành khoảng
+        <MathExpr tex={String.raw`0.631+j0.074`} /> và LS estimate trở thành khoảng
+        <MathExpr tex={String.raw`0.499-j0.394`} />.
+        Estimate vẫn gần channel thật, nhưng không còn chính xác tuyệt đối.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sparse-reference">
+      <p class="concept-kicker">04 · DM-RS KHÔNG NẰM TRÊN MỌI DATA RE</p>
+      <h2>Estimate tại pilot chỉ là bước đầu. Receiver còn phải suy ra channel tại các RE nằm giữa những reference đã đo.</h2>
+
+      <p>
+        Giả sử receiver có LS estimates tại hai subcarrier <MathExpr tex="k_0" /> và <MathExpr tex="k_1" />.
+        Một interpolation tuyến tính đơn giản cho subcarrier nằm giữa là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\alpha=\frac{k-k_0}{k_1-k_0},\qquad \widehat H[k]=(1-\alpha)\widehat H[k_0]+\alpha\widehat H[k_1]`}
+        display
+      />
+
+      <p>
+        Đây là interpolation trực tiếp trên complex channel.
+        Nếu channel thay đổi chậm theo tần số giữa hai pilots, approximation có thể khá tốt.
+        Nếu channel có notch hoặc phase variation nhanh giữa hai pilots, spacing quá thưa sẽ bỏ lỡ structure đó.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Pilot density phải liên quan tới tốc độ channel thay đổi</strong>
+        <p>
+          Theo tần số, multipath làm <MathExpr tex="H[k]" /> gợn nhanh hay chậm tùy delay spread.
+          Theo thời gian, mobility và Doppler làm <MathExpr tex={String.raw`H[k,\ell]`} /> thay đổi qua các OFDM symbols.
+          Channel estimation vì vậy thường là bài toán interpolation hoặc filtering hai chiều trên time-frequency grid.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="channel-estimation-lab">
+      <p class="concept-kicker">05 · INTERACTIVE LAB</p>
+      <h2>Tăng noise, đổi khoảng cách pilot và tăng echo để nhìn channel estimate xấu đi theo những nguyên nhân khác nhau.</h2>
+
+      <p>
+        Lab dùng một channel minh họa gồm direct path và một echo để tạo frequency selectivity trên 12 subcarrier.
+        Receiver lấy LS tại các DM-RS positions rồi nội suy complex channel qua data positions.
+        Hãy thử ba thao tác riêng: tăng noise, làm pilot thưa hơn, rồi tăng echo strength.
+      </p>
+
+      <div data-lesson-visual>
+        <ChannelEstimationExplorer client:load />
+      </div>
+
+      <p>
+        Khi noise tăng, ngay cả estimate tại pilot cũng lệch.
+        Khi pilot thưa hơn trong một channel biến thiên nhanh theo frequency, interpolation error tăng dù noise giữ nguyên.
+        Hai nguồn lỗi này khác nhau và cần các kỹ thuật xử lý khác nhau.
+      </p>
+    </section>
+
+    <section class="concept-block" id="noise-smoothing">
+      <p class="concept-kicker">06 · NHIỀU PILOT CÓ THỂ GIÚP GIẢM NOISE, NHƯNG CHỈ KHI TA CÓ QUYỀN GIẢ ĐỊNH CHANNEL GẦN NHAU</p>
+
+      <p>
+        Nếu nhiều pilot samples quan sát gần như cùng một channel coefficient, một estimator rất đơn giản có thể average:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\widehat H_{\mathrm{avg}}=\frac{1}{M}\sum_{m=0}^{M-1}\widehat H_{\mathrm{LS},m}`}
+        display
+      />
+
+      <p>
+        Averaging có thể giảm phần noise ngẫu nhiên, nhưng nó cũng có thể làm mất channel variation thật nếu gom các pilots quá xa nhau.
+        Đây là tradeoff nền tảng giữa <strong>noise reduction</strong> và <strong>khả năng bám theo channel variation</strong>.
+      </p>
+
+      <p>
+        Các receiver thực tế có thể dùng smoothing filters, interpolation nhiều chiều, Wiener/LMMSE-style estimators hoặc các cấu trúc khác tùy complexity,
+        available statistics và mục tiêu performance.
+        LS ở bài này là baseline dễ nhìn nhất, không phải estimator duy nhất.
+      </p>
+    </section>
+
+    <section class="concept-block" id="multipath-link">
+      <p class="concept-kicker">07 · CHANNEL ESTIMATION NỐI TRỰC TIẾP VỚI MULTIPATH ĐÃ HỌC Ở BÀI 12</p>
+      <h2>Time-domain taps và frequency-domain <MathExpr tex="H[k]" /> chỉ là hai cách nhìn của cùng channel.</h2>
+
+      <p>
+        Nếu discrete-time channel impulse response có <MathExpr tex="L" /> taps:
+      </p>
+
+      <MathExpr
+        tex={String.raw`h[0],h[1],\ldots,h[L-1]`}
+        display
+      />
+
+      <p>Frequency response trên OFDM bins là DFT của các taps:</p>
+
+      <MathExpr
+        tex={String.raw`H[k]=\sum_{m=0}^{L-1}h[m]e^{-j2\pi km/N}`}
+        display
+      />
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>HAI CÁCH NHÌN CÙNG CHANNEL</span>
+        <div class="system-position-flow">
+          <span>multipath taps <MathExpr tex="h[m]" /></span><b>→ DFT →</b>
+          <strong>frequency response <MathExpr tex="H[k]" /></strong><b>→</b>
+          <span>mỗi subcarrier bị scale/rotate khác nhau</span>
+        </div>
+        <p>
+          Channel estimation cho OFDM thường quan tâm trực tiếp tới <MathExpr tex="H[k]" /> hoặc <MathExpr tex={String.raw`H[k,\ell]`} /> vì equalizer hoạt động trên FFT bins.
+          Một implementation khác có thể estimate channel trong miền thời gian rồi transform sang frequency domain.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">08 · NẾU NHÌN TỪ CODE RECEIVER, CHANNEL ESTIMATION TRÔNG RA SAO?</p>
+      <h2>Flow đi từ resource mapping tới một <MathExpr tex={String.raw`\widehat H`} /> grid mà equalizer có thể đọc.</h2>
+
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">FFT / RESOURCE EXTRACTOR</span>
+            <h3>Lấy received REs đúng vị trí</h3>
+            <p>Receiver đã sync đủ tốt để FFT và map bins về resource grid của transmission.</p>
+            <small>OUTPUT · received grid <MathExpr tex={String.raw`Y[k,\ell]`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">DM-RS GENERATOR / MAPPER</span>
+            <h3>Tái tạo known reference</h3>
+            <p>Từ configuration, receiver biết DM-RS nằm ở RE nào và sequence value tương ứng là gì.</p>
+            <small>OUTPUT · <MathExpr tex={String.raw`X_{\mathrm{DMRS}}[k,\ell]`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PILOT ESTIMATOR</span>
+            <h3>Tính estimate tại DM-RS positions</h3>
+            <p>Baseline LS thực hiện complex division <MathExpr tex={String.raw`Y/X`} /> trên những RE reference.</p>
+            <small>OUTPUT · sparse <MathExpr tex={String.raw`\widehat H_{\mathrm{pilot}}`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">FILTER / INTERPOLATOR</span>
+            <h3>Fill channel estimate trên data region</h3>
+            <p>Interpolate hoặc filter theo frequency, time và có thể theo antenna/layer context tùy receiver design.</p>
+            <small>OUTPUT · dense <MathExpr tex={String.raw`\widehat H[k,\ell]`} /> grid</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">EQUALIZER INPUT</span>
+            <h3>Đưa estimate sang detector/equalizer</h3>
+            <p>Equalizer dùng received data cùng channel estimate để tạo estimate của transmitted modulation symbols.</p>
+            <small>NEXT · Bài 48 Equalization</small>
+          </div>
+        </article>
+      </div>
+
+      <p>
+        Receiver thật có thể combine nhiều antenna observations, estimate noise power, track channel qua slot, xử lý PTRS hoặc chạy estimator khác nhau cho các transmission modes.
+        Standard không bắt implementation phải chia code đúng năm block như flow này.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">09 · NĂM CHỖ DỄ HIỂU NHẦM</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">ESTIMATION ≠ EQUALIZATION</span>
+          <p>Estimation tìm <MathExpr tex={String.raw`\widehat H`} />. Equalization dùng <MathExpr tex={String.raw`\widehat H`} /> để undo channel trên data.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">DM-RS ≠ CHANNEL ESTIMATE</span>
+          <p>DM-RS là transmitted reference. Channel estimate là kết quả receiver suy ra từ received DM-RS.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">LS ≠ 3GPP-MANDATED ALGORITHM</span>
+          <p>LS là baseline engineering example. Receiver có thể dùng estimator khác miễn đáp ứng performance và interoperability cần thiết.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">INTERPOLATION ≠ GROUND TRUTH</span>
+          <p>Giữa hai pilots, receiver đang dùng assumption về channel smoothness. Pilot quá thưa có thể bỏ lỡ variation thật.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CHANNEL KHÔNG NHẤT THIẾT STATIC</span>
+          <p><MathExpr tex={String.raw`H[k,\ell]`} /> có thể thay đổi theo cả frequency và time, đặc biệt khi delay spread hoặc Doppler lớn.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">10 · SPECIFICATION LAYER</p>
+      <h2>3GPP quy định reference signal và mapping. Cách receiver estimate/interpolate channel là implementation.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>DM-RS sequence generation, resource mapping và các configuration liên quan cho physical channels.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Flow known DM-RS → LS sample → interpolation → dense <MathExpr tex={String.raw`\widehat H`} /> grid → equalizer.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>LS, averaging, LMMSE/Wiener filtering, interpolation kernel, tracking strategy, fixed-point scaling và complexity tradeoff.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.1.1: demodulation reference signals for PDSCH, gồm sequence/resource mapping rules ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 6.4.1.1: demodulation reference signals for PUSCH ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+
+      <p>
+        Các công thức LS, averaging và linear interpolation trong bài là receiver algorithms minh họa.
+        Chúng giúp xây mental model và không được trình bày như một estimator bắt buộc của 3GPP.
+      </p>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">11 · NỐI LẠI TOÀN BỘ FLOW</p>
+      <ol class="recap-list">
+        <li><strong>Received RE:</strong> sau FFT, receiver thấy <MathExpr tex={String.raw`Y=HX+W`} />, không trực tiếp thấy transmitted symbol.</li>
+        <li><strong>Known DM-RS:</strong> tại reference RE, <MathExpr tex="X" /> đã biết nên receiver có thể isolate channel.</li>
+        <li><strong>LS:</strong> <MathExpr tex={String.raw`\widehat H=Y/X`} /> cho estimate đơn giản tại pilot và đồng thời mang theo noise error.</li>
+        <li><strong>Interpolation:</strong> sparse pilot estimates phải được mở rộng sang data RE bằng assumption về channel variation.</li>
+        <li><strong>Multipath:</strong> time-domain taps tạo frequency-selective <MathExpr tex="H[k]" />, nên mỗi subcarrier có thể cần channel coefficient khác nhau.</li>
+        <li><strong>Time variation:</strong> mobility làm channel thay đổi thêm theo OFDM-symbol index <MathExpr tex={String.raw`\ell`} />.</li>
+        <li><strong>Output:</strong> dense <MathExpr tex={String.raw`\widehat H[k,\ell]`} /> grid trở thành input cho equalizer.</li>
+        <li><strong>Boundary:</strong> DM-RS là reference, channel estimation tạo estimate, equalization mới dùng estimate để recover data.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/#phan-6">
+        <span>← BÀI 46 · SẮP TỚI</span>
+        <strong>DMRS</strong>
+        <small>Reference symbols được tạo và đặt vào resource grid như thế nào?</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-6">
+        <span>BÀI 48 · SẮP TỚI →</span>
+        <strong>Equalization</strong>
+        <small>Từ received symbol và <MathExpr tex={String.raw`\widehat H`} /> quay về estimate của transmitted data như thế nào?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
