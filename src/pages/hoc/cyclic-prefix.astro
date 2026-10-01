@@ -14,17 +14,17 @@ import MathExpr from '../../components/Math.astro';
       <p class="eyebrow">GHI CHÉP 16 · WIRELESS LINK</p>
       <h1>Cyclic Prefix</h1>
       <p class="lesson-deck">
-        Multipath không phải một khái niệm trừu tượng: <strong>cùng một waveform đi qua nhiều đường có độ dài khác nhau nên các bản copy đến receiver ở những thời điểm khác nhau.</strong>{" "}
-        Cyclic Prefix tạo một vùng đệm có cấu trúc đặc biệt để những bản copy đến muộn không phá useful FFT window.
+        Multipath không phải một khái niệm trừu tượng: <strong>cùng một dạng sóng đi qua nhiều đường có độ dài khác nhau nên các bản copy đến máy thu ở những thời điểm khác nhau.</strong>{" "}
+        Cyclic Prefix tạo một vùng đệm có cấu trúc đặc biệt để những bản copy đến muộn không phá cửa sổ FFT hữu ích.
       </p>
     </header>
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">BÀI NÀY GIẢI QUYẾT CÂU HỎI GÌ?</p>
       <p class="map-intro">
-        Vì sao một reflection đi xa hơn vài trăm mét có thể làm symbol trước tràn vào symbol sau?
+        Vì sao một đường phản xạ đi xa hơn vài trăm mét có thể làm symbol trước tràn vào symbol sau?
         Vì sao chỉ chèn một khoảng trống chưa đủ, mà OFDM lại copy chính phần cuối symbol lên đầu?
-        Và quan trọng nhất: CP đang xử lý <strong>độ chênh trễ giữa các path</strong>, hay đang bù toàn bộ propagation delay từ transmitter tới receiver?
+        Và quan trọng nhất: CP đang xử lý <strong>độ chênh trễ giữa các path</strong>, hay đang bù toàn bộ propagation delay từ máy phát tới máy thu?
       </p>
 
       <div class="system-position technical-card concept-flow-card" data-lesson-role="problem">
@@ -33,12 +33,12 @@ import MathExpr from '../../components/Math.astro';
           <span>nhiều đường truyền</span><b>→</b>
           <strong>nhiều bản copy trễ</strong><b>→</b>
           <span>ISI ở đầu symbol</span><b>→</b>
-          <strong>CP hấp thụ vùng trễ</strong><b>→</b>
+          <strong>overlap nằm trong CP</strong><b>→</b>
           <span>FFT window sạch hơn</span>
         </div>
         <p>
           CP không làm multipath biến mất và cũng không bù propagation delay tuyệt đối.
-          Sau khi receiver đã đồng bộ vị trí symbol, CP tạo một cyclic extension để <strong>channel memory / excess delay giữa các path</strong>
+          Sau khi máy thu đã đồng bộ vị trí symbol, CP tạo một cyclic extension để <strong>channel memory / excess delay giữa các path</strong>
           không phá useful FFT window, miễn là phần trễ liên quan nằm trong độ dài CP.
         </p>
       </div>
@@ -49,19 +49,19 @@ import MathExpr from '../../components/Math.astro';
       <h2>Cùng một waveform đi nhiều quãng đường khác nhau, nên các bản copy đến receiver lệch nhau theo thời gian.</h2>
 
       <p>
-        Giả sử transmitter và receiver nhìn thấy nhau qua một direct path, nhưng signal cũng phản xạ qua một bề mặt.
+        Giả sử máy phát và máy thu có một đường trực tiếp, nhưng tín hiệu đồng thời phản xạ qua một bề mặt khác.
         Đường phản xạ dài hơn nên bản copy đó đến muộn hơn.
         Với path thứ <MathExpr tex={String.raw`\ell`} />, delay hình học xấp xỉ:
       </p>
 
       <MathExpr tex={String.raw`\tau_\ell=\frac{d_\ell}{c}`} display />
       <p class="math-caption">
-        <MathExpr tex={String.raw`d_\ell`} /> là độ dài path và <MathExpr tex="c" /> là tốc độ lan truyền gần tốc độ ánh sáng.
+        <MathExpr tex={String.raw`d_\ell`} /> là độ dài đường truyền và <MathExpr tex="c" /> là tốc độ lan truyền gần tốc độ ánh sáng.
       </p>
 
       <p>
         Nhưng với Cyclic Prefix, đại lượng quan trọng hơn là <strong>excess delay so với path tham chiếu</strong>.
-        Nếu receiver đã đặt timing theo path đến sớm nhất <MathExpr tex="0" />, ta nhìn:
+        Nếu máy thu đã đặt timing theo path đến sớm nhất <MathExpr tex="0" />, ta nhìn:
       </p>
 
       <MathExpr
@@ -74,7 +74,7 @@ import MathExpr from '../../components/Math.astro';
           <svg viewBox="0 0 900 330" role="img" aria-label="Direct path và reflected path có độ dài khác nhau giữa transmitter và receiver">
             <line class="cp-ground" x1="55" y1="250" x2="845" y2="250" />
             <rect class="cp-building" x="402" y="52" width="96" height="110" rx="4" />
-            <text class="cp-natural-label" x="425" y="42">reflector</text>
+            <text class="cp-natural-label" x="425" y="42">vật phản xạ</text>
 
             <circle class="cp-node tx" cx="90" cy="220" r="19" />
             <circle class="cp-node rx" cx="810" cy="220" r="19" />
@@ -84,8 +84,8 @@ import MathExpr from '../../components/Math.astro';
             <path class="cp-path direct" d="M110 220 L790 220" />
             <path class="cp-path reflected" d="M108 208 L450 82 L792 208" />
 
-            <text class="cp-natural-label" x="380" y="207">direct path</text>
-            <text class="cp-natural-label" x="505" y="91">reflected path</text>
+            <text class="cp-natural-label" x="380" y="207">đường trực tiếp</text>
+            <text class="cp-natural-label" x="505" y="91">đường phản xạ</text>
 
             <foreignObject x="318" y="216" width="122" height="44">
               <div xmlns="http://www.w3.org/1999/xhtml" class="svg-math svg-math-label"><MathExpr tex="d_0" /></div>
@@ -101,41 +101,41 @@ import MathExpr from '../../components/Math.astro';
           </svg>
         </div>
         <p>
-          Receiver không biết signal “đi đường nào”. Nó chỉ thấy tổng của direct copy và các reflected copies, mỗi copy có delay và complex gain riêng.
+          Máy thu không biết tín hiệu “đi đường nào”. Nó chỉ thấy tổng của bản copy trực tiếp và các bản copy phản xạ, mỗi bản có delay và complex gain riêng.
         </p>
       </div>
 
       <div class="cp-geometry-example">
         <article class="technical-card formula-card formula-card-compact">
-          <span class="card-label">DIRECT PATH</span>
+          <span class="card-label">ĐƯỜNG TRỰC TIẾP</span>
           <div class="formula-card-main"><MathExpr tex={String.raw`d_0=1000\,\mathrm{m}`} /></div>
           <p>Bản copy tới sớm nhất.</p>
         </article>
         <article class="technical-card formula-card formula-card-compact">
-          <span class="card-label">REFLECTED PATH</span>
+          <span class="card-label">ĐƯỜNG PHẢN XẠ</span>
           <div class="formula-card-main"><MathExpr tex={String.raw`d_1=1900\,\mathrm{m}`} /></div>
           <p>Đi thêm <MathExpr tex={String.raw`900\,\mathrm{m}`} />.</p>
         </article>
         <article class="technical-card formula-card formula-card-compact">
-          <span class="card-label">EXCESS DELAY</span>
+          <span class="card-label">TRỄ TƯƠNG ĐỐI</span>
           <div class="formula-card-main"><MathExpr tex={String.raw`\Delta\tau\approx3\,\mu\mathrm{s}`} /></div>
           <p>Vì khoảng <MathExpr tex={String.raw`300\,\mathrm{m}\approx1\,\mu\mathrm{s}`} />.</p>
         </article>
       </div>
 
       <aside class="precision-note">
-        <strong>CP không cần dài bằng thời gian signal bay từ transmitter tới receiver</strong>
+        <strong>CP không cần dài bằng thời gian tín hiệu bay từ máy phát tới máy thu</strong>
         <p>
           Một link có thể có propagation delay tuyệt đối rất lớn nhưng delay spread nhỏ.
-          Synchronization/timing alignment quyết định receiver đặt FFT window ở đâu; CP chỉ cần bảo vệ trước <em>relative channel memory</em>
+          Synchronization/timing alignment quyết định máy thu đặt cửa sổ FFT ở đâu; CP chỉ cần bảo vệ trước <em>relative channel memory</em>
           quanh cửa sổ đã được căn chỉnh. Đây là lý do không được lấy khoảng cách TX–RX rồi so trực tiếp với CP.
         </p>
       </aside>
     </section>
 
     <section class="concept-block" id="channel-copies">
-      <p class="concept-kicker">02 · RECEIVER THẤY NHIỀU BẢN COPY CỦA CÙNG SIGNAL</p>
-      <h2>Mỗi path tạo một bản copy bị attenuate, quay pha và trễ thời gian.</h2>
+      <p class="concept-kicker">02 · MÁY THU THẤY NHIỀU BẢN COPY CỦA CÙNG TÍN HIỆU</p>
+      <h2>Mỗi path tạo một bản copy bị suy hao, quay pha và trễ thời gian.</h2>
 
       <MathExpr
         tex={String.raw`r(t)=\sum_{\ell}\alpha_\ell s(t-\tau_\ell)+w(t)`}
@@ -146,12 +146,12 @@ import MathExpr from '../../components/Math.astro';
         <article class="math-card">
           <span class="card-label">PATH GAIN</span>
           <div class="math-card-formula"><MathExpr tex={String.raw`\alpha_\ell`} /></div>
-          <p>Magnitude mô tả attenuation; angle mô tả phase rotation của path.</p>
+          <p>Độ lớn mô tả suy hao; góc mô tả phần quay pha của path.</p>
         </article>
         <article class="math-card">
           <span class="card-label">PATH DELAY</span>
           <div class="math-card-formula"><MathExpr tex={String.raw`\tau_\ell`} /></div>
-          <p>Bản copy thứ <MathExpr tex={String.raw`\ell`} /> đến muộn bao nhiêu so với reference path.</p>
+          <p>Bản copy thứ <MathExpr tex={String.raw`\ell`} /> đến muộn bao nhiêu so với path tham chiếu.</p>
         </article>
         <article class="math-card">
           <span class="card-label">CHANNEL MEMORY</span>
@@ -161,7 +161,7 @@ import MathExpr from '../../components/Math.astro';
         <article class="math-card">
           <span class="card-label">DISCRETE MODEL</span>
           <div class="math-card-formula"><MathExpr tex={String.raw`y[n]=\sum_{\ell=0}^{L-1}h[\ell]x[n-\ell]`} /></div>
-          <p>Trong DSP, delay liên tục được biểu diễn gần đúng bằng channel taps.</p>
+          <p>Trong DSP, delay liên tục được biểu diễn gần đúng bằng các tap của kênh.</p>
         </article>
       </div>
     </section>
@@ -198,7 +198,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
 
         <p class="cp-overlap-note">
-          Vùng đỏ là nơi receiver đang muốn xử lý symbol <MathExpr tex="m" />, nhưng vẫn nhận energy của symbol <MathExpr tex={String.raw`m-1`} />.
+          Vùng đỏ là nơi máy thu đang muốn xử lý symbol <MathExpr tex="m" />, nhưng vẫn nhận năng lượng của symbol <MathExpr tex={String.raw`m-1`} />.
         </p>
       </div>
 
@@ -232,7 +232,7 @@ import MathExpr from '../../components/Math.astro';
         <article class="technical-card formula-card">
           <span class="card-label">SYMBOL HIỆN TẠI</span>
           <div class="formula-card-main"><MathExpr tex={String.raw`x^{(m)}=[2,2,2,2,-2,-2,-2,-2]`} /></div>
-          <p>Receiver muốn FFT đúng block này.</p>
+          <p>Máy thu muốn FFT đúng block này.</p>
         </article>
       </div>
 
@@ -242,14 +242,14 @@ import MathExpr from '../../components/Math.astro';
           <MathExpr tex={String.raw`y[0]=x^{(m)}[0]+0.5\,x^{(m-1)}[6]`} />
         </div>
         <p>
-          Term thứ hai đến từ symbol trước. Đây là ISI ở đúng sample đầu của current FFT block.
+          Thành phần thứ hai đến từ symbol trước. Đây là ISI ngay tại sample đầu của FFT block hiện tại.
         </p>
       </div>
     </section>
 
     <section class="concept-block" id="copy-tail">
       <p class="concept-kicker">05 · CP LÀ COPY CỦA CUỐI SYMBOL, KHÔNG PHẢI ZERO PADDING</p>
-      <h2>Ta copy một đoạn ở cuối useful symbol lên phía trước để tạo cyclic extension.</h2>
+      <h2>Ta copy một đoạn ở cuối phần hữu ích của symbol lên phía trước để tạo cyclic extension.</h2>
 
       <div class="cp-concept-row">
         <div>
@@ -266,8 +266,8 @@ import MathExpr from '../../components/Math.astro';
       <div class="cp-tail-example technical-card visual-card" data-lesson-visual>
         <span class="card-label">VÍ DỤ <MathExpr tex="N=8" />, <MathExpr tex={String.raw`N_{\mathrm{CP}}=2`} /></span>
         <div class="cp-sample-strip">
-          <i class="cp-prefix-sample"><small>CP</small><strong>-2</strong></i>
-          <i class="cp-prefix-sample"><small>CP</small><strong>-2</strong></i>
+          <i class="cp-prefix-sample"><small>CP ← <MathExpr tex="x[6]" /></small><strong>-2</strong></i>
+          <i class="cp-prefix-sample"><small>CP ← <MathExpr tex="x[7]" /></small><strong>-2</strong></i>
           <i><small><MathExpr tex="0" /></small><strong>2</strong></i>
           <i><small><MathExpr tex="1" /></small><strong>2</strong></i>
           <i><small><MathExpr tex="2" /></small><strong>2</strong></i>
@@ -279,7 +279,7 @@ import MathExpr from '../../components/Math.astro';
         </div>
         <p>
           Hai sample CP chính là copy của <MathExpr tex={String.raw`x[6],x[7]`} />.
-          Không có information mới được tạo ra.
+          Không có thông tin mới được tạo ra.
         </p>
       </div>
     </section>
@@ -307,22 +307,22 @@ import MathExpr from '../../components/Math.astro';
             <span class="cp-case-useful">useful current symbol</span>
             <i class="cp-case-overlap">echo rơi vào CP</i>
           </div>
-          <p>Receiver bỏ CP, rồi FFT chỉ trên useful block màu xanh.</p>
+          <p>Máy thu bỏ CP, rồi FFT chỉ trên block hữu ích màu xanh.</p>
         </article>
       </div>
 
       <div class="cp-does-grid">
         <article class="technical-card">
           <span class="card-label">VAI TRÒ 1 · GUARD INTERVAL</span>
-          <strong>Giữ contamination của symbol trước ở ngoài FFT window</strong>
+          <strong>Giữ phần nhiễu từ symbol trước ở ngoài cửa sổ FFT</strong>
           <p>
             Delayed tail của symbol <MathExpr tex={String.raw`m-1`} /> có thể chồng lên đầu symbol <MathExpr tex="m" />,
-            nhưng nếu delay nằm trong CP thì receiver bỏ vùng đó trước FFT.
+            nhưng nếu delay nằm trong CP thì máy thu bỏ vùng đó trước FFT.
           </p>
         </article>
         <article class="technical-card">
           <span class="card-label">VAI TRÒ 2 · CYCLIC EXTENSION</span>
-          <strong>Cung cấp đúng các sample “âm” của current symbol</strong>
+          <strong>Cung cấp đúng các sample “âm” của symbol hiện tại</strong>
           <p>
             Khi channel cần <MathExpr tex={String.raw`x[-1],x[-2],\ldots`} />,
             CP không đưa zero vào mà đưa lại tail <MathExpr tex={String.raw`x[N-1],x[N-2],\ldots`} />.
@@ -348,7 +348,7 @@ import MathExpr from '../../components/Math.astro';
           <MathExpr tex={String.raw`y[0]=x^{(m)}[0]+0.5\,x^{(m)}[6]`} />
         </div>
         <p>
-          Delayed term bây giờ vẫn thuộc chính current symbol. Đây là wrap-around structure mà FFT xử lý rất đẹp.
+          Thành phần bị trễ bây giờ vẫn thuộc chính symbol hiện tại. Đây là cấu trúc vòng mà FFT xử lý rất tự nhiên.
         </p>
       </div>
     </section>
@@ -358,7 +358,7 @@ import MathExpr from '../../components/Math.astro';
       <h2>CP không xóa channel; nó làm useful block có boundary phù hợp với DFT.</h2>
 
       <p>
-        Sau khi receiver bỏ CP và lấy đúng <MathExpr tex="N" /> useful samples, dưới điều kiện CP đủ dài:
+        Sau khi máy thu bỏ CP và lấy đúng <MathExpr tex="N" /> useful samples, dưới điều kiện CP đủ dài:
       </p>
 
       <MathExpr
@@ -367,7 +367,7 @@ import MathExpr from '../../components/Math.astro';
       />
 
       <p>
-        Với channel hai taps ở ví dụ trước, relation trên trở thành:
+        Với channel hai taps ở ví dụ trước, quan hệ trên trở thành:
       </p>
 
       <MathExpr
@@ -380,7 +380,7 @@ import MathExpr from '../../components/Math.astro';
         <MathExpr tex={String.raw`y[0]=x[0]+0.5x[N-2]`} /> và
         <MathExpr tex={String.raw`y[1]=x[1]+0.5x[N-1]`} />.
         Chính hai giá trị tail này đã được CP copy lên trước khi phát.
-        Boundary của block vì thế hành xử như một vòng tròn thay vì kéo dữ liệu từ symbol trước vào.
+        Biên của block vì thế hành xử như một vòng tròn thay vì kéo dữ liệu từ symbol trước vào.
       </p>
 
       <p>
@@ -401,13 +401,13 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" id="physical-example">
-      <p class="concept-kicker">08 · VÍ DỤ HÌNH HỌC → CP ĐỦ HAY KHÔNG?</p>
+      <p class="concept-kicker">08 · VÍ DỤ HÌNH HỌC → CP CÓ ĐỦ DÀI KHÔNG?</p>
       <h2>Từ chênh lệch quãng đường, ta có thể ước lượng ngay excess delay rồi so với CP.</h2>
 
       <p>
-        Xét một OFDM system minh họa có useful symbol time <MathExpr tex={String.raw`T_u=66.7\,\mu\mathrm{s}`} />
+        Xét một hệ OFDM minh họa có useful symbol time <MathExpr tex={String.raw`T_u=66.7\,\mu\mathrm{s}`} />
         và CP time <MathExpr tex={String.raw`T_{\mathrm{CP}}=4.7\,\mu\mathrm{s}`} />.
-        Đây là ví dụ số để xây trực giác, không phải một rule áp cho mọi waveform.
+        Đây là ví dụ số để xây trực giác, không phải một quy tắc áp cho mọi waveform.
       </p>
 
       <div class="cp-distance-cases">
@@ -417,7 +417,7 @@ import MathExpr from '../../components/Math.astro';
           <div class="formula-card-details">
             <MathExpr tex={String.raw`\Delta\tau=\frac{900}{3\times10^8}\approx3\,\mu\mathrm{s}`} />
           </div>
-          <p><MathExpr tex={String.raw`3\,\mu\mathrm{s}<4.7\,\mu\mathrm{s}`} /> nên delayed copy còn nằm trong guard interval.</p>
+          <p><MathExpr tex={String.raw`3\,\mu\mathrm{s}<4.7\,\mu\mathrm{s}`} /> nên bản copy trễ còn nằm trong guard interval.</p>
         </article>
 
         <article class="technical-card formula-card cp-distance-card bad">
@@ -426,7 +426,7 @@ import MathExpr from '../../components/Math.astro';
           <div class="formula-card-details">
             <MathExpr tex={String.raw`\Delta\tau\approx5.33\,\mu\mathrm{s}`} />
           </div>
-          <p><MathExpr tex={String.raw`5.33\,\mu\mathrm{s}>4.7\,\mu\mathrm{s}`} /> nên một phần channel tail có thể lọt vào useful window.</p>
+          <p><MathExpr tex={String.raw`5.33\,\mu\mathrm{s}>4.7\,\mu\mathrm{s}`} /> nên một phần đuôi kênh có thể lọt vào cửa sổ hữu ích.</p>
         </article>
       </div>
 
@@ -439,10 +439,10 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block lab-section" id="cp-lab">
       <p class="concept-kicker">09 · INTERACTIVE LAB</p>
-      <h2>Thay CP length và channel delay để nhìn lúc nào previous-symbol energy bắt đầu tràn vào useful window.</h2>
+      <h2>Thay độ dài CP và channel delay để nhìn lúc nào năng lượng của symbol trước bắt đầu tràn vào cửa sổ FFT hữu ích.</h2>
       <p>
-        Lab dùng simplified maximum-delay model.
-        Khi CP dài ít nhất bằng channel memory đang xét, delayed tail nằm trong prefix và receiver bỏ nó trước FFT.
+        Lab dùng mô hình maximum-delay đơn giản hóa.
+        Khi CP dài ít nhất bằng channel memory đang xét, phần đuôi trễ nằm trong prefix và máy thu bỏ nó trước FFT.
         Khi channel memory dài hơn CP, phần dư sẽ tràn vào useful block.
       </p>
       <CyclicPrefixExplorer client:load />
@@ -454,7 +454,7 @@ import MathExpr from '../../components/Math.astro';
 
       <p>
         Sau khi timing đã được căn chỉnh, nếu channel support chạy từ tap <MathExpr tex="0" /> tới tap <MathExpr tex={String.raw`L-1`} />,
-        thì maximum <strong>excess delay trong discrete-time model</strong> là <MathExpr tex={String.raw`L-1`} /> samples.
+        thì maximum <strong>excess delay trong mô hình discrete-time</strong> là <MathExpr tex={String.raw`L-1`} /> samples.
         Cyclic extension phải cover khoảng memory này để useful block không cần sample từ symbol trước.
         Vì vậy textbook thường viết:
         <MathExpr tex={String.raw`N_{\mathrm{CP}}\ge L-1`} />.
@@ -471,8 +471,8 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <section class="concept-block" data-lesson-role="implementation" id="equalization">
-      <p class="concept-kicker">11 · PAYOFF: MỘT CHANNEL NHIỀU TAPS THÀNH MỘT COMPLEX NUMBER TRÊN MỖI BIN</p>
-      <h2>Receiver có thể equalize per subcarrier thay vì invert một long convolution trực tiếp.</h2>
+      <p class="concept-kicker">11 · KẾT QUẢ QUAN TRỌNG: CHANNEL NHIỀU TAPS THÀNH MỘT HỆ SỐ PHỨC TRÊN MỖI BIN</p>
+      <h2>Máy thu có thể equalize theo từng subcarrier thay vì đảo một phép chập dài trực tiếp trong miền thời gian.</h2>
 
       <div class="system-position technical-card concept-flow-card" data-lesson-visual>
         <span>RECEIVER PIPELINE</span>
@@ -492,7 +492,7 @@ import MathExpr from '../../components/Math.astro';
         Sau FFT, ideal model là:
         <MathExpr tex="Y[k]=H[k]X[k]+W[k]" />.
         Nếu <MathExpr tex="H[k]" /> đã được estimate, zero-forcing intuition là <MathExpr tex={String.raw`\hat{X}[k]=Y[k]/H[k]`} />.
-        Practical equalizers như MMSE xử lý noise amplification tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo FFT bins.
+        Các bộ equalizer thực tế như MMSE xử lý việc khuếch đại nhiễu tốt hơn, nhưng nền tảng vẫn là channel đã được diagonalize theo các FFT bin.
       </p>
 
       <p>
@@ -503,7 +503,7 @@ import MathExpr from '../../components/Math.astro';
 
     <section class="concept-block" id="overhead">
       <p class="concept-kicker">12 · CP DÀI HƠN KHÔNG PHẢI LÚC NÀO CŨNG TỐT HƠN</p>
-      <h2>Mỗi sample CP tiêu tốn time và transmit energy nhưng không thêm một frequency-domain data coefficient mới.</h2>
+      <h2>Mỗi sample CP tiêu tốn thời gian và năng lượng phát nhưng không thêm một hệ số dữ liệu miền tần số mới.</h2>
 
       <MathExpr tex={String.raw`\eta_{\mathrm{useful}} = \frac{N}{N+N_{\mathrm{CP}}}`} display />
       <p class="math-caption">Useful-time fraction của một CP-OFDM symbol trong simplified sample-count view.</p>
@@ -511,13 +511,13 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Nếu <MathExpr tex="N=1024" /> và <MathExpr tex={String.raw`N_{\mathrm{CP}}=72`} />, useful fraction xấp xỉ 93.4%.
         Nếu tăng CP lên 256 samples, useful fraction chỉ còn 80%.
-        CP lớn hơn chịu được channel memory dài hơn nhưng giảm time efficiency.
+        CP lớn hơn chịu được channel memory dài hơn nhưng giảm hiệu quả sử dụng thời gian.
       </p>
     </section>
 
     <section class="concept-block" data-lesson-role="boundary" id="what-cp-does-not-do">
       <p class="concept-kicker">13 · CP KHÔNG LÀM MULTIPATH BIẾN MẤT</p>
-      <h2>Channel vẫn có <MathExpr tex="H[k]" /> và vẫn có deep fades; CP chỉ làm structure dễ xử lý hơn.</h2>
+      <h2>Channel vẫn có <MathExpr tex="H[k]" /> và vẫn có các vùng suy hao sâu; CP chỉ làm cấu trúc dễ xử lý hơn.</h2>
 
       <div class="cp-does-grid">
         <article class="technical-card">
@@ -551,8 +551,8 @@ import MathExpr from '../../components/Math.astro';
           <span class="card-label">ZERO GUARD</span>
           <strong>Cho channel một khoảng trống, nhưng các sample trước useful block là zero</strong>
           <p>
-            Zero padding có thể hữu ích với receiver processing phù hợp, nhưng sau khi chỉ cắt lấy
-            <MathExpr tex="N" /> useful samples, ta không tự động có relation
+            Zero padding có thể hữu ích với cách xử lý máy thu phù hợp, nhưng sau khi chỉ cắt lấy
+            <MathExpr tex="N" /> useful samples, ta không tự động có quan hệ
             <MathExpr tex={String.raw`x[-\ell]=x[N-\ell]`} /> cần cho circular convolution.
           </p>
         </article>
@@ -590,12 +590,12 @@ import MathExpr from '../../components/Math.astro';
       <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/ifft-fft-trong-ofdm/">
         <span>← BÀI TRƯỚC</span>
         <strong>IFFT/FFT trong OFDM</strong>
-        <small>Frequency coefficients biến thành time samples như thế nào?</small>
+        <small>Các hệ số miền tần số biến thành sample miền thời gian như thế nào?</small>
       </a>
       <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/resource-grid/">
         <span>BÀI TIẾP THEO →</span>
         <strong>Resource grid</strong>
-        <small>Complex symbols được tổ chức theo time và frequency ra sao?</small>
+        <small>Các symbol phức được tổ chức theo thời gian và tần số ra sao?</small>
       </a>
     </nav>
   </article>
