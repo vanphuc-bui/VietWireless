@@ -20817,3 +20817,300 @@ body {
     min-width: 560px;
   }
 }
+
+
+/* --- Lesson 47: estimator families and comparison --- */
+.estimator-family-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.estimator-family-grid > article {
+  min-width: 0;
+}
+
+.estimator-family-grid h3 {
+  margin-top: 8px;
+}
+
+.estimator-comparison-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  margin: 20px 0;
+}
+
+.estimator-comparison-story > article {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.estimator-comparison-story > article > small,
+.estimator-comparison-story > article > strong {
+  display: block;
+}
+
+.estimator-comparison-story > article > small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-comparison-story > article > strong {
+  margin-top: 7px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.estimator-comparison-story > article > p {
+  margin: 8px 0 0;
+}
+
+.estimator-comparison-story > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-comparison-lab {
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.estimator-comparison-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.estimator-comparison-controls label {
+  min-width: 0;
+}
+
+.estimator-comparison-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-comparison-controls input {
+  width: 100%;
+}
+
+.estimator-comparison-readout.metric-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.estimator-comparison-readout .metric-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.estimator-comparison-readout .metric-card-value,
+.estimator-comparison-readout .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+}
+
+.estimator-assumption-strip {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+
+.estimator-assumption-strip > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.estimator-assumption-strip > div > small,
+.estimator-assumption-strip > div > strong,
+.estimator-assumption-strip > div > span {
+  display: block;
+}
+
+.estimator-assumption-strip > div > small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-assumption-strip > div > strong {
+  margin-top: 6px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.estimator-assumption-strip > div > span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-assumption-strip > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+}
+
+.estimator-comparison-chart {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.estimator-comparison-chart svg {
+  width: 100%;
+  min-width: 640px;
+  min-height: 260px;
+  margin-top: 14px;
+}
+
+.ece-true,
+.ece-ls,
+.ece-dft,
+.ece-pdp {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ece-true {
+  stroke: #315f78;
+  stroke-width: 3.2;
+}
+
+.ece-ls {
+  stroke: #b64031;
+  stroke-width: 2.2;
+  stroke-dasharray: 4 4;
+}
+
+.ece-dft {
+  stroke: #6c4f8d;
+  stroke-width: 2.6;
+  stroke-dasharray: 9 5;
+}
+
+.ece-pdp {
+  stroke: #65723a;
+  stroke-width: 2.6;
+}
+
+.estimator-comparison-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-comparison-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.estimator-comparison-legend i {
+  width: 25px;
+  height: 3px;
+  display: inline-block;
+}
+
+.estimator-comparison-legend i.true {
+  background: #315f78;
+}
+
+.estimator-comparison-legend i.ls {
+  background: #b64031;
+}
+
+.estimator-comparison-legend i.dft {
+  background: #6c4f8d;
+}
+
+.estimator-comparison-legend i.pdp {
+  background: #65723a;
+}
+
+.estimator-comparison-notes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.estimator-comparison-notes > article {
+  min-width: 0;
+  padding: 16px;
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.estimator-comparison-notes > article:last-child {
+  border-right: 0;
+}
+
+.estimator-comparison-notes small,
+.estimator-comparison-notes strong {
+  display: block;
+}
+
+.estimator-comparison-notes small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.estimator-comparison-notes strong {
+  margin-top: 7px;
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .estimator-family-grid,
+  .estimator-comparison-controls,
+  .estimator-comparison-readout.metric-card-grid,
+  .estimator-comparison-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .estimator-comparison-notes > article {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .estimator-comparison-notes > article:last-child {
+    border-bottom: 0;
+  }
+
+  .estimator-comparison-story,
+  .estimator-assumption-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .estimator-comparison-story > b,
+  .estimator-assumption-strip > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+}
