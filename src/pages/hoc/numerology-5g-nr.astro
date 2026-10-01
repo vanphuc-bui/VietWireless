@@ -10,7 +10,7 @@ import MathExpr from '../../components/Math.astro';
 >
   <article class="lesson shell">
     <header class="lesson-hero">
-      <a class="back-link" href="/hoc/">← Về lộ trình học</a>
+      <a class="back-link" data-lesson-nav="map" href="/hoc/">← Về lộ trình học</a>
       <p class="eyebrow">GHI CHÉP 18 · WIRELESS LINK</p>
       <h1>Numerology trong 5G NR</h1>
       <p class="lesson-deck">
@@ -19,7 +19,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </header>
 
-    <section class="concept-block lesson-map-block">
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context">
       <p class="concept-kicker">TẠI SAO 5G KHÔNG CHỈ DÙNG <MathExpr tex={String.raw`15\,\mathrm{kHz}`} />?</p>
       <p class="map-intro">
         Carrier frequency, expected Doppler, delay spread, bandwidth và latency target khác nhau giữa use cases.
@@ -27,7 +27,7 @@ import MathExpr from '../../components/Math.astro';
         NR vì vậy cho phép scale subcarrier spacing theo powers of two.
       </p>
 
-      <div class="system-position">
+      <div class="system-position technical-card concept-flow-card" data-lesson-role="problem">
         <span>NUMEROLOGY <MathExpr tex={String.raw`\mu`} /></span>
         <div class="system-position-flow">
           <strong><MathExpr tex={String.raw`\mu`} /></strong><b>→</b>
@@ -234,7 +234,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </section>
 
-    <section class="concept-block" id="spec">
+    <section class="concept-block" data-lesson-role="specification" id="spec">
       <p class="concept-kicker">10 · SPECIFICATION LAYER</p>
       <p>
         Các con số SCS, cyclic-prefix options và slot/frame structure trong bài được lấy từ TS 38.211.
@@ -247,7 +247,7 @@ import MathExpr from '../../components/Math.astro';
       </p>
     </section>
 
-    <section class="concept-block recap">
+    <section class="concept-block recap" data-lesson-role="recap">
       <p class="concept-kicker">11 · NỐI LẠI CÁC Ý</p>
       <ol class="recap-list">
         <li><strong>Numerology:</strong> scale OFDM lattice bằng <MathExpr tex={String.raw`\mu`} />.</li>
@@ -262,12 +262,12 @@ import MathExpr from '../../components/Math.astro';
     </section>
 
     <nav class="lesson-navigation" aria-label="Điều hướng bài học">
-      <a class="lesson-nav-card previous" href="/hoc/resource-grid/">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/resource-grid/">
         <span>← BÀI TRƯỚC</span>
         <strong>Resource grid</strong>
         <small>Frequency-time resources được tổ chức như thế nào?</small>
       </a>
-      <a class="lesson-nav-card next" href="/hoc/ue-bat-nguon/">
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/ue-bat-nguon/">
         <span>BÀI TIẾP THEO →</span>
         <strong>UE bật nguồn thì chuyện gì xảy ra?</strong>
         <small>Từ OFDM foundations sang initial cell search 5G NR.</small>
