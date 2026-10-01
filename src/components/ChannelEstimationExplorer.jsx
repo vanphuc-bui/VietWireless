@@ -140,7 +140,7 @@ export default function ChannelEstimationExplorer() {
     <div className="channel-estimation-lab">
       <div className="channel-estimation-controls">
         <label>
-          <span>Noise amplitude <strong>{noise.toFixed(2)}</strong></span>
+          <span>Biên độ noise <strong>{noise.toFixed(2)}</strong></span>
           <input
             type="range"
             min="0"
@@ -164,7 +164,7 @@ export default function ChannelEstimationExplorer() {
         </label>
 
         <label>
-          <span>Echo strength <strong>{echo.toFixed(2)}</strong></span>
+          <span>Độ mạnh echo <strong>{echo.toFixed(2)}</strong></span>
           <input
             type="range"
             min="0"
@@ -178,7 +178,7 @@ export default function ChannelEstimationExplorer() {
 
       <div className="channel-estimation-readout metric-card-grid">
         <div className="metric-card">
-          <small className="metric-card-label">DM-RS SAMPLES</small>
+          <small className="metric-card-label">SỐ DM-RS</small>
           <strong className="metric-card-value">{pilotPositions.length}</strong>
           <span className="metric-card-formula">trên 12 subcarrier minh họa</span>
         </div>
@@ -210,7 +210,7 @@ export default function ChannelEstimationExplorer() {
 
       <div className="channel-estimation-chart">
         <div className="visual-caption">
-          <span>TRUE CHANNEL vs ESTIMATE</span>
+          <span>CHANNEL THẬT vs ESTIMATE</span>
           <strong>Magnitude theo subcarrier</strong>
         </div>
 
@@ -255,12 +255,12 @@ export default function ChannelEstimationExplorer() {
 
       <div className="channel-estimation-inspect">
         <div>
-          <small>TRUE CHANNEL</small>
+          <small>CHANNEL THẬT</small>
           <strong><MathExpr tex={'H[5]=' + formatComplex(trueInspect)} /></strong>
         </div>
-        <b>→ estimate từ pilots →</b>
+        <b>→</b>
         <div>
-          <small>ESTIMATED CHANNEL</small>
+          <small>CHANNEL ESTIMATE</small>
           <strong><MathExpr tex={'\\widehat H[5]=' + formatComplex(estInspect)} /></strong>
         </div>
       </div>
