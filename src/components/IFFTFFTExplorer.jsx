@@ -39,7 +39,7 @@ function dft(x) {
   });
 }
 
-function đóng gópForBin(Xk, k, n) {
+function contributionForBin(Xk, k, n) {
   const angle = 2 * Math.PI * k * n / N;
   return {
     re: (Xk.re * Math.cos(angle) - Xk.im * Math.sin(angle)) / N,
@@ -75,19 +75,19 @@ export default function IFFTFFTExplorer() {
   const x = useMemo(() => idft(X), [bins]);
   const Y = useMemo(() => dft(x), [x]);
 
-  const basisHệ số = qpsk[basisQpsk];
+  const basisCoefficient = qpsk[basisQpsk];
   const basisVector = useMemo(
     () => Array.from(
       { length: N },
-      (_, n) => đóng gópForBin(basisHệ số, basisK, n)
+      (_, n) => contributionForBin(basisCoefficient, basisK, n)
     ),
-    [basisHệ số, basisK]
+    [basisCoefficient, basisK]
   );
 
   const basisPhaseStepDeg = 360 * basisK / N;
 
   const selectedContributions = useMemo(
-    () => X.map((value, k) => đóng gópForBin(value, k, inspectN)),
+    () => X.map((value, k) => contributionForBin(value, k, inspectN)),
     [X, inspectN]
   );
 
@@ -221,7 +221,7 @@ export default function IFFTFFTExplorer() {
             </div>
             <div className="metric-card">
               <small className="metric-card-label">COEFFICIENT</small>
-              <strong className="metric-card-value"><MathExpr tex={complexText(basisHệ số)} /></strong>
+              <strong className="metric-card-value"><MathExpr tex={complexText(basisCoefficient)} /></strong>
               <span className="metric-card-formula">quyết định scale và pha ban đầu</span>
             </div>
           </div>
@@ -348,13 +348,13 @@ export default function IFFTFFTExplorer() {
             </div>
           </div>
 
-          <div className="ifft-đóng góp-panel">
+          <div className="ifft-contribution-panel">
             <div className="visual-caption">
               <span>MỘT SAMPLE THỜI GIAN ĐƯỢC TẠO RA TỪ ĐÂU?</span>
-              <strong>one complex đóng góp from every active frequency bin</strong>
+              <strong>mỗi bin đang hoạt động đóng góp một vector phức</strong>
             </div>
 
-            <div className="ifft-đóng góp-strip">
+            <div className="ifft-contribution-strip">
               {selectedContributions.map((value, k) => (
                 <div key={k} className={bins[k] >= 0 ? 'active' : 'off'}>
                   <small><MathExpr tex={'k=' + k} /></small>
@@ -364,8 +364,8 @@ export default function IFFTFFTExplorer() {
               ))}
             </div>
 
-            <div className="ifft-đóng góp-sum">
-              <span>all đóng góps</span>
+            <div className="ifft-contribution-sum">
+              <span>tất cả contribution</span>
               <b>→ tổng vector phức →</b>
               <strong><MathExpr tex={'x[' + inspectN + ']=' + complexText(selectedSum)} /></strong>
             </div>
@@ -483,7 +483,7 @@ export default function IFFTFFTExplorer() {
                 ))}
               </div>
 
-              <div className="ifft-đóng góp-sum">
+              <div className="ifft-contribution-sum">
                 <span>sum across all <MathExpr tex="n" /></span>
                 <b>→ cộng coherent →</b>
                 <strong><MathExpr tex={'Y[' + inspectQ + ']=' + complexText(fftSum)} /></strong>
@@ -493,10 +493,10 @@ export default function IFFTFFTExplorer() {
             <div className="ifft-projection-phasors">
               <div className="visual-caption">
                 <span>SAU KHI QUAY NGƯỢC THEO BIN ĐANG CHỌN</span>
-                <strong>matching basis đóng góps line up coherently</strong>
+                <strong>các contribution đúng basis cùng hướng và cộng coherent</strong>
               </div>
 
-              <svg viewBox="0 0 370 330" role="img" aria-label="FFT projection đóng góp vectors and their coherent sum">
+              <svg viewBox="0 0 370 330" role="img" aria-label="FFT projection contribution vectors and their coherent sum">
                 <line className="ifft-axis" x1="34" y1={phCy} x2="338" y2={phCy} />
                 <line className="ifft-axis" x1={phCx} y1="28" x2={phCx} y2="302" />
 
@@ -550,6 +550,89 @@ export default function IFFTFFTExplorer() {
           </div>
         </>
       )}
+
+      <style>{`
+        .ifft-projection-grid {
+          grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+          align-items: start;
+        }
+
+        .ifft-projection-terms,
+        .ifft-projection-phasors {
+          min-width: 0;
+        }
+
+        .ifft-projection-strip {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.7rem;
+          align-items: stretch;
+        }
+
+        .ifft-projection-strip > div {
+          min-width: 0;
+          width: auto;
+          padding: 0.72rem 0.45rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.35rem;
+          overflow: hidden;
+        }
+
+        .ifft-projection-strip > div > small,
+        .ifft-projection-strip > div > strong {
+          max-width: 100%;
+        }
+
+        .ifft-projection-strip > div > strong {
+          line-height: 1.35;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .ifft-projection-strip > div > strong .katex {
+          font-size: var(--lesson-box-content-size);
+        }
+
+        .ifft-projection-terms .ifft-contribution-sum {
+          display: grid;
+          grid-template-columns: minmax(0, 0.72fr) auto minmax(0, 1fr);
+          gap: 0.8rem;
+          align-items: center;
+        }
+
+        .ifft-projection-terms .ifft-contribution-sum > * {
+          min-width: 0;
+        }
+
+        .ifft-projection-terms .ifft-contribution-sum > strong {
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        @media (max-width: 1100px) {
+          .ifft-projection-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .ifft-projection-strip {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 720px) {
+          .ifft-projection-strip {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .ifft-projection-terms .ifft-contribution-sum {
+            grid-template-columns: 1fr;
+            text-align: center;
+          }
+        }
+      `}</style>
     </div>
   );
 }
