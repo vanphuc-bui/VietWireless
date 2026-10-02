@@ -1,0 +1,609 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import SSBBlockExplorer from '../../components/SSBBlockExplorer.jsx';
+
+const lessonMeta = {
+  number: 21,
+  part: 3,
+  slug: 'ssb',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="SSB là gì trong 5G NR? | VietWireless"
+  description="Hiểu SS/PBCH block trong 5G NR: 4 OFDM symbols, 240 subcarriers, vị trí PSS, SSS, PBCH, PBCH DM-RS, SS burst set, SSB index và beam sweeping."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 21 · INITIAL ACCESS</p>
+      <h1>SSB là gì?</h1>
+      <p class="lesson-deck">
+        Sau Bài 20, UE đã biết nó cần một structure đã biết để bám timing, frequency và cell context.{" "}
+        <strong>Trong NR, SS/PBCH block là block time-frequency gom PSS, SSS, PBCH và PBCH DM-RS vào cùng một cấu trúc để UE có thể tìm cell, nhận dạng cell và tiến tới decode broadcast information đầu tiên.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>UE vừa bật lên chưa biết cell ID, chưa biết frame timing đầy đủ và chưa decode được system information. Vậy gNB phải phát thứ gì để UE có thể bắt đầu?</h2>
+
+      <p>
+        Nếu gNB chỉ phát user data, UE sẽ không biết sequence nào để search, không biết resource nào chứa thông tin broadcast và cũng chưa có channel estimate để demodulate broadcast channel.
+        NR vì vậy gom những tín hiệu cần cho bước bootstrap ban đầu vào một block có cấu trúc xác định.
+      </p>
+
+      <div class="ssb-purpose-grid">
+        <article class="technical-card">
+          <span class="card-label">TÌM BLOCK</span>
+          <strong>PSS</strong>
+          <p>Tạo known sequence để receiver có thể search một candidate synchronization block.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">NHẬN DẠNG CELL</span>
+          <strong>SSS</strong>
+          <p>Bổ sung cell-identity information và synchronization context sau PSS.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">ESTIMATE CHANNEL</span>
+          <strong>PBCH DM-RS</strong>
+          <p>Cung cấp reference symbols để receiver estimate channel cần cho PBCH demodulation.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">ĐỌC BROADCAST</span>
+          <strong>PBCH</strong>
+          <p>Mang broadcast-channel information để UE tiếp tục dựng system context và tìm MIB.</p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>SSB không phải chỉ là một synchronization signal</strong>
+        <p>
+          Tên đầy đủ là <em>SS/PBCH block</em>.
+          Nó kết hợp hai synchronization signals với một physical broadcast channel và reference signal dành cho broadcast channel đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">SSB NẰM Ở ĐÂU TRONG INITIAL ACCESS?</p>
+      <h2>Bài 20 nói receiver cần synchronization. Bài 21 xác định chính xác block mà receiver đang cố tìm và xử lý.</h2>
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>INITIAL-ACCESS FLOW</span>
+        <div class="system-position-flow">
+          <span>RF samples</span><b>→ search →</b>
+          <strong>SSB candidate</strong><b>→ PSS / SSS →</b>
+          <span>cell identity + timing context</span><b>→ PBCH DM-RS →</b>
+          <span>channel estimate</span><b>→ PBCH →</b>
+          <strong>broadcast information</strong>
+        </div>
+        <p>
+          Một SSB là container vật lý cho chuỗi bootstrap này.
+          Các bài 22 đến 27 sẽ tách từng thành phần ra để đi sâu.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="dimensions">
+      <p class="concept-kicker">01 · MỘT SSB CÓ KÍCH THƯỚC CỐ ĐỊNH THEO RESOURCE GRID</p>
+      <h2>Một SS/PBCH block chiếm 4 OFDM symbols theo thời gian và 240 subcarriers liên tiếp theo tần số.</h2>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{sym}}^{\mathrm{SSB}}=4,\qquad N_{\mathrm{sc}}^{\mathrm{SSB}}=240`}
+        display
+      />
+
+      <p>
+        Vì một resource element là một subcarrier tại một OFDM-symbol position, rectangle của một SSB chứa:
+      </p>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{RE}}^{\mathrm{SSB}}=4\times240=960`}
+        display
+      />
+
+      <div class="ssb-dimension-story" data-lesson-visual>
+        <div>
+          <small>TẦN SỐ</small>
+          <strong>240 subcarriers</strong>
+          <span><MathExpr tex={String.raw`k=0,\ldots,239`} /> tương đối trong block</span>
+        </div>
+        <b>×</b>
+        <div>
+          <small>THỜI GIAN</small>
+          <strong>4 OFDM symbols</strong>
+          <span><MathExpr tex={String.raw`\ell=0,\ldots,3`} /> tương đối trong block</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>SS/PBCH BLOCK</small>
+          <strong>960 RE positions</strong>
+          <span>không phải tất cả đều mang cùng loại signal</span>
+        </div>
+      </div>
+
+      <p>
+        <MathExpr tex="k" /> và <MathExpr tex={String.raw`\ell`} /> ở đây là <strong>relative indexes bên trong SSB</strong>.
+        Chúng chưa nói SSB nằm ở absolute subcarrier hay absolute OFDM symbol nào của carrier.
+      </p>
+    </section>
+
+    <section class="concept-block" id="exact-mapping">
+      <p class="concept-kicker">02 · BỐN OFDM SYMBOLS KHÔNG CÓ CÙNG NỘI DUNG</p>
+      <h2>PSS nằm ở symbol 0, SSS nằm ở symbol 2, còn PBCH và PBCH DM-RS trải qua symbols 1, 2 và 3.</h2>
+
+      <div class="math-data-table-wrap ssb-mapping-table-wrap">
+        <table class="math-data-table ssb-mapping-table">
+          <thead>
+            <tr>
+              <th>Signal / channel</th>
+              <th>Relative symbol</th>
+              <th>Relative subcarriers</th>
+              <th>Vai trò</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PSS</td>
+              <td><MathExpr tex={String.raw`\ell=0`} /></td>
+              <td><MathExpr tex={String.raw`k=56,\ldots,182`} /></td>
+              <td>127 RE synchronization sequence</td>
+            </tr>
+            <tr>
+              <td>SSS</td>
+              <td><MathExpr tex={String.raw`\ell=2`} /></td>
+              <td><MathExpr tex={String.raw`k=56,\ldots,182`} /></td>
+              <td>127 RE synchronization sequence</td>
+            </tr>
+            <tr>
+              <td>PBCH</td>
+              <td><MathExpr tex={String.raw`\ell=1,3`} /></td>
+              <td>toàn 240-subcarrier span, trừ PBCH DM-RS RE</td>
+              <td>physical broadcast channel</td>
+            </tr>
+            <tr>
+              <td>PBCH</td>
+              <td><MathExpr tex={String.raw`\ell=2`} /></td>
+              <td><MathExpr tex={String.raw`k=0,\ldots,47`} /> và <MathExpr tex={String.raw`k=192,\ldots,239`} />, trừ DM-RS</td>
+              <td>hai vùng ngoài SSS</td>
+            </tr>
+            <tr>
+              <td>Set to 0</td>
+              <td><MathExpr tex={String.raw`\ell=0`} /></td>
+              <td>hai phía ngoài PSS</td>
+              <td>không phải PBCH data</td>
+            </tr>
+            <tr>
+              <td>Set to 0</td>
+              <td><MathExpr tex={String.raw`\ell=2`} /></td>
+              <td><MathExpr tex={String.raw`k=48,\ldots,55`} /> và <MathExpr tex={String.raw`k=183,\ldots,191`} /></td>
+              <td>guard-like zero regions quanh SSS trong block mapping</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        PBCH DM-RS được xen vào các PBCH regions theo spacing 4 subcarriers.
+        Offset của pattern là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`v=N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4`}
+        display
+      />
+
+      <p>
+        Vì vậy sau khi UE đã xác định physical cell ID, nó biết DM-RS comb nằm ở residue class nào modulo 4.
+        Đây là một ví dụ rất đẹp cho việc các stage initial access phụ thuộc lẫn nhau.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="re-accounting">
+      <p class="concept-kicker">03 · CHECK BẰNG SỐ: 960 RE CỦA SSB ĐI ĐÂU HẾT?</p>
+      <h2>Ta có thể cộng chính xác từng loại resource để kiểm tra mapping.</h2>
+
+      <div class="ssb-accounting-grid">
+        <article class="math-card">
+          <span class="card-label">PSS</span>
+          <div class="math-card-formula"><MathExpr tex="127" /></div>
+          <p>Symbol 0, subcarriers 56 đến 182.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">SSS</span>
+          <div class="math-card-formula"><MathExpr tex="127" /></div>
+          <p>Symbol 2, cùng 127-subcarrier central span.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">PBCH DM-RS</span>
+          <div class="math-card-formula"><MathExpr tex="144" /></div>
+          <p>60 RE ở symbol 1, 24 RE ở symbol 2 và 60 RE ở symbol 3.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">PBCH</span>
+          <div class="math-card-formula"><MathExpr tex="432" /></div>
+          <p>PBCH RE còn lại sau khi loại DM-RS khỏi PBCH regions.</p>
+        </article>
+        <article class="math-card">
+          <span class="card-label">SET TO 0</span>
+          <div class="math-card-formula"><MathExpr tex="130" /></div>
+          <p>113 RE ở symbol 0 và 17 RE ở symbol 2.</p>
+        </article>
+      </div>
+
+      <MathExpr
+        tex={String.raw`127+127+144+432+130=960`}
+        display
+      />
+
+      <p>
+        Đây là một consistency check hữu ích.
+        Nó cũng cho thấy câu “SSB có PSS, SSS và PBCH” vẫn còn quá thô nếu muốn implement receiver: PBCH DM-RS và zero regions chiếm một phần đáng kể của exact grid.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive-grid">
+      <p class="concept-kicker">04 · INTERACTIVE GRID</p>
+      <h2>Đổi PBCH DM-RS offset và click từng OFDM symbol để nhìn exact mapping thay đổi như thế nào.</h2>
+
+      <p>
+        Slider dưới đây thay <MathExpr tex="v" /> từ 0 tới 3.
+        Nó không thay PSS, SSS hay số lượng DM-RS; nó chỉ dịch comb DM-RS trong frequency theo physical cell ID modulo 4.
+      </p>
+
+      <div data-lesson-visual>
+        <SSBBlockExplorer client:load />
+      </div>
+
+      <p>
+        Hãy chọn symbol 2.
+        Bạn sẽ thấy central 127 RE thuộc SSS, hai vùng zero nhỏ nằm ngay hai bên SSS, còn PBCH và PBCH DM-RS chỉ nằm ở hai outer regions.
+        Đây là symbol có cấu trúc phức tạp nhất trong SSB.
+      </p>
+    </section>
+
+    <section class="concept-block" id="roles">
+      <p class="concept-kicker">05 · BỐN THÀNH PHẦN, BỐN CÂU HỎI KHÁC NHAU</p>
+      <h2>UE không xử lý tất cả resource của SSB theo cùng một cách.</h2>
+
+      <div class="ssb-role-flow" data-lesson-visual>
+        <article>
+          <small>PSS</small>
+          <strong>“Có candidate block ở đây không?”</strong>
+          <p>Known sequence phù hợp cho detection/correlation và coarse synchronization hypothesis.</p>
+        </article>
+        <b>→</b>
+        <article>
+          <small>SSS</small>
+          <strong>“Đây là cell nào?”</strong>
+          <p>Bổ sung cell-identity information và giúp hoàn thiện physical-layer cell ID.</p>
+        </article>
+        <b>→</b>
+        <article>
+          <small>PBCH DM-RS</small>
+          <strong>“Channel trên PBCH trông ra sao?”</strong>
+          <p>Known reference để estimate channel và hỗ trợ PBCH processing.</p>
+        </article>
+        <b>→</b>
+        <article>
+          <small>PBCH</small>
+          <strong>“Cell broadcast gì để đi tiếp?”</strong>
+          <p>Physical broadcast channel mang thông tin cần cho bước dựng system context tiếp theo.</p>
+        </article>
+      </div>
+
+      <aside class="precision-note">
+        <strong>Đây là receiver learning order, không phải khẳng định implementation phải chạy tuần tự từng block code</strong>
+        <p>
+          Receiver thật có thể giữ nhiều hypotheses, xử lý song song hoặc combine nhiều operations.
+          Mental model trên chỉ biểu diễn dependency: không biết candidate/PSS thì khó đặt SSS context; chưa biết cell identity thì chưa biết chính xác PBCH DM-RS offset; chưa estimate được PBCH channel thì decode PBCH sẽ khó hơn.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="bandwidth">
+      <p class="concept-kicker">06 · 240 SUBCARRIERS RỘNG BAO NHIÊU HZ?</p>
+      <h2>Physical width của SSB phụ thuộc subcarrier spacing được dùng cho SS/PBCH block.</h2>
+
+      <MathExpr
+        tex={String.raw`B_{\mathrm{SSB}}=240\,\Delta f_{\mathrm{SSB}}`}
+        display
+      />
+
+      <p>
+        Ví dụ nếu SSB dùng subcarrier spacing <MathExpr tex={String.raw`30\,\mathrm{kHz}`} />:
+      </p>
+
+      <MathExpr
+        tex={String.raw`B_{\mathrm{SSB}}=240\times30\,\mathrm{kHz}=7.2\,\mathrm{MHz}`}
+        display
+      />
+
+      <p>
+        Vì 240 subcarriers bằng <MathExpr tex={String.raw`20\times12`} /> subcarriers, ta có thể nói SSB có frequency span tương đương 20 resource-block widths.
+        Tuy nhiên <strong>không nên diễn giải SSB như một PDSCH allocation gồm 20 PRB</strong>.
+        Đây là SS/PBCH block với mapping riêng của nó.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Bốn OFDM symbols cũng không có một duration cố định theo microsecond cho mọi SSB</strong>
+        <p>
+          Symbol duration phụ thuộc SSB subcarrier spacing và cyclic-prefix timing.
+          Vì vậy “4 symbols” là định nghĩa resource-grid ổn định hơn so với ghi một con số thời gian tuyệt đối duy nhất.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="frequency-location">
+      <p class="concept-kicker">07 · SSB KHÔNG ĐỒNG NGHĨA “240 SUBCARRIERS Ở GIỮA CARRIER”</p>
+      <h2>UE phải tìm SSB ở một frequency location hợp lệ; block không cần trùng carrier center hay BWP center.</h2>
+
+      <div class="ssb-carrier-visual" data-lesson-visual>
+        <div class="ssb-carrier-track">
+          <span class="guard left">carrier resources</span>
+          <strong class="ssb-window">SSB · 240 SC</strong>
+          <span class="guard right">carrier resources</span>
+        </div>
+        <div class="ssb-carrier-center"></div>
+        <p>
+          Hình cố ý đặt SSB lệch khỏi center để phá mental model sai rằng synchronization block luôn nằm chính giữa carrier.
+        </p>
+      </div>
+
+      <p>
+        Trước khi decode đủ broadcast configuration, UE dựa vào những frequency hypotheses/raster mà specification cho phép để search.
+        Sau đó các quantities như common-resource-grid reference và SSB offset mới được đặt vào full carrier context chi tiết hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="burst-set">
+      <p class="concept-kicker">08 · MỘT SSB KHÁC MỘT SS BURST SET</p>
+      <h2>SSB là một block 4-symbol × 240-subcarrier. SS burst set là tập các candidate SS/PBCH blocks xuất hiện ở những time positions xác định.</h2>
+
+      <div class="ssb-burst-visual" data-lesson-visual>
+        <div class="ssb-half-frame">
+          <small>HALF-FRAME CANDIDATE REGION</small>
+          <div class="ssb-burst-track">
+            <i class="active">SSB 0</i>
+            <i></i>
+            <i class="active">SSB 2</i>
+            <i></i>
+            <i class="active">SSB 4</i>
+            <i></i>
+            <i></i>
+            <i class="active">SSB n</i>
+          </div>
+        </div>
+        <p>
+          Các ô trên chỉ minh họa candidate positions, không biểu diễn một Case A/B/C/D/E cụ thể.
+          Standard quy định candidate positions theo SSB pattern; network không bắt buộc phải phát mọi candidate.
+        </p>
+      </div>
+
+      <p>
+        Candidate SS/PBCH blocks trong một half-frame được index theo thứ tự thời gian.
+        Khi UE đã có SSB index/context, index đó còn liên quan tới các procedure phía sau như PBCH processing, beam association và mapping tới random-access opportunities.
+      </p>
+
+      <aside class="mental-model">
+        <strong>SSB index không phải một “cell ID thứ hai”</strong>
+        <p>
+          Physical cell ID nhận dạng cell.
+          SSB index nhận dạng một candidate/transmitted SS/PBCH block position trong burst structure của cell đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="periodicity">
+      <p class="concept-kicker">09 · UE KHÔNG GIẢ ĐỊNH SSB PHÁT LIÊN TỤC MỖI SLOT</p>
+      <h2>SS/PBCH blocks có burst timing và periodicity; initial cell search phải đợi đúng cửa sổ thời gian.</h2>
+
+      <p>
+        Với initial cell selection, TS 38.213 cho phép UE giả định các half-frames chứa SS/PBCH blocks xuất hiện với periodicity 2 radio frames:
+      </p>
+
+      <MathExpr
+        tex={String.raw`T_{\mathrm{initial\ search}}=2\times10\,\mathrm{ms}=20\,\mathrm{ms}`}
+        display
+      />
+
+      <p>
+        Khi UE đã có serving-cell configuration, SSB reception periodicity có thể được cấu hình khác.
+        Vì vậy <MathExpr tex={String.raw`20\,\mathrm{ms}`} /> là mental anchor rất hữu ích cho initial search, không phải tuyên bố mọi serving cell mãi mãi chỉ dùng đúng periodicity đó.
+      </p>
+    </section>
+
+    <section class="concept-block" id="beam-sweeping">
+      <p class="concept-kicker">10 · TẠI SAO MỘT CELL CÓ THỂ PHÁT NHIỀU SSB?</p>
+      <h2>Một deployment có thể truyền các SSB khác nhau theo các spatial directions khác nhau để UE tìm được một beam phù hợp.</h2>
+
+      <div class="ssb-beam-scene" data-lesson-visual>
+        <div class="ssb-gnb">
+          <strong>gNB</strong>
+          <span>SSB burst set</span>
+        </div>
+        <div class="ssb-beams">
+          <i class="beam b0"><span>SSB 0</span></i>
+          <i class="beam b1"><span>SSB 1</span></i>
+          <i class="beam b2"><span>SSB 2</span></i>
+          <i class="beam b3"><span>SSB 3</span></i>
+        </div>
+        <div class="ssb-ue"><strong>UE</strong><span>đo candidate mạnh hơn</span></div>
+      </div>
+
+      <p>
+        Đây là nền tảng trực giác của beam sweeping:
+        thay vì chỉ phát một synchronization block theo một radiation pattern duy nhất, gNB có thể phát nhiều SSB instances ở các time positions khác nhau và dùng spatial transmission khác nhau.
+        UE có thể quan sát một SSB mạnh hơn các SSB khác.
+      </p>
+
+      <aside class="precision-note">
+        <strong>SSB index không nên bị định nghĩa đơn giản là beam ID</strong>
+        <p>
+          Trong deployment beamformed, SSB index thường rất hữu ích để gắn một SSB transmission với spatial direction/context.
+          Nhưng index trong specification trước hết là index của SS/PBCH block candidate/transmission.
+          Cách beamforming được tạo ra là implementation/deployment detail.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="receiver-flow">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER, SSB PROCESSING LÀ MỘT CHUỖI GIẢM UNCERTAINTY</p>
+      <h2>Mỗi thành phần trong SSB mở khóa một phần thông tin cần cho stage kế tiếp.</h2>
+
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SEARCH</span>
+            <h3>Scan candidate frequency/time hypotheses</h3>
+            <p>Receiver lấy sample windows ở các frequency hypotheses phù hợp với initial-access search.</p>
+            <small>OUTPUT · candidate regions</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PSS</span>
+            <h3>Detect synchronization candidate</h3>
+            <p>Correlation với known PSS hypotheses tạo timing/cell-group hypothesis ban đầu.</p>
+            <small>NEXT · Bài 22</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SSS</span>
+            <h3>Hoàn thiện physical cell identity</h3>
+            <p>SSS processing bổ sung phần identity còn thiếu và refinement context.</p>
+            <small>NEXT · Bài 23</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PBCH DM-RS</span>
+            <h3>Estimate channel cho PBCH</h3>
+            <p>Sau khi biết cell identity, receiver biết DM-RS comb offset và có known reference để estimate channel.</p>
+            <small>NEXT · Bài 25</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PBCH</span>
+            <h3>Demodulate và decode broadcast channel</h3>
+            <p>Receiver dùng channel estimate để equalize PBCH resources rồi tiếp tục channel decoding và MIB-related processing.</p>
+            <small>NEXT · Bài 26 và 27</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · SÁU CHỖ DỄ NHẦM VỀ SSB</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">SSB ≠ PSS</span>
+          <p>PSS chỉ là một thành phần 127 RE trong symbol 0 của toàn block.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSB ≠ MỘT OFDM SYMBOL</span>
+          <p>Một SSB kéo dài 4 OFDM symbols.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSB ≠ SS BURST SET</span>
+          <p>SSB là một block; burst set là tập candidate/transmitted blocks theo time structure.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PBCH ≠ TOÀN SSB</span>
+          <p>PBCH chia sẻ block với PSS, SSS, PBCH DM-RS và zero resources.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PBCH ≠ “CHỈ MIB”</span>
+          <p>PBCH processing còn có additional physical-layer payload/context; Bài 26 và 27 sẽ tách PBCH khỏi MIB.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSB INDEX ≠ CELL ID</span>
+          <p>PCI nhận dạng cell; SSB index nhận dạng block candidate/transmission trong SSB timing structure của cell.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa exact resource mapping và time-location rules; cách receiver search/threshold/process candidates vẫn là implementation.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>SS/PBCH block có 4 OFDM symbols, 240 contiguous subcarriers, exact PSS/SSS/PBCH/PBCH-DMRS mapping và candidate time locations.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Container mental model, RE accounting, receiver dependency flow và trực giác beam sweeping.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Search order, FFT strategy, correlation engine, threshold, candidate pruning, beamforming weights và parallel processing.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.3.1 và Table 7.4.3.1-1: SS/PBCH block gồm 4 OFDM symbols, 240 contiguous subcarriers và exact PSS/SSS/PBCH/PBCH-DMRS mapping ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 4.1: candidate SS/PBCH block time locations, SSB index context và assumptions cho cell search ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI TOÀN BỘ Ý</p>
+      <ol class="recap-list">
+        <li><strong>SSB:</strong> là SS/PBCH block, không phải chỉ PSS hay chỉ một OFDM symbol.</li>
+        <li><strong>Kích thước:</strong> 4 OFDM symbols × 240 contiguous subcarriers = 960 RE positions.</li>
+        <li><strong>PSS:</strong> 127 RE ở symbol 0, central subcarriers 56 đến 182.</li>
+        <li><strong>SSS:</strong> 127 RE ở symbol 2, cùng central span.</li>
+        <li><strong>PBCH:</strong> nằm ở symbols 1, 2 và 3, với PBCH DM-RS puncture các reference RE tương ứng.</li>
+        <li><strong>PBCH DM-RS:</strong> comb offset phụ thuộc <MathExpr tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4`} />.</li>
+        <li><strong>SS burst set:</strong> là tập candidate/transmitted SSBs theo time structure; một SSB chỉ là một block trong tập đó.</li>
+        <li><strong>Beam sweeping:</strong> nhiều SSB transmissions có thể được dùng với các spatial directions khác nhau, nhưng SSB index không nên bị đồng nhất với một universal beam ID.</li>
+        <li><strong>Receiver flow:</strong> tìm PSS → xử lý SSS → dùng PBCH DM-RS → decode PBCH → tiếp tục MIB/system-information path.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/synchronization/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Synchronization là gì?</strong>
+        <small>Vì sao receiver cần timing, frequency và frame/SSB context trước khi decode?</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span>
+        <strong>PSS</strong>
+        <small>Zoom vào 127-element known sequence và cách correlation tạo timing candidate.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
