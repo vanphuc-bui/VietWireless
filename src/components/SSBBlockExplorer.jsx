@@ -4,15 +4,19 @@ import MathExpr from './MathExpr.jsx';
 const N_SC = 240;
 const N_SYM = 4;
 
+function inRange(value, start, end) {
+  return Math.max(start, Math.min(end, value)) === value;
+}
+
 function resourceType(symbol, k, v) {
   if (symbol === 0) {
-    return k >= 56 && k <= 182 ? 'pss' : 'zero';
+    return inRange(k, 56, 182) ? 'pss' : 'zero';
   }
 
   if (symbol === 2) {
-    if (k >= 56 && k <= 182) return 'sss';
-    if ((k >= 48 && k <= 55) || (k >= 183 && k <= 191)) return 'zero';
-    if ((k <= 47 || k >= 192) && k % 4 === v) return 'dmrs';
+    if (inRange(k, 56, 182)) return 'sss';
+    if (inRange(k, 48, 55) || inRange(k, 183, 191)) return 'zero';
+    if (k % 4 === v) return 'dmrs';
     return 'pbch';
   }
 
@@ -22,9 +26,9 @@ function resourceType(symbol, k, v) {
 
 function countTypes(symbol, v) {
   const counts = { pss: 0, sss: 0, pbch: 0, dmrs: 0, zero: 0 };
-  for (let k = 0; k < N_SC; k += 1) {
+  Array.from({ length: N_SC }, (_, k) => k).forEach((k) => {
     counts[resourceType(symbol, k, v)] += 1;
-  }
+  });
   return counts;
 }
 
