@@ -21417,24 +21417,24 @@ body {
   border-right: 0;
 }
 
-.ssb-symbol-detail small,
-.ssb-symbol-detail strong,
-.ssb-symbol-detail span {
+.ssb-symbol-detail > div > small,
+.ssb-symbol-detail > div > strong,
+.ssb-symbol-detail > div > span {
   display: block;
 }
 
-.ssb-symbol-detail small {
+.ssb-symbol-detail > div > small {
   color: var(--muted);
   font-family: var(--font-ui);
   font-size: var(--lesson-meta-size);
 }
 
-.ssb-symbol-detail strong {
+.ssb-symbol-detail > div > strong {
   margin-top: 5px;
   font-size: var(--lesson-box-content-size);
 }
 
-.ssb-symbol-detail span {
+.ssb-symbol-detail > div > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: var(--lesson-meta-size);
@@ -21566,15 +21566,15 @@ body {
   top: 142px;
 }
 
-.ssb-gnb strong,
-.ssb-gnb span,
-.ssb-ue strong,
-.ssb-ue span {
+.ssb-gnb > strong,
+.ssb-gnb > span,
+.ssb-ue > strong,
+.ssb-ue > span {
   display: block;
 }
 
-.ssb-gnb span,
-.ssb-ue span {
+.ssb-gnb > span,
+.ssb-ue > span {
   margin-top: 4px;
   color: var(--muted);
   font-size: var(--lesson-meta-size);
