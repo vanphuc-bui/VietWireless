@@ -102,9 +102,9 @@ export default function SSBBlockExplorer() {
 
       <div className="ssb-explorer-main">
         <div className="ssb-frequency-axis">
-          <span>k=239</span>
+          <span><MathExpr tex="k=239" /></span>
           <strong>tần số ↑</strong>
-          <span>k=0</span>
+          <span><MathExpr tex="k=0" /></span>
         </div>
 
         <div className="ssb-exact-grid" aria-label="Resource mapping chính xác tương đối bên trong một SS/PBCH block">
