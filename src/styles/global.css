@@ -21114,3 +21114,589 @@ body {
     transform: rotate(90deg);
   }
 }
+
+
+/* --- Lesson 21: SS/PBCH block --- */
+.ssb-purpose-grid,
+.ssb-accounting-grid {
+  margin: 28px 0;
+  display: grid;
+  gap: 14px;
+}
+
+.ssb-purpose-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ssb-accounting-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.ssb-purpose-grid .technical-card,
+.ssb-accounting-grid .math-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.ssb-purpose-grid .technical-card > strong {
+  display: block;
+  margin: 8px 0;
+  font-size: var(--lesson-prose-size);
+}
+
+.ssb-dimension-story,
+.ssb-role-flow {
+  margin: 28px 0;
+  display: grid;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.ssb-dimension-story {
+  grid-template-columns:
+    minmax(0, 1fr) 32px
+    minmax(0, 1fr) 42px
+    minmax(0, 1fr);
+}
+
+.ssb-role-flow {
+  grid-template-columns:
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr);
+}
+
+.ssb-dimension-story > div,
+.ssb-role-flow > article {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ssb-dimension-story small,
+.ssb-role-flow small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.ssb-dimension-story strong,
+.ssb-role-flow strong {
+  display: block;
+  margin: 7px 0;
+  font-size: var(--lesson-prose-size);
+  line-height: 1.35;
+}
+
+.ssb-dimension-story > div > span,
+.ssb-role-flow p {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.ssb-dimension-story > b,
+.ssb-role-flow > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.ssb-mapping-table-wrap {
+  max-width: 100%;
+}
+
+.ssb-mapping-table {
+  min-width: 840px;
+}
+
+.ssb-explorer {
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ssb-explorer-controls {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.ssb-explorer-controls label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.ssb-explorer-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-explorer-controls input {
+  width: 100%;
+}
+
+.ssb-explorer-controls small {
+  color: var(--muted);
+}
+
+.ssb-total-readout.metric-card-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.ssb-total-readout .metric-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.ssb-total-readout .metric-card-value,
+.ssb-total-readout .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+}
+
+.ssb-explorer-main {
+  min-height: 440px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.ssb-frequency-axis {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+}
+
+.ssb-frequency-axis > strong {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 650;
+}
+
+.ssb-exact-grid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  gap: 8px;
+}
+
+.ssb-exact-column {
+  min-width: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 34px minmax(0, 1fr);
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+}
+
+.ssb-exact-column.selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.ssb-column-title {
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.ssb-column-cells {
+  min-height: 365px;
+  display: grid;
+  grid-template-rows: repeat(240, minmax(1px, 1fr));
+}
+
+.ssb-column-cells > i {
+  min-height: 1px;
+  display: block;
+}
+
+.ssb-column-cells > i.pss {
+  background: #7fa9c0;
+}
+
+.ssb-column-cells > i.sss {
+  background: #7b6b9d;
+}
+
+.ssb-column-cells > i.pbch {
+  background: #d78678;
+}
+
+.ssb-column-cells > i.dmrs {
+  background: #526b3c;
+}
+
+.ssb-column-cells > i.zero {
+  background: #e4e0da;
+}
+
+.ssb-explorer-legend {
+  padding: 14px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-explorer-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ssb-explorer-legend i {
+  width: 18px;
+  height: 10px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, .08);
+}
+
+.ssb-explorer-legend i.pss {
+  background: #7fa9c0;
+}
+
+.ssb-explorer-legend i.sss {
+  background: #7b6b9d;
+}
+
+.ssb-explorer-legend i.pbch {
+  background: #d78678;
+}
+
+.ssb-explorer-legend i.dmrs {
+  background: #526b3c;
+}
+
+.ssb-explorer-legend i.zero {
+  background: #e4e0da;
+}
+
+.ssb-symbol-detail {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(5, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.ssb-symbol-detail > div {
+  min-width: 0;
+  padding: 14px;
+  border-right: 1px solid var(--line);
+}
+
+.ssb-symbol-detail > div:last-child {
+  border-right: 0;
+}
+
+.ssb-symbol-detail small,
+.ssb-symbol-detail strong,
+.ssb-symbol-detail span {
+  display: block;
+}
+
+.ssb-symbol-detail small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-symbol-detail strong {
+  margin-top: 5px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.ssb-symbol-detail span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-explorer-note {
+  margin: 0;
+  padding: 16px 18px;
+  color: var(--muted);
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.55;
+}
+
+.ssb-carrier-visual,
+.ssb-burst-visual {
+  margin: 28px 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ssb-carrier-track {
+  position: relative;
+  min-height: 90px;
+  display: grid;
+  grid-template-columns: 1.3fr .75fr 1fr;
+  align-items: stretch;
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+}
+
+.ssb-carrier-track > span,
+.ssb-carrier-track > strong {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 14px;
+  text-align: center;
+}
+
+.ssb-carrier-track > span {
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-carrier-track > strong {
+  border-inline: 1px solid #c7a29a;
+  background: var(--accent-soft);
+  font-size: var(--lesson-prose-size);
+}
+
+.ssb-carrier-center {
+  width: 1px;
+  height: 24px;
+  margin: 0 auto;
+  background: var(--violet);
+}
+
+.ssb-carrier-visual > p,
+.ssb-burst-visual > p {
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+.ssb-half-frame > small {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.ssb-burst-track {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.ssb-burst-track > i {
+  min-height: 68px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line-strong);
+  background: var(--paper-2);
+  color: var(--muted);
+  font-style: normal;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-burst-track > i.active {
+  border-style: solid;
+  border-color: #c7a29a;
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.ssb-beam-scene {
+  position: relative;
+  min-height: 360px;
+  margin: 30px 0;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.ssb-gnb,
+.ssb-ue {
+  position: absolute;
+  z-index: 3;
+  min-width: 108px;
+  padding: 14px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  text-align: center;
+}
+
+.ssb-gnb {
+  left: 32px;
+  top: 142px;
+}
+
+.ssb-ue {
+  right: 32px;
+  top: 142px;
+}
+
+.ssb-gnb strong,
+.ssb-gnb span,
+.ssb-ue strong,
+.ssb-ue span {
+  display: block;
+}
+
+.ssb-gnb span,
+.ssb-ue span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.ssb-beams {
+  position: absolute;
+  inset: 24px 135px;
+}
+
+.ssb-beams .beam {
+  position: absolute;
+  left: 0;
+  width: 78%;
+  height: 56px;
+  transform-origin: left center;
+  clip-path: polygon(0 45%, 100% 0, 100% 100%, 0 55%);
+  background: rgba(49, 95, 120, .10);
+}
+
+.ssb-beams .beam > span {
+  position: absolute;
+  right: 14%;
+  top: 19px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-style: normal;
+}
+
+.ssb-beams .b0 {
+  top: 112px;
+  transform: rotate(-20deg);
+}
+
+.ssb-beams .b1 {
+  top: 130px;
+  transform: rotate(-7deg);
+  background: rgba(108, 79, 141, .12);
+}
+
+.ssb-beams .b2 {
+  top: 148px;
+  transform: rotate(7deg);
+  background: rgba(183, 64, 49, .11);
+}
+
+.ssb-beams .b3 {
+  top: 166px;
+  transform: rotate(20deg);
+  background: rgba(82, 107, 60, .12);
+}
+
+@media (max-width: 980px) {
+  .ssb-accounting-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ssb-total-readout.metric-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ssb-symbol-detail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ssb-symbol-detail > div {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ssb-role-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .ssb-role-flow > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .ssb-purpose-grid,
+  .ssb-accounting-grid,
+  .ssb-total-readout.metric-card-grid,
+  .ssb-symbol-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .ssb-dimension-story {
+    grid-template-columns: 1fr;
+  }
+
+  .ssb-dimension-story > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .ssb-explorer-main {
+    overflow-x: auto;
+  }
+
+  .ssb-exact-grid {
+    min-width: 620px;
+  }
+
+  .ssb-frequency-axis {
+    min-width: 62px;
+  }
+
+  .ssb-burst-track {
+    min-width: 620px;
+  }
+
+  .ssb-burst-visual {
+    overflow-x: auto;
+  }
+
+  .ssb-beam-scene {
+    min-width: 620px;
+  }
+
+  .concept-block:has(.ssb-beam-scene) {
+    overflow-x: auto;
+  }
+}
