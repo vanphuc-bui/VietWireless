@@ -1,0 +1,643 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import PSSExplorer from '../../components/PSSExplorer.jsx';
+
+const lessonMeta = {
+  number: 22,
+  part: 3,
+  slug: 'pss',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="PSS trong 5G NR: sequence, correlation và cell search | VietWireless"
+  description="Hiểu Primary Synchronization Signal trong 5G NR: 127-element m-sequence, ba giá trị N_ID^(2), mapping trong SSB, correlation, timing candidate, CFO và giới hạn của PSS."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 22 · INITIAL ACCESS</p>
+      <h1>PSS</h1>
+      <p class="lesson-deck">
+        Bài 21 cho thấy PSS nằm ở OFDM symbol đầu tiên của SSB và chiếm 127 subcarriers.{" "}
+        <strong>Bây giờ ta zoom vào chính 127 giá trị đó: chúng được tạo từ đâu, tại sao chỉ có ba PSS hypotheses, và correlation biến một sequence đã biết thành timing candidate cùng <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> như thế nào.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>UE có một buffer <MathExpr tex="I/Q" /> đầy noise và waveform chưa biết timing. Vì sao một sequence chỉ dài 127 phần tử lại giúp nó tìm ra một cell candidate?</h2>
+
+      <p>
+        UE chưa thể hỏi gNB “bạn bắt đầu SSB ở đâu?”.
+        Nó phải tự search trong received samples.
+        Điều hữu ích duy nhất ở thời điểm này là transmitter và receiver cùng biết trước một tập synchronization sequences rất nhỏ.
+      </p>
+
+      <div class="pss-question-grid">
+        <article class="technical-card">
+          <span class="card-label">KNOWN TRƯỚC</span>
+          <strong>3 PSS sequences</strong>
+          <p>UE có thể tự sinh cả ba hypotheses mà không cần decode payload nào trước.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">UNKNOWN</span>
+          <strong>timing + sequence identity</strong>
+          <p>UE chưa biết PSS nằm ở đâu trong buffer và cell đang dùng hypothesis nào.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PHÉP ĐO</span>
+          <strong>correlation</strong>
+          <p>So received waveform với known templates ở nhiều candidate timings.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">OUTPUT BAN ĐẦU</span>
+          <strong>candidate timing + <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></strong>
+          <p>Chưa phải full PCI và cũng chưa có PBCH.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">PSS NẰM Ở ĐÂU TRONG INITIAL ACCESS?</p>
+      <h2>PSS là bước đầu tiên biến một sample stream chưa có identity thành một candidate có timing và một phần cell identity.</h2>
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>RECEIVER STATE TRANSITION</span>
+        <div class="system-position-flow">
+          <span><MathExpr tex="I/Q" /> sample buffer</span><b>+</b>
+          <span>3 known PSS templates</span><b>→ correlate →</b>
+          <strong>peak candidate</strong><b>→</b>
+          <span>timing hypothesis</span><b>+</b>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></strong>
+        </div>
+        <p>
+          PSS giảm uncertainty rất mạnh nhưng chưa hoàn tất cell search.
+          SSS ở Bài 23 sẽ cung cấp phần identity còn thiếu để xây full physical-layer cell ID.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="three-sequences">
+      <p class="concept-kicker">01 · NR CHỈ CÓ BA PSS SEQUENCES</p>
+      <h2>Ba sequence tương ứng trực tiếp với ba giá trị <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}\in\{0,1,2\}`} />.</h2>
+
+      <p>
+        Physical-layer cell identity trong NR được tách thành hai phần:
+      </p>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}
+        =3N_{\mathrm{ID}}^{(1)}+N_{\mathrm{ID}}^{(2)}`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{(1)}\in\{0,\ldots,335\},
+        \qquad
+        N_{\mathrm{ID}}^{(2)}\in\{0,1,2\}`}
+        display
+      />
+
+      <p>
+        Tổng cộng có <MathExpr tex="1008" /> physical cell identities.
+        PSS chỉ cho UE biết phần <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />.
+        Sau một PSS detection lý tưởng, vẫn còn <MathExpr tex="336" /> PCI candidates cùng chia sẻ giá trị đó.
+      </p>
+
+      <div class="pss-id-story" data-lesson-visual>
+        <div>
+          <small>PSS</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=0,1,2`} /></strong>
+          <span>3 possibilities</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>SSS · BÀI 23</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=0,\ldots,335`} /></strong>
+          <span>336 possibilities</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>FULL PCI</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}`} /></strong>
+          <span>1008 identities</span>
+        </div>
+      </div>
+
+      <aside class="mental-model">
+        <strong>PSS không tự mang full cell ID</strong>
+        <p>
+          Nếu detector chọn được PSS hypothesis số 2, điều đó chỉ nói <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=2`} />.
+          UE vẫn cần SSS để tìm <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} />.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="sequence-generation">
+      <p class="concept-kicker">02 · 127 GIÁ TRỊ PSS ĐƯỢC SINH TỪ MỘT MAXIMAL-LENGTH SEQUENCE</p>
+      <h2>PSS là một BPSK-like sequence gồm các giá trị <MathExpr tex={String.raw`+1`} /> và <MathExpr tex={String.raw`-1`} />, được xây từ một m-sequence chu kỳ 127.</h2>
+
+      <p>
+        3GPP bắt đầu bằng binary sequence <MathExpr tex="x(i)" /> có recurrence:
+      </p>
+
+      <MathExpr
+        tex={String.raw`x(i+7)=\big(x(i+4)+x(i)\big)\bmod2`}
+        display
+      />
+
+      <p>với initial state:</p>
+
+      <MathExpr
+        tex={String.raw`[x(6)\ x(5)\ x(4)\ x(3)\ x(2)\ x(1)\ x(0)]
+        =[1\ 1\ 1\ 0\ 1\ 1\ 0]`}
+        display
+      />
+
+      <p>
+        Vì đây là một maximal-length sequence từ thanh ghi bậc 7, chu kỳ của nó là:
+      </p>
+
+      <MathExpr tex={String.raw`2^7-1=127`} display />
+
+      <p>
+        Binary value sau đó được map thành real-valued synchronization symbol:
+      </p>
+
+      <MathExpr
+        tex={String.raw`d_{\mathrm{PSS}}(n)=1-2x(m)`}
+        display
+      />
+
+      <p>
+        Nghĩa là bit <MathExpr tex="0" /> trở thành <MathExpr tex={String.raw`+1`} /> và bit <MathExpr tex="1" /> trở thành <MathExpr tex={String.raw`-1`} />.
+        PSS không mang arbitrary payload bits; sequence được specification xác định hoàn toàn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cyclic-shifts">
+      <p class="concept-kicker">03 · BA PSS KHÔNG CẦN BA GENERATOR KHÁC NHAU</p>
+      <h2>Chúng là ba cyclic shifts của cùng một base m-sequence.</h2>
+
+      <MathExpr
+        tex={String.raw`m=
+        \big(n+43N_{\mathrm{ID}}^{(2)}\big)\bmod127,
+        \qquad 0\le n<127`}
+        display
+      />
+
+      <div class="pss-shift-story" data-lesson-visual>
+        <article>
+          <small>HYPOTHESIS 0</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=0`} /></strong>
+          <span>base sequence · cyclic shift 0</span>
+        </article>
+        <b>→</b>
+        <article>
+          <small>HYPOTHESIS 1</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=1`} /></strong>
+          <span>cyclic shift 43</span>
+        </article>
+        <b>→</b>
+        <article>
+          <small>HYPOTHESIS 2</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=2`} /></strong>
+          <span>cyclic shift 86</span>
+        </article>
+      </div>
+
+      <p>
+        Với m-sequence lý tưởng, cyclic autocorrelation có một peak rất lớn khi shift khớp và giá trị nhỏ ở các non-zero cyclic shifts.
+        Đây là một trong những lý do sequence kiểu này rất phù hợp cho detection.
+      </p>
+
+      <aside class="precision-note">
+        <strong>“PSS là BPSK” cần hiểu đúng domain</strong>
+        <p>
+          Các giá trị <MathExpr tex={String.raw`d_{\mathrm{PSS}}(n)\in\{-1,+1\}`} /> là symbols được map lên subcarriers.
+          Sau resource mapping và IFFT, waveform phát qua antenna là complex time-domain OFDM waveform, không phải 127 time samples chỉ có giá trị <MathExpr tex={String.raw`\pm1`} />.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="mapping">
+      <p class="concept-kicker">04 · PSS NẰM CHÍNH XÁC Ở ĐÂU TRONG SSB?</p>
+      <h2>127 sequence elements được map theo thứ tự tăng của subcarrier index vào central span của relative OFDM symbol 0.</h2>
+
+      <MathExpr
+        tex={String.raw`\ell=0,\qquad k=56,57,\ldots,182`}
+        display
+      />
+
+      <div class="pss-ssb-map" data-lesson-visual>
+        <div class="pss-map-axis">tần số ↑</div>
+        <div class="pss-map-symbol">
+          <span class="pss-map-zero upper">56 RE phía trên ngoài PSS</span>
+          <strong>PSS · 127 RE</strong>
+          <span class="pss-map-zero lower">56 RE phía dưới ngoài PSS</span>
+        </div>
+        <div class="pss-map-time">relative OFDM symbol 0 của SSB</div>
+      </div>
+
+      <p>
+        127 PSS subcarriers nằm giữa span 240-subcarrier của SSB.
+        Các RE còn lại ở symbol 0 được set to zero theo SS/PBCH block mapping đã học ở Bài 21.
+      </p>
+    </section>
+
+    <section class="concept-block" id="correlation-two-views">
+      <p class="concept-kicker">05 · CÓ HAI CORRELATION MENTAL MODELS NÊN TÁCH RIÊNG</p>
+      <h2>Một cái tìm timing trong sample stream; cái còn lại so ba PSS hypotheses sau khi đã có candidate resource.</h2>
+
+      <div class="pss-two-view-grid">
+        <article class="technical-card">
+          <span class="card-label">VIEW A · TIME-DOMAIN SEARCH</span>
+          <h3>Trượt PSS-derived waveform template qua sample buffer</h3>
+          <MathExpr
+            tex={String.raw`C_q[\tau]
+            =\sum_n r[\tau+n]s_q^*[n]`}
+            display
+          />
+          <p>
+            <MathExpr tex="q" /> là một trong ba PSS hypotheses.
+            Peak theo candidate lag <MathExpr tex={String.raw`\tau`} /> tạo timing hypothesis.
+            <MathExpr tex="s_q[n]" /> ở đây là time-domain template được sinh từ PSS resource mapping và OFDM modulation.
+          </p>
+        </article>
+
+        <article class="technical-card">
+          <span class="card-label">VIEW B · SEQUENCE-DOMAIN MATCH</span>
+          <h3>So 127 received PSS REs với ba known sequences</h3>
+          <MathExpr
+            tex={String.raw`Z_q
+            =\sum_{n=0}^{126}R_{\mathrm{PSS}}[n]d_q^*[n]`}
+            display
+          />
+          <p>
+            Sau khi extract được candidate PSS resources, receiver có thể đo mức match của ba hypotheses.
+            Hypothesis có metric phù hợp nhất cho candidate <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />.
+          </p>
+        </article>
+      </div>
+
+      <p>
+        Receiver implementation không bắt buộc phải tách đúng hai block như trên.
+        Có thể search trong frequency domain, dùng FFT-based correlation, search nhiều CFO hypotheses song song hoặc combine timing và identity detection.
+        Hai view chỉ giúp tách rõ <strong>timing search</strong> khỏi <strong>sequence identity</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="correlation-example">
+      <p class="concept-kicker">06 · VÍ DỤ NHỎ: VÌ SAO CORRELATION TẠO PEAK?</p>
+      <h2>Đúng alignment làm nhiều contribution cộng cùng dấu; sai alignment khiến chúng triệt tiêu nhiều hơn.</h2>
+
+      <p>
+        Dùng một toy sequence ngắn để nhìn cơ chế, không phải PSS thật:
+      </p>
+
+      <MathExpr
+        tex={String.raw`s=[+1,-1,-1,+1,-1]`}
+        display
+      />
+
+      <p>Nếu received segment khớp chính xác:</p>
+
+      <MathExpr
+        tex={String.raw`r=[+1,-1,-1,+1,-1]`}
+        display
+      />
+
+      <p>thì element-wise products với reference đều bằng <MathExpr tex={String.raw`+1`} />:</p>
+
+      <MathExpr
+        tex={String.raw`r\odot s=[1,1,1,1,1],\qquad C=5`}
+        display
+      />
+
+      <p>
+        Với wrong alignment hoặc wrong PSS hypothesis, positive và negative contributions không còn reinforce giống nhau.
+        PSS thật dùng 127 elements, nên coherent accumulation có processing gain đáng kể so với nhìn từng RE riêng lẻ.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="pss-lab">
+      <p class="concept-kicker">07 · INTERACTIVE LAB</p>
+      <h2>Cho receiver search cả timing lẫn ba PSS hypotheses, rồi tăng noise và CFO để xem peak mất rõ dần.</h2>
+
+      <p>
+        Lab tạo đúng ba PSS sequences theo công thức 3GPP, map mỗi sequence vào một PSS-only OFDM template,
+        chèn một template vào sample buffer rồi chạy normalized sliding correlation với cả ba hypotheses.
+      </p>
+
+      <div data-lesson-visual>
+        <PSSExplorer client:load />
+      </div>
+
+      <p>
+        Khi noise tăng, correlation floor tăng và peak kém nổi bật.
+        Khi normalized CFO tăng, received samples quay phase trong observation window nên contributions không còn cộng coherent hoàn toàn với template không có CFO.
+        Practical receiver có thể search hoặc compensate frequency hypotheses để khôi phục peak.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cfo">
+      <p class="concept-kicker">08 · CFO KHÔNG CHỈ “DỊCH CẢ PHỔ SANG MỘT BÊN”</p>
+      <h2>Trong time-domain correlator, CFO tạo phase rotation tích lũy và làm coherent sum suy giảm.</h2>
+
+      <p>
+        Với normalized CFO:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\epsilon
+        =\frac{\Delta f_{\mathrm{CFO}}}{\Delta f_{\mathrm{SCS}}}`}
+        display
+      />
+
+      <p>
+        received template lý tưởng bị nhân thêm một rotation theo sample index:
+      </p>
+
+      <MathExpr
+        tex={String.raw`r[n]
+        \propto s[n]e^{j2\pi\epsilon n/N_{\mathrm{FFT}}}`}
+        display
+      />
+
+      <p>
+        Nếu correlator vẫn dùng <MathExpr tex="s[n]" /> không có rotation,
+        mỗi sample contribution mang một phase khác nhau.
+        Khi <MathExpr tex={String.raw`|\epsilon|`} /> tăng, coherent accumulation thường giảm.
+      </p>
+
+      <aside class="precision-note">
+        <strong>PSS có thể giúp frequency synchronization, nhưng không có nghĩa một phép correlation duy nhất cho CFO chính xác cuối cùng</strong>
+        <p>
+          Practical receiver có thể dùng PSS để search coarse frequency hypotheses hoặc derive frequency information từ correlation structure.
+          Bài 24 sẽ tách fine timing và frequency refinement ra riêng.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="multipath">
+      <p class="concept-kicker">09 · MULTIPATH CÓ THỂ TẠO NHIỀU TIMING FEATURES QUANH PSS</p>
+      <h2>PSS detector không quan sát một channel một-path hoàn hảo.</h2>
+
+      <p>
+        Với multipath:
+      </p>
+
+      <MathExpr
+        tex={String.raw`r[n]
+        =\sum_m h[m]s[n-m]+w[n]`}
+        display
+      />
+
+      <p>
+        correlation output trở thành channel bị “nhìn qua” autocorrelation của template:
+      </p>
+
+      <MathExpr
+        tex={String.raw`C[\tau]
+        =\sum_m h[m]R_{ss}[\tau-m]+\eta[\tau]`}
+        display
+      />
+
+      <p>
+        Vì vậy strongest correlation peak không phải lúc nào cũng đồng nghĩa earliest physical path.
+        Timing candidate từ PSS còn có thể được refine bằng additional structure và receiver logic.
+      </p>
+
+      <div class="pss-multipath-story" data-lesson-visual>
+        <div>
+          <small>PATH 0</small>
+          <strong>earlier</strong>
+          <span>có thể yếu hơn</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>PATH 1</small>
+          <strong>later</strong>
+          <span>có thể mạnh hơn</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>CORRELATION</small>
+          <strong>structured peak region</strong>
+          <span>detector phải chọn timing hypothesis</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="what-ue-knows">
+      <p class="concept-kicker">10 · SAU PSS, UE BIẾT GÌ VÀ VẪN CHƯA BIẾT GÌ?</p>
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table pss-state-table">
+          <thead>
+            <tr>
+              <th>Thông tin</th>
+              <th>Sau PSS?</th>
+              <th>Ghi chú</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>candidate timing / SSB region</td>
+              <td>có hypothesis</td>
+              <td>còn có thể cần refinement.</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></td>
+              <td>có candidate</td>
+              <td>một trong ba giá trị.</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /></td>
+              <td>chưa</td>
+              <td>SSS cung cấp phần này.</td>
+            </tr>
+            <tr>
+              <td>full PCI</td>
+              <td>chưa</td>
+              <td>cần cả PSS và SSS.</td>
+            </tr>
+            <tr>
+              <td>PBCH channel estimate</td>
+              <td>chưa</td>
+              <td>PBCH DM-RS xử lý ở bước sau.</td>
+            </tr>
+            <tr>
+              <td>MIB</td>
+              <td>chưa</td>
+              <td>phải decode PBCH trước.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>Một PSS detector thực tế thường phải search nhiều dimensions hơn chỉ một sequence index.</h2>
+
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">TEMPLATE GENERATION</span>
+            <h3>Sinh ba PSS hypotheses</h3>
+            <p>Tạo sequence từ <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=0,1,2`} /> và chuyển sang representation phù hợp với detector.</p>
+            <small>KNOWN BEFORE DETECTION</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">SEARCH SPACE</span>
+            <h3>Duyệt timing và có thể cả frequency hypotheses</h3>
+            <p>Receiver không biết block nằm chính xác ở sample nào và residual CFO có thể chưa nhỏ.</p>
+            <small>OUTPUT · candidate hypotheses</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">CORRELATION / MATCHED FILTER</span>
+            <h3>Tích lũy match metric</h3>
+            <p>Dùng direct correlation, FFT-based convolution hoặc optimized SIMD/DSP implementation tùy receiver.</p>
+            <small>OUTPUT · metric surface</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PEAK DECISION</span>
+            <h3>Chọn hoặc giữ nhiều candidates</h3>
+            <p>Threshold, peak-to-average rule và candidate pruning là implementation-dependent.</p>
+            <small>OUTPUT · timing + <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">NEXT STAGE</span>
+            <h3>Extract SSS region</h3>
+            <p>Dùng candidate timing và PSS identity để xây đúng hypotheses cho SSS processing.</p>
+            <small>NEXT · Bài 23</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · SÁU CHỖ DỄ HIỂU NHẦM VỀ PSS</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">PSS ≠ SSB</span>
+          <p>PSS chỉ chiếm 127 RE trong một OFDM symbol của block 4-symbol × 240-subcarrier.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PSS ≠ FULL PCI</span>
+          <p>PSS chỉ cho <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />; SSS còn phải cung cấp <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} />.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PSS ≠ 127 TIME SAMPLES</span>
+          <p>127 values được map lên subcarriers. OFDM modulation mới tạo time-domain waveform.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PEAK ≠ FINAL TIMING</span>
+          <p>Noise, multipath và CFO có thể làm timing candidate cần refinement thêm.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PSS ≠ PAYLOAD CHANNEL</span>
+          <p>PSS là physical synchronization signal; nó không mang higher-layer payload như PBCH/PDSCH.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CORRELATOR ≠ 3GPP ALGORITHM</span>
+          <p>3GPP định nghĩa sequence và mapping, nhưng detector architecture, threshold và search strategy là receiver implementation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>3GPP quy định chính xác PSS sequence và mapping; cách UE phát hiện sequence đó vẫn do receiver thiết kế.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>Ba giá trị <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />, recurrence của m-sequence, cyclic shifts, 127 PSS symbols và resource mapping trong SSB.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Correlation peak, timing-hypothesis mental model, CFO coherence loss và state transition sau PSS.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Time-domain hay frequency-domain detector, FFT correlation, threshold, CFO bank, multipath handling và candidate pruning.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 7.4.2.1 và 7.4.2.2: physical-layer cell identities và exact PSS sequence generation ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, clause 7.4.3.1.1 và Table 7.4.3.1-1: mapping 127 PSS symbols vào SS/PBCH block ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, clause 4.1: cell search dùng PSS và SSS để acquire synchronization và detect physical-layer cell ID ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI TOÀN BỘ Ý</p>
+      <ol class="recap-list">
+        <li><strong>PSS:</strong> là 127-element synchronization sequence nằm trên relative OFDM symbol 0 của SSB.</li>
+        <li><strong>Ba hypotheses:</strong> tương ứng với <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=0,1,2`} />.</li>
+        <li><strong>Sequence:</strong> được sinh từ 7-stage maximal-length binary sequence rồi map thành <MathExpr tex={String.raw`\pm1`} />.</li>
+        <li><strong>Cyclic shift:</strong> ba PSS dùng shifts 0, 43 và 86 trên cùng base m-sequence.</li>
+        <li><strong>Mapping:</strong> PSS chiếm <MathExpr tex={String.raw`k=56,\ldots,182`} /> của relative symbol <MathExpr tex={String.raw`\ell=0`} /> trong SSB.</li>
+        <li><strong>Correlation:</strong> known template biến timing/identity search thành metric theo candidate hypothesis.</li>
+        <li><strong>CFO và multipath:</strong> có thể làm correlation peak giảm, dịch hoặc trở nên phức tạp hơn.</li>
+        <li><strong>Sau PSS:</strong> UE có timing candidate và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />, nhưng chưa có full PCI.</li>
+        <li><strong>Bước tiếp:</strong> SSS cung cấp <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /> để hoàn thiện physical cell identity.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/ssb/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>SSB là gì?</strong>
+        <small>Block 4 OFDM symbols × 240 subcarriers chứa PSS, SSS, PBCH và PBCH DM-RS.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span>
+        <strong>SSS và Physical Cell ID</strong>
+        <small>Từ <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> của PSS tới full physical-layer cell identity.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
