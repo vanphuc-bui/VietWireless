@@ -22507,3 +22507,363 @@ body {
     flex-direction: column;
   }
 }
+
+
+/* --- Lesson 24: fine timing and frequency synchronization --- */
+.fine-sync-problem-grid,
+.fine-sync-two-timing,
+.fine-sync-cfo-types {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fine-sync-problem-grid > article,
+.fine-sync-two-timing > article,
+.fine-sync-cfo-types > article {
+  min-width: 0;
+  min-height: 0;
+}
+
+.fine-sync-problem-grid > article > strong,
+.fine-sync-two-timing > article > strong,
+.fine-sync-cfo-types > article > strong {
+  display: block;
+  margin: 8px 0;
+  font-size: var(--lesson-prose-size);
+}
+
+.fine-sync-example-cases {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fine-sync-example-cases > article {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fine-sync-example-cases > article > small,
+.fine-sync-example-cases > article > strong {
+  display: block;
+}
+
+.fine-sync-example-cases > article > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-example-cases > article > strong {
+  margin: 7px 0;
+  font-size: var(--lesson-prose-size);
+}
+
+.fine-sync-loop {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr) 28px
+    minmax(0, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.fine-sync-loop > div {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fine-sync-loop > div > small,
+.fine-sync-loop > div > strong {
+  display: block;
+}
+
+.fine-sync-loop > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-loop > div > strong {
+  margin-top: 7px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.fine-sync-loop > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+}
+
+.fine-sync-explorer {
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.fine-sync-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.fine-sync-controls label {
+  min-width: 0;
+}
+
+.fine-sync-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-controls input {
+  width: 100%;
+}
+
+.fine-sync-controls label > small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.fine-sync-readout.metric-card-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.fine-sync-readout .metric-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.fine-sync-readout .metric-card-value,
+.fine-sync-readout .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+}
+
+.fine-sync-window-panel {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.fine-sync-timeline {
+  position: relative;
+  height: 170px;
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.fine-sync-prev-zone,
+.fine-sync-cp-zone,
+.fine-sync-useful-zone,
+.fine-sync-next-zone {
+  position: absolute;
+  top: 42px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid rgba(0,0,0,.08);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-prev-zone,
+.fine-sync-next-zone {
+  background: #eee9e2;
+}
+
+.fine-sync-cp-zone {
+  background: #e8eef2;
+}
+
+.fine-sync-useful-zone {
+  background: #f4f1ec;
+}
+
+.fine-sync-safe-zone {
+  position: absolute;
+  top: 112px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #9fb18b;
+  background: #edf3e7;
+  color: #4e613e;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  white-space: nowrap;
+}
+
+.fine-sync-window {
+  position: absolute;
+  top: 24px;
+  height: 92px;
+  border: 2px solid;
+  pointer-events: none;
+}
+
+.fine-sync-window.safe {
+  border-color: #65723a;
+  background: rgba(101, 114, 58, .05);
+}
+
+.fine-sync-window.unsafe {
+  border-color: #b64031;
+  background: rgba(182, 64, 49, .05);
+}
+
+.fine-sync-window > span {
+  position: absolute;
+  top: -23px;
+  left: 4px;
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.fine-sync-current-start {
+  position: absolute;
+  top: 18px;
+  bottom: 16px;
+  width: 1px;
+  border-left: 2px dashed var(--violet);
+}
+
+.fine-sync-current-start > span {
+  position: absolute;
+  bottom: -2px;
+  left: 5px;
+  white-space: nowrap;
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-window-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.fine-sync-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.fine-sync-chart {
+  min-width: 0;
+  padding: 18px;
+  overflow-x: auto;
+}
+
+.fine-sync-chart + .fine-sync-chart {
+  border-left: 1px solid var(--line);
+}
+
+.fine-sync-chart svg {
+  width: 100%;
+  min-width: 520px;
+  min-height: 230px;
+  margin-top: 14px;
+}
+
+.fine-sync-gridline {
+  stroke: #e7e1d9;
+  stroke-width: 1;
+}
+
+.fine-sync-axis-label {
+  fill: #817b73;
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.fine-sync-timing-line {
+  fill: none;
+  stroke: #315f78;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fine-sync-cfo-line {
+  fill: none;
+  stroke: #b64031;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fine-sync-explorer-note {
+  margin: 0;
+  padding: 16px 18px;
+  color: var(--muted);
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .fine-sync-readout.metric-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fine-sync-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fine-sync-chart + .fine-sync-chart {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .fine-sync-loop {
+    grid-template-columns: 1fr;
+  }
+
+  .fine-sync-loop > b {
+    min-height: 22px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .fine-sync-problem-grid,
+  .fine-sync-two-timing,
+  .fine-sync-cfo-types,
+  .fine-sync-example-cases,
+  .fine-sync-controls,
+  .fine-sync-readout.metric-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fine-sync-timeline {
+    min-width: 640px;
+  }
+
+  .fine-sync-window-panel {
+    overflow-x: auto;
+  }
+}
