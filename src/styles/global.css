@@ -22103,3 +22103,407 @@ body {
     min-width: 640px;
   }
 }
+
+
+/* --- Lesson 23: SSS and Physical Cell ID --- */
+.sss-pci-story,
+.sss-example-flow {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) 32px
+    minmax(0, 1fr) 42px
+    minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.sss-pci-story > div,
+.sss-example-flow > div {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sss-pci-story > div > small,
+.sss-example-flow > div > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+  letter-spacing: .055em;
+}
+
+.sss-pci-story > div > strong,
+.sss-example-flow > div > strong {
+  display: block;
+  margin: 7px 0;
+  font-size: var(--lesson-prose-size);
+}
+
+.sss-pci-story > div > span,
+.sss-example-flow > div > span {
+  color: var(--muted);
+  font-size: var(--lesson-prose-size);
+  line-height: 1.5;
+}
+
+.sss-pci-story > b,
+.sss-example-flow > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-prose-size);
+  font-weight: 500;
+}
+
+.sss-336-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sss-336-grid > article {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sss-336-grid > article > small,
+.sss-336-grid > article > strong,
+.sss-336-grid > article > span {
+  display: block;
+}
+
+.sss-336-grid > article > small {
+  color: var(--accent);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+  font-weight: 700;
+}
+
+.sss-336-grid > article > strong {
+  margin-top: 8px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.sss-336-grid > article > span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-ssb-position {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sss-ssb-position > div {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.sss-ssb-position > div.sss-highlight {
+  border-color: #baa9ce;
+  background: #f3edf8;
+}
+
+.sss-ssb-position > div > small,
+.sss-ssb-position > div > strong,
+.sss-ssb-position > div > span {
+  display: block;
+}
+
+.sss-ssb-position > div > small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-ssb-position > div > strong {
+  margin-top: 7px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.sss-ssb-position > div > span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-explorer {
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.sss-explorer-controls {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.sss-explorer-controls label {
+  min-width: 0;
+}
+
+.sss-explorer-controls label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-explorer-controls input,
+.sss-explorer-controls select {
+  width: 100%;
+}
+
+.sss-explorer-readout.metric-card-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sss-explorer-readout .metric-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+.sss-explorer-readout .metric-card-value,
+.sss-explorer-readout .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+}
+
+.sss-result-banner {
+  padding: 14px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--lesson-box-content-size);
+}
+
+.sss-result-banner.correct {
+  background: #edf3e7;
+}
+
+.sss-result-banner.wrong {
+  background: #fbebe8;
+}
+
+.sss-result-banner > strong {
+  flex: 0 0 auto;
+}
+
+.sss-result-banner > span {
+  color: var(--muted);
+}
+
+.sss-search-chart {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.sss-search-chart svg {
+  width: 100%;
+  min-width: 680px;
+  min-height: 270px;
+  margin-top: 14px;
+}
+
+.sss-gridline {
+  stroke: #e7e1d9;
+  stroke-width: 1;
+}
+
+.sss-axis-label {
+  fill: #817b73;
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+
+.sss-metric-line {
+  fill: none;
+  stroke: #315f78;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sss-true-id {
+  stroke: #65723a;
+  stroke-width: 1.6;
+  stroke-dasharray: 5 5;
+}
+
+.sss-detected-id {
+  stroke: #b64031;
+  stroke-width: 1.6;
+  stroke-dasharray: 8 4;
+}
+
+.sss-search-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-search-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sss-search-legend i {
+  width: 24px;
+  height: 3px;
+  display: inline-block;
+}
+
+.sss-search-legend i.metric {
+  background: #315f78;
+}
+
+.sss-search-legend i.true {
+  height: 0;
+  border-top: 2px dashed #65723a;
+}
+
+.sss-search-legend i.detected {
+  height: 0;
+  border-top: 2px dashed #b64031;
+}
+
+.sss-top-candidates {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.sss-top-candidates > div {
+  min-width: 0;
+  padding: 14px;
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.sss-top-candidates > div:last-child {
+  border-right: 0;
+}
+
+.sss-top-candidates > div.winner {
+  background: var(--blue-soft);
+}
+
+.sss-top-candidates > div > small,
+.sss-top-candidates > div > strong,
+.sss-top-candidates > div > span {
+  display: block;
+}
+
+.sss-top-candidates > div > small {
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-top-candidates > div > strong {
+  margin-top: 5px;
+  font-size: var(--lesson-box-content-size);
+}
+
+.sss-top-candidates > div > span {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: var(--lesson-meta-size);
+}
+
+.sss-explorer-note {
+  margin: 0;
+  padding: 16px 18px;
+  color: var(--muted);
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.55;
+}
+
+.sss-after-pci-grid {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sss-after-pci-grid > article {
+  min-width: 0;
+  min-height: 0;
+}
+
+.sss-after-pci-grid > article > strong {
+  display: block;
+  margin: 8px 0;
+  font-size: var(--lesson-box-content-size);
+}
+
+@media (max-width: 980px) {
+  .sss-explorer-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .sss-explorer-readout.metric-card-grid,
+  .sss-top-candidates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sss-ssb-position,
+  .sss-after-pci-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sss-top-candidates > div {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 720px) {
+  .sss-pci-story,
+  .sss-example-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .sss-pci-story > b,
+  .sss-example-flow > b {
+    min-height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .sss-336-grid,
+  .sss-ssb-position,
+  .sss-after-pci-grid,
+  .sss-explorer-readout.metric-card-grid,
+  .sss-top-candidates {
+    grid-template-columns: 1fr;
+  }
+
+  .sss-result-banner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
