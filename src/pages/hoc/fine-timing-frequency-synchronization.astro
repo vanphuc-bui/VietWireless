@@ -1,0 +1,574 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import FineSyncExplorer from '../../components/FineSyncExplorer.jsx';
+
+const lessonMeta = {
+  number: 24,
+  part: 3,
+  slug: 'fine-timing-frequency-synchronization',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="Fine timing và frequency synchronization trong 5G NR | VietWireless"
+  description="Hiểu receiver refine FFT-window timing và residual carrier-frequency offset sau PSS/SSS: CP timing margin, phase ramp, CFO phase drift, ICI và practical correction flow."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 24 · INITIAL ACCESS</p>
+      <h1>Fine timing và frequency synchronization</h1>
+      <p class="lesson-deck">
+        PSS và SSS đã giúp receiver tìm được một SSB candidate và full PCI, nhưng “đã detect đúng cell” chưa có nghĩa sample clock và carrier frequency đã align đủ tốt cho FFT/PBCH.{" "}
+        <strong>Bước tiếp theo là refine nơi đặt FFT window và giảm residual frequency error để OFDM orthogonality được giữ đủ tốt cho PBCH DM-RS và PBCH processing.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>PSS correlation peak đã cho timing candidate. Tại sao receiver không thể cứ đặt FFT window đúng ngay tại peak đó rồi decode PBCH?</h2>
+
+      <p>
+        Có hai lý do lớn.
+        Thứ nhất, multipath có thể tạo nhiều timing features và strongest peak không nhất thiết là earliest useful path.
+        Thứ hai, oscillator mismatch hoặc Doppler để lại carrier-frequency offset khiến phase tiếp tục quay trong OFDM symbol.
+      </p>
+
+      <div class="fine-sync-problem-grid">
+        <article class="technical-card">
+          <span class="card-label">TIMING ERROR</span>
+          <strong>FFT window đặt chưa tối ưu</strong>
+          <p>Nếu quá sớm hoặc quá muộn, useful window có thể mất circular-convolution condition và bị ISI.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FREQUENCY ERROR</span>
+          <strong>Residual CFO</strong>
+          <p>Phase quay qua useful symbol làm subcarriers mất orthogonality và tạo inter-carrier interference.</p>
+        </article>
+      </div>
+
+      <aside class="mental-model">
+        <strong>Coarse synchronization trả lời “xấp xỉ ở đâu”. Fine synchronization trả lời “đặt FFT ở đâu và derotate bao nhiêu”.</strong>
+        <p>
+          Mục tiêu không phải làm mọi residual error thành tuyệt đối bằng zero, mà đưa chúng vào vùng receiver có thể xử lý ổn định ở stage kế tiếp.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">BÀI 24 NẰM Ở ĐÂU TRONG FLOW?</p>
+      <h2>PSS/SSS tạo candidate. Fine synchronization biến candidate đó thành một FFT-ready receive context.</h2>
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>INITIAL-ACCESS STATE TRANSITION</span>
+        <div class="system-position-flow">
+          <span>PSS timing candidate</span><b>+</b>
+          <span>PCI từ SSS</span><b>→ refine →</b>
+          <strong>FFT-window timing</strong><b>+</b>
+          <strong>residual CFO estimate</strong><b>→ correct →</b>
+          <span>PBCH DM-RS / PBCH</span>
+        </div>
+        <p>
+          Exact refinement algorithm không được 3GPP bắt buộc.
+          Receiver có thể dùng PSS/SSS, CP correlation, known-symbol phase, joint search hoặc tracking loop tùy implementation.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="timing-convention">
+      <p class="concept-kicker">01 · TRƯỚC HẾT PHẢI PHÂN BIỆT “SSB TIMING” VÀ “FFT-WINDOW TIMING”</p>
+      <h2>Biết approximate start của SSB chưa đồng nghĩa biết sample chính xác nên dùng làm sample đầu tiên của FFT.</h2>
+
+      <p>
+        PSS detector thường tạo một timing hypothesis quanh nơi known waveform match tốt nhất.
+        Nhưng OFDM demodulator cần một quyết định khác: chọn đúng <MathExpr tex="N" /> useful samples để đưa vào FFT.
+      </p>
+
+      <div class="fine-sync-two-timing">
+        <article class="technical-card">
+          <span class="card-label">COARSE TIMING</span>
+          <strong>candidate SSB arrival</strong>
+          <p>Đủ để extract vùng PSS/SSS và tiếp tục search.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FFT TIMING</span>
+          <strong>exact useful-window placement</strong>
+          <p>Phải nằm trong timing region mà CP và channel memory vẫn giữ circular model hợp lệ.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="safe-window">
+      <p class="concept-kicker">02 · CYCLIC PREFIX TẠO MỘT TIMING MARGIN</p>
+      <h2>Nếu channel memory nằm trong CP, FFT window không nhất thiết phải bắt đầu tại đúng một sample duy nhất.</h2>
+
+      <p>
+        Dùng một model minh họa với useful OFDM symbol dài <MathExpr tex="N" />, CP dài <MathExpr tex={String.raw`N_{\mathrm{CP}}`} /> và channel có
+        <MathExpr tex="L" /> taps từ delay 0 tới <MathExpr tex={String.raw`L-1`} />.
+        Quy ước:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\Delta n<0
+        \quad\text{nghĩa là FFT window bắt đầu sớm vào CP}`}
+        display
+      />
+
+      <p>
+        Một safe interval điển hình theo convention này là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`L-1-N_{\mathrm{CP}}
+        \le
+        \Delta n
+        \le
+        0`}
+        display
+      />
+
+      <p>
+        Phía trái bảo đảm delayed path cuối cùng vẫn lấy samples thuộc cyclic extension của current symbol.
+        Phía phải tránh để cuối FFT window tràn sang symbol tiếp theo.
+      </p>
+
+      <aside class="precision-note">
+        <strong>Đây là geometry của ideal discrete-time OFDM model</strong>
+        <p>
+          Receiver thật còn có fractional delay, filter transients, sampling-clock error, channel time variation và implementation margin.
+          Vì vậy không nên hiểu interval trên như một universal NR threshold.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="timing-example">
+      <p class="concept-kicker">03 · VÍ DỤ SỐ: CP 16 SAMPLES, CHANNEL 7 TAPS</p>
+      <h2>Timing window có thể bắt đầu sớm tối đa 10 samples mà vẫn giữ circular model trong ví dụ lý tưởng.</h2>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{CP}}=16,\qquad L=7`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`L-1-N_{\mathrm{CP}}
+        =6-16
+        =-10`}
+        display
+      />
+
+      <p>Do đó safe range là:</p>
+
+      <MathExpr
+        tex={String.raw`-10\le\Delta n\le0`}
+        display
+      />
+
+      <div class="fine-sync-example-cases" data-lesson-visual>
+        <article>
+          <small><MathExpr tex={String.raw`\Delta n=-4`} /></small>
+          <strong>safe</strong>
+          <p>FFT bắt đầu sớm 4 samples nhưng vẫn ở trong CP margin.</p>
+        </article>
+        <article>
+          <small><MathExpr tex={String.raw`\Delta n=-14`} /></small>
+          <strong>quá sớm</strong>
+          <p>Delayed path có thể kéo sample từ previous symbol vào useful FFT window.</p>
+        </article>
+        <article>
+          <small><MathExpr tex={String.raw`\Delta n=+3`} /></small>
+          <strong>quá muộn</strong>
+          <p>Cuối FFT window tràn sang next symbol và circularity không còn được bảo đảm.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" id="phase-ramp">
+      <p class="concept-kicker">04 · TIMING OFFSET TRONG SAFE REGION KHÔNG NHẤT THIẾT TẠO ISI, NHƯNG NÓ TẠO PHASE RAMP</p>
+      <h2>Đổi nơi cắt một circular OFDM block tương đương một phase rotation phụ thuộc subcarrier index.</h2>
+
+      <p>
+        Với convention của bài, nếu FFT window dịch <MathExpr tex={String.raw`\Delta n`} /> samples nhưng vẫn nằm trong safe circular region:
+      </p>
+
+      <MathExpr
+        tex={String.raw`Y_{\Delta n}[k]
+        =
+        Y[k]\,
+        e^{j2\pi k\Delta n/N}`}
+        display
+      />
+
+      <p>Phase slope giữa hai subcarriers kề nhau là:</p>
+
+      <MathExpr
+        tex={String.raw`\Delta\phi_{\mathrm{SC}}
+        =
+        \frac{2\pi\Delta n}{N}`}
+        display
+      />
+
+      <p>
+        Đây là một distinction rất quan trọng:
+        <strong>timing error nhỏ nằm trong CP có thể chủ yếu hiện ra như deterministic phase slope theo frequency</strong>,
+        trong khi timing error vượt safe region mới trực tiếp phá circular-convolution assumption và gây interference nghiêm trọng hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cfo-model">
+      <p class="concept-kicker">05 · FREQUENCY OFFSET BIẾN THÀNH PHASE ROTATION THEO THỜI GIAN</p>
+      <h2>Một carrier-frequency error cố định trong hertz tạo phase tăng tuyến tính theo sample index.</h2>
+
+      <MathExpr
+        tex={String.raw`r[n]
+        =
+        s[n]\,
+        e^{j2\pi\Delta f_{\mathrm{CFO}}nT_s}`}
+        display
+      />
+
+      <p>
+        Trong OFDM, rất tiện khi normalize CFO theo subcarrier spacing:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\epsilon
+        =
+        \frac{\Delta f_{\mathrm{CFO}}}
+        {\Delta f_{\mathrm{SCS}}}`}
+        display
+      />
+
+      <p>
+        Với useful symbol có <MathExpr tex="N" /> samples, phase quay xấp xỉ qua toàn useful symbol là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`\Delta\phi_{\mathrm{sym}}
+        \approx
+        2\pi\epsilon`}
+        display
+      />
+
+      <p>
+        Ví dụ <MathExpr tex={String.raw`\epsilon=0.1`} /> tương ứng khoảng <MathExpr tex={String.raw`36^\circ`} /> phase drift qua một useful symbol.
+      </p>
+    </section>
+
+    <section class="concept-block" id="fractional-cfo">
+      <p class="concept-kicker">06 · FRACTIONAL CFO PHÁ ORTHOGONALITY VÀ TẠO ICI</p>
+      <h2>Subcarriers không còn được FFT nhìn đúng tại zero-crossings của nhau.</h2>
+
+      <p>
+        Với một ideal <MathExpr tex="N" />-point OFDM symbol, desired-bin amplitude factor do normalized CFO có thể viết:
+      </p>
+
+      <MathExpr
+        tex={String.raw`A_0(\epsilon)
+        =
+        \frac{\sin(\pi\epsilon)}
+        {N\sin(\pi\epsilon/N)}`}
+        display
+      />
+
+      <p>
+        Desired-bin power còn lại là <MathExpr tex={String.raw`|A_0(\epsilon)|^2`} />.
+        Phần energy còn lại bị rò sang neighboring FFT bins dưới dạng ICI trong ideal single-tone model.
+      </p>
+
+      <aside class="mental-model">
+        <strong>CFO khác timing offset ở pattern lỗi sau FFT</strong>
+        <p>
+          Safe timing offset tạo phase slope theo subcarrier nhưng vẫn có thể giữ orthogonality.
+          Fractional CFO làm phase quay trong chính FFT observation interval và gây cross-talk giữa subcarriers.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="integer-fractional">
+      <p class="concept-kicker">07 · INTEGER CFO VÀ FRACTIONAL CFO CÓ TÁC ĐỘNG KHÁC NHAU</p>
+      <h2>Tách normalized CFO thành integer shift và fractional residual giúp hiểu receiver search tốt hơn.</h2>
+
+      <MathExpr
+        tex={String.raw`\epsilon=m+\delta,
+        \qquad
+        m\in\mathbb Z,
+        \qquad
+        |\delta|<\frac12`}
+        display
+      />
+
+      <div class="fine-sync-cfo-types">
+        <article class="technical-card">
+          <span class="card-label">INTEGER PART</span>
+          <strong><MathExpr tex="m" /> subcarrier spacings</strong>
+          <p>Trong ideal OFDM model, một exact integer shift chủ yếu dịch FFT-bin indexing thay vì tạo fractional-ICI pattern.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FRACTIONAL PART</span>
+          <strong><MathExpr tex={String.raw`\delta`} /></strong>
+          <p>Làm subcarrier tones rơi giữa FFT-bin centers và gây ICI.</p>
+        </article>
+      </div>
+
+      <p>
+        Initial acquisition có thể phải search frequency hypotheses đủ rộng để xử lý cả hai effects.
+        Sau coarse correction, fine synchronizer thường tập trung vào residual fractional error nhỏ hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cp-cfo-estimation">
+      <p class="concept-kicker">08 · CYCLIC PREFIX CŨNG CÓ THỂ CUNG CẤP FREQUENCY INFORMATION</p>
+      <h2>CP là bản copy của cuối useful symbol, nên hai đoạn giống nhau cách nhau đúng <MathExpr tex="N" /> samples.</h2>
+
+      <p>
+        Bỏ qua noise và channel variation để thấy ý tưởng:
+      </p>
+
+      <MathExpr
+        tex={String.raw`r[n+N]
+        \approx
+        r[n]e^{j2\pi\epsilon}`}
+        display
+      />
+
+      <p>
+        Do đó complex correlation giữa CP và corresponding tail có phase xấp xỉ <MathExpr tex={String.raw`2\pi\epsilon`} />:
+      </p>
+
+      <MathExpr
+        tex={String.raw`P
+        =
+        \sum_{n\in\mathrm{CP}}
+        r[n+N]r^*[n]`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`\widehat\epsilon
+        \approx
+        \frac{\angle P}{2\pi}`}
+        display
+      />
+
+      <p>
+        Đây là một estimator minh họa rất trực quan.
+        Practical NR receiver không bắt buộc dùng CP correlation và phải xử lý ambiguity range, multipath, timing error, noise và symbol structure.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="fine-sync-lab">
+      <p class="concept-kicker">09 · INTERACTIVE LAB</p>
+      <h2>Kéo FFT window ra khỏi safe CP region và tăng residual CFO để nhìn hai lỗi khác nhau.</h2>
+
+      <p>
+        Lab dùng <MathExpr tex={String.raw`N=128`} />, <MathExpr tex={String.raw`N_{\mathrm{CP}}=16`} /> và channel support <MathExpr tex={String.raw`L=7`} />.
+        Đây là numbers minh họa, không phải một NR numerology cụ thể.
+      </p>
+
+      <div data-lesson-visual>
+        <FineSyncExplorer client:load />
+      </div>
+
+      <p>
+        Khi timing offset vẫn nằm từ <MathExpr tex={String.raw`-10`} /> tới <MathExpr tex="0" />, lab đánh dấu window là safe và biểu diễn timing error bằng phase ramp.
+        Khi window vượt vùng đó, receiver có nguy cơ lấy samples từ neighboring symbol.
+        CFO slider độc lập cho thấy phase drift và ICI tăng ngay cả khi timing window đang tốt.
+      </p>
+    </section>
+
+    <section class="concept-block" id="joint-correction">
+      <p class="concept-kicker">10 · TIMING VÀ FREQUENCY THƯỜNG ĐƯỢC REFINE LẶP LẠI, KHÔNG NHẤT THIẾT MỘT LẦN</p>
+      <h2>Một correction tốt ở frequency có thể làm timing metric sắc hơn, và timing tốt hơn lại giúp frequency estimator sạch hơn.</h2>
+
+      <div class="fine-sync-loop" data-lesson-visual>
+        <div>
+          <small>COARSE PSS</small>
+          <strong>timing + CFO hypothesis</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>DEROTATE</small>
+          <strong>giảm frequency error</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>REFINE TIMING</small>
+          <strong>đặt FFT window tốt hơn</strong>
+        </div>
+        <b>→</b>
+        <div>
+          <small>TRACK / RE-ESTIMATE</small>
+          <strong>residual error nhỏ hơn</strong>
+        </div>
+      </div>
+
+      <p>
+        Receiver implementation có thể giữ nhiều candidate hypotheses và refine theo score thay vì commit ngay vào một timing/CFO duy nhất.
+        Điều này đặc biệt hữu ích ở low SNR hoặc multipath mạnh.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>Fine synchronization là bước biến PSS/SSS detection thành parameters mà FFT và PBCH pipeline thực sự dùng được.</h2>
+
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">INPUT</span>
+            <h3>Nhận PSS/SSS candidate</h3>
+            <p>Có approximate SSB timing, PSS/SSS identity và thường đã có coarse frequency hypothesis.</p>
+            <small>STATE · coarse sync</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">FREQUENCY REFINE</span>
+            <h3>Estimate residual CFO</h3>
+            <p>Dùng known-signal phase, CP relation, multi-hypothesis search hoặc estimator khác tùy design.</p>
+            <small>OUTPUT · <MathExpr tex={String.raw`\widehat{\Delta f}_{\mathrm{CFO}}`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">DEROTATION</span>
+            <h3>Correct samples</h3>
+            <p>Nhân sample stream với complex exponential ngược chiều estimated CFO.</p>
+            <small>OUTPUT · lower residual phase drift</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">TIMING REFINE</span>
+            <h3>Chọn FFT-window start</h3>
+            <p>Dùng correlation/channel structure và CP margin để tránh vùng có neighboring-symbol contamination.</p>
+            <small>OUTPUT · FFT sample index</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">NEXT</span>
+            <h3>FFT và PBCH DM-RS</h3>
+            <p>Receiver giờ có timing/frequency context tốt hơn để extract PBCH resources và estimate channel.</p>
+            <small>NEXT · Bài 25</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · BẢY CHỖ DỄ HIỂU NHẦM</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">PSS PEAK ≠ FFT START</span>
+          <p>Correlation peak là timing candidate; exact FFT-window placement còn phụ thuộc channel/CP geometry và receiver design.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">TIMING ERROR TRONG CP ≠ LUÔN ISI</span>
+          <p>Nếu window vẫn ở safe circular region, error có thể chủ yếu trở thành phase ramp theo subcarrier.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CP LENGTH ≠ SAFE MARGIN TOÀN BỘ</span>
+          <p>Channel memory đã tiêu tốn một phần CP, nên timing margin nhỏ hơn raw CP length.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CFO ≠ CHỈ COMMON PHASE</span>
+          <p>Fractional CFO quay phase trong FFT interval và gây ICI, không chỉ rotate toàn constellation bằng một angle cố định.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">INTEGER CFO ≠ FRACTIONAL CFO</span>
+          <p>Exact integer-SCS shift và fractional residual có signatures khác nhau trong ideal OFDM model.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FINE SYNC ≠ 3GPP ALGORITHM</span>
+          <p>3GPP yêu cầu UE acquire time/frequency synchronization, nhưng không prescribe một estimator implementation duy nhất.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SYNC ≠ MỘT LẦN RỒI XONG</span>
+          <p>Oscillator drift, Doppler và mobility có thể cần tracking tiếp sau initial acquisition.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa OFDM timing structure và yêu cầu cell search acquire time/frequency synchronization. Exact fine estimator vẫn là implementation.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>OFDM baseband signal/CP structure, PSS/SSS signals và cell-search requirement về time/frequency synchronization cùng Physical Cell ID.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Safe FFT-window geometry, phase-ramp intuition, normalized CFO, ICI picture và CP-based CFO example.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Peak selection, earliest-path logic, CP correlation, joint PSS/SSS estimator, CFO bank, loop filter, tracking bandwidth và fixed-point details.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 4.1: cell search là procedure để UE acquire time synchronization, frequency synchronization và Physical Cell ID bằng PSS/SSS ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 5.3.1: OFDM baseband signal generation và cyclic-prefix timing structure cho NR channels/signals ngoài PRACH và RIM-RS ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI TOÀN BỘ Ý</p>
+      <ol class="recap-list">
+        <li><strong>Coarse timing:</strong> PSS/SSS cho SSB candidate nhưng chưa nhất thiết cho FFT-window start tối ưu.</li>
+        <li><strong>CP margin:</strong> safe timing range phụ thuộc cả CP length và channel memory.</li>
+        <li><strong>Safe timing error:</strong> trong ideal circular region, timing shift tạo phase ramp theo subcarrier thay vì trực tiếp tạo ISI.</li>
+        <li><strong>Unsafe timing:</strong> window quá sớm hoặc quá muộn có thể lấy energy từ neighboring OFDM symbol.</li>
+        <li><strong>CFO:</strong> frequency error tạo phase rotation theo sample index.</li>
+        <li><strong>Normalized CFO:</strong> <MathExpr tex={String.raw`\epsilon=\Delta f_{\mathrm{CFO}}/\Delta f_{\mathrm{SCS}}`} /> cho biết error lớn tới đâu so với subcarrier spacing.</li>
+        <li><strong>Fractional CFO:</strong> phá orthogonality và tạo ICI.</li>
+        <li><strong>Fine correction:</strong> receiver estimate residual CFO, derotate samples và refine FFT timing, có thể lặp lại nhiều lần.</li>
+        <li><strong>Bước tiếp:</strong> với timing/frequency context tốt hơn, receiver chuyển sang PBCH DM-RS để estimate channel cho PBCH.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/sss-physical-cell-id/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>SSS và Physical Cell ID</strong>
+        <small>Từ 336 SSS hypotheses tới full PCI.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span>
+        <strong>PBCH DM-RS</strong>
+        <small>Known reference nào giúp receiver estimate channel trước khi decode PBCH?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
