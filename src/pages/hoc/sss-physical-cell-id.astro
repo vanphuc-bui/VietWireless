@@ -1,0 +1,653 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import SSSExplorer from '../../components/SSSExplorer.jsx';
+
+const lessonMeta = {
+  number: 23,
+  part: 3,
+  slug: 'sss-physical-cell-id',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="SSS và Physical Cell ID trong 5G NR | VietWireless"
+  description="Hiểu Secondary Synchronization Signal trong 5G NR: 336 N_ID^(1) hypotheses, hai m-sequence, correlation, cách ghép PSS và SSS thành 1008 Physical Cell IDs."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 23 · INITIAL ACCESS</p>
+      <h1>SSS và Physical Cell ID</h1>
+      <p class="lesson-deck">
+        Sau PSS, UE mới biết một trong ba giá trị <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> và vẫn còn 336 cell-identity hypotheses.{" "}
+        <strong>SSS chính là bước thu hẹp 336 khả năng đó xuống một <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} />, rồi ghép với PSS để tạo full Physical Cell ID.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>PSS đã tạo timing candidate rồi. Tại sao UE vẫn chưa biết mình đang nghe cell nào?</h2>
+
+      <p>
+        PSS chỉ mang ba possibilities:
+      </p>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{(2)}\in\{0,1,2\}`}
+        display
+      />
+
+      <p>
+        Trong khi NR có tổng cộng 1008 Physical Cell IDs.
+        Nếu PSS detector cho:
+      </p>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{(2)}=1`}
+        display
+      />
+
+      <p>
+        thì UE vẫn chưa biết cell là PCI 1, 4, 7, 10 hay hàng trăm khả năng khác.
+        Nó cần một signal thứ hai để xác định phần identity còn thiếu.
+      </p>
+
+      <aside class="mental-model">
+        <strong>PSS trả lời “cell thuộc một trong ba families nào”; SSS chọn đúng member trong family đó.</strong>
+        <p>
+          Đây là lý do PSS và SSS phải được học như một cặp.
+          Chỉ khi ghép hai kết quả lại, UE mới có full physical-layer cell identity.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">SSS NẰM Ở ĐÂU TRONG INITIAL ACCESS?</p>
+      <h2>Input của SSS detector là timing candidate và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> từ PSS. Output là full PCI.</h2>
+
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>IDENTITY FLOW</span>
+        <div class="system-position-flow">
+          <span>PSS timing candidate</span><b>+</b>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></strong><b>→ extract →</b>
+          <span>127 SSS RE</span><b>→ search 336 hypotheses →</b>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /></strong><b>→</b>
+          <strong>PCI</strong>
+        </div>
+        <p>
+          SSS search không bắt đầu từ zero knowledge.
+          Nó tận dụng PSS result để giới hạn sequence family cần kiểm tra.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="pci-decomposition">
+      <p class="concept-kicker">01 · 1008 PCI ĐƯỢC TÁCH THÀNH 336 × 3</p>
+      <h2>Physical Cell ID là tổ hợp của hai sequence identities, không phải một con số được truyền trực tiếp dưới dạng payload bits.</h2>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}
+        =3N_{\mathrm{ID}}^{(1)}+N_{\mathrm{ID}}^{(2)}`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{(1)}\in\{0,\ldots,335\},
+        \qquad
+        N_{\mathrm{ID}}^{(2)}\in\{0,1,2\}`}
+        display
+      />
+
+      <div class="sss-pci-story" data-lesson-visual>
+        <div>
+          <small>PSS RESULT</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></strong>
+          <span>3 possibilities</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>SSS RESULT</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /></strong>
+          <span>336 possibilities</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>PHYSICAL CELL ID</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}`} /></strong>
+          <span>1008 possibilities</span>
+        </div>
+      </div>
+
+      <aside class="precision-note">
+        <strong>PCI là physical-layer identity, không phải globally unique network identity</strong>
+        <p>
+          Hai cells ở đủ xa nhau có thể reuse cùng PCI.
+          PCI chủ yếu giúp physical-layer procedures nhận dạng và cấu hình sequence/scrambling/reference context quanh cell đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="336-structure">
+      <p class="concept-kicker">02 · CON SỐ 336 CÓ CẤU TRÚC RẤT ĐẸP: 3 × 112</p>
+      <h2>Tách <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /> thành quotient và remainder giúp nhìn ngay cách SSS được sinh.</h2>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{(1)}=112q+r`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`q=\left\lfloor\frac{N_{\mathrm{ID}}^{(1)}}{112}\right\rfloor
+        \in\{0,1,2\},
+        \qquad
+        r=N_{\mathrm{ID}}^{(1)}\bmod112
+        \in\{0,\ldots,111\}`}
+        display
+      />
+
+      <div class="sss-336-grid" data-lesson-visual>
+        <article>
+          <small><MathExpr tex="q=0" /></small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=0\ldots111`} /></strong>
+          <span>112 possibilities</span>
+        </article>
+        <article>
+          <small><MathExpr tex="q=1" /></small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=112\ldots223`} /></strong>
+          <span>112 possibilities</span>
+        </article>
+        <article>
+          <small><MathExpr tex="q=2" /></small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=224\ldots335`} /></strong>
+          <span>112 possibilities</span>
+        </article>
+      </div>
+
+      <p>
+        Đây không chỉ là cách viết lại số học.
+        Hai quantities <MathExpr tex="q" /> và <MathExpr tex="r" /> đi thẳng vào hai cyclic shifts dùng để sinh SSS.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sequence-generation">
+      <p class="concept-kicker">03 · SSS LÀ TÍCH CỦA HAI M-SEQUENCES ĐÃ ĐƯỢC DỊCH</p>
+      <h2>Hai base sequences cùng dài 127 nhưng dùng recurrence khác nhau.</h2>
+
+      <p>Base sequence thứ nhất:</p>
+
+      <MathExpr
+        tex={String.raw`x_0(i+7)
+        =\big(x_0(i+4)+x_0(i)\big)\bmod2`}
+        display
+      />
+
+      <p>Base sequence thứ hai:</p>
+
+      <MathExpr
+        tex={String.raw`x_1(i+7)
+        =\big(x_1(i+1)+x_1(i)\big)\bmod2`}
+        display
+      />
+
+      <p>Cả hai dùng initial state:</p>
+
+      <MathExpr
+        tex={String.raw`[x(6)\ x(5)\ x(4)\ x(3)\ x(2)\ x(1)\ x(0)]
+        =[0\ 0\ 0\ 0\ 0\ 0\ 1]`}
+        display
+      />
+
+      <p>Hai cyclic shifts được chọn bởi:</p>
+
+      <MathExpr
+        tex={String.raw`m_0
+        =15\left\lfloor\frac{N_{\mathrm{ID}}^{(1)}}{112}\right\rfloor
+        +5N_{\mathrm{ID}}^{(2)}`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`m_1
+        =N_{\mathrm{ID}}^{(1)}\bmod112`}
+        display
+      />
+
+      <p>Và SSS cuối cùng là:</p>
+
+      <MathExpr
+        tex={String.raw`d_{\mathrm{SSS}}(n)
+        =
+        \left[1-2x_0\big((n+m_0)\bmod127\big)\right]
+        \left[1-2x_1\big((n+m_1)\bmod127\big)\right]`}
+        display
+      />
+
+      <MathExpr tex={String.raw`0\le n<127`} display />
+
+      <p>
+        Mỗi bracket chỉ có giá trị <MathExpr tex={String.raw`\pm1`} />, nên tích của chúng cũng chỉ là <MathExpr tex={String.raw`\pm1`} />.
+        SSS vì vậy là một real-valued 127-element synchronization sequence trên resource grid.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="worked-example">
+      <p class="concept-kicker">04 · VÍ DỤ XUYÊN SUỐT: TỪ HAI ID THÀNH PCI 370</p>
+      <h2>Giả sử PSS đã cho <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=1`} /> và SSS thật tương ứng với <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=123`} />.</h2>
+
+      <p>Đầu tiên tách 123:</p>
+
+      <MathExpr
+        tex={String.raw`123=112\times1+11`}
+        display
+      />
+
+      <p>nên:</p>
+
+      <MathExpr
+        tex={String.raw`q=1,\qquad r=11`}
+        display
+      />
+
+      <p>Hai shift trở thành:</p>
+
+      <MathExpr
+        tex={String.raw`m_0=15\times1+5\times1=20,
+        \qquad
+        m_1=11`}
+        display
+      />
+
+      <p>Sau khi detector chọn đúng <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=123`} />, full PCI là:</p>
+
+      <MathExpr
+        tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}
+        =3\times123+1
+        =370`}
+        display
+      />
+
+      <div class="sss-example-flow" data-lesson-visual>
+        <div>
+          <small>PSS</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=1`} /></strong>
+          <span>đã biết từ Bài 22</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>SSS</small>
+          <strong><MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=123`} /></strong>
+          <span>search trong 336 candidates</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>PCI</small>
+          <strong>370</strong>
+          <span>full physical cell identity</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="mapping">
+      <p class="concept-kicker">05 · SSS DÙNG CÙNG 127-SUBCARRIER CENTRAL SPAN VỚI PSS, NHƯNG Ở SYMBOL KHÁC</p>
+      <h2>PSS nằm ở relative symbol 0; SSS nằm ở relative symbol 2 của cùng SS/PBCH block.</h2>
+
+      <MathExpr
+        tex={String.raw`\ell_{\mathrm{PSS}}=0,
+        \qquad
+        \ell_{\mathrm{SSS}}=2`}
+        display
+      />
+
+      <MathExpr
+        tex={String.raw`k=56,\ldots,182`}
+        display
+      />
+
+      <div class="sss-ssb-position" data-lesson-visual>
+        <div>
+          <small>SYMBOL 0</small>
+          <strong>PSS · 127 RE</strong>
+          <span>central span</span>
+        </div>
+        <div>
+          <small>SYMBOL 1</small>
+          <strong>PBCH + DM-RS</strong>
+          <span>không phải SSS</span>
+        </div>
+        <div class="sss-highlight">
+          <small>SYMBOL 2</small>
+          <strong>SSS · 127 RE</strong>
+          <span>central span + PBCH ở hai outer regions</span>
+        </div>
+        <div>
+          <small>SYMBOL 3</small>
+          <strong>PBCH + DM-RS</strong>
+          <span>không phải SSS</span>
+        </div>
+      </div>
+
+      <p>
+        Vì PSS đã cung cấp timing candidate cho SSB, receiver biết relative position để extract symbol 2 và lấy đúng 127 SSS RE.
+        Đây là một dependency rất mạnh giữa hai synchronization signals.
+      </p>
+    </section>
+
+    <section class="concept-block" id="correlation">
+      <p class="concept-kicker">06 · SSS DETECTION LÀ MỘT BÀI TOÁN 336-HYPOTHESIS MATCHING</p>
+      <h2>Khi <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> đã biết, UE chỉ cần search <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=0,\ldots,335`} />.</h2>
+
+      <p>
+        Với received SSS vector <MathExpr tex={String.raw`R_{\mathrm{SSS}}[n]`} />, một metric minh họa là:
+      </p>
+
+      <MathExpr
+        tex={String.raw`Z(p)
+        =
+        \sum_{n=0}^{126}
+        R_{\mathrm{SSS}}[n]
+        d_{\mathrm{SSS}}^{(p,N_{\mathrm{ID}}^{(2)})}[n]`}
+        display
+      />
+
+      <p>Receiver chọn candidate:</p>
+
+      <MathExpr
+        tex={String.raw`\widehat N_{\mathrm{ID}}^{(1)}
+        =
+        \arg\max_{p\in\{0,\ldots,335\}}
+        |Z(p)|`}
+        display
+      />
+
+      <p>
+        Đây là baseline mental model.
+        Practical receiver có thể normalize energy, compensate channel/phase effects, shortlist candidates hoặc dùng algebraic structure để giảm complexity.
+        3GPP không bắt receiver phải chạy đúng 336 direct dot products.
+      </p>
+
+      <aside class="precision-note">
+        <strong>336 SSS sequences không phải 336 vectors hoàn toàn orthogonal</strong>
+        <p>
+          Detection dựa vào correlation properties và processing gain của sequence family.
+          Noise, residual synchronization error và frequency-selective channel vẫn có thể làm wrong candidate metric tăng.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="sss-lab">
+      <p class="concept-kicker">07 · INTERACTIVE LAB</p>
+      <h2>Search cả 336 SSS hypotheses, rồi cố tình đưa sai PSS result để thấy dependency giữa hai stages.</h2>
+
+      <p>
+        Lab mặc định dùng example xuyên suốt:
+        <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=123`} />,
+        <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}=1`} />,
+        nên true PCI là <MathExpr tex="370" />.
+        Receiver quan sát SSS qua một common complex channel gain và noise, sau đó correlate với 336 candidates.
+      </p>
+
+      <div data-lesson-visual>
+        <SSSExplorer client:load />
+      </div>
+
+      <p>
+        Hãy giữ PSS result bằng 1 rồi tăng noise.
+        Peak đúng dần kém nổi bật nhưng correct sequence vẫn nằm trong search family.
+        Sau đó đổi PSS result sang 0 hoặc 2: receiver lập tức sinh một family SSS khác, nên correct sequence không còn nằm trong 336 candidates đang được kiểm tra.
+      </p>
+    </section>
+
+    <section class="concept-block" id="common-phase">
+      <p class="concept-kicker">08 · COMMON PHASE ROTATION KHÔNG NHẤT THIẾT PHÁ HỎNG CORRELATION MAGNITUDE</p>
+      <h2>Nếu toàn bộ SSS chịu cùng một complex gain, gain đó có thể factor ra ngoài correlation sum.</h2>
+
+      <p>Với model đơn giản:</p>
+
+      <MathExpr
+        tex={String.raw`R[n]=h\,d_{\mathrm{SSS}}[n]+W[n]`}
+        display
+      />
+
+      <p>Tại đúng candidate:</p>
+
+      <MathExpr
+        tex={String.raw`Z
+        \approx
+        h\sum_{n=0}^{126}|d_{\mathrm{SSS}}[n]|^2
+        =
+        127h`}
+        display
+      />
+
+      <p>
+        Nếu detector dùng <MathExpr tex={String.raw`|Z|`} />, common phase của <MathExpr tex="h" /> không làm mất peak.
+        Nhưng đây chỉ là flat/common-gain model.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Frequency-selective channel khó hơn nhiều</strong>
+        <p>
+          Nếu mỗi SSS subcarrier chịu complex gain khác nhau, 127 contributions không còn chỉ khác nhau bởi một common <MathExpr tex="h" />.
+          Receiver có thể khai thác PSS/SSS structure, smoothing hoặc joint processing, nhưng cách làm là implementation-dependent.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="after-pci">
+      <p class="concept-kicker">09 · FULL PCI MỞ KHÓA NHỮNG GÌ?</p>
+      <h2>PCI không chỉ là một nhãn để hiển thị. Nó đi vào nhiều physical-layer sequences và mappings phía sau.</h2>
+
+      <div class="sss-after-pci-grid">
+        <article class="technical-card">
+          <span class="card-label">PBCH DM-RS</span>
+          <strong><MathExpr tex={String.raw`v=N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4`} /></strong>
+          <p>PCI cho receiver biết comb offset của PBCH DM-RS mapping đã thấy ở Bài 21.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">REFERENCE / SCRAMBLING CONTEXT</span>
+          <strong>cell-dependent sequences</strong>
+          <p>Nhiều physical-layer operations phía sau dùng PCI hoặc quantities derived từ PCI.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CELL CANDIDATE</span>
+          <strong>identity hoàn chỉnh</strong>
+          <p>Receiver giờ có thể gắn subsequent PBCH processing với đúng physical-layer cell hypothesis.</p>
+        </article>
+      </div>
+
+      <p>
+        Với example PCI 370:
+      </p>
+
+      <MathExpr
+        tex={String.raw`v=370\bmod4=2`}
+        display
+      />
+
+      <p>
+        Như vậy SSS detection trực tiếp giúp receiver biết PBCH DM-RS comb offset cần dùng ở stage sau.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sync-role">
+      <p class="concept-kicker">10 · SSS VẪN LÀ SYNCHRONIZATION SIGNAL, NHƯNG KHÔNG NÊN GỌI NÓ LÀ “FINE SYNC ALGORITHM”</p>
+      <h2>Known relative position và known sequence có thể giúp validate/refine candidate, nhưng full refinement còn là bài toán receiver riêng.</h2>
+
+      <p>
+        SSS nằm ở vị trí cố định so với PSS trong cùng SSB.
+        Vì vậy successful SSS detection vừa xác nhận identity vừa tăng confidence rằng PSS timing candidate thực sự thuộc một valid SS/PBCH block.
+      </p>
+
+      <p>
+        Tuy nhiên residual timing error, residual CFO, sampling effects và multipath vẫn có thể cần refinement.
+        Bài 24 sẽ tập trung vào chính bước đó thay vì gán toàn bộ fine synchronization cho SSS.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>PSS làm search space nhỏ đi; SSS biến 336 sequence metrics thành một PCI candidate.</h2>
+
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">INPUT FROM PSS</span>
+            <h3>Nhận timing candidate và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /></h3>
+            <p>Dùng relative SSB structure để xác định vùng chứa SSS symbol.</p>
+            <small>OUTPUT · candidate SSS REs</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">RESOURCE EXTRACT</span>
+            <h3>Lấy 127 central RE của relative symbol 2</h3>
+            <p>FFT/resource mapping phải đủ aligned để receiver lấy đúng SSS span.</p>
+            <small>OUTPUT · received SSS vector</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">HYPOTHESIS GENERATION</span>
+            <h3>Sinh 336 SSS candidates</h3>
+            <p>Mỗi candidate dùng cùng <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> nhưng khác <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} />.</p>
+            <small>KNOWN SEQUENCE BANK</small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">METRIC / RANKING</span>
+            <h3>Correlation và candidate selection</h3>
+            <p>Receiver có thể giữ một hoặc nhiều high-confidence hypotheses thay vì ép chọn duy nhất quá sớm.</p>
+            <small>OUTPUT · <MathExpr tex={String.raw`\widehat N_{\mathrm{ID}}^{(1)}`} /></small>
+          </div>
+        </article>
+
+        <div class="implementation-connector">↓</div>
+
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PCI ASSEMBLY</span>
+            <h3>Ghép PSS và SSS identity</h3>
+            <p>Tính full PCI rồi chuyển sang synchronization refinement và PBCH-related processing.</p>
+            <small>NEXT · Bài 24 và 25</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · BẢY CHỖ DỄ HIỂU NHẦM</p>
+
+      <div class="boundary-grid">
+        <article class="technical-card">
+          <span class="card-label">SSS ≠ FULL PCI MỘT MÌNH</span>
+          <p>SSS cho <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} />; vẫn cần <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> từ PSS.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">336 ≠ 336 PCI TỔNG CỘNG</span>
+          <p>336 là số <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /> possibilities cho mỗi PSS family; tổng PCI là 1008.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSS ≠ PAYLOAD BITS</span>
+          <p>Identity được biểu diễn bởi việc chọn synchronization sequence, không phải gửi binary representation của PCI như một data packet.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSS ≠ ORTHOGONAL BANK</span>
+          <p>Sequences có correlation structure tốt nhưng không nên được mô tả như 336 mutually orthogonal vectors.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">PCI ≠ GLOBAL CELL ID</span>
+          <p>PCI có thể được reuse; nó là local physical-layer identity.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">SSS PEAK ≠ PERFECT SYNC</span>
+          <p>Residual timing/frequency errors và multipath vẫn có thể cần refinement ở Bài 24.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">CORRELATION ≠ 3GPP RECEIVER ALGORITHM</span>
+          <p>3GPP định nghĩa sequence và mapping; exact search architecture, normalization và threshold là implementation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa exact SSS sequence generation và mapping. Cách UE search 336 candidates là receiver design.</h2>
+
+      <div class="spec-separation">
+        <article class="technical-card">
+          <span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>PCI decomposition, two m-sequences, <MathExpr tex="m_0" /> và <MathExpr tex="m_1" />, 127 SSS symbols và mapping vào SS/PBCH block.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p><MathExpr tex={String.raw`336=3\times112`} /> mental model, 336-hypothesis correlation search, worked PCI example và dependency từ PSS.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Correlation architecture, channel compensation, shortlist size, normalization, joint PSS/SSS processing và decision threshold.</p>
+        </article>
+      </div>
+
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 7.4.2.1 và 7.4.2.3.1: Physical Cell ID decomposition và exact SSS sequence generation ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, clause 7.4.3.1.2 và Table 7.4.3.1-1: mapping 127 SSS symbols vào relative OFDM symbol 2 của SS/PBCH block ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.213 Release 18, clause 4.1: cell search sử dụng PSS và SSS để acquire synchronization và detect Physical Cell ID ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI TOÀN BỘ Ý</p>
+      <ol class="recap-list">
+        <li><strong>PSS output:</strong> UE đã có timing candidate và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />.</li>
+        <li><strong>SSS task:</strong> search <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=0,\ldots,335`} /> để hoàn thiện identity.</li>
+        <li><strong>336 structure:</strong> <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}=112q+r`} /> với 3 values của <MathExpr tex="q" /> và 112 values của <MathExpr tex="r" />.</li>
+        <li><strong>Sequence:</strong> SSS là tích của hai shifted m-sequences dài 127.</li>
+        <li><strong>Mapping:</strong> 127 SSS RE nằm ở <MathExpr tex={String.raw`\ell=2`} />, <MathExpr tex={String.raw`k=56,\ldots,182`} /> trong SSB.</li>
+        <li><strong>Detection:</strong> known sequence bank biến identity search thành ranking/correlation problem.</li>
+        <li><strong>PCI:</strong> <MathExpr tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}=3N_{\mathrm{ID}}^{(1)}+N_{\mathrm{ID}}^{(2)}`} />.</li>
+        <li><strong>Dependency:</strong> nếu PSS hypothesis sai, receiver sinh sai family SSS candidates.</li>
+        <li><strong>Sau PCI:</strong> receiver có cell-dependent context để tiếp tục synchronization refinement và PBCH DM-RS/PBCH processing.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/pss/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>PSS</strong>
+        <small>Từ ba known sequences tới timing candidate và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} />.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span>
+        <strong>Fine timing và frequency synchronization</strong>
+        <small>Sau khi biết cell candidate, receiver refine timing và residual frequency error như thế nào?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
