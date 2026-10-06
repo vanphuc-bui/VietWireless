@@ -40,7 +40,7 @@ export const curriculum = [
       { number: 20, title: 'Synchronization là gì?', slug: 'synchronization', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 21, title: 'SSB là gì?', slug: 'ssb', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 22, title: 'PSS', slug: 'pss', status: 'published', kind: 'deep-dive', specRequired: true },
-      { number: 23, title: 'SSS và Physical Cell ID', slug: 'sss-physical-cell-id', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 23, title: 'SSS và Physical Cell ID', slug: 'sss-physical-cell-id', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 24, title: 'Fine timing và frequency synchronization', slug: 'fine-timing-frequency-synchronization', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 25, title: 'PBCH DM-RS', slug: 'pbch-dmrs', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 26, title: 'PBCH', slug: 'pbch', status: 'planned', kind: 'deep-dive', specRequired: true },
