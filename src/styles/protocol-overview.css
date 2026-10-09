@@ -1,0 +1,98 @@
+/* Bài 19: 5G protocol journey. Editorial flow, no oversized dashboard tiles. */
+.protocol-lesson .lesson-hero { max-width: 900px; }
+.protocol-lesson .lesson-hero h1 { max-width: 840px; }
+.protocol-topology { display: grid; grid-template-columns: minmax(0,1fr) minmax(100px,.7fr) minmax(0,1fr) minmax(95px,.65fr) minmax(0,1fr); align-items: stretch; column-gap: 10px; row-gap: 12px; margin: 28px 0 32px; }
+.protocol-node { min-width: 0; border: 1px solid var(--line); border-top: 3px solid var(--accent); background: #fff; padding: 20px 16px; }
+.protocol-node.core { border-top-color: var(--blue); }
+.protocol-node small { color: var(--accent); font: 800 .72rem var(--font-ui); letter-spacing: .055em; }
+.protocol-node.core small { color: var(--blue); }
+.protocol-node strong { display: block; margin: 8px 0; font: 600 1.48rem/1.35 var(--font-serif); }
+.protocol-node p { margin: 0; color: var(--ink-soft); font-size: .92rem; line-height: 1.62; }
+.protocol-link { min-width: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; gap: 4px; }
+.protocol-link span { font: 700 .79rem var(--font-ui); color: var(--ink-soft); }
+.protocol-link b { color: var(--accent); font-size: 1.75rem; font-weight: 500; }
+.protocol-link small { color: var(--muted); font-size: .76rem; line-height: 1.5; overflow-wrap: anywhere; }
+.protocol-topology figcaption { grid-column: 1 / -1; margin: 6px 0 0; padding-top: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: .91rem; line-height: 1.7; }
+.protocol-stack { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-left: 1px solid var(--line); border-top: 1px solid var(--line); margin: 30px 0; }
+.protocol-stack > div { min-width: 0; padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.6); }
+.protocol-stack strong { font: 750 .94rem var(--font-ui); color: var(--accent); }
+.protocol-stack p { margin: 9px 0 0; font-size: .94rem; line-height: 1.72; color: var(--ink-soft); }
+.protocol-phase-overview { max-width: 860px; list-style: none; padding: 0; margin: 30px 0 25px; border-top: 1px solid var(--line); }
+.protocol-phase-overview li { border-bottom: 1px solid var(--line); }
+.protocol-phase-overview a { display: grid; grid-template-columns: 52px minmax(0,1fr) auto; gap: 18px; padding: 18px 5px; align-items: center; }
+.protocol-phase-overview a:hover, .protocol-phase-overview a:focus-visible { background: var(--accent-soft); }
+.protocol-phase-index { color: var(--accent); font: 500 1.18rem var(--font-serif); }
+.protocol-phase-overview strong { display: block; font: 600 1.08rem/1.5 var(--font-serif); }
+.protocol-phase-overview p { margin: 4px 0 0; color: var(--ink-soft); font-size: .93rem; line-height: 1.65; }
+.protocol-phase-overview small { font-size: .84rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.protocol-exchange { display: grid; gap: 0; margin: 30px 0 32px; border-top: 1px solid var(--line); }
+.protocol-exchange > div { display: grid; grid-template-columns: 60px minmax(0,1fr) 38px 60px; align-items: center; gap: 10px; padding: 16px 12px; border-bottom: 1px solid var(--line); }
+.protocol-exchange span { font: 750 .82rem var(--font-ui); color: var(--ink); text-align: center; }
+.protocol-exchange strong { font: 600 1.01rem var(--font-serif); overflow-wrap: anywhere; }
+.protocol-exchange b { font: 600 1.65rem var(--font-ui); color: var(--accent); text-align: center; }
+.protocol-exchange .down b { color: var(--blue); }
+.protocol-exchange p { grid-column: 2 / -1; margin: 0; color: var(--ink-soft); font-size: .93rem; line-height: 1.66; }
+.protocol-step-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 23px; padding: 14px 0; margin: 22px 0 30px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.protocol-step-legend span { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-soft); font-size: .8rem; font-weight: 700; }
+.protocol-step-legend span:last-child { color: var(--muted); font-weight: 500; }
+.protocol-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+.protocol-dot.dl { background: var(--blue); }
+.protocol-dot.ul { background: var(--accent); }
+.protocol-phase { padding: 32px 0 46px; border-bottom: 1px solid var(--line-strong); scroll-margin-top: 26px; }
+.protocol-phase:first-of-type { padding-top: 6px; }
+.protocol-phase:last-of-type { border-bottom: 0; }
+.protocol-phase-heading { display: grid; grid-template-columns: 46px minmax(0,1fr); gap: 16px; align-items: start; }
+.protocol-phase-heading > span { padding-top: 5px; font: 500 1.15rem var(--font-serif); color: var(--accent); }
+.protocol-phase-heading .section-kicker { margin: 0 0 8px; }
+.protocol-phase-heading h3 { margin: 0 0 8px; font: 600 clamp(1.28rem,2vw,1.67rem)/1.4 var(--font-serif); }
+.protocol-phase-heading p:not(.section-kicker) { color: var(--ink-soft); margin: 0; font-size: .96rem; line-height: 1.75; }
+.protocol-state { display: flex; flex-wrap: wrap; gap: 7px 14px; align-items: center; margin: 22px 0 24px 62px; padding: 12px 15px; background: var(--blue-soft); }
+.protocol-state strong { font: 800 .7rem var(--font-ui); letter-spacing: .055em; color: var(--blue); }
+.protocol-state span { font-size: .91rem; line-height: 1.63; color: var(--ink-soft); }
+.protocol-steps { display: grid; grid-template-columns: 1fr; gap: 0; margin-left: 62px; border-top: 1px solid var(--line); }
+.protocol-step { padding: 15px 0 16px; border-bottom: 1px solid var(--line); }
+.protocol-step-head { display: grid; grid-template-columns: 30px 53px minmax(0,1fr); gap: 9px; align-items: start; }
+.protocol-step-no { padding-top: 3px; font: 500 .92rem var(--font-serif); color: var(--muted); }
+.protocol-direction { justify-self: start; margin-top: 3px; border-radius: 3px; padding: 3px 5px; font: 800 .68rem var(--font-ui); letter-spacing: .035em; }
+.protocol-direction.is-dl { color: var(--blue); background: var(--blue-soft); }
+.protocol-direction.is-ul { color: var(--accent); background: var(--accent-soft); }
+.protocol-step-name strong { display: block; font: 600 1.01rem/1.55 var(--font-serif); overflow-wrap: anywhere; }
+.protocol-step-name small { display: block; margin-top: 2px; color: var(--muted); font: 500 .75rem/1.5 var(--font-ui); }
+.protocol-step > p { margin: 7px 0 0 92px; font-size: .94rem; line-height: 1.73; color: var(--ink-soft); }
+.protocol-phase-lesson { margin: 23px 0 0 62px; padding-left: 15px; border-left: 2px solid var(--accent); color: var(--ink-soft); font-size: .96rem; line-height: 1.78; }
+.protocol-phase-lesson strong { color: var(--ink); }
+.protocol-step-count { margin: 25px 0 0; color: var(--muted); font-size: .88rem; }
+.protocol-loop { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 30px 0; }
+.protocol-loop article { min-width: 0; padding: 24px 20px; border: 1px solid var(--line); background: #fff; }
+.protocol-loop small { display: block; margin-bottom: 17px; color: var(--accent); font: 800 .73rem var(--font-ui); letter-spacing: .07em; }
+.protocol-loop strong { display: block; padding: 12px 10px; background: var(--paper-2); font: 600 .96rem/1.5 var(--font-serif); text-align: center; }
+.protocol-loop b { display: block; padding: 6px 0; text-align: center; color: var(--accent); font-size: 1.25rem; }
+.protocol-loop p { margin: 18px 0 0; color: var(--ink-soft); font-size: .94rem; line-height: 1.74; }
+.protocol-caveats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 28px 0 30px; }
+.protocol-caveats article { border-top: 2px solid var(--line-strong); padding: 16px 10px 10px 0; }
+.protocol-caveats strong { font: 600 1.03rem/1.5 var(--font-serif); }
+.protocol-caveats p { margin: 9px 0 0; font-size: .93rem; line-height: 1.76; color: var(--ink-soft); }
+@media (max-width: 880px) {
+  .protocol-topology { grid-template-columns: minmax(0,1fr) minmax(55px,.45fr) minmax(0,1fr) minmax(55px,.4fr) minmax(0,1fr); }
+  .protocol-node { padding: 16px 11px; }
+  .protocol-link small { font-size: .7rem; }
+}
+@media (max-width: 720px) {
+  .protocol-topology { grid-template-columns: 1fr; gap: 8px; }
+  .protocol-link { padding: 3px 6px; }
+  .protocol-link b { transform: rotate(90deg); font-size: 1.2rem; }
+  .protocol-link small { max-width: 270px; }
+  .protocol-topology figcaption { grid-column: 1; }
+  .protocol-stack, .protocol-loop, .protocol-caveats { grid-template-columns: 1fr; }
+  .protocol-phase-overview a { grid-template-columns: 35px minmax(0,1fr) 42px; gap: 8px; }
+  .protocol-phase-overview small { font-size: .74rem; }
+  .protocol-phase-heading { grid-template-columns: 30px minmax(0,1fr); gap: 9px; }
+  .protocol-state, .protocol-steps, .protocol-phase-lesson { margin-left: 0; }
+  .protocol-step > p { margin-left: 0; }
+  .protocol-step-head { grid-template-columns: 25px 48px minmax(0,1fr); gap: 6px; }
+  .protocol-step-name strong { font-size: .97rem; }
+  .protocol-step-head .protocol-direction { margin-top: 2px; }
+  .protocol-exchange > div { grid-template-columns: 31px minmax(0,1fr) 26px 31px; gap: 6px; padding: 15px 3px; }
+  .protocol-exchange strong { font-size: .96rem; }
+  .protocol-exchange p { grid-column: 1 / -1; padding-top: 6px; }
+}
