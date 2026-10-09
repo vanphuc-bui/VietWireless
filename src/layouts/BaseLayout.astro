@@ -4,6 +4,7 @@ import '../styles/global.css';
 import '../styles/about.css';
 import '../styles/typography-rhythm.css';
 import '../styles/protocol-overview.css';
+import '../styles/back-to-top.css';
 
 const {
   title = 'VietWireless | Ghi chép trực quan về viễn thông',
@@ -49,7 +50,7 @@ const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
     <title>{title}</title>
   </head>
   <body>
-    <header class="site-header">
+    <header id="page-top" class="site-header">
       <a class="brand" href={isEnglish ? '/en/' : '/'} aria-label="VietWireless home">
         <span class="brand-mark" aria-hidden="true">≈</span>
         <span>
@@ -132,5 +133,29 @@ const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
         </p>
       </div>
     </footer>
+
+    <a
+      class="back-to-top"
+      href="#page-top"
+      data-back-to-top
+      aria-label={isEnglish ? 'Back to top' : 'Lên đầu trang'}
+      title={isEnglish ? 'Back to top' : 'Lên đầu trang'}
+    >
+      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="m6 12 6-6 6 6" />
+        <path d="M12 6v13" />
+      </svg>
+    </a>
+    <script>
+      const backToTop = document.querySelector('[data-back-to-top]');
+      if (backToTop) {
+        const updateBackToTop = () => {
+          backToTop.classList.toggle('is-visible', window.scrollY > 440);
+        };
+        updateBackToTop();
+        window.addEventListener('scroll', updateBackToTop, { passive: true });
+        window.addEventListener('pageshow', updateBackToTop);
+      }
+    </script>
   </body>
 </html>
