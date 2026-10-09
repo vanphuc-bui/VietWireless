@@ -1,0 +1,391 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const lessonMeta = {
+  number: 19,
+  part: 3,
+  slug: 'quy-trinh-ket-noi-5g-nr',
+  kind: 'overview',
+  specRequired: true,
+};
+
+const phases = [
+  {
+    id: 'phase-discovery', label: '01', range: '01–05',
+    name: 'Nghe cell và đọc thông tin hệ thống',
+    question: 'UE chưa biết gNB đang ở đâu trên tài nguyên thời gian và tần số. Nó nghe bằng cách nào?',
+    state: 'Từ chưa biết cell → có thông tin cần thiết để thử truy nhập',
+    lesson: 'PSS/SSS giúp UE tìm và nhận dạng cell; PBCH mang MIB; PDCCH lên lịch PDSCH mang SIB1. SIB1 cung cấp thông tin cần cho cell access và random access.',
+    steps: [
+      [1,'DL','PHY / RRC','SSB: PSS, SSS, PBCH / MIB','UE tìm vị trí SSB, đồng bộ sơ bộ, xác định PCI và giải mã MIB. MIB là bước khởi đầu, chưa phải toàn bộ cấu hình cell.'],
+      [2,'DL','PHY','PDCCH / CORESET#0 / DCI 1_0','Dựa trên MIB và quy tắc common search space, UE tìm lệnh lập lịch cho PDSCH mang SIB1. DCI là thông tin điều khiển, không phải SIB1.'],
+      [3,'DL','RRC trên PDSCH','SIB1','UE đọc cấu hình cell, tham số truy nhập và thông tin random access; kiểm tra cell có thích hợp để lựa chọn/camping không.'],
+      [4,'DL','PHY','PDCCH / DCI cho SI bổ sung','Khi cần và được cấu hình, UE theo dõi lịch phát các system information khác. Không phải mọi lần kết nối đều có bước này.'],
+      [5,'DL','RRC trên PDSCH','Other SIBs (tùy tình huống)','UE nhận thêm thông tin hệ thống nếu cần, chẳng hạn thông tin dành cho một tính năng hoặc loại truy nhập cụ thể.'],
+    ],
+  },
+  {
+    id: 'phase-ra', label: '02', range: '06–11',
+    name: 'Random Access và RRC Setup',
+    question: 'UE nghe được gNB rồi, nhưng làm sao gNB biết UE đang yêu cầu phát uplink?',
+    state: 'Từ chỉ nghe downlink → có căn chỉnh uplink và context RRC',
+    lesson: 'Bốn bản tin Msg1–Msg4 là khung của 4-step contention-based random access. Các bước PDCCH xen giữa là lớp điều khiển tài nguyên để truyền các bản tin ấy.',
+    steps: [
+      [6,'UL','PHY / PRACH','Msg1: PRACH preamble','UE phát preamble trên PRACH occasion phù hợp. Đây là uplink, chiều UE → gNB, không phải downlink như dấu mũi tên in nhầm trong ảnh.'],
+      [7,'DL','PHY','PDCCH / DCI 1_0 / RA-RNTI','gNB chỉ cho UE nơi có PDSCH mang Random Access Response; RA-RNTI giúp UE nhận diện phản hồi theo cơ hội PRACH.'],
+      [8,'DL','MAC trên PDSCH','Msg2: Random Access Response (RAR)','RAR cung cấp Timing Advance, UL grant cho Msg3 và temporary C-RNTI trong trường hợp tương ứng.'],
+      [9,'UL','RRC trên PUSCH','Msg3: RRCSetupRequest','UE dùng tài nguyên UL được cấp để gửi yêu cầu thiết lập kết nối RRC; trong contention-based access đây là điểm gNB nhận dạng yêu cầu của UE.'],
+      [10,'DL','PHY','PDCCH / lịch PDSCH cho Msg4','gNB cấp tài nguyên downlink để UE nhận phản hồi và thông tin giải quyết tranh chấp; chi tiết RNTI/DCI tùy trạng thái RA.'],
+      [11,'DL','RRC trên PDSCH','Msg4: RRCSetup / contention resolution','UE nhận RRCSetup trong ví dụ này và hoàn tất contention resolution. Random access đã tiến tới mục tiêu, nhưng NAS registration chưa kết thúc.'],
+    ],
+  },
+  {
+    id: 'phase-rrc', label: '03', range: '12–14',
+    name: 'Hoàn tất RRC và chuyển yêu cầu đăng ký',
+    question: 'Có RRC connection rồi, làm sao yêu cầu đăng ký được gửi tới 5G Core?',
+    state: 'Từ RRC setup → NAS Registration Request tới AMF',
+    lesson: 'RRC là giao thức giữa UE và gNB. NAS đi xa hơn: UE tạo NAS message, gNB chuyển tiếp tới AMF. Các bản tin lớp cao được vận chuyển qua PUSCH/PDSCH.',
+    steps: [
+      [12,'DL','PHY','PDCCH / DCI 0_0 hoặc 0_1','Một ví dụ về UL grant: gNB báo tài nguyên để UE truyền PUSCH. DCI format phụ thuộc cấu hình và điều kiện, không cố định cho mọi trường hợp.'],
+      [13,'UL','PHY / HARQ','HARQ-ACK cho Msg4 trên PUCCH hoặc PUSCH','UE phản hồi việc giải mã downlink transport block. ACK thuộc cơ chế HARQ của lớp thấp, không có nghĩa AMF đã chấp nhận registration.'],
+      [14,'UL','RRC + NAS trên PUSCH','RRCSetupComplete + NAS Registration Request','UE xác nhận hoàn thành RRC setup và có thể kèm yêu cầu NAS Registration. gNB chuyển NAS lên AMF trong 5GC.'],
+    ],
+  },
+  {
+    id: 'phase-identity', label: '04', range: '15–24',
+    name: 'Xác minh danh tính và xác thực thuê bao',
+    question: 'Mạng làm sao biết UE là thuê bao được phép sử dụng dịch vụ?',
+    state: 'Từ yêu cầu đăng ký → nhận diện và xác thực',
+    lesson: 'Identity exchange là tùy trường hợp. Authentication trao đổi thông tin với AMF và các chức năng xác thực trong core; PHY chỉ là phương tiện vận chuyển qua giao diện vô tuyến.',
+    steps: [
+      [15,'DL','PHY','PDCCH / DL scheduling','gNB chỉ vị trí PDSCH mang NAS Identity Request trong kịch bản minh họa.'],
+      [16,'DL','NAS trên PDSCH','Identity Request (có điều kiện)','AMF có thể yêu cầu UE cung cấp định danh thích hợp khi thông tin hiện có chưa đủ. Không phải luôn cần phát bản tin này.'],
+      [17,'UL','PHY / HARQ','HARQ-ACK cho Identity Request','Phản hồi tầng truyền dẫn về transport block downlink đã nhận.'],
+      [18,'DL','PHY','PDCCH / UL grant','gNB cấp tài nguyên PUSCH cho phản hồi danh tính.'],
+      [19,'UL','NAS trên PUSCH','Identity Response','UE gửi phản hồi NAS; gNB chuyển tới AMF.'],
+      [20,'DL','PHY','PDCCH / DL scheduling','Chỉ vị trí gói downlink chứa yêu cầu xác thực.'],
+      [21,'DL','NAS trên PDSCH','Authentication Request','Mạng bắt đầu thủ tục xác thực dựa trên thông tin và khóa từ các chức năng thích hợp trong 5GC và USIM.'],
+      [22,'UL','PHY / HARQ','HARQ-ACK cho Authentication Request','UE phản hồi transport block đã nhận, tách biệt với tính đúng sai của kết quả xác thực NAS.'],
+      [23,'DL','PHY','PDCCH / UL grant','Cấp tài nguyên truyền bản tin NAS phía uplink.'],
+      [24,'UL','NAS trên PUSCH','Authentication Response','UE trả lời thử thách xác thực. Mạng kiểm tra kết quả trước khi đi tiếp.'],
+    ],
+  },
+  {
+    id: 'phase-nas-sec', label: '05', range: '25–30',
+    name: 'Thiết lập bảo mật NAS',
+    question: 'Sau khi xác thực, làm sao các bản tin NAS tiếp theo được bảo vệ?',
+    state: 'Từ xác thực thuê bao → kích hoạt ngữ cảnh bảo mật NAS',
+    lesson: 'NAS Security Mode thiết lập cơ chế bảo vệ báo hiệu UE–AMF. Nó khác với bảo mật AS/RRC giữa UE và gNB.',
+    steps: [
+      [25,'DL','PHY','PDCCH / DL scheduling','Cấp tài nguyên cho NAS Security Mode Command.'],
+      [26,'DL','NAS trên PDSCH','NAS Security Mode Command','AMF chỉ định và xác nhận ngữ cảnh/thuật toán bảo mật NAS được thỏa thuận theo thủ tục.'],
+      [27,'UL','PHY / HARQ','HARQ-ACK cho NAS Security Mode Command','ACK vận chuyển downlink, không phải Security Mode Complete.'],
+      [28,'DL','PHY','PDCCH / UL grant','Cấp tài nguyên cho UE trả lời qua PUSCH.'],
+      [29,'UL','NAS trên PUSCH','NAS Security Mode Complete','UE xác nhận hoàn tất thủ tục bảo mật NAS tới AMF.'],
+      [30,'DL','PHY','PDCCH / DL scheduling','Giao tài nguyên downlink cho thủ tục RRC security sắp tới.'],
+    ],
+  },
+  {
+    id: 'phase-as-sec', label: '06', range: '31–35',
+    name: 'Thiết lập bảo mật truy nhập RRC',
+    question: 'Tại sao NAS đã bảo mật mà gNB vẫn cần một bước security riêng?',
+    state: 'Từ NAS security → bảo vệ báo hiệu radio access',
+    lesson: 'AS security bảo vệ báo hiệu RRC giữa UE và gNB. NAS security bảo vệ thông tin UE–AMF. Hai lớp có điểm cuối và phạm vi khác nhau.',
+    steps: [
+      [31,'DL','RRC trên PDSCH','RRC SecurityModeCommand','gNB kích hoạt bảo mật Access Stratum cho liên kết vô tuyến theo ngữ cảnh bảo mật tương ứng.'],
+      [32,'UL','PHY / HARQ','HARQ-ACK cho RRC SecurityModeCommand','Xác nhận nhận transport block ở lớp thấp.'],
+      [33,'DL','PHY','PDCCH / UL grant','Cấp tài nguyên UE gửi phản hồi RRC.'],
+      [34,'UL','RRC trên PUSCH','RRC SecurityModeComplete','UE xác nhận thủ tục thiết lập bảo mật RRC hoàn tất.'],
+      [35,'DL','PHY','PDCCH / DL scheduling','Chuẩn bị tài nguyên cho thông tin cấu hình RRC và phản hồi đăng ký.'],
+    ],
+  },
+  {
+    id: 'phase-register', label: '07', range: '36–39',
+    name: 'Đăng ký mạng được chấp nhận',
+    question: 'UE đăng ký thành công thì đã truyền dữ liệu Internet ngay được chưa?',
+    state: 'Từ thủ tục registration → UE được đăng ký trong 5GC',
+    lesson: 'Registration Accept/Complete thuộc NAS. RRCReconfiguration là việc cấu hình radio bearer, measurement, security hoặc tài nguyên truy nhập. Hai loại bản tin có thể cùng được vận chuyển trong một giai đoạn nhưng không đồng nghĩa.',
+    steps: [
+      [36,'DL','RRC + NAS trên PDSCH','RRCReconfiguration và Registration Accept','Trong ví dụ, NAS Registration Accept được chuyển cùng giai đoạn với cấu hình RRC. Hai thông điệp có điểm cuối và mục đích khác nhau.'],
+      [37,'UL','PHY / HARQ','HARQ-ACK','ACK xuống tới transport block, không thay thế phản hồi RRC/NAS ở bước cao hơn.'],
+      [38,'DL','PHY','PDCCH / UL grant','Giao tài nguyên để UE gửi phản hồi điều khiển.'],
+      [39,'UL','RRC + NAS trên PUSCH','RRCReconfigurationComplete và Registration Complete','UE xác nhận cấu hình RRC và, khi áp dụng, hoàn tất registration NAS. Chúng có thể đi trong các bản tin/đợt truyền riêng.'],
+    ],
+  },
+  {
+    id: 'phase-session', label: '08', range: '40–44',
+    name: 'Thiết lập PDU Session để có kết nối dữ liệu',
+    question: 'Đã đăng ký mạng, UE còn cần gì để truyền dữ liệu ứng dụng?',
+    state: 'Từ đã đăng ký → PDU Session với tài nguyên user plane',
+    lesson: 'UE yêu cầu PDU Session cho một dịch vụ dữ liệu. SMF và UPF tham gia thiết lập session và user plane. Phần trao đổi giữa các network functions không hiển thị trong bảng vô tuyến 44 bước.',
+    steps: [
+      [40,'DL','PHY','PDCCH / UL grant','Cấp tài nguyên uplink cho yêu cầu session.'],
+      [41,'UL','RRC + NAS trên PUSCH','ULInformationTransfer + PDU Session Establishment Request','UE chuyển NAS Session Management message tới core qua RRC, gNB và AMF; SMF xử lý yêu cầu phiên.'],
+      [42,'DL','PHY','PDCCH / DL scheduling','Cấp tài nguyên để trả thông tin về phiên dữ liệu.'],
+      [43,'DL','RRC + NAS trên PDSCH','DLInformationTransfer + PDU Session Establishment Accept','Core trả kết quả session. Trong triển khai thực tế còn có thiết lập tài nguyên user plane và có thể RRCReconfiguration cho DRB/QoS.'],
+      [44,'UL','PHY / HARQ','HARQ-ACK cho downlink','UE phản hồi transport block. Đây không phải dấu mốc duy nhất chứng minh user-plane đã hoàn toàn sẵn sàng.'],
+    ],
+  },
+];
+
+const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
+---
+
+<BaseLayout
+  title="Tổng quan quy trình kết nối 5G NR: từ UE bật nguồn tới PDU Session | VietWireless"
+  description="Bức tranh tổng thể 5G NR trong 44 bước minh họa: SSB/MIB, SIB1, 4-step random access, RRC Setup, NAS registration, authentication, security và PDU Session."
+>
+  <article class="lesson protocol-lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 19 · BỨC TRANH TOÀN HỆ THỐNG</p>
+      <h1>UE kết nối mạng 5G NR như thế nào?</h1>
+      <p class="lesson-deck">
+        Trước khi tách riêng PSS, SSS, PBCH hay PRACH, tôi muốn thử nhìn một lần toàn bộ câu chuyện:
+        <strong>từ một thiết bị chưa biết cell đang phát ở đâu, tới khi mạng nhận diện UE và thiết lập được phiên dữ liệu.</strong>
+        Bài này là bản đồ các giao thức và tín hiệu, không phải phân tích từng bit.
+      </p>
+    </header>
+
+    <section class="concept-block" id="problem" data-lesson-role="problem">
+      <p class="concept-kicker">CÂU HỎI ĐẦU TIÊN</p>
+      <h2>Tại sao UE không thể vừa bật lên là gửi dữ liệu ngay?</h2>
+      <p>
+        Khi mới bật phần vô tuyến, UE chưa có đồng bộ với gNB, chưa biết tài nguyên truy nhập,
+        chưa có kết nối điều khiển RRC, chưa được 5G Core xác thực và có thể chưa có PDU Session.
+        Đây là những vấn đề khác nhau, do các tầng giao thức khác nhau xử lý.
+      </p>
+      <p>
+        Tôi mượn khung 44 bước trong một bảng kiểm tra để đặt toàn bộ trao đổi lên cùng một trục.
+        Đó chỉ là <strong>một kịch bản minh họa kiểu 5G SA với 4-step random access</strong>,
+        không phải danh sách 44 bước bắt buộc trong 3GPP. Trong thực tế, một số bước không xảy ra,
+        có bước được lặp lại hoặc có thứ tự khác tùy trạng thái và cấu hình của mạng.
+      </p>
+      <aside class="precision-note">
+        <strong>Phạm vi của bài</strong>
+        <p>
+          Bắt đầu từ lúc UE thử một NR carrier, đi qua cell search, đọc SIB1, truy nhập ngẫu nhiên,
+          RRC, NAS registration và thiết lập PDU Session. Bài không mô tả boot hệ điều hành,
+          mọi trao đổi nội bộ 5G Core hay tất cả biến thể truy nhập của Release 18.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="system-context" data-lesson-role="system-context">
+      <p class="concept-kicker">01 · ĐẶT ĐÚNG CÁC THÀNH PHẦN</p>
+      <h2>UE nói chuyện với gNB ở phía vô tuyến, nhưng một số thủ tục phải đi tới 5G Core.</h2>
+      <figure class="protocol-topology" data-lesson-visual>
+        <div class="protocol-node">
+          <small>THIẾT BỊ</small>
+          <strong>UE</strong>
+          <p>Receiver, phát uplink, RRC và NAS</p>
+        </div>
+        <div class="protocol-link">
+          <span>Uu · NR radio</span>
+          <b>⇄</b>
+          <small>SSB · PDCCH · PDSCH · PRACH · PUSCH · PUCCH</small>
+        </div>
+        <div class="protocol-node">
+          <small>TRẠM TRUY NHẬP</small>
+          <strong>gNB</strong>
+          <p>Điều khiển radio, RRC, lên lịch PHY</p>
+        </div>
+        <div class="protocol-link">
+          <span>NG · control/user plane</span>
+          <b>⇄</b>
+          <small>N2 / N3</small>
+        </div>
+        <div class="protocol-node core">
+          <small>MẠNG LÕI 5G</small>
+          <strong>5GC</strong>
+          <p>AMF: đăng ký · SMF: phiên · UPF: dữ liệu</p>
+        </div>
+        <figcaption>
+          NAS là trao đổi logic giữa UE và AMF (hoặc chức năng quản lý phiên qua AMF).
+          gNB chuyển tiếp bản tin NAS; gNB không tự đóng vai trò AMF.
+        </figcaption>
+      </figure>
+
+      <div class="protocol-stack" aria-label="Phân biệt tín hiệu vật lý và giao thức">
+        <div><strong>PHY / MAC</strong><p>“Phát ở đâu, lúc nào, trên kênh nào?” PDCCH, PDSCH, PUSCH, PUCCH, PRACH và HARQ vận chuyển thông tin.</p></div>
+        <div><strong>RRC</strong><p>“UE và gNB thiết lập, cấu hình, bảo mật liên kết radio như thế nào?” Ví dụ RRCSetup và RRCReconfiguration.</p></div>
+        <div><strong>NAS</strong><p>“Thuê bao được đăng ký và xác thực chưa? Phiên dữ liệu được chấp nhận chưa?” Các thông điệp thuộc 5G Core.</p></div>
+      </div>
+      <p>
+        Cùng một lần thu PDSCH có thể đưa UE tới một bản tin RRC hoặc NAS.
+        <strong>Tên kênh mang dữ liệu và tên thông điệp được mang là hai lớp khác nhau.</strong>
+        Đây là lý do một bảng protocol thường có các hàng PDCCH, PDSCH và tên NAS xen kẽ.
+      </p>
+    </section>
+
+    <section class="concept-block" id="eight-phases">
+      <p class="concept-kicker">02 · MỘT BỨC TRANH TRƯỚC KHI XEM CHI TIẾT</p>
+      <h2>44 dòng có thể gộp thành tám chặng, mỗi chặng giải quyết một câu hỏi.</h2>
+      <ol class="protocol-phase-overview" data-lesson-visual>
+        {phases.map((phase) => (
+          <li>
+            <a href={`#${phase.id}`}>
+              <span class="protocol-phase-index">{phase.label}</span>
+              <div><strong>{phase.name}</strong><p>{phase.question}</p></div>
+              <small>{phase.range} ↓</small>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <p>
+        Mỗi chặng bên dưới có bảng các bước và cột “vì sao cần”.
+        Chỉ cần đọc từ trên xuống để nhận ra chuỗi phụ thuộc:
+        phải nghe được cell, rồi mới truy nhập; phải có signaling, rồi mới đăng ký và yêu cầu dịch vụ.
+      </p>
+    </section>
+
+    <section class="concept-block" id="worked-example" data-lesson-role="example">
+      <p class="concept-kicker">03 · VÍ DỤ ĐI XUYÊN CÁC TẦNG</p>
+      <h2>Nhìn vào Msg1 đến Msg4: chỉ bốn thông điệp nhưng có cả cấp phát tài nguyên ở giữa.</h2>
+      <div class="protocol-exchange" data-lesson-visual aria-label="Ví dụ bốn bản tin random access">
+        <div><span>UE</span><strong>Msg1 · PRACH preamble</strong><b>→</b><span>gNB</span><p>UE thử “gõ cửa”; gNB nhận ra có một yêu cầu truy nhập nhưng chưa có kết nối RRC.</p></div>
+        <div class="down"><span>UE</span><strong>Msg2 · RAR trên PDSCH</strong><b>←</b><span>gNB</span><p>PDCCH ra lịch; RAR mang Timing Advance và UL grant để UE chuẩn bị Msg3.</p></div>
+        <div><span>UE</span><strong>Msg3 · RRCSetupRequest</strong><b>→</b><span>gNB</span><p>UE dùng PUSCH được grant để yêu cầu thiết lập RRC.</p></div>
+        <div class="down"><span>UE</span><strong>Msg4 · RRCSetup</strong><b>←</b><span>gNB</span><p>gNB gửi kết quả contention resolution cùng phản hồi RRC trong kịch bản này.</p></div>
+      </div>
+      <p>
+        Ví dụ số độc lập: nếu UE ở cách gNB khoảng 1,5 km thì độ trễ truyền một chiều trong không gian gần bằng
+        <strong>5 µs</strong> (lấy tốc độ truyền xấp xỉ 300.000 km/s).
+        Chính vì tín hiệu uplink không đến ngay lập tức, gNB phải ước lượng thời điểm đến và hướng dẫn UE hiệu chỉnh bằng Timing Advance.
+        Giá trị TA được mã hóa và lượng tử hóa theo quy tắc 3GPP, không đơn giản luôn bằng 5 µs.
+      </p>
+      <p>
+        Khi Msg4 đã tới UE, hệ thống vẫn cần RRCSetupComplete, NAS Registration,
+        xác thực và những bước khác trước khi có dịch vụ dữ liệu. Đó là điểm khác nhau giữa
+        <strong>truy nhập radio thành công</strong> và <strong>dịch vụ end-to-end sẵn sàng</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block" id="full-procedure">
+      <p class="concept-kicker">04 · CHI TIẾT TỪNG BƯỚC</p>
+      <h2>Bảng 44 bước minh họa và vai trò của mỗi bước trong hệ thống.</h2>
+      <p>
+        Dấu <strong>↓ DL</strong> là gNB phát xuống UE, còn <strong>↑ UL</strong> là UE phát lên gNB.
+        Những hàng ghi NAS cho biết nội dung logic do 5G Core xử lý, dù vẫn phải đi qua các kênh radio.
+        Các hàng PDCCH hoặc HARQ có thể lặp lại nhiều lần trong thực tế.
+      </p>
+      <div class="protocol-step-legend">
+        <span><i class="protocol-dot dl"></i> DL · gNB → UE</span>
+        <span><i class="protocol-dot ul"></i> UL · UE → gNB</span>
+        <span>44 bước tham khảo · 8 giai đoạn</span>
+      </div>
+      {phases.map((phase) => (
+        <section class="protocol-phase" id={phase.id}>
+          <header class="protocol-phase-heading">
+            <span>{phase.label}</span>
+            <div><p class="section-kicker">BƯỚC {phase.range}</p><h3>{phase.name}</h3><p>{phase.question}</p></div>
+          </header>
+          <div class="protocol-state"><strong>CHUYỂN TRẠNG THÁI</strong><span>{phase.state}</span></div>
+          <div class="protocol-steps" data-lesson-visual>
+            {phase.steps.map(([num, direction, layer, message, why]) => (
+              <article class="protocol-step">
+                <div class="protocol-step-head">
+                  <span class="protocol-step-no">{String(num).padStart(2,'0')}</span>
+                  <span class:list={['protocol-direction', direction === 'DL' ? 'is-dl' : 'is-ul']}>{direction === 'DL' ? '↓ DL' : '↑ UL'}</span>
+                  <div class="protocol-step-name"><strong>{message}</strong><small>{layer}</small></div>
+                </div>
+                <p>{why}</p>
+              </article>
+            ))}
+          </div>
+          <p class="protocol-phase-lesson"><strong>Sau chặng này:</strong> {phase.lesson}</p>
+        </section>
+      ))}
+      <p class="protocol-step-count">
+        Tổng cộng {totalSteps} bước, được diễn giải lại từ bảng tham khảo thành một sơ đồ học tập.
+        Bảng này không phải bản chép hoặc flow chuẩn mang tính bắt buộc của 3GPP.
+      </p>
+    </section>
+
+    <section class="concept-block" id="scheduling-cycle" data-lesson-role="implementation">
+      <p class="concept-kicker">05 · VÌ SAO CỨ LẶP PDCCH, PDSCH, PUSCH VÀ ACK?</p>
+      <h2>Control chỉ đường cho data, còn HARQ phản hồi việc giải mã. Đó là chu kỳ lặp trong code.</h2>
+      <div class="protocol-loop" data-lesson-visual>
+        <article><small>TRUYỀN XUỐNG</small><strong>PDCCH · DCI</strong><b>↓</b><strong>PDSCH · transport block</strong><b>↓</b><strong>HARQ-ACK · PUCCH/PUSCH</strong><p>gNB lập lịch, UE nhận transport block, rồi phản hồi thành công/thất bại ở lớp truyền dẫn.</p></article>
+        <article><small>TRUYỀN LÊN</small><strong>PDCCH · UL grant</strong><b>↓</b><strong>PUSCH · transport block</strong><b>↓</b><strong>gNB giải mã UL</strong><p>gNB cấp tài nguyên; UE dùng PUSCH để mang MAC/RLC/PDCP/RRC hoặc NAS message tương ứng.</p></article>
+      </div>
+      <p>
+        Khi triển khai receiver, không nên coi “nhận được DCI” là đã đọc được NAS message.
+        DCI chỉ chứa thông tin lập lịch và thông số để xử lý transport block.
+        Phần mềm còn phải xử lý kênh được cấp phát, demodulation, channel decoding và các lớp giao thức.
+      </p>
+      <p>
+        Trong một trace, có thể đếm nhiều lệnh DCI, retransmission và HARQ feedback nhưng chỉ thấy một
+        NAS Authentication Request. Những lượng đếm ấy không nên bị hiểu là số bước cố định của protocol.
+      </p>
+    </section>
+
+    <section class="concept-block" id="boundary" data-lesson-role="boundary">
+      <p class="concept-kicker">06 · NHỮNG ĐIỀU BẢNG 44 BƯỚC KHÔNG NÓI HẾT</p>
+      <h2>Kết nối thành công không có nghĩa mọi bản tin đều đi theo một danh sách bất biến.</h2>
+      <div class="protocol-caveats">
+        <article><strong>Identity Request là tùy tình huống</strong><p>AMF có thể đã có định danh/context cần thiết nên không phải luôn gửi Identity Request và nhận Identity Response.</p></article>
+        <article><strong>4-step RA chỉ là một nhánh</strong><p>NR còn có những kiểu random access và RRC resume/re-establishment khác. Bài này chọn một đường đi dễ học đầu tiên.</p></article>
+        <article><strong>RRC và NAS là hai thủ tục</strong><p>RRCSetupComplete có thể mang NAS Registration Request, nhưng thành công ở RRC không đồng nghĩa NAS registration đã thành công.</p></article>
+        <article><strong>Registration và PDU Session độc lập</strong><p>UE có thể đã registered mà chưa có PDU Session phù hợp. PDU Session cần thông tin session management và tài nguyên user plane.</p></article>
+        <article><strong>ACK không thay thế phản hồi ứng dụng</strong><p>HARQ-ACK chỉ nói về transport block. Registration Complete, Security Mode Complete hay RRCReconfigurationComplete là thông điệp ở lớp cao hơn.</p></article>
+        <article><strong>Chưa mô tả hết 5GC</strong><p>AMF, AUSF/UDM, SMF, UPF và các bản tin trên giao diện mạng lõi tạo thành các thủ tục bổ sung không hiện trên trục vô tuyến.</p></article>
+      </div>
+      <aside class="mental-model">
+        <strong>Một lỗi chiều truyền dễ gặp trong bảng gốc</strong>
+        <p>
+          Msg1 là PRACH preamble do UE phát tới gNB, vì vậy phải là <strong>UE → gNB</strong>.
+          DCI 1_0 thường dùng cho lịch truyền xuống, còn DCI 0_0/0_1 là các ví dụ định dạng lịch truyền lên;
+          không được trộn “lệnh lập lịch” với “bản tin dữ liệu được lập lịch”.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="specification" data-lesson-role="specification">
+      <p class="concept-kicker">07 · ĐỌC ĐÚNG TÀI LIỆU CHUẨN</p>
+      <h2>Mỗi tầng có tài liệu 3GPP riêng. Các hàng trong bảng là cách nối chúng lại để học.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP QUY ĐỊNH</span><p>Định nghĩa channel, RRC message, random access, NAS và các thủ tục 5GC. Không quy định đúng 44 dòng cho mọi UE.</p></article>
+        <article class="technical-card"><span class="card-label">DIỄN GIẢI GIẢNG DẠY</span><p>Chia toàn bộ một kịch bản kết nối thành tám giai đoạn và gán vai trò cho mỗi hàng để người đọc dễ theo dõi.</p></article>
+        <article class="technical-card"><span class="card-label">CỤ THỂ TÙY IMPLEMENTATION</span><p>Scheduling, grant, ACK, xử lý retry, công nghệ 2-step/4-step RA và điều kiện gửi mỗi NAS message.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.300 Release 18, ETSI TS 138 300 V18.8.0: tổng quan NR/NG-RAN, initial access và radio protocol architecture · <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138300/18.08.00_60/ts_138300v180800p.pdf" target="_blank" rel="noreferrer">xem chuẩn ↗</a></p>
+        <p class="spec-source">3GPP TS 38.321 Release 18, ETSI TS 138 321 V18.8.0, clause 5.1: random access ở MAC, các điều kiện và bản tin liên quan · <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138321/18.08.00_60/ts_138321v180800p.pdf" target="_blank" rel="noreferrer">xem chuẩn ↗</a></p>
+        <p class="spec-source">3GPP TS 38.331 Release 18, ETSI TS 138 331 V18.8.0, clause 5.3.3 và các định nghĩa RRC message: RRCSetup, RRCSetupComplete, bảo mật và cấu hình · <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">xem chuẩn ↗</a></p>
+        <p class="spec-source">3GPP TS 23.502 Release 18, ETSI TS 123 502 V18.12.0, clauses 4.2.2.2 và 4.3.2.2: registration và PDU Session Establishment trong 5GC · <a href="https://www.etsi.org/deliver/etsi_ts/123500_123599/123502/18.12.00_60/ts_123502v181200p.pdf" target="_blank" rel="noreferrer">xem chuẩn ↗</a></p>
+        <p class="spec-source">3GPP TS 24.501 Release 18, ETSI TS 124 501 V18.12.0: định dạng và thủ tục NAS cho registration, authentication, security và session management · <a href="https://www.etsi.org/deliver/etsi_ts/124500_124599/124501/18.12.00_60/ts_124501v181200p.pdf" target="_blank" rel="noreferrer">xem chuẩn ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" id="recap" data-lesson-role="recap">
+      <p class="concept-kicker">08 · MANG THEO BỨC TRANH NÀY</p>
+      <h2>Từ giờ mỗi bài chuyên sâu chỉ cần trả lời: nó nằm ở chỗ nào trong quy trình?</h2>
+      <ol class="recap-list">
+        <li><strong>Tìm cell:</strong> SSB, PSS, SSS, PBCH, MIB để UE hiểu tín hiệu phát xuống.</li>
+        <li><strong>Đọc cell:</strong> PDCCH, PDSCH và SIB1 cung cấp thông tin truy nhập.</li>
+        <li><strong>Truy nhập:</strong> PRACH và Random Access Response giúp UE bắt đầu uplink có điều khiển.</li>
+        <li><strong>Thiết lập điều khiển:</strong> RRC tạo và cấu hình kết nối radio.</li>
+        <li><strong>Đăng ký và xác thực:</strong> NAS kết nối logic UE với AMF, bao gồm các cơ chế security.</li>
+        <li><strong>Phiên dữ liệu:</strong> Session management với 5GC giúp xây dựng con đường cho lưu lượng ứng dụng.</li>
+      </ol>
+      <p>
+        Bài tiếp theo sẽ phóng to <strong>chặng 01</strong>, từ lúc UE chỉ thấy một luồng mẫu tín hiệu
+        tới khi tìm được SSB và đọc MIB. Sau đó chúng ta mới tách PSS, SSS, PBCH, SIB1 và random access thành từng bài.
+      </p>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/numerology-5g-nr/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Numerology trong 5G NR</strong>
+        <small>Time-frequency grid đã sẵn sàng để nhìn vào các thủ tục của UE.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/ue-bat-nguon/">
+        <span>BÀI TIẾP THEO →</span>
+        <strong>UE bật nguồn thì chuyện gì xảy ra?</strong>
+        <small>Đi sâu vào chặng cell search, synchronization, SSB, PBCH và MIB.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
