@@ -32,7 +32,7 @@ const phases = [
     state: 'Từ chỉ nghe downlink → có căn chỉnh uplink và context RRC',
     lesson: 'Bốn bản tin Msg1–Msg4 là khung của 4-step contention-based random access. Các bước PDCCH xen giữa là lớp điều khiển tài nguyên để truyền các bản tin ấy.',
     steps: [
-      [6,'UL','PHY / PRACH','Msg1: PRACH preamble','UE phát preamble trên PRACH occasion phù hợp. Đây là uplink, chiều UE → gNB, không phải downlink như dấu mũi tên in nhầm trong ảnh.'],
+      [6,'UL','PHY / PRACH','Msg1: PRACH preamble','UE phát preamble trên PRACH occasion phù hợp. Đây là uplink, chiều UE → gNB; UE bắt đầu cho gNB biết có một yêu cầu truy nhập.'],
       [7,'DL','PHY','PDCCH / DCI 1_0 / RA-RNTI','gNB chỉ cho UE nơi có PDSCH mang Random Access Response; RA-RNTI giúp UE nhận diện phản hồi theo cơ hội PRACH.'],
       [8,'DL','MAC trên PDSCH','Msg2: Random Access Response (RAR)','RAR cung cấp Timing Advance, UL grant cho Msg3 và temporary C-RNTI trong trường hợp tương ứng.'],
       [9,'UL','RRC trên PUSCH','Msg3: RRCSetupRequest','UE dùng tài nguyên UL được cấp để gửi yêu cầu thiết lập kết nối RRC; trong contention-based access đây là điểm gNB nhận dạng yêu cầu của UE.'],
@@ -334,7 +334,7 @@ const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
         <article><strong>Chưa mô tả hết 5GC</strong><p>AMF, AUSF/UDM, SMF, UPF và các bản tin trên giao diện mạng lõi tạo thành các thủ tục bổ sung không hiện trên trục vô tuyến.</p></article>
       </div>
       <aside class="mental-model">
-        <strong>Một lỗi chiều truyền dễ gặp trong bảng gốc</strong>
+        <strong>Phân biệt chiều truyền khi đọc bảng nhiều tầng</strong>
         <p>
           Msg1 là PRACH preamble do UE phát tới gNB, vì vậy phải là <strong>UE → gNB</strong>.
           DCI 1_0 thường dùng cho lịch truyền xuống, còn DCI 0_0/0_1 là các ví dụ định dạng lịch truyền lên;
