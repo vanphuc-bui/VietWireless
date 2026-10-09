@@ -149,7 +149,7 @@ export default function PBCHDMRSExplorer(){
     </div>
 
     <div className="pbchdmrs-sample">
-      <div><small>KNOWN PILOT · k={28+model.v}</small>
+      <div><small>KNOWN PILOT · <MathExpr tex={'k='+(28+model.v)}/></small>
         <strong><MathExpr tex={String.raw`X_{\mathrm{DMRS}}`}/></strong><span>{fmt(model.selected.x)}</span></div>
       <b>→ channel + noise →</b>
       <div><small>OBSERVED</small><strong><MathExpr tex={String.raw`Y_{\mathrm{DMRS}}`}/></strong>
