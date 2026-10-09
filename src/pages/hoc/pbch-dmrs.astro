@@ -113,7 +113,7 @@ const lessonMeta = {
       </div>
       <MathExpr tex={String.raw`60+24+60=144\ \text{DM-RS RE}`} display />
       <p>
-        144 là số RE của DM-RS trong cấu trúc SSB đầy đủ. Ngoại lệ cần nhớ: một số tình huống 3 MHz cell-search dùng SSB bị puncture, không thể áp dụng nguyên xi bài toán full-grid này.
+        144 là số RE của DM-RS trong cấu trúc SSB đầy đủ. Ngoại lệ cần nhớ: một số tình huống <MathExpr tex={String.raw`3\,\mathrm{MHz}`} /> cell-search dùng SSB bị puncture, không thể áp dụng nguyên xi bài toán full-grid này.
       </p>
     </section>
 
@@ -383,7 +383,7 @@ const lessonMeta = {
         <article class="technical-card"><span class="card-label">LS ≠ PERFECT CHANNEL</span>
           <p>Noise, interpolation error, residual CFO/timing, Doppler và model mismatch vẫn ảnh hưởng estimate.</p></article>
         <article class="technical-card"><span class="card-label">144 RE ≠ MỌI TRƯỜNG HỢP</span>
-          <p>144 áp dụng cho cấu trúc 240-subcarrier SS/PBCH block đầy đủ; TS 38.211 còn nêu trường hợp puncturing cho cell search ở carrier bandwidth 3 MHz.</p></article>
+          <p>144 áp dụng cho cấu trúc 240-subcarrier SS/PBCH block đầy đủ; TS 38.211 còn nêu trường hợp puncturing cho cell search ở carrier bandwidth <MathExpr tex={String.raw`3\,\mathrm{MHz}`} />.</p></article>
         <article class="technical-card"><span class="card-label">PBCH DM-RS ≠ PDSCH DM-RS</span>
           <p>DM-RS cho hai physical channels có sequence generation, resource mapping và contexts khác nhau; không được dùng chung mask một cách máy móc.</p></article>
       </div>
@@ -406,7 +406,7 @@ const lessonMeta = {
           <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
         </p>
         <p class="spec-source">
-          Cùng TS 38.211, clauses 7.4.3.1 và 7.4.3.1.3, Table 7.4.3.1-1: mapping PBCH/PBCH DM-RS lên SSB grid, và trường hợp cell search trên carrier 3 MHz ·
+          Cùng TS 38.211, clauses 7.4.3.1 và 7.4.3.1.3, Table 7.4.3.1-1: mapping PBCH/PBCH DM-RS lên SSB grid, và trường hợp cell search trên carrier <MathExpr tex={String.raw`3\,\mathrm{MHz}`} /> ·
           <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
         </p>
       </div>
