@@ -23298,3 +23298,125 @@ body {
   .pbch-one-re,.pbch-soft-grid {grid-template-columns:1fr;}
   .pbch-one-re > b {min-height:24px;transform:rotate(90deg);}
 }
+
+
+/* Lesson 28 · MIB field decoder and initial-access bridge */
+.mib-layer-illustration,
+.mib-config-split,.mib-next-hop,.mib-dmrs-comparison,
+.mib-formula-flow {
+  display:grid;align-items:stretch;gap:10px;margin:25px 0;
+}
+.mib-layer-illustration,.mib-formula-flow{
+  grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 30px minmax(0,1fr);
+}
+.mib-config-split{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);}
+.mib-next-hop{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);}
+.mib-dmrs-comparison{grid-template-columns:repeat(2,minmax(0,1fr));}
+.mib-layer-illustration > div,.mib-config-split > div,.mib-next-hop > div,
+.mib-dmrs-comparison > div,.mib-formula-flow > div {
+  min-width:0;background:var(--paper);border:1px solid var(--line);
+  padding:var(--lesson-technical-card-padding);
+}
+.mib-layer-illustration > b,.mib-config-split > b,.mib-next-hop > b,
+.mib-formula-flow > b {
+  display:grid;place-items:center;color:var(--violet);
+  font:500 var(--lesson-box-content-size) var(--font-ui);
+}
+.mib-layer-illustration > div > small,.mib-config-split > div > small,
+.mib-next-hop > div > small,.mib-dmrs-comparison > div > small,
+.mib-formula-flow > div > small {
+  display:block;color:var(--accent);font:700 var(--lesson-meta-size) var(--font-ui);
+}
+.mib-layer-illustration > div > strong,.mib-config-split > div > strong,
+.mib-next-hop > div > strong,.mib-dmrs-comparison > div > strong,
+.mib-formula-flow > div > strong {
+  display:block;margin:8px 0;font-size:var(--lesson-box-content-size);
+  overflow-wrap:anywhere;
+}
+.mib-layer-illustration > div > span,.mib-config-split > div > span,
+.mib-next-hop > div > span,.mib-dmrs-comparison > div > span,
+.mib-formula-flow > div > span {
+  display:block;color:var(--ink-soft);font-size:var(--lesson-box-content-size);
+  line-height:1.5;overflow-wrap:anywhere;
+}
+.mib-field-table{min-width:840px;}
+.mib-worked {
+  padding:var(--lesson-technical-card-padding);background:var(--paper);
+  border:1px solid var(--line);margin:25px 0;
+}
+.mib-lab{border:1px solid var(--line);background:#fff;margin:25px 0;}
+.mib-controls {
+  padding:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;background:var(--paper-2);border-bottom:1px solid var(--line);
+}
+.mib-controls label{min-width:0;}
+.mib-controls label > span{
+  display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;
+  font:500 var(--lesson-meta-size) var(--font-ui);color:var(--ink-soft);
+}
+.mib-controls label > input,.mib-controls label > select{width:100%;max-width:100%;}
+.mib-metrics.metric-card-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.mib-metrics .metric-card{min-width:0;min-height:0;}
+.mib-metrics .metric-card-value,.mib-metrics .metric-card-formula{
+  font-size:var(--lesson-box-content-size);overflow-wrap:anywhere;
+}
+.mib-fields,.mib-sfn,.mib-pdcch{padding:18px;border-bottom:1px solid var(--line);}
+.mib-fields-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;margin:18px 0;
+}
+.mib-field{
+  min-width:0;text-align:left;padding:12px;cursor:pointer;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);
+}
+.mib-field.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+.mib-field:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.mib-field-label{display:block;font:500 var(--lesson-meta-size) var(--font-ui);overflow-wrap:anywhere;}
+.mib-field > strong{
+  display:block;font:700 var(--lesson-box-content-size) var(--font-ui);
+  letter-spacing:.08em;margin:9px 0;overflow-wrap:anywhere;
+}
+.mib-field > small{display:block;color:var(--muted);font:400 var(--lesson-meta-size) var(--font-ui);}
+.mib-focused-field{margin:15px 0 8px!important;font-size:var(--lesson-box-content-size)!important;}
+.mib-technical-note,.mib-lab-note{
+  color:var(--ink-soft);font-size:var(--lesson-box-content-size);line-height:1.6;
+}
+.mib-technical-note{margin:0!important;}
+.mib-formula-flow{margin:18px 0;}
+.mib-formula-flow > div > strong {
+  font:700 var(--lesson-box-content-size) var(--font-ui);letter-spacing:.07em;
+}
+.mib-sfn > p,.mib-pdcch > p{font-size:var(--lesson-box-content-size);line-height:1.6;}
+.mib-pdcch-parts{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0;
+}
+.mib-pdcch-parts > div{
+  min-width:0;background:var(--paper);border:1px solid var(--line);padding:18px;
+}
+.mib-pdcch-parts > div > small{display:block;color:var(--accent);font:700 var(--lesson-meta-size) var(--font-ui);}
+.mib-pdcch-parts > div > strong{
+  display:block;font:700 var(--lesson-box-content-size) var(--font-ui);margin:8px 0;letter-spacing:.08em;
+}
+.mib-pdcch-parts > div > span{display:block;color:var(--ink-soft);font-size:var(--lesson-box-content-size);}
+.mib-pdcch-parts > div > p{font-size:var(--lesson-box-content-size);line-height:1.55;margin:10px 0 0;}
+.mib-cell-state{padding:18px;border-bottom:1px solid var(--line);background:var(--paper);}
+.mib-cell-state > strong{font-size:var(--lesson-box-content-size);}
+.mib-cell-state > p{font-size:var(--lesson-box-content-size);line-height:1.55;margin:8px 0 0;}
+.mib-lab-note{padding:18px;margin:0;}
+@media(max-width:1120px){
+  .mib-next-hop{grid-template-columns:1fr;}
+  .mib-next-hop > b{min-height:20px;transform:rotate(90deg);}
+}
+@media(max-width:900px){
+  .mib-layer-illustration,.mib-config-split,.mib-formula-flow{grid-template-columns:1fr;}
+  .mib-layer-illustration > b,.mib-config-split > b,.mib-formula-flow > b{
+    min-height:20px;transform:rotate(90deg);
+  }
+  .mib-controls{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .mib-fields-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .mib-metrics.metric-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:680px){
+  .mib-dmrs-comparison,.mib-controls,.mib-fields-grid,
+  .mib-pdcch-parts,.mib-metrics.metric-card-grid{grid-template-columns:1fr;}
+}
