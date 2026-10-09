@@ -79,10 +79,6 @@ body {
 /* Keep navigation, UI controls, inline equations and figures on their own spacing scale. */
 .site-nav,
 .language-switcher,
-.lesson .math-inline,
-.lesson .math-display,
-.lesson .katex,
-.lesson svg,
 .lesson button,
 .lesson input,
 .lesson select {
