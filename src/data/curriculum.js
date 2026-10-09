@@ -43,7 +43,7 @@ export const curriculum = [
       { number: 23, title: 'SSS và Physical Cell ID', slug: 'sss-physical-cell-id', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 24, title: 'Fine timing và frequency synchronization', slug: 'fine-timing-frequency-synchronization', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 25, title: 'PBCH DM-RS', slug: 'pbch-dmrs', status: 'published', kind: 'deep-dive', specRequired: true },
-      { number: 26, title: 'PBCH', slug: 'pbch', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 26, title: 'PBCH', slug: 'pbch', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 27, title: 'MIB', slug: 'mib', status: 'planned', kind: 'deep-dive', specRequired: true },
     ],
   },
