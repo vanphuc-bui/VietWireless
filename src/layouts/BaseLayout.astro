@@ -1,6 +1,7 @@
 ---
 import 'katex/dist/katex.min.css';
 import '../styles/global.css';
+import '../styles/about.css';
 
 const {
   title = 'VietWireless | Ghi chép trực quan về viễn thông',
@@ -63,14 +64,14 @@ const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
                 <a href="/en/#history">History</a>
                 <a href="/en/#big-picture">Big picture</a>
                 <a href="/en/learn/">Learning map</a>
-                <a href="/en/#about">About</a>
+                <a class="site-nav-about" href="/en/about/" aria-current={currentPath.startsWith('/en/about') ? 'page' : undefined}>About Me</a>
               </>
             ) : (
               <>
                 <a href="/#lich-su">Lịch sử</a>
                 <a href="/#buc-tranh-lon">Bức tranh lớn</a>
                 <a href="/hoc/">Bản đồ học</a>
-                <a href="/#tai-sao">Về VietWireless</a>
+                <a class="site-nav-about" href="/about/" aria-current={currentPath.startsWith('/about') ? 'page' : undefined}>About Me</a>
               </>
             )
           }
@@ -118,7 +119,7 @@ const alternateAbsolute = new URL(resolvedAlternateHref, Astro.url.origin).href;
       <div class="footer-note">
         <p>
           {isEnglish ? 'Written by ' : 'Viết bởi '}
-          <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">Van-Phuc Bui</a>.
+          <a href={isEnglish ? '/en/about/' : '/about/'}>Van-Phuc Bui</a>.
         </p>
         <p>
           {
