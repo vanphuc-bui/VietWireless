@@ -23072,3 +23072,229 @@ body {
   .pbchdmrs-strip {height:42px;}
   .pbchdmrs-response svg {min-width:540px;}
 }
+
+
+/* Lesson 26: PBCH transport chain, constellation and soft demapping */
+.pbch-layer-stack,
+.pbch-size-story,
+.pbch-recovery-flow,
+.pbch-one-re {
+  display: grid;
+  align-items: stretch;
+  gap: 9px;
+  margin: 26px 0;
+}
+.pbch-layer-stack { grid-template-columns: 1fr; }
+.pbch-size-story {
+  grid-template-columns: minmax(0,1fr) 24px minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr);
+}
+.pbch-size-story-compact,
+.pbch-recovery-flow {
+  grid-template-columns: minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,1fr);
+}
+.pbch-layer-stack > div,
+.pbch-size-story > div,
+.pbch-recovery-flow > div,
+.pbch-one-re > div {
+  min-width:0;
+  padding:var(--lesson-technical-card-padding);
+  border:1px solid var(--line);
+  background:#fff;
+}
+.pbch-layer-stack > b,
+.pbch-size-story > b,
+.pbch-recovery-flow > b,
+.pbch-one-re > b {
+  display:grid;
+  place-items:center;
+  min-width:0;
+  color:var(--violet);
+  font:500 var(--lesson-box-content-size) var(--font-ui);
+}
+.pbch-layer-stack > b { min-height:16px; }
+.pbch-layer-stack > div > small,
+.pbch-size-story > div > small,
+.pbch-recovery-flow > div > small,
+.pbch-one-re > div > small {
+  display:block;
+  color:var(--accent);
+  font:700 var(--lesson-meta-size) var(--font-ui);
+}
+.pbch-layer-stack > div > strong,
+.pbch-size-story > div > strong,
+.pbch-recovery-flow > div > strong,
+.pbch-one-re > div > strong {
+  display:block;
+  margin:7px 0;
+  font-size:var(--lesson-box-content-size);
+  overflow-wrap:anywhere;
+}
+.pbch-layer-stack > div > span,
+.pbch-size-story > div > span,
+.pbch-recovery-flow > div > span,
+.pbch-one-re > div > span {
+  display:block;
+  color:var(--ink-soft);
+  line-height:1.5;
+  font-size:var(--lesson-box-content-size);
+  overflow-wrap:anywhere;
+}
+.pbch-two-scramblers,
+.pbch-crc-result,
+.pbch-llr-story {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:26px 0;
+}
+.pbch-llr-story {grid-template-columns:repeat(3,minmax(0,1fr));}
+.pbch-two-scramblers > article {min-height:0;min-width:0;}
+.pbch-two-scramblers > article > h3 {margin:9px 0;font-size:var(--lesson-prose-size);}
+.pbch-crc-result > div,
+.pbch-llr-story > div {
+  min-width:0;
+  padding:var(--lesson-technical-card-padding);
+  border:1px solid var(--line);
+  background:var(--paper);
+}
+.pbch-crc-result > div > small,
+.pbch-llr-story > div > small {
+  display:block;
+  font:700 var(--lesson-meta-size) var(--font-ui);
+  color:var(--accent);
+}
+.pbch-crc-result > div > strong,
+.pbch-llr-story > div > strong {
+  display:block;
+  margin:8px 0;
+  font-size:var(--lesson-box-content-size);
+}
+.pbch-crc-result > div > span,
+.pbch-llr-story > div > span {
+  display:block;
+  line-height:1.5;
+  font-size:var(--lesson-box-content-size);
+  color:var(--ink-soft);
+}
+.pbch-decode-lab {
+  border:1px solid var(--line);
+  margin:24px 0;
+  background:#fff;
+}
+.pbch-decode-controls {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  padding:18px;
+  background:var(--paper-2);
+  border-bottom:1px solid var(--line);
+}
+.pbch-decode-controls label {min-width:0;}
+.pbch-decode-controls label > span {
+  display:flex;
+  justify-content:space-between;
+  gap:9px;
+  align-items:center;
+  color:var(--ink-soft);
+  margin-bottom:9px;
+  font:500 var(--lesson-meta-size) var(--font-ui);
+}
+.pbch-decode-controls label > input,
+.pbch-decode-controls label > select {width:100%;}
+.pbch-decode-metrics.metric-card-grid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.pbch-decode-metrics .metric-card {min-height:0;min-width:0;}
+.pbch-decode-metrics .metric-card-value,
+.pbch-decode-metrics .metric-card-formula {
+  font-size:var(--lesson-box-content-size);
+  overflow-wrap:anywhere;
+}
+.pbch-plots {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  border-bottom:1px solid var(--line);
+}
+.pbch-plot {
+  min-width:0;
+  padding:16px 18px;
+  text-align:center;
+}
+.pbch-plot + .pbch-plot {border-left:1px solid var(--line);}
+.pbch-plot > strong {
+  display:block;
+  font-size:var(--lesson-box-content-size);
+}
+.pbch-plot > p {
+  margin:6px 0 12px;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:var(--lesson-box-content-size);
+}
+.pbch-plot svg {
+  width:100%;
+  max-width:300px;
+  margin:0 auto;
+  display:block;
+}
+.pbch-grid-line {stroke:#eee9e2;stroke-width:.7;}
+.pbch-axis {stroke:#afa69b;stroke-width:1.3;}
+.pbch-ideal-dot {stroke:#ad9e91;fill:none;stroke-dasharray:2 3;stroke-width:1.2;}
+.pbch-point {fill:#457a93;opacity:.82;}
+.pbch-point.selected {fill:#b24b32;stroke:white;stroke-width:1.8;opacity:1;}
+.pbch-plot-axis-label {fill:#78716b;font:12px var(--font-ui);}
+.pbch-one-re {
+  grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr) 32px minmax(0,1fr);
+  padding:16px;
+  margin:0;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+}
+.pbch-one-re > div {background:white;}
+.pbch-soft-demo {padding:18px;border-bottom:1px solid var(--line);}
+.pbch-soft-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0;}
+.pbch-soft-grid > div {
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--line);
+  background:var(--paper);
+}
+.pbch-soft-grid > div > small {
+  display:block;
+  color:var(--accent);
+  font:700 var(--lesson-meta-size) var(--font-ui);
+}
+.pbch-soft-grid > div > strong {display:block;margin:8px 0;font-size:var(--lesson-box-content-size);}
+.pbch-soft-grid > div > span {
+  display:block;
+  color:var(--ink-soft);
+  font-size:var(--lesson-box-content-size);
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.pbch-soft-demo > p {margin:12px 0 0;font-size:var(--lesson-box-content-size);line-height:1.6;}
+.pbch-lab-note {
+  padding:16px 18px;
+  margin:0;
+  font-size:var(--lesson-box-content-size);
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+@media (max-width: 1020px) {
+  .pbch-size-story,
+  .pbch-size-story-compact,
+  .pbch-recovery-flow {grid-template-columns:1fr;}
+  .pbch-size-story > b,
+  .pbch-recovery-flow > b {min-height:24px;transform:rotate(90deg);}
+  .pbch-decode-controls {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .pbch-decode-metrics.metric-card-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .pbch-plots {grid-template-columns:1fr;}
+  .pbch-plot + .pbch-plot {border-left:0;border-top:1px solid var(--line);}
+  .pbch-plot svg {max-width:300px;}
+}
+@media (max-width: 720px) {
+  .pbch-two-scramblers,.pbch-crc-result,.pbch-llr-story,
+  .pbch-decode-controls,.pbch-decode-metrics.metric-card-grid,
+  .pbch-one-re,.pbch-soft-grid {grid-template-columns:1fr;}
+  .pbch-one-re > b {min-height:24px;transform:rotate(90deg);}
+}
