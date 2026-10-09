@@ -26,8 +26,9 @@ import MathExpr from '../components/Math.astro';
       <div class="hero-note">
         <span class="note-mark">Ghi chú mở đầu</span>
         <p>
-          Nếu bạn mới bước vào ngành Điện tử - Viễn thông và thấy FFT, <MathExpr tex="I/Q" />, OFDM hay resource grid
-          hơi rời rạc, tôi cũng từng có cảm giác như vậy. VietWireless là nơi tôi thử nối chúng lại bằng hình ảnh và những ví dụ dễ nhìn hơn.
+          VietWireless là notebook tôi viết để tự hệ thống lại kiến thức về tín hiệu và hệ thống vô tuyến.
+          Từng chủ đề đi từ trực giác, hình minh họa và ví dụ tới công thức, rồi kết nối với cách triển khai trong thực tế.
+          <a href="/about/">Đọc về người viết và lý do bắt đầu →</a>
         </p>
       </div>
     </header>
@@ -355,51 +356,8 @@ import MathExpr from '../components/Math.astro';
       </div>
     </section>
 
-    <section class="essay-section" id="tai-sao">
-      <div class="section-number">03</div>
-      <div class="essay-content">
-        <p class="section-kicker">VÌ SAO TÔI VIẾT VIETWIRELESS</p>
-
-        <p>
-          Khi học viễn thông, tôi từng gặp chính những câu hỏi rất cơ bản mà giáo trình thường đi qua quá nhanh:{" "}
-          <strong>FFT thực sự để làm gì? Tại sao lúc thì tín hiệu ở miền thời gian, lúc lại ở miền tần số?
-          <MathExpr tex="I" /> và <MathExpr tex="Q" /> là gì? Một sample trong code liên quan gì tới sóng đi ra khỏi anten?</strong>
-        </p>
-
-        <p>
-          Sau này, khi học, nghiên cứu và làm việc sâu hơn với wireless, tôi nhận ra cảm giác này khá phổ biến.
-          Ta có thể dùng FFT, OFDM, channel estimation hay <MathExpr tex="I/Q" /> rất thường xuyên nhưng đôi khi vẫn phải dừng lại một chút để hỏi:{" "}
-          <em>ở bước này tín hiệu đang được biểu diễn theo cách nào?</em>
-        </p>
-
-        <blockquote class="teaching-quote">
-          <p>
-            Điều tôi muốn làm ở VietWireless không phải là bỏ công thức đi.
-            Tôi chỉ muốn mỗi công thức xuất hiện sau khi ta đã có một hình dung tương đối rõ về thứ nó đang mô tả.
-          </p>
-        </blockquote>
-
-        <p>
-          Vì vậy tôi sẽ cố gắng đi chậm hơn một chút ở những chỗ từng làm tôi bối rối: nhìn waveform trước Fourier Transform,
-          xoay một phasor trước khi nói về complex baseband, rồi nối những hình dung đó với subcarrier và 3GPP khi cần.
-        </p>
-
-        <div class="author-strip">
-          <div class="author-monogram" aria-hidden="true">VP</div>
-          <div>
-            <strong>Van-Phuc Bui</strong>
-            <p>
-              VietWireless là nơi tôi ghi lại cách tôi đang nối các mảnh kiến thức này với nhau,
-              từ những câu hỏi rất cơ bản cho tới những thứ tôi gặp trong nghiên cứu và công việc wireless.
-            </p>
-            <a href="https://vanphucbui.com/" target="_blank" rel="noreferrer">vanphucbui.com ↗</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="essay-section" id="cach-hoc">
-      <div class="section-number">04</div>
+      <div class="section-number">03</div>
       <div class="essay-content">
         <p class="section-kicker">CÁCH TÔI MUỐN VIẾT CÁC CHỦ ĐỀ</p>
         <h2>Thường sẽ bắt đầu bằng một câu hỏi, rồi mới đi dần tới toán và implementation.</h2>
@@ -430,7 +388,7 @@ import MathExpr from '../components/Math.astro';
     </section>
 
     <section class="essay-section" id="ban-do-hoc">
-      <div class="section-number">05</div>
+      <div class="section-number">04</div>
       <div class="essay-content">
         <p class="section-kicker">BẢN ĐỒ HỌC VIỄN THÔNG</p>
         <h2>Từ nền tảng tín hiệu tới một UE kết nối 5G NR, truyền dữ liệu và đi tiếp tới NTN.</h2>
