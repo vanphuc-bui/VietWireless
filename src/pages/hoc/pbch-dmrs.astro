@@ -1,0 +1,443 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import PBCHDMRSExplorer from '../../components/PBCHDMRSExplorer.jsx';
+
+const lessonMeta = {
+  number: 25,
+  part: 3,
+  slug: 'pbch-dmrs',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="PBCH DM-RS: từ reference symbols tới channel estimation | VietWireless"
+  description="Bài 25 về PBCH DM-RS trong 5G NR: 144 pilot RE, comb theo PCI, Gold-sequence QPSK theo SSB index, LS estimate và nội suy channel để giải điều chế PBCH."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 25 · INITIAL ACCESS</p>
+      <h1>PBCH DM-RS</h1>
+      <p class="lesson-deck">
+        Bài 24 đã đưa FFT window và residual CFO về trạng thái đủ tốt để quan sát SSB grid. Nhưng PBCH data trên grid vẫn chịu channel gain và phase rotation chưa biết.{" "}
+        <strong>PBCH DM-RS là các known reference symbols để UE đo channel trên những resource gần PBCH, rồi dùng channel estimate đó cho bước demodulation tiếp theo.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>UE đã nhận đúng PSS/SSS và PCI. Tại sao vẫn chưa thể đọc trực tiếp các QPSK symbols của PBCH?</h2>
+
+      <p>
+        Cùng một transmitted QPSK symbol có thể tới receiver với biên độ suy giảm, pha bị quay và noise cộng thêm.
+        Sau FFT, UE nhìn thấy received symbol, không biết chính xác transmitted PBCH symbol nào tạo ra nó:
+      </p>
+      <MathExpr tex={String.raw`Y[k,\ell]=H[k,\ell]X[k,\ell]+W[k,\ell]`} display />
+      <p>
+        PBCH data <MathExpr tex={String.raw`X[k,\ell]`} /> chưa được decode, nên receiver không thể đơn giản lấy received data chia cho transmitted data để tìm <MathExpr tex={String.raw`H[k,\ell]`} />.
+        Nó cần những RE mà <strong>transmitted value đã biết từ trước</strong>.
+      </p>
+      <aside class="mental-model">
+        <strong>DM-RS là “thước đo channel”, không phải payload</strong>
+        <p>
+          UE tự tái tạo DM-RS sequence theo các hypothesis hợp lệ rồi so với DM-RS nhận được.
+          Khác biệt giữa known reference và received reference cho biết channel đã tác động như thế nào.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">TỪ FINE SYNC TỚI PBCH DECODER</p>
+      <h2>Input là FFT grid, PCI và SSB hypotheses. Output là channel estimate tại những PBCH data RE.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>RECEIVER STATE TRANSITION</span>
+        <div class="system-position-flow">
+          <span>FFT SSB grid</span><b>+</b>
+          <span>PCI, SSB hypotheses</span><b>→</b>
+          <strong>PBCH DM-RS positions + QPSK sequence</strong><b>→</b>
+          <span>LS tại pilot</span><b>→</b>
+          <strong>channel estimate cho PBCH</strong>
+        </div>
+        <p>
+          UE đã có candidate timing/frequency và full PCI, nhưng có thể còn phải thử nhiều SSB-index/half-frame hypotheses.
+          PBCH DM-RS vừa hỗ trợ channel estimation vừa mang sequence context hữu ích cho quá trình xác nhận SSB hypothesis.
+          Sau đó receiver mới thực hiện PBCH equalization/demodulation và decoding (Bài 26).
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="resource-mapping">
+      <p class="concept-kicker">01 · DM-RS NẰM Ở NHỮNG VỊ TRÍ NÀO?</p>
+      <h2>Không phải cả 960 RE của SSB: DM-RS chỉ chiếm các comb RE trong symbols 1, 2 và 3.</h2>
+
+      <p>
+        Theo TS 38.211, trong một SS/PBCH block đầy đủ có 240 subcarriers và bốn OFDM symbols.
+        PSS ở symbol 0, SSS ở symbol 2, còn PBCH DM-RS nằm xen vào những vùng mang PBCH.
+        Vị trí comb theo frequency dùng:
+      </p>
+      <MathExpr tex={String.raw`v=N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4`} display />
+      <p>
+        Cứ bốn subcarriers có một vị trí DM-RS, bắt đầu từ offset <MathExpr tex="v" />.
+        Nhưng ở symbol 2, giữa grid là SSS và các zero RE, nên DM-RS chỉ xuất hiện ở hai vùng ngoài.
+      </p>
+
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead>
+            <tr><th>Symbol tương đối</th><th>DM-RS subcarrier positions</th><th>Số pilot RE</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><MathExpr tex={String.raw`\ell=1`} /></td>
+              <td><MathExpr tex={String.raw`k=v,\,4+v,\,\ldots,\,236+v`} /></td>
+              <td>60</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex={String.raw`\ell=2`} /></td>
+              <td>
+                <MathExpr tex={String.raw`k=v,\,4+v,\,\ldots,\,44+v`} />
+                và <MathExpr tex={String.raw`k=192+v,\,196+v,\,\ldots,\,236+v`} />
+              </td>
+              <td>12 + 12 = 24</td>
+            </tr>
+            <tr>
+              <td><MathExpr tex={String.raw`\ell=3`} /></td>
+              <td><MathExpr tex={String.raw`k=v,\,4+v,\,\ldots,\,236+v`} /></td>
+              <td>60</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <MathExpr tex={String.raw`60+24+60=144\ \text{DM-RS RE}`} display />
+      <p>
+        144 là số RE của DM-RS trong cấu trúc SSB đầy đủ. Ngoại lệ cần nhớ: một số tình huống 3 MHz cell-search dùng SSB bị puncture, không thể áp dụng nguyên xi bài toán full-grid này.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="pci-example">
+      <p class="concept-kicker">02 · VÍ DỤ TỪ BÀI 23: PCI 370</p>
+      <h2>PCI xác định offset comb, nhưng chưa đủ để xác định toàn bộ QPSK reference sequence.</h2>
+
+      <MathExpr tex={String.raw`N_{\mathrm{ID}}^{\mathrm{cell}}=370`} display />
+      <MathExpr tex={String.raw`v=370\bmod4=2`} display />
+      <p>
+        Ở symbols 1 và 3, các pilot nằm tại subcarriers 2, 6, 10, 14 và tiếp tục cách nhau 4 subcarriers.
+        Ở symbol 2, chỉ có hai nhóm: subcarriers 2 tới 46 và 194 tới 238 theo bước 4.
+      </p>
+      <div class="pbchdmrs-accounting" data-lesson-visual>
+        <div><small>SYMBOL 1</small><strong>60 pilot</strong><span>Toàn 240-subcarrier span</span></div>
+        <b>+</b>
+        <div><small>SYMBOL 2</small><strong>24 pilot</strong><span>12 bên trái + 12 bên phải SSS</span></div>
+        <b>+</b>
+        <div><small>SYMBOL 3</small><strong>60 pilot</strong><span>Toàn 240-subcarrier span</span></div>
+        <b>=</b>
+        <div><small>MỘT SSB</small><strong>144 pilot</strong><span>PBCH data còn 432 RE</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="known-sequence">
+      <p class="concept-kicker">03 · VỊ TRÍ ĐÚNG CHƯA ĐỦ: UE CẦN BIẾT GIÁ TRỊ PILOT ĐÃ PHÁT</p>
+      <h2>PBCH DM-RS được tạo thành 144 QPSK reference symbols từ pseudo-random Gold sequence.</h2>
+      <p>
+        Mỗi giá trị tham chiếu dùng hai bits của Gold sequence <MathExpr tex="c(n)" /> và trở thành một complex QPSK symbol:
+      </p>
+      <MathExpr
+        tex={String.raw`r(m)=\frac{1-2c(2m)}{\sqrt2}
+        +j\frac{1-2c(2m+1)}{\sqrt2},\qquad 0\le m<144`}
+        display
+      />
+      <p>
+        Vì thế mỗi pilot có magnitude bằng 1 và thuộc bốn constellation points.
+        Đây là <strong>known sequence</strong>: khi receiver biết seed hypothesis, nó có thể tự tạo lại từng <MathExpr tex="r(m)" />.
+        Giá trị của r không phải luôn cùng một QPSK symbol trên toàn bộ 144 RE.
+      </p>
+
+      <div class="pbchdmrs-symbols" data-lesson-visual>
+        <div><MathExpr tex={String.raw`(+1+j)/\sqrt2`} /></div>
+        <div><MathExpr tex={String.raw`(-1+j)/\sqrt2`} /></div>
+        <div><MathExpr tex={String.raw`(-1-j)/\sqrt2`} /></div>
+        <div><MathExpr tex={String.raw`(+1-j)/\sqrt2`} /></div>
+      </div>
+      <p>
+        Chi tiết tạo bits của Gold sequence nằm ở TS 38.211 clause 5.2.1.
+        Bài này tập trung vào cách pilot được tái tạo và được receiver sử dụng, thay vì biến phần sequence generator thành một bài lập trình LFSR riêng.
+      </p>
+    </section>
+
+    <section class="concept-block" id="seed">
+      <p class="concept-kicker">04 · TẠI SAO PBCH DM-RS SEQUENCE CÒN PHỤ THUỘC SSB INDEX?</p>
+      <h2>Seed kết hợp PCI và thông tin candidate SS/PBCH block, nên UE có thể thử các index hypotheses trước khi decode PBCH payload.</h2>
+      <MathExpr
+        tex={String.raw`c_{\mathrm{init}}=
+        2^{11}(\bar i_{\mathrm{SSB}}+1)
+        \left(\left\lfloor\frac{N_{\mathrm{ID}}^{\mathrm{cell}}}{4}\right\rfloor+1\right)
+        +2^6(\bar i_{\mathrm{SSB}}+1)
+        +(N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4)`}
+        display
+      />
+      <p>
+        Với trường hợp <MathExpr tex={String.raw`\bar L_{\max}=4`} />, specification xác định:
+      </p>
+      <MathExpr tex={String.raw`\bar i_{\mathrm{SSB}}=i_{\mathrm{SSB}}+4n_{\mathrm{hf}}`} display />
+      <p>
+        <MathExpr tex={String.raw`i_{\mathrm{SSB}}`} /> liên quan hai least-significant bits của candidate SSB index,
+        còn <MathExpr tex={String.raw`n_{\mathrm{hf}}\in\{0,1\}`} /> là half-frame index.
+        Với trường hợp <MathExpr tex={String.raw`\bar L_{\max}>4`} />, <MathExpr tex={String.raw`\bar i_{\mathrm{SSB}}`} /> dùng ba least-significant bits của candidate index theo specification.
+      </p>
+
+      <aside class="mental-model">
+        <strong>Không có vòng lặp logic “phải decode PBCH mới biết DM-RS, nhưng phải có DM-RS mới decode PBCH”</strong>
+        <p>
+          UE có thể thử những DM-RS hypotheses ứng với các candidate SSB-index contexts.
+          Hypothesis phù hợp có thể được dùng để estimate channel và xử lý PBCH.
+          Các bits index/context còn lại có thể phải được xác nhận từ PBCH processing; chi tiết phụ thuộc SSB configuration.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="seed-example">
+      <p class="concept-kicker">05 · TÍNH SEED CỤ THỂ: CÙNG PCI 370, CHỌN CANDIDATE 2 Ở HALF-FRAME 0</p>
+
+      <p>Ví dụ minh họa theo trường hợp <MathExpr tex={String.raw`\bar L_{\max}=4`} />:</p>
+      <MathExpr tex={String.raw`i_{\mathrm{SSB}}=2,\qquad n_{\mathrm{hf}}=0,\qquad \bar i_{\mathrm{SSB}}=2`} display />
+      <MathExpr tex={String.raw`\left\lfloor370/4\right\rfloor+1=93`} display />
+      <MathExpr
+        tex={String.raw`c_{\mathrm{init}}
+        =2048\times3\times93+64\times3+2
+        =571586`}
+        display
+      />
+      <p>
+        Thay candidate index hoặc half-frame sẽ thay seed và 144 QPSK values, ngay cả khi PCI giữ nguyên.
+        Nhưng comb offset <MathExpr tex={String.raw`v=2`} /> không đổi.
+        Do đó <strong>“DM-RS nằm ở đâu?”</strong> và <strong>“pilot value là gì?”</strong> là hai câu hỏi khác nhau.
+      </p>
+    </section>
+
+    <section class="concept-block" id="pilot-to-ls">
+      <p class="concept-kicker">06 · RECEIVER BIẾN KNOWN DM-RS THÀNH CHANNEL ESTIMATE</p>
+      <h2>Ở DM-RS RE, receiver có đúng cặp giá trị cần thiết: transmitted reference được tái tạo và received reference đo được.</h2>
+      <MathExpr tex={String.raw`Y_{\mathrm{DMRS}}=HX_{\mathrm{DMRS}}+W`} display />
+      <p>Baseline Least Squares (LS) lấy:</p>
+      <MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}=\frac{Y_{\mathrm{DMRS}}}{X_{\mathrm{DMRS}}}`} display />
+      <p>
+        Vì PBCH DM-RS có unit magnitude, phép chia tương đương nhân với complex conjugate của pilot:
+      </p>
+      <MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}=Y_{\mathrm{DMRS}}X_{\mathrm{DMRS}}^*`} display />
+      <p>
+        Nếu noise khác zero, estimate vẫn sai lệch:
+      </p>
+      <MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}=H+\frac{W}{X_{\mathrm{DMRS}}}`} display />
+      <p>
+        Phép chia không tự khử noise; nó chỉ bỏ known pilot value và để lại observation về channel.
+        Receiver có thể tiếp tục smoothing, noise estimation hoặc dùng estimator tiên tiến hơn LS.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="ls-example">
+      <p class="concept-kicker">07 · VÍ DỤ SỐ: KHÁC BIỆT GIỮA PILOT VÀ CHANNEL</p>
+      <h2>Một QPSK reference có thể nhận được ở vị trí hoàn toàn khác trên constellation, mà vẫn giúp đo đúng channel.</h2>
+      <p>
+        Ví dụ đơn giản hóa dưới đây chọn một pilot hợp lệ trong bốn constellation values;
+        giá trị này <strong>không khẳng định là pilot đầu tiên của PCI 370</strong>.
+      </p>
+      <MathExpr tex={String.raw`X_{\mathrm{DMRS}}=(1+j)/\sqrt2`} display />
+      <MathExpr tex={String.raw`H=0.8e^{j30^\circ}\approx0.6928+j0.4000`} display />
+      <MathExpr tex={String.raw`Y_{\mathrm{DMRS}}=HX_{\mathrm{DMRS}}\approx0.2071+j0.7727`} display />
+      <MathExpr tex={String.raw`\widehat H=Y_{\mathrm{DMRS}}/X_{\mathrm{DMRS}}=H`} display />
+      <p>
+        Ở đây ta bỏ noise để thấy nguyên lý. Khi bật noise trong lab bên dưới, estimated complex channel sẽ không còn chính xác hoàn toàn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="interpolation">
+      <p class="concept-kicker">08 · DM-RS KHÔNG NẰM TRÊN MỌI PBCH DATA RE</p>
+      <h2>LS tạo sparse channel estimates; receiver còn phải fill giá trị channel cho những RE mang PBCH data.</h2>
+      <p>
+        Một cách minh họa đơn giản là nội suy trực tiếp trên complex channel coefficients theo subcarrier:
+      </p>
+      <MathExpr
+        tex={String.raw`\widehat H[k]=(1-\alpha)\widehat H[k_0]
+        +\alpha\widehat H[k_1],\qquad
+        \alpha=\frac{k-k_0}{k_1-k_0}`}
+        display
+      />
+      <p>
+        Với một channel tương đối smooth theo frequency, linear interpolation giữa các DM-RS RE có thể hữu ích.
+        Khi multipath làm frequency response thay đổi nhanh, pilot spacing hoặc filter chưa phù hợp có thể làm interpolation sai.
+        Noise tại pilot cũng lan vào những data RE được nội suy.
+      </p>
+      <p>
+        Đây là lý do không thể nói <strong>“144 pilot = 432 channel values đã biết chính xác”</strong>.
+        Receiver đang xây approximation trên các PBCH data RE và có thể cần time interpolation giữa symbols 1, 2 và 3, filtering hoặc joint estimation tùy thiết kế.
+      </p>
+      <aside class="precision-note">
+        <strong>Vùng SSS ở symbol 2 không phải PBCH data region</strong>
+        <p>
+          Có hai nhóm PBCH data tách nhau ở hai phía của SSS.
+          Lab dưới đây nội suy riêng từng vùng và không vẽ một đường ước lượng băng qua khoảng SSS.
+          Receiver thực tế có thể dùng model chung để khai thác correlation rộng hơn nếu hợp lý.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="pbch-dmrs-lab">
+      <p class="concept-kicker">09 · INTERACTIVE LAB</p>
+      <h2>Cùng một SSB: đổi PCI và SSB index để thay DM-RS, sau đó tăng noise/echo để quan sát LS channel estimate.</h2>
+      <p>
+        Lab sử dụng Gold-sequence QPSK generator cho trường hợp bốn candidate SSB positions,
+        exact 60/24/60 pilot mapping và một two-path channel minh họa.
+        Click symbol 1, 2 hoặc 3 để so channel thật với LS estimates đã nội suy trên vùng PBCH.
+      </p>
+      <div data-lesson-visual>
+        <PBCHDMRSExplorer client:load />
+      </div>
+      <p>
+        Thử giữ PCI cố định và đổi SSB index: comb giữ nguyên nhưng pilot QPSK/seed thay đổi.
+        Thử tăng echo: channel frequency selectivity tăng.
+        Thử tăng noise: pilot LS MSE tăng ngay cả khi receiver biết chính xác reference.
+      </p>
+    </section>
+
+    <section class="concept-block" id="ssb-index">
+      <p class="concept-kicker">10 · DM-RS VỪA LÀ REFERENCE CHO DEMODULATION, VỪA CÓ THỂ GIÚP PHÂN BIỆT SSB HYPOTHESES</p>
+      <h2>Reference sequence có thể chứa dấu hiệu của candidate index mà UE đang kiểm tra.</h2>
+      <p>
+        Khi UE vừa detect PSS/SSS, nó biết PCI nhưng chưa chắc đã xác định đủ mọi thông tin SSB index/half-frame.
+        Vì PBCH DM-RS seed phụ thuộc <MathExpr tex={String.raw`\bar i_{\mathrm{SSB}}`} />, receiver có thể kiểm tra những hypotheses khác nhau và dùng correlation/fit metric để tìm reference phù hợp.
+      </p>
+      <p>
+        Không nên đồng nhất việc detect DM-RS với việc đã biết toàn bộ SSB index hay frame number cho mọi frequency range và configuration.
+        Bài 26–27 sẽ giải thích phần broadcast bits và thông tin timing còn nằm trong PBCH payload/context.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>PBCH DM-RS processing biến FFT SSB buffer thành một channel estimate mà PBCH equalizer có thể sử dụng.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div>
+          <div class="implementation-step-body">
+            <span class="card-label">INPUT CONTEXT</span>
+            <h3>Nhận FFT SSB grid, PCI và SSB hypotheses</h3>
+            <p>Coarse/fine sync đã được xử lý đủ để FFT và xác định relative SSB RE coordinates.</p>
+            <small>INPUT · <MathExpr tex={String.raw`Y[k,\ell]`} /></small>
+          </div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">02</div>
+          <div class="implementation-step-body">
+            <span class="card-label">PILOT RE GENERATOR</span>
+            <h3>Tính comb offset và vị trí 144 pilot</h3>
+            <p>Từ PCI modulo 4, lấy đúng các DM-RS positions của symbols 1/2/3.</p>
+            <small>OUTPUT · resource mask</small>
+          </div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">03</div>
+          <div class="implementation-step-body">
+            <span class="card-label">QPSK SEQUENCE GENERATOR</span>
+            <h3>Tính seed cho mỗi SSB candidate, rồi tạo known pilots</h3>
+            <p>Gold sequence generator cho một reference hypothesis; receiver có thể thử nhiều hypotheses.</p>
+            <small>OUTPUT · <MathExpr tex={String.raw`X_{\mathrm{DMRS}}`} /></small>
+          </div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">04</div>
+          <div class="implementation-step-body">
+            <span class="card-label">CHANNEL ESTIMATOR</span>
+            <h3>LS tại pilot, lọc/interpolate theo frequency/time</h3>
+            <p>Dùng received DM-RS và known symbols để ước lượng channel trên data RE.</p>
+            <small>OUTPUT · <MathExpr tex={String.raw`\widehat H[k,\ell]`} /></small>
+          </div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish">
+          <div class="implementation-step-no">05</div>
+          <div class="implementation-step-body">
+            <span class="card-label">NEXT STAGE</span>
+            <h3>PBCH equalization và demodulation</h3>
+            <p>Đưa channel estimate cùng received PBCH RE sang detector, chuẩn bị soft bits cho PBCH decoding.</p>
+            <small>NEXT · Bài 26</small>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · NHỮNG ĐIỂM TUYỆT ĐỐI KHÔNG ĐƯỢC NHẦM</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">PSS / SSS ≠ PBCH DM-RS</span>
+          <p>PSS/SSS chủ yếu hỗ trợ cell search và identity; PBCH DM-RS được thiết kế trực tiếp làm reference cho PBCH demodulation.</p></article>
+        <article class="technical-card"><span class="card-label">PILOT MASK ≠ PILOT VALUES</span>
+          <p>PCI modulo 4 quyết định comb; Gold-sequence seed còn phụ thuộc SSB candidate/half-frame context.</p></article>
+        <article class="technical-card"><span class="card-label">DM-RS ≠ CHANNEL ESTIMATE</span>
+          <p>Reference là transmitted known signal. Channel estimate là kết quả UE tính từ received reference.</p></article>
+        <article class="technical-card"><span class="card-label">LS ≠ PERFECT CHANNEL</span>
+          <p>Noise, interpolation error, residual CFO/timing, Doppler và model mismatch vẫn ảnh hưởng estimate.</p></article>
+        <article class="technical-card"><span class="card-label">144 RE ≠ MỌI TRƯỜNG HỢP</span>
+          <p>144 áp dụng cho cấu trúc 240-subcarrier SS/PBCH block đầy đủ; TS 38.211 còn nêu trường hợp puncturing cho cell search ở carrier bandwidth 3 MHz.</p></article>
+        <article class="technical-card"><span class="card-label">PBCH DM-RS ≠ PDSCH DM-RS</span>
+          <p>DM-RS cho hai physical channels có sequence generation, resource mapping và contexts khác nhau; không được dùng chung mask một cách máy móc.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>3GPP quy định pilot sequence và mapping. LS/interpolation trong lab là ví dụ receiver, không phải thuật toán bắt buộc.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>PBCH DM-RS QPSK sequence, seed theo PCI và SSB context; exact comb mapping và positions của 144 DM-RS symbols trong full SS/PBCH block.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Vì sao known pilot giải được channel ambiguity; ví dụ PCI 370; LS estimate, interpolation và trực giác noise/echo.</p></article>
+        <article class="technical-card"><span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Blind sequence hypothesis scoring, LS/LMMSE, interpolation/filter kernel, multi-antenna combining, residual phase correction và tracking.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 7.4.1.4.1: PBCH DM-RS sequence và <MathExpr tex={String.raw`c_{\mathrm{init}}`} /> ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          Cùng TS 38.211, clauses 7.4.3.1 và 7.4.3.1.3, Table 7.4.3.1-1: mapping PBCH/PBCH DM-RS lên SSB grid, và trường hợp cell search trên carrier 3 MHz ·
+          <a href="https://www.etsi.org/deliver/etsi_TS/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI FLOW</p>
+      <ol class="recap-list">
+        <li><strong>Problem:</strong> received PBCH data đã bị channel rotate/scale, nhưng transmitter data chưa biết.</li>
+        <li><strong>Known reference:</strong> PBCH DM-RS cung cấp pilots được receiver tái tạo từ cell/SSB context.</li>
+        <li><strong>Mapping:</strong> full SSB có 144 DM-RS RE theo pattern 60/24/60 trên symbols 1/2/3.</li>
+        <li><strong>PCI:</strong> <MathExpr tex={String.raw`v=N_{\mathrm{ID}}^{\mathrm{cell}}\bmod4`} /> quyết định comb offset.</li>
+        <li><strong>Gold sequence:</strong> QPSK pilot values còn phụ thuộc SSB-index/half-frame context trong seed.</li>
+        <li><strong>Estimation:</strong> tại pilot, LS tính <MathExpr tex={String.raw`\widehat H=Y/X`} /> và vẫn chịu noise.</li>
+        <li><strong>Data RE:</strong> receiver phải nội suy/filter để có channel estimate trên PBCH data RE.</li>
+        <li><strong>Boundary:</strong> DM-RS không phải PBCH payload, và 144 pilot không đồng nghĩa 144 channel values hoàn hảo.</li>
+        <li><strong>Next:</strong> PBCH equalizer/demapper/decoder dùng channel estimate để recover broadcast information.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/fine-timing-frequency-synchronization/">
+        <span>← BÀI TRƯỚC</span>
+        <strong>Fine timing và frequency synchronization</strong>
+        <small>Chuẩn bị FFT-ready SSB context.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span>
+        <strong>PBCH</strong>
+        <small>Từ channel estimate tới demodulation, soft bits và broadcast-channel decoding.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
