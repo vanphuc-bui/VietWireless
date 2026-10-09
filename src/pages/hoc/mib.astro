@@ -1,0 +1,367 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import MIBExplorer from '../../components/MIBExplorer.jsx';
+
+const lessonMeta = {
+  number: 28,
+  part: 3,
+  slug: 'mib',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="MIB trong 5G NR: đọc các field sau PBCH | VietWireless"
+  description="Giải thích MIB theo 3GPP TS 38.331: 6-bit SFN, common SCS, kSSB, DM-RS Type A, cellBarred, pdcch-ConfigSIB1 và cách UE tìm CORESET#0, SearchSpace#0, SIB1."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 28 · INITIAL ACCESS</p>
+      <h1>MIB: UE biết gì sau khi decode PBCH?</h1>
+      <p class="lesson-deck">
+        Bài 27 đã khôi phục được broadcast payload sau Polar decoding và CRC. Nhưng payload đúng vẫn chưa trả lời một câu hỏi rất thực tế:{" "}
+        <strong>UE phải đọc những trường nào để biết time context của cell, common numerology và nơi bắt đầu tìm PDCCH scheduling SIB1?</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">VẤN ĐỀ CẦN GIẢI</p>
+      <h2>UE đã nhận dạng cell và giải mã PBCH thành công. Nhưng còn chưa biết PDCCH nằm ở đâu để đọc SIB1.</h2>
+      <p>
+        Trước MIB, receiver biết SSB timing, PCI và có một BCH payload đã vượt qua CRC.
+        Để tiếp tục truy nhập cell, UE phải chuyển các bit đó thành tham số thật: radio-frame timing, common subcarrier spacing, SSB alignment và một cấu hình PDCCH tối thiểu.
+      </p>
+      <p>
+        Network không thể chờ RRC connection rồi mới bảo UE xem PDCCH ở đâu: PDCCH/SIB1 là một phần của quá trình UE lấy thông tin cần thiết trước khi truy nhập.
+        Vì vậy MIB là một <strong>bootstrap configuration</strong> rất ngắn, không phải tập hợp toàn bộ cấu hình của cell.
+      </p>
+      <aside class="mental-model">
+        <strong>MIB giống chỉ dẫn để tìm thêm tài liệu, không phải cuốn tài liệu đầy đủ.</strong>
+        <p>
+          MIB cho UE đủ context để tìm Type0-PDCCH common search space và kiểm tra những điều kiện ban đầu.
+          SIB1 sẽ cung cấp nhiều thông tin hệ thống hơn về cell access, scheduling, cấu hình chung và cell selection.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">TỪ BÀI 27 SANG BÀI 29</p>
+      <h2>PBCH decoder tạo bits. MIB parser tạo cấu hình. UE dùng cấu hình đó để tìm SIB1 qua PDCCH và PDSCH.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>INITIAL SYSTEM INFORMATION FLOW</span>
+        <div class="system-position-flow">
+          <span>PBCH CRC pass</span><b>→</b>
+          <strong>MIB + PHY extra bits</strong><b>→</b>
+          <span>SFN / common SCS / SSB offset</span><b>+</b>
+          <strong>pdcch-ConfigSIB1</strong><b>→</b>
+          <span>CORESET#0 + SearchSpace#0</span><b>→</b>
+          <span>PDCCH → PDSCH(SIB1)</span>
+        </div>
+        <p>
+          Bài này giải thích cách đọc field và lý do chúng tồn tại.
+          Bài 29 sẽ giải thích cách tra bảng TS 38.213 để xác định chính xác vùng CORESET#0 và monitoring occasions của SearchSpace#0.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="three-layer-boundary">
+      <p class="concept-kicker">01 · PHÂN BIỆT MIB VỚI BCH/PBCH PAYLOAD</p>
+      <h2>32-bit payload vừa khôi phục không phải một MIB message 32-bit.</h2>
+      <div class="mib-layer-illustration" data-lesson-visual>
+        <div>
+          <small>HIGHER-LAYER MIB</small>
+          <strong>24-bit BCH transport block</strong>
+          <span>Message được mã hóa/đóng gói từ cấu trúc ASN.1 MIB</span>
+        </div>
+        <b>+</b>
+        <div>
+          <small>PHY-ADDED INFORMATION</small>
+          <strong>8 bits</strong>
+          <span>SFN thấp, half-frame và bits theo SSB configuration</span>
+        </div>
+        <b>→</b>
+        <div>
+          <small>PBCH PAYLOAD</small>
+          <strong>32 bits</strong>
+          <span>Trước CRC/Polar coding phía phát</span>
+        </div>
+      </div>
+      <p>
+        TS 38.331 định nghĩa những MIB fields và ý nghĩa của chúng.
+        TS 38.212 định nghĩa cách thêm tám physical-layer bits, interleave và scramble payload khi phát BCH qua PBCH.
+        Một field như <code>systemFrameNumber</code> vì thế chỉ chứa <strong>6 bit cao</strong> của SFN; bốn bit thấp không nằm trong MIB ASN.1.
+      </p>
+      <p>
+        Nếu cộng độ dài các field được liệt kê trong ASN.1 MIB, ta được 23 bit field values.
+        Đừng đọc sơ đồ field như raw transmitted-bit layout: higher-layer encoding/padding và PBCH payload processing có các bước của riêng chúng trước khi tạo BCH/PBCH transport bits.
+      </p>
+    </section>
+
+    <section class="concept-block" id="mib-field-table">
+      <p class="concept-kicker">02 · TÁM FIELD ĐƯỢC ĐỊNH NGHĨA TRONG MIB</p>
+      <h2>Mỗi field giải quyết một nhu cầu cụ thể trong quá trình UE tìm và đánh giá cell.</h2>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table mib-field-table">
+          <thead><tr><th>MIB field (38.331)</th><th>Độ dài</th><th>UE dùng để làm gì?</th></tr></thead>
+          <tbody>
+            <tr><td><code>systemFrameNumber</code></td><td>6 bit</td><td>6 MSB của SFN; ghép với 4 LSB từ physical PBCH payload.</td></tr>
+            <tr><td><code>subCarrierSpacingCommon</code></td><td>1 bit</td><td>Common SCS cho SIB1 và các broadcast/initial-access channels; diễn giải phụ thuộc frequency range/case.</td></tr>
+            <tr><td><code>ssb-SubcarrierOffset</code></td><td>4 bit</td><td>Frequency offset giữa SSB và common resource block grid; liên quan trạng thái SIB1 availability.</td></tr>
+            <tr><td><code>dmrs-TypeA-Position</code></td><td>1 bit</td><td>Position của Type-A DM-RS cho shared-channel demodulation, không phải PBCH DM-RS comb.</td></tr>
+            <tr><td><code>pdcch-ConfigSIB1</code></td><td>8 bit</td><td>4 bit CORESET#0 index và 4 bit SearchSpace#0 index.</td></tr>
+            <tr><td><code>cellBarred</code></td><td>1 bit</td><td>Barring status đầu tiên, cần áp dụng đúng UE procedure/context.</td></tr>
+            <tr><td><code>intraFreqReselection</code></td><td>1 bit</td><td>Quy định việc reselect intra-frequency cell trong ngữ cảnh highest-ranked cell bị barred.</td></tr>
+            <tr><td><code>spare</code></td><td>1 bit</td><td>Bit dự phòng; không phải chỉ thị điều khiển cell access.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Bảng giữ nguyên tên field chuẩn để người đọc có thể đối chiếu trực tiếp ASN.1 trong TS 38.331.
+        Các trường ở đây là thông tin <em>tối thiểu</em>, không chứa PLMN identity, tracking-area code, toàn bộ RACH configuration hay toàn bộ PDSCH scheduling của SIB1.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sfn">
+      <p class="concept-kicker">03 · SYSTEM FRAME NUMBER: 10 BIT ĐẾN TỪ HAI NGUỒN</p>
+      <h2>MIB cho sáu bit cao; PBCH processing bổ sung bốn bit thấp để tái dựng SFN.</h2>
+      <MathExpr tex={String.raw`\mathrm{SFN}
+        =16\,\mathrm{SFN}_{\mathrm{MSB6}}
+        +\mathrm{SFN}_{\mathrm{LSB4}}`} display />
+      <p>
+        Ví dụ MIB mang <MathExpr tex={String.raw`\mathrm{SFN}_{\mathrm{MSB6}}=42`} /> và PBCH extra payload cho
+        <MathExpr tex={String.raw`\mathrm{SFN}_{\mathrm{LSB4}}=11`} />.
+      </p>
+      <MathExpr tex={String.raw`\mathrm{SFN}=42\times16+11=683`} display />
+      <p>
+        10-bit SFN nằm trong miền 0–1023 rồi quay vòng. Với mỗi radio frame dài 10 ms, full SFN giúp receiver định vị timeline, nhưng không có nghĩa chỉ cần đọc MIB là suy ra tuyệt đối mọi timing/SSB index mà không cần các thông tin khác.
+      </p>
+    </section>
+
+    <section class="concept-block" id="scs">
+      <p class="concept-kicker">04 · COMMON SCS KHÔNG PHẢI SCS CỦA MỌI TÍN HIỆU TRONG CELL</p>
+      <h2>Trường một bit trong MIB xác định common initial-access numerology theo frequency-range context.</h2>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table mib-scs-table">
+          <thead><tr><th>Giá trị ASN.1</th><th>FR1 thông thường</th><th>FR2 thông thường</th></tr></thead>
+          <tbody>
+            <tr><td><code>scs15or60</code></td><td><MathExpr tex={String.raw`15\,\mathrm{kHz}`} /></td><td><MathExpr tex={String.raw`60\,\mathrm{kHz}`} /></td></tr>
+            <tr><td><code>scs30or120</code></td><td><MathExpr tex={String.raw`30\,\mathrm{kHz}`} /></td><td><MathExpr tex={String.raw`120\,\mathrm{kHz}`} /></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Trường này đặc biệt liên quan SIB1, Msg.2/4, MsgB, paging và một số broadcast SI.
+        Nó không có nghĩa SSB và toàn bộ future PDSCH/PUSCH allocations của cell nhất thiết dùng một SCS duy nhất.
+      </p>
+      <aside class="precision-note">
+        <strong>Cần đọc điều kiện trong specification.</strong>
+        <p>
+          Với shared-spectrum channel access trong FR1 và một số trường hợp FR2-2, TS 38.331 quy định diễn giải khác với bảng thông thường; common SCS có thể theo SSB SCS và bit field còn được dùng cho QCL-related information.
+          Interactive bên dưới minh họa ordinary FR1/FR2 case để tránh gán một rule sai cho mọi deployment.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="ssb-offset">
+      <p class="concept-kicker">05 · SSB OFFSET: NỐI ĐỊNH VỊ SSB VỚI COMMON RESOURCE GRID</p>
+      <h2>Biết SSB center chưa đủ để định nghĩa mọi RB của initial downlink control region.</h2>
+      <p>
+        MIB có trường 4-bit <code>ssb-SubcarrierOffset</code> với miền giá trị 0–15, liên quan <MathExpr tex={String.raw`k_{\mathrm{SSB}}`} /> trong TS 38.211/38.213.
+        Với một số FR1 configurations, phần mở rộng high bit được đưa ở PBCH payload ngoài MIB.
+      </p>
+      <p>
+        Đây là offset theo đơn vị subcarrier trên grid, không phải offset theo hertz hoặc “số PRB của SSB”.
+        UE cần kết hợp thông tin này với SSB frequency position và các rules của common resource grid khi tìm CORESET#0.
+      </p>
+      <aside class="mental-model">
+        <strong>Không phải mọi SSB đều chỉ đến một SIB1 tại chính cell đó.</strong>
+        <p>
+          Một số giá trị/cấu hình <MathExpr tex={String.raw`k_{\mathrm{SSB}}`} /> chỉ ra SIB1 không có mặt ở cell mà UE vừa tìm thấy.
+          Khi đó <code>pdcch-ConfigSIB1</code> có thể mang ý nghĩa chỉ dẫn sang frequency positions khác thay vì một CORESET#0 tại chính SSB này.
+          Bài 29 sẽ đi sâu nhánh này trong TS 38.213 clause 13.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="type-a">
+      <p class="concept-kicker">06 · DMRS-TYPEA-POSITION LÀ MỘT KHÁI NIỆM KHÁC PBCH DM-RS</p>
+      <h2>Cùng tên DM-RS nhưng chúng hỗ trợ các physical-channel processing khác nhau.</h2>
+      <p>
+        Field <code>dmrs-TypeA-Position</code> mang lựa chọn <code>pos2</code> hoặc <code>pos3</code>.
+        Nó chỉ vị trí của (first) Type-A DM-RS theo định nghĩa 3GPP cho shared channels (downlink/uplink trong điều kiện áp dụng), chứ không làm dịch pattern PBCH DM-RS 60–24–60 của Bài 25.
+      </p>
+      <div class="mib-dmrs-comparison" data-lesson-visual>
+        <div><small>BÀI 25 · PBCH DM-RS</small><strong>PCI/SSB-dependent reference</strong><span>Known pilots trong SS/PBCH block để estimate channel cho PBCH.</span></div>
+        <div><small>MIB · dmrs-TypeA-Position</small><strong>pos2 hoặc pos3</strong><span>Tham số liên quan Type-A DM-RS trên shared-channel transmissions.</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="pdcch-config">
+      <p class="concept-kicker">07 · PDCCH-CONFIGSIB1 LÀ CHIẾC CẦU SANG SIB1</p>
+      <h2>Tám bit được chia thành hai index: một để dựng vùng CORESET#0, một để dựng lịch monitor SearchSpace#0.</h2>
+      <div class="mib-config-split" data-lesson-visual>
+        <div><small>4 MOST SIGNIFICANT BITS</small><strong>controlResourceSetZero</strong><span>Index vào bảng quyết định control RB span, symbol duration, offset và multiplexing context.</span></div>
+        <b>+</b>
+        <div><small>4 LEAST SIGNIFICANT BITS</small><strong>searchSpaceZero</strong><span>Index vào bảng quyết định Type0-PDCCH CSS monitoring occasions.</span></div>
+      </div>
+      <p>
+        Hai index này không phải tọa độ tuyệt đối. Cần biết thêm SSB/PDCCH SCS, minimum channel bandwidth, frequency range, SSB index, multiplexing pattern và các điều kiện trong TS 38.213 clause 13 để chọn đúng bảng rồi lấy các parameters.
+      </p>
+      <div class="mib-next-hop" data-lesson-visual>
+        <div><strong>MIB</strong><span>pdcch-ConfigSIB1</span></div><b>→</b>
+        <div><strong>CORESET#0</strong><span>vùng resources của PDCCH</span></div><b>+</b>
+        <div><strong>SearchSpace#0</strong><span>các dịp UE cần giám sát</span></div><b>→</b>
+        <div><strong>DCI scheduling SIB1</strong><span>PDCCH dẫn tới PDSCH</span></div>
+      </div>
+      <p>
+        UE giám sát Type0-PDCCH common search space để nhận scheduling DCI, rồi mới đọc PDSCH chứa SIB1. MIB không trực tiếp mang SIB1 và cũng không cung cấp đủ PDSCH scheduling cho từng transport block.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="worked-example">
+      <p class="concept-kicker">08 · VÍ DỤ XUYÊN SUỐT: MỘT UE VỪA DECODE PBCH</p>
+      <h2>Từ các giá trị MIB giả định tới cấu hình ban đầu, nhưng chưa tự ý đoán vị trí CORESET#0.</h2>
+      <div class="mib-worked">
+        <p>
+          Giả sử receiver phát hiện PCI 370, đã có SSB candidate context và thu được MIB với SFN upper 6 bits bằng 42,
+          common SCS field là <code>scs30or120</code>, <code>ssb-SubcarrierOffset=8</code>,
+          <code>dmrs-TypeA-Position=pos2</code>, <code>cellBarred=notBarred</code>.
+          PBCH extra bits cung cấp SFN lower 4 bits là 11.
+        </p>
+        <MathExpr tex={String.raw`\mathrm{SFN}=42\times16+11=683`} display />
+        <p>Với FR1 thông thường, common SCS ở ví dụ là <MathExpr tex={String.raw`30\,\mathrm{kHz}`} />.</p>
+        <p>Giả sử 8-bit <code>pdcch-ConfigSIB1</code> được minh họa bằng:</p>
+        <MathExpr tex={String.raw`\texttt{0011\,0101}_2=\texttt{0x35}`} display />
+        <p>Ta tách được <code>controlResourceSetZero=3</code> và <code>searchSpaceZero=5</code>.</p>
+        <p>
+          Các con số 3 và 5 mới là table indexes. Không thể kết luận CORESET rộng bao nhiêu RB, offset bao nhiêu RB hoặc giám sát slot nào nếu chưa chọn đúng bảng/spec context.
+          Đây chính là công việc của Bài 29.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">09 · INTERACTIVE FIELD DECODER</p>
+      <h2>Đổi các MIB fields và xem UE thật sự có thể suy ra điều gì từ từng nhóm bit.</h2>
+      <p>
+        Lab bắt đầu với ví dụ SFN 683 và <code>pdcch-ConfigSIB1=0x35</code>. Kéo 6 MSB và 4 LSB của SFN riêng biệt,
+        chuyển FR1/FR2, thay common SCS, CORESET/SearchSpace indices và cellBarred flag.
+      </p>
+      <div data-lesson-visual>
+        <MIBExplorer client:load />
+      </div>
+      <p>
+        Interactive hiển thị 23 field bits theo cấu trúc MIB ASN.1, <strong>không giả làm một raw transmitted 23-bit bitstream</strong>.
+        Các field vẫn phải được giải mã bằng chuẩn encoding và xử lý PBCH payload trước đó.
+      </p>
+    </section>
+
+    <section class="concept-block" id="barring">
+      <p class="concept-kicker">10 · MIB CHƯA ĐỦ ĐỂ KẾT LUẬN CELL CÓ PHÙ HỢP HAY KHÔNG</p>
+      <h2><code>cellBarred</code> và <code>intraFreqReselection</code> chỉ là một phần của access/cell-selection logic.</h2>
+      <p>
+        Trong trường hợp thông thường, <code>cellBarred=barred</code> khiến UE cân nhắc cell barring và thủ tục reselection theo TS 38.304.
+        <code>intraFreqReselection</code> mô tả UE có thể xem xét lại những cell cùng tần số khi highest-ranked cell bị barred, chứ không phải nút bật/tắt mọi handover.
+      </p>
+      <p>
+        Release 18 còn có các điều kiện/ngoại lệ cho những loại UE và ứng dụng cụ thể, bao gồm NTN-related access.
+        Vì vậy không nên viết một rule cứng rằng <code>cellBarred=barred</code> luôn cấm mọi UE trong mọi tình huống.
+      </p>
+      <p>
+        Ngược lại, <code>notBarred</code> cũng không thay thế quá trình đọc SIB1 và các điều kiện chọn cell. UE vẫn chưa biết đầy đủ PLMN, tracking-area information hay cell-access configuration từ riêng MIB.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="receiver">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>MIB parser nên tách rõ bit recovery, field decoding và construction của initial-access configuration.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">BCH OUTPUT</span><h3>Nhận 32-bit PBCH payload đã qua CRC</h3>
+          <p>Undo payload scrambling/interleaving theo đúng SFN/SSB hypotheses; tách 24 higher-layer bits và 8 PHY-added bits.</p>
+          <small>OUTPUT · decoded payload structure</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">MIB DECODE</span><h3>Giải mã message/fields</h3>
+          <p>Decode ASN.1 MIB, không dùng hard-coded offset trong 32-bit on-air ordering.</p>
+          <small>OUTPUT · MIB field values</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">TIME CONTEXT</span><h3>Khôi phục SFN đầy đủ</h3>
+          <p>Ghép MIB six MSB với PBCH four LSB và giữ half-frame/SSB context đồng nhất.</p>
+          <small>OUTPUT · frame timing state</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">BASIC CELL CONFIG</span><h3>Đọc SCS, SSB offset, DM-RS Type A, barring status</h3>
+          <p>Giải nghĩa các field theo FR/band/cell-search case và quyết định có thể tiếp tục tìm SIB1 ở cell này hay phải xử lý nhánh khác.</p>
+          <small>OUTPUT · initial access parameters</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">NEXT PHYSICAL STAGE</span><h3>Lookup CORESET#0 và SearchSpace#0</h3>
+          <p>Kết hợp hai index từ MIB với TS 38.213 tables, SSB location/index và frequency context rồi tìm PDCCH scheduling SIB1.</p>
+          <small>NEXT · Bài 29</small></div></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · NHỮNG CHỖ DỄ HIỂU SAI</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">MIB ≠ 32-BIT PBCH PAYLOAD</span><p>24 higher-layer transport bits kết hợp với tám bit bổ sung từ PHY tạo thành 32-bit PBCH payload.</p></article>
+        <article class="technical-card"><span class="card-label">MIB ≠ ĐỦ MỌI CELL CONFIGURATION</span><p>Thông tin như PLMN, TAC và nhiều access parameters thuộc SIB1, không nằm hết trong MIB.</p></article>
+        <article class="technical-card"><span class="card-label">6-BIT SFN ≠ FULL SFN</span><p>Receiver còn cần bốn LSB ngoài MIB để khôi phục 10-bit System Frame Number.</p></article>
+        <article class="technical-card"><span class="card-label">COMMON SCS ≠ MỌI SCS</span><p>Không phải tất cả resources, SSB và future BWPs luôn dùng cùng một numerology.</p></article>
+        <article class="technical-card"><span class="card-label">TYPE-A DM-RS ≠ PBCH DM-RS</span><p>Field Type-A position không đổi PBCH DM-RS comb mapping của Bài 25.</p></article>
+        <article class="technical-card"><span class="card-label">PDCCH-CONFIGSIB1 ≠ TỌA ĐỘ</span><p>Hai nhóm bốn bit là indexes vào những specification tables phụ thuộc ngữ cảnh.</p></article>
+        <article class="technical-card"><span class="card-label">NOTBARRED ≠ ACCESS GRANTED</span><p>UE vẫn cần đánh giá cell suitability, SIB1 và các điều kiện selection/access.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · SPECIFICATION LAYER</p>
+      <h2>RRC định nghĩa MIB fields; PHY định nghĩa bits bổ sung; procedure specs định nghĩa cách UE sử dụng các fields đó.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP RRC · TS 38.331</span>
+          <p>ASN.1 <code>MIB</code> và <code>PDCCH-ConfigSIB1</code>, từng field description, các điều kiện khi nhận MIB và SIB1.</p></article>
+        <article class="technical-card"><span class="card-label">3GPP PHY · TS 38.212 / 38.213</span>
+          <p>24+8 BCH/PBCH payload construction, SFN low bits, index context, SSB/CORESET/SearchSpace table lookup và nhánh không phát SIB1.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS MINH HỌA</span>
+          <p>Ví dụ SFN 683, byte cấu hình 0x35, sơ đồ bit fields và trình tự dựng receiver state. Các giá trị index minh họa không suy ra cấu hình bảng cụ thể nếu thiếu context.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.331 Release 18, ETSI TS 138 331 V18.8.0, MIB / PDCCH-ConfigSIB1 ASN.1 definitions, field descriptions và clause 5.2.2.4.1 ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.212 Release 18, ETSI TS 138 212 V18.8.0, clauses 7.1.1–7.1.3: BCH payload, additional bits, interleaving và scrambling ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 13: UE procedure for monitoring Type0-PDCCH CSS và các CORESET#0/SearchSpace#0 tables ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NỐI LẠI TOÀN BỘ</p>
+      <ol class="recap-list">
+        <li><strong>PBCH CRC pass</strong> chỉ mới nói receiver khôi phục được BCH/PBCH payload candidate đáng tin cậy.</li>
+        <li><strong>MIB</strong> là message chứa các field nhỏ nhưng đủ để tiếp tục hệ thống initial access.</li>
+        <li><strong>SFN</strong> cần kết hợp 6 MSB trong MIB với 4 LSB từ PBCH additional bits.</li>
+        <li><strong>Common SCS và SSB offset</strong> đặt resource/time-frequency context cho những bước tiếp theo.</li>
+        <li><strong>dmrs-TypeA-Position</strong> khác PBCH DM-RS; dùng đúng channel context.</li>
+        <li><strong>pdcch-ConfigSIB1</strong> chia thành 4-bit CORESET index và 4-bit SearchSpace index.</li>
+        <li><strong>cellBarred/intraFreqReselection</strong> chỉ dẫn UE procedure, không thay thế SIB1/cell suitability.</li>
+        <li><strong>Bước tiếp:</strong> tra đúng tables trong TS 38.213 để tìm CORESET#0 và SearchSpace#0, sau đó đọc scheduling DCI và SIB1.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/pbch/">
+        <span>← BÀI TRƯỚC</span><strong>PBCH</strong><small>Equalization, Polar decoding, CRC và khôi phục BCH payload.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>CORESET#0 và SearchSpace#0</strong>
+        <small>Biến hai MIB table indexes thành vị trí và thời điểm UE giám sát PDCCH.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
