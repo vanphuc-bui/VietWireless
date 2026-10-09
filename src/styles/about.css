@@ -1,0 +1,67 @@
+/* About Me — quiet editorial layout that follows VietWireless typography. */
+.site-nav a[aria-current="page"] { color: var(--accent); border-color: currentColor; }
+.about-page { padding-bottom: 104px; }
+.about-hero { display: grid; grid-template-columns: minmax(0,1.75fr) minmax(240px,.78fr); align-items: start; gap: clamp(32px,5vw,75px); padding: 88px 0 86px; }
+.about-hero-main { min-width: 0; }
+.about-hero h1 { max-width: 760px; margin: 0; font: 500 clamp(2.6rem,4.65vw,4.35rem)/1.14 var(--font-serif); letter-spacing: -.032em; }
+.about-hero h1 em { color: var(--accent); font-style: normal; }
+.about-hero-main > p:not(.chapter-label) { max-width: 720px; margin: 23px 0 0; color: var(--ink-soft); font-size: 1.04rem; line-height: 1.9; }
+.about-hero-main .about-lead { margin-top: 29px; font: 400 clamp(1.14rem,1.8vw,1.35rem)/1.75 var(--font-serif); }
+.about-profile { padding: 29px 25px 24px; border-top: 3px solid var(--accent); background: var(--paper-2); }
+.about-monogram { display: grid; place-items: center; width: 54px; height: 54px; margin-bottom: 17px; border-radius: 50%; background: var(--ink); color: #fff; font: 600 1rem var(--font-serif); }
+.about-profile > strong { display: block; font: 600 1.28rem var(--font-serif); }
+.about-profile > span { display: block; margin-top: 7px; color: var(--ink-soft); font-size: .87rem; line-height: 1.65; }
+.about-profile-item { margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--line-strong); }
+.about-profile-item small { display: block; color: var(--accent); font-size: .7rem; font-weight: 800; letter-spacing: .09em; }
+.about-profile-item p { margin: 5px 0 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.65; }
+.about-profile > a { display: inline-block; margin-top: 22px; color: var(--accent); font-weight: 700; font-size: .9rem; text-decoration: underline; text-underline-offset: 4px; }
+.about-section { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 26px; padding: 78px 0 82px; border-top: 1px solid var(--line); }
+.about-num { padding-top: 4px; color: #a8a29c; font: 400 1.05rem var(--font-serif); }
+.about-section-content { max-width: 780px; min-width: 0; }
+.about-section-content h2, .about-ending h2 { max-width: 800px; margin: 0 0 28px; font: 500 clamp(2rem,3.5vw,3.15rem)/1.19 var(--font-serif); letter-spacing: -.024em; }
+.about-section-content > p { margin: 18px 0; color: var(--ink-soft); font-size: 1.04rem; line-height: 1.9; }
+.about-section-content > p strong { color: var(--ink); font-weight: 700; }
+.about-keywords { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.about-keywords span { padding: 7px 13px; border: 1px solid var(--line-strong); border-radius: 99px; background: rgba(255,255,255,.62); color: var(--ink-soft); font-size: .8rem; font-weight: 600; }
+.about-timeline { margin: 32px 0 37px; border-left: 2px solid var(--line-strong); }
+.about-timeline article { position: relative; display: grid; grid-template-columns: 158px minmax(0,1fr); gap: 17px; padding: 0 0 34px 23px; }
+.about-timeline article:last-child { padding-bottom: 0; }
+.about-timeline article::before { content: ''; position: absolute; top: 8px; left: -6px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--paper); }
+.about-timeline time { padding-top: 2px; color: var(--accent); font-size: .78rem; font-weight: 750; }
+.about-timeline h3 { margin: 0 0 6px; font: 600 1.16rem/1.5 var(--font-serif); }
+.about-timeline p { margin: 0; color: var(--ink-soft); font-size: .96rem; line-height: 1.74; }
+.about-questions { margin: 28px 0 33px; border-top: 1px solid var(--line); }
+.about-questions p { display: grid; grid-template-columns: 36px minmax(0,1fr); gap: 12px; margin: 0; padding: 17px 0; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: 1.02rem; line-height: 1.82; }
+.about-questions span { color: var(--accent); font: 400 .86rem var(--font-serif); padding-top: 2px; }
+.about-quote { margin: 37px 0 0; padding: 7px 0 7px 24px; border-left: 3px solid var(--accent); }
+.about-quote p { max-width: 680px; margin: 0; font: 500 clamp(1.3rem,2.2vw,1.75rem)/1.6 var(--font-serif); }
+.about-methods { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); margin: 34px 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.about-methods > div { padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.47); }
+.about-methods strong { color: var(--ink); font-size: 1rem; }
+.about-methods p { margin: 8px 0 0; color: var(--ink-soft); font-size: .94rem; line-height: 1.75; }
+.about-section-content .about-disclaimer { margin-top: 28px; padding-top: 18px; border-top: 1px dashed var(--line-strong); color: var(--muted); font-size: .91rem; }
+.about-ending { max-width: 840px; padding: 67px 0 0; border-top: 1px solid var(--line); }
+.about-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-top: 30px; }
+.about-actions a { color: var(--accent); font-weight: 700; font-size: .94rem; }
+.about-actions .about-cta { padding: 13px 19px; background: var(--accent); color: #fff; border-radius: 3px; }
+.about-actions a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.home-essay .hero-note a { color: var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 860px) {
+  .about-hero { grid-template-columns: minmax(0,1fr) 240px; gap: 25px; padding: 67px 0; }
+  .about-section { padding: 62px 0; }
+}
+@media (max-width: 720px) {
+  .about-hero { grid-template-columns: 1fr; gap: 36px; }
+  .about-profile { max-width: 440px; }
+  .about-section { grid-template-columns: 1fr; gap: 7px; padding: 48px 0 55px; }
+  .about-num { margin-bottom: 4px; }
+}
+@media (max-width: 520px) {
+  .site-nav a.site-nav-about { display: inline-flex; }
+  .about-hero { padding: 51px 0 55px; }
+  .about-hero h1 { font-size: clamp(2.12rem,9vw,2.75rem); }
+  .about-timeline article { display: block; padding-left: 17px; }
+  .about-timeline time { display: block; margin-bottom: 5px; }
+  .about-questions p { grid-template-columns: 28px minmax(0,1fr); gap: 9px; }
+  .about-methods { grid-template-columns: 1fr; }
+}
