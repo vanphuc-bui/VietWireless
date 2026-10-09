@@ -45,7 +45,7 @@ export const curriculum = [
       { number: 25, title: 'Fine timing và frequency synchronization', slug: 'fine-timing-frequency-synchronization', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 26, title: 'PBCH DM-RS', slug: 'pbch-dmrs', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 27, title: 'PBCH', slug: 'pbch', status: 'published', kind: 'deep-dive', specRequired: true },
-      { number: 28, title: 'MIB', slug: 'mib', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 28, title: 'MIB', slug: 'mib', status: 'published', kind: 'deep-dive', specRequired: true },
     ],
   },
   {
