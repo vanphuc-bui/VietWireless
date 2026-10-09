@@ -1,0 +1,105 @@
+/* Shared reading rhythm for VietWireless.
+   Increase space between consecutive text lines without changing font size.
+   Leave mathematical formulas, SVG charts and compact lab controls alone. */
+
+:root {
+  --reading-leading: 1.72;
+  --heading-leading: 1.26;
+}
+
+body {
+  line-height: 1.78;
+}
+
+/* Long-form articles and lesson explanations */
+.home-essay,
+.lesson,
+.about-page {
+  line-height: var(--reading-leading);
+}
+
+.home-essay :is(p, li),
+.lesson :is(p, li),
+.about-page :is(p, li) {
+  line-height: var(--reading-leading);
+}
+
+/* Technical tables and captions should breathe, but remain compact. */
+.lesson :is(td, th, figcaption, .math-caption, .lab-caption, .visual-caption),
+.home-essay figcaption {
+  line-height: 1.64;
+}
+
+/* Main multiline headings across the site. */
+.home-essay .essay-hero h1 {
+  line-height: 1.17;
+}
+
+.home-essay :is(.essay-content h2, .start-card h2, .communication-intro h2) {
+  line-height: var(--heading-leading);
+}
+
+.home-essay :is(.history-copy h3, .teaching-steps h3, .course-list h3),
+.about-page .about-timeline h3 {
+  line-height: 1.42;
+}
+
+.lesson .lesson-hero h1 {
+  line-height: 1.25;
+}
+
+.lesson .concept-block > h2 {
+  line-height: 1.37;
+}
+
+.lesson :is(h3, h4, .next-lesson h2) {
+  line-height: 1.4;
+}
+
+.about-page .about-hero h1 {
+  line-height: 1.25;
+}
+
+.about-page :is(.about-section-content h2, .about-ending h2) {
+  line-height: 1.3;
+}
+
+/* Preserve the more spacious introductions even when page-specific rules set line-height. */
+.home-essay .essay-lead,
+.lesson .lesson-deck,
+.about-page .about-hero-main .about-lead {
+  line-height: 1.8;
+}
+
+.about-page .about-quote p,
+.home-essay .teaching-quote p {
+  line-height: 1.7;
+}
+
+/* Keep navigation, UI controls, inline equations and figures on their own spacing scale. */
+.site-nav,
+.language-switcher,
+.lesson .math-inline,
+.lesson .math-display,
+.lesson .katex,
+.lesson svg,
+.lesson button,
+.lesson input,
+.lesson select {
+  line-height: normal;
+}
+
+@media (max-width: 720px) {
+  /* Give Vietnamese diacritics and stacked headings extra separation on narrow screens. */
+  .home-essay .essay-hero h1,
+  .lesson .lesson-hero h1,
+  .about-page .about-hero h1 {
+    line-height: 1.28;
+  }
+
+  .lesson .concept-block > h2,
+  .home-essay :is(.essay-content h2, .start-card h2),
+  .about-page :is(.about-section-content h2, .about-ending h2) {
+    line-height: 1.38;
+  }
+}
