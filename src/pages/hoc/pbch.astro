@@ -4,7 +4,7 @@ import MathExpr from '../../components/Math.astro';
 import PBCHDecodeExplorer from '../../components/PBCHDecodeExplorer.jsx';
 
 const lessonMeta = {
-  number: 26,
+  number: 27,
   part: 3,
   slug: 'pbch',
   kind: 'deep-dive',
@@ -14,15 +14,15 @@ const lessonMeta = {
 
 <BaseLayout
   title="PBCH trong 5G NR: từ QPSK symbols tới Polar decoding | VietWireless"
-  description="Bài 26 giải thích PBCH receiver từ 432 data RE tới soft bits, physical descrambling, rate recovery, Polar decoding, CRC-24C và 32-bit BCH payload; phân biệt PBCH, BCH và MIB."
+  description="Bài 27 giải thích PBCH receiver từ 432 data RE tới soft bits, physical descrambling, rate recovery, Polar decoding, CRC-24C và 32-bit BCH payload; phân biệt PBCH, BCH và MIB."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
       <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
-      <p class="eyebrow">GHI CHÉP 26 · INITIAL ACCESS</p>
+      <p class="eyebrow">GHI CHÉP 27 · INITIAL ACCESS</p>
       <h1>PBCH: từ tín hiệu thu đến broadcast bits</h1>
       <p class="lesson-deck">
-        Bài 25 đã tạo <MathExpr tex={String.raw`\widehat H[k,\ell]`} /> từ PBCH DM-RS.
+        Bài 26 đã tạo <MathExpr tex={String.raw`\widehat H[k,\ell]`} /> từ PBCH DM-RS.
         Giờ receiver có 432 received PBCH QPSK symbols và channel estimates tương ứng, nhưng chưa đọc được message.{" "}
         <strong>PBCH receiver phải equalize các symbols, sinh soft bits, xử lý scrambling, rate matching và Polar code, rồi kiểm CRC trước khi chuyển broadcast payload sang bước đọc MIB.</strong>
       </p>
@@ -47,7 +47,7 @@ const lessonMeta = {
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
       <p class="concept-kicker">SAU BÀI 25, UE ĐANG CÓ GÌ?</p>
-      <h2>Đầu vào của Bài 26 là các PBCH data RE và channel estimate. Đầu ra là một BCH payload vượt qua kiểm tra CRC.</h2>
+      <h2>Đầu vào của Bài 27 là các PBCH data RE và channel estimate. Đầu ra là một BCH payload vượt qua kiểm tra CRC.</h2>
       <div class="system-position technical-card concept-flow-card" data-lesson-visual>
         <span>PBCH RX CHAIN</span>
         <div class="system-position-flow">
@@ -68,7 +68,7 @@ const lessonMeta = {
       <p class="concept-kicker">01 · PBCH, BCH VÀ MIB CÓ PHẢI MỘT?</p>
       <h2>Ba tên chỉ ba tầng khác nhau của cùng hành trình broadcast information.</h2>
       <div class="pbch-layer-stack" data-lesson-visual>
-        <div><small>RRC MESSAGE / THÔNG TIN</small><strong>MIB</strong><span>Cấu trúc thông tin do higher layer tạo ra; Bài 27 sẽ đọc từng field.</span></div>
+        <div><small>RRC MESSAGE / THÔNG TIN</small><strong>MIB</strong><span>Cấu trúc thông tin do higher layer tạo ra; Bài 28 sẽ đọc từng field.</span></div>
         <b>↓</b>
         <div><small>TRANSPORT CHANNEL</small><strong>BCH</strong><span>Transport block mang MIB-related information được đưa vào channel coding.</span></div>
         <b>↓</b>
@@ -83,7 +83,7 @@ const lessonMeta = {
       <p class="concept-kicker">02 · VÌ SAO CÓ 432 QPSK SYMBOLS?</p>
       <h2>PBCH chiếm những RE còn lại sau PSS, SSS, DM-RS và zero regions trong SSB đầy đủ.</h2>
       <p>
-        Ta đã có SSB gồm 960 RE positions và 144 DM-RS RE từ Bài 21/25. Với mapping SSB đầy đủ, PBCH data RE được đếm như sau:
+        Ta đã có SSB gồm 960 RE positions và 144 DM-RS RE từ Bài 22/25. Với mapping SSB đầy đủ, PBCH data RE được đếm như sau:
       </p>
       <div class="math-data-table-wrap">
         <table class="math-data-table">
@@ -103,7 +103,7 @@ const lessonMeta = {
       <aside class="precision-note">
         <strong>Đây là full SS/PBCH block mapping.</strong>
         <p>
-          Trường hợp SSB bị puncture cho một số cell-search configurations không được suy diễn trực tiếp từ bảng trên. Bài này dùng full mapping để nối rõ với Bài 25.
+          Trường hợp SSB bị puncture cho một số cell-search configurations không được suy diễn trực tiếp từ bảng trên. Bài này dùng full mapping để nối rõ với Bài 26.
         </p>
       </aside>
     </section>
@@ -292,7 +292,7 @@ const lessonMeta = {
       </p>
       <p>
         Những bit này còn đi qua interleaving và selective scrambling. Sau successful decoding, receiver phải khôi phục đúng ordering và scrambling state trước khi higher layers có thể dùng thông tin.
-        Bài 27 sẽ tập trung vào cách MIB được tổ chức và những field nào giúp UE tìm control resources ban đầu.
+        Bài 28 sẽ tập trung vào cách MIB được tổ chức và những field nào giúp UE tìm control resources ban đầu.
       </p>
       <aside class="mental-model">
         <strong>Đừng đồng nhất 32-bit PBCH payload với 24-bit MIB message.</strong>
@@ -349,7 +349,7 @@ const lessonMeta = {
           <div class="implementation-step-no">05</div><div class="implementation-step-body">
             <span class="card-label">CRC / PAYLOAD RECOVERY</span><h3>CRC check rồi khôi phục 32-bit payload</h3>
             <p>Undo BCH payload scrambling/interleaving, xuất phần message và timing context cho bước đọc MIB.</p>
-            <small>NEXT · Bài 27</small></div>
+            <small>NEXT · Bài 28</small></div>
         </article>
       </div>
       <p>
@@ -399,7 +399,7 @@ const lessonMeta = {
     <section class="concept-block recap" data-lesson-role="recap" id="recap">
       <p class="concept-kicker">16 · KẾT NỐI LẠI TOÀN BỘ FLOW</p>
       <ol class="recap-list">
-        <li><strong>Đầu vào:</strong> 432 PBCH RE trong SSB đầy đủ và channel estimates từ Bài 25.</li>
+        <li><strong>Đầu vào:</strong> 432 PBCH RE trong SSB đầy đủ và channel estimates từ Bài 26.</li>
         <li><strong>Equalization:</strong> giải tác động của channel để QPSK points trở lại gần constellation gốc.</li>
         <li><strong>Soft demapping:</strong> mỗi QPSK symbol cho hai bit metrics, tổng cộng 864 soft bits.</li>
         <li><strong>Physical descrambling:</strong> dùng đúng PCI và SSB-index hypothesis để chuẩn bị soft coded stream.</li>
@@ -407,7 +407,7 @@ const lessonMeta = {
         <li><strong>Polar decoder:</strong> recover 56 bits gồm 32 payload bits và 24 CRC bits.</li>
         <li><strong>CRC-24C:</strong> kiểm tra candidate, rồi undo payload scrambling/interleaving.</li>
         <li><strong>BCH payload:</strong> 24 bits higher-layer message cùng 8 bits bổ sung liên quan timing/SSB.</li>
-        <li><strong>Bước tiếp theo:</strong> Bài 27 sẽ giải thích MIB chứa những field gì và vì sao chúng đưa UE tới bước tìm CORESET#0/SIB1.</li>
+        <li><strong>Bước tiếp theo:</strong> Bài 28 sẽ giải thích MIB chứa những field gì và vì sao chúng đưa UE tới bước tìm CORESET#0/SIB1.</li>
       </ol>
     </section>
 

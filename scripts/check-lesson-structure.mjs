@@ -14,11 +14,11 @@ function escapeRegex(value) {
 }
 
 const numbers = lessons.map((lesson) => lesson.number);
-const expectedNumbers = Array.from({ length: 66 }, (_, index) => index + 1);
+const expectedNumbers = Array.from({ length: 67 }, (_, index) => index + 1);
 
 if (curriculum.length !== 8) fail(`expected 8 parts, found ${curriculum.length}.`);
 if (JSON.stringify(numbers) !== JSON.stringify(expectedNumbers)) {
-  fail('lesson numbers must be contiguous from 1 through 66 in src/data/curriculum.js.');
+  fail('lesson numbers must be contiguous from 1 through 67 in src/data/curriculum.js.');
 }
 
 const slugs = new Set();
@@ -112,7 +112,7 @@ for (const lesson of lessons) {
     if (lesson.number > 1 && !/data-lesson-nav=["']previous["']/u.test(content)) {
       fail(`${path} must include data-lesson-nav="previous".`);
     }
-    if (lesson.number < 66 && !/data-lesson-nav=["']next["']/u.test(content)) {
+    if (lesson.number < 67 && !/data-lesson-nav=["']next["']/u.test(content)) {
       fail(`${path} must include data-lesson-nav="next".`);
     }
   }

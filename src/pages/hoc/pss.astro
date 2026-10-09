@@ -4,7 +4,7 @@ import MathExpr from '../../components/Math.astro';
 import PSSExplorer from '../../components/PSSExplorer.jsx';
 
 const lessonMeta = {
-  number: 22,
+  number: 23,
   part: 3,
   slug: 'pss',
   kind: 'deep-dive',
@@ -19,10 +19,10 @@ const lessonMeta = {
   <article class="lesson shell">
     <header class="lesson-hero">
       <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
-      <p class="eyebrow">GHI CHÉP 22 · INITIAL ACCESS</p>
+      <p class="eyebrow">GHI CHÉP 23 · INITIAL ACCESS</p>
       <h1>PSS</h1>
       <p class="lesson-deck">
-        Bài 21 cho thấy PSS nằm ở OFDM symbol đầu tiên của SSB và chiếm 127 subcarriers.{" "}
+        Bài 22 cho thấy PSS nằm ở OFDM symbol đầu tiên của SSB và chiếm 127 subcarriers.{" "}
         <strong>Bây giờ ta zoom vào chính 127 giá trị đó: chúng được tạo từ đâu, tại sao chỉ có ba PSS hypotheses, và correlation biến một sequence đã biết thành timing candidate cùng <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> như thế nào.</strong>
       </p>
     </header>
@@ -76,7 +76,7 @@ const lessonMeta = {
         </div>
         <p>
           PSS giảm uncertainty rất mạnh nhưng chưa hoàn tất cell search.
-          SSS ở Bài 23 sẽ cung cấp phần identity còn thiếu để xây full physical-layer cell ID.
+          SSS ở Bài 24 sẽ cung cấp phần identity còn thiếu để xây full physical-layer cell ID.
         </p>
       </div>
     </section>
@@ -245,7 +245,7 @@ const lessonMeta = {
 
       <p>
         127 PSS subcarriers nằm giữa span 240-subcarrier của SSB.
-        Các RE còn lại ở symbol 0 được set to zero theo SS/PBCH block mapping đã học ở Bài 21.
+        Các RE còn lại ở symbol 0 được set to zero theo SS/PBCH block mapping đã học ở Bài 22.
       </p>
     </section>
 
@@ -378,7 +378,7 @@ const lessonMeta = {
         <strong>PSS có thể giúp frequency synchronization, nhưng không có nghĩa một phép correlation duy nhất cho CFO chính xác cuối cùng</strong>
         <p>
           Practical receiver có thể dùng PSS để search coarse frequency hypotheses hoặc derive frequency information từ correlation structure.
-          Bài 24 sẽ tách fine timing và frequency refinement ra riêng.
+          Bài 25 sẽ tách fine timing và frequency refinement ra riêng.
         </p>
       </aside>
     </section>
@@ -540,7 +540,7 @@ const lessonMeta = {
             <span class="card-label">NEXT STAGE</span>
             <h3>Extract SSS region</h3>
             <p>Dùng candidate timing và PSS identity để xây đúng hypotheses cho SSS processing.</p>
-            <small>NEXT · Bài 23</small>
+            <small>NEXT · Bài 24</small>
           </div>
         </article>
       </div>

@@ -112,7 +112,8 @@ import MathExpr from '../../components/Math.astro';
       <p>
         Nó chưa biết chính xác OFDM symbol bắt đầu ở sample nào, carrier của gNB lệch bao nhiêu so với oscillator của nó,
         Physical Cell ID là gì, hay phải nhìn vào vùng resource grid nào để đọc system information.
-        Vì vậy phần 5G NR sẽ bắt đầu từ bài tổng quan về initial access trước khi đi sâu vào PSS, SSS hay PBCH.
+        Trước khi nhìn riêng initial access, hãy bắt đầu từ bản đồ protocol toàn hệ thống: tìm cell, random access, RRC, NAS và PDU Session.
+        Sau đó chúng ta mới đi sâu vào PSS, SSS, PBCH và từng bước của 5G NR.
       </p>
 
       <div class="system-position">
@@ -160,6 +161,8 @@ import MathExpr from '../../components/Math.astro';
         </p>
       </aside>
     </section>
+
+    <p class="protocol-map-cta"><a class="text-button" href="/hoc/quy-trinh-ket-noi-5g-nr/">Đọc bài tổng quan toàn bộ quy trình kết nối 5G NR →</a></p>
 
     <section class="concept-block learning-map-target" id="phan-1">
       <p class="concept-kicker">PHẦN I · NỀN TẢNG TÍN HIỆU</p>
@@ -253,15 +256,16 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN III · UE BẬT LÊN VÀ TÌM CELL 5G</p>
       <h2>Từ một receiver chưa biết timing, frequency hay cell ID tới việc đọc được MIB.</h2>
       <ol class="course-list">
-        <li class="available"><span class="course-no">Bài 19</span><div><h3>UE bật nguồn thì chuyện gì xảy ra?</h3><p>Từ receiver chưa biết timing/cell ID tới PSS, SSS, PBCH và MIB.</p></div><a href="/hoc/ue-bat-nguon/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 20</span><div><h3>Synchronization là gì?</h3><p>UE align timing, carrier frequency và frame/SSB context trước khi decode như thế nào?</p></div><a href="/hoc/synchronization/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 21</span><div><h3>SSB là gì?</h3><p>4 OFDM symbols × 240 subcarriers chứa PSS, SSS, PBCH và PBCH DM-RS được tổ chức ra sao?</p></div><a href="/hoc/ssb/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 22</span><div><h3>PSS</h3><p>Ba synchronization sequences, correlation peak và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> giúp UE tạo timing candidate như thế nào?</p></div><a href="/hoc/pss/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 23</span><div><h3>SSS và Physical Cell ID</h3><p>Từ 336 <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /> hypotheses tới full PCI và cell-dependent PHY context.</p></div><a href="/hoc/sss-physical-cell-id/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 24</span><div><h3>Fine timing và frequency synchronization</h3><p>Từ PSS/SSS candidate tới FFT-window timing, residual CFO correction và một receiver context sẵn sàng cho PBCH.</p></div><a href="/hoc/fine-timing-frequency-synchronization/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 25</span><div><h3>PBCH DM-RS</h3><p>144 pilot RE, sequence theo PCI/SSB context và channel estimation cho PBCH.</p></div><a href="/hoc/pbch-dmrs/">Đọc bài →</a></li>
-        <li class="available"><span class="course-no">Bài 26</span><div><h3>PBCH</h3><p>432 QPSK RE, 864 soft bits, Polar decoding, CRC-24C và khôi phục BCH payload.</p></div><a href="/hoc/pbch/">Đọc bài →</a></li>
-        <li><span class="course-no">Bài 27</span><div><h3>MIB</h3><p>Sau PBCH, UE có thêm những mảnh thông tin nào để tiếp tục tìm system information?</p></div><span class="course-status">Sắp tới</span></li>
+        <li class="available"><span class="course-no">Bài 19</span><div><h3>Toàn cảnh quy trình kết nối 5G NR</h3><p>8 giai đoạn, 44 bước minh họa: SSB, random access, RRC, NAS và PDU Session.</p></div><a href="/hoc/quy-trinh-ket-noi-5g-nr/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 20</span><div><h3>UE bật nguồn thì chuyện gì xảy ra?</h3><p>Từ receiver chưa biết timing/cell ID tới PSS, SSS, PBCH và MIB.</p></div><a href="/hoc/ue-bat-nguon/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 21</span><div><h3>Synchronization là gì?</h3><p>UE align timing, carrier frequency và frame/SSB context trước khi decode như thế nào?</p></div><a href="/hoc/synchronization/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 22</span><div><h3>SSB là gì?</h3><p>4 OFDM symbols × 240 subcarriers chứa PSS, SSS, PBCH và PBCH DM-RS được tổ chức ra sao?</p></div><a href="/hoc/ssb/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 23</span><div><h3>PSS</h3><p>Ba synchronization sequences, correlation peak và <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(2)}`} /> giúp UE tạo timing candidate như thế nào?</p></div><a href="/hoc/pss/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 24</span><div><h3>SSS và Physical Cell ID</h3><p>Từ 336 <MathExpr tex={String.raw`N_{\mathrm{ID}}^{(1)}`} /> hypotheses tới full PCI và cell-dependent PHY context.</p></div><a href="/hoc/sss-physical-cell-id/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 25</span><div><h3>Fine timing và frequency synchronization</h3><p>Từ PSS/SSS candidate tới FFT-window timing, residual CFO correction và một receiver context sẵn sàng cho PBCH.</p></div><a href="/hoc/fine-timing-frequency-synchronization/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 26</span><div><h3>PBCH DM-RS</h3><p>144 pilot RE, sequence theo PCI/SSB context và channel estimation cho PBCH.</p></div><a href="/hoc/pbch-dmrs/">Đọc bài →</a></li>
+        <li class="available"><span class="course-no">Bài 27</span><div><h3>PBCH</h3><p>432 QPSK RE, 864 soft bits, Polar decoding, CRC-24C và khôi phục BCH payload.</p></div><a href="/hoc/pbch/">Đọc bài →</a></li>
+        <li><span class="course-no">Bài 28</span><div><h3>MIB</h3><p>Sau PBCH, UE có thêm những mảnh thông tin nào để tiếp tục tìm system information?</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 
@@ -269,12 +273,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN IV · TỪ MIB TỚI THÔNG TIN HỆ THỐNG</p>
       <h2>Biết cell tồn tại chưa đủ. UE còn phải tìm nơi gNB gửi control và cấu hình chung.</h2>
       <ol class="course-list">
-        <li><span class="course-no">Bài 28</span><div><h3>CORESET#0 và SearchSpace#0</h3><p>Từ thông tin trong MIB, UE tìm vùng control ban đầu như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 29</span><div><h3>PDCCH là gì?</h3><p>gNB chỉ cho UE biết data hoặc grant nằm ở đâu bằng cách nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 30</span><div><h3>DCI cơ bản</h3><p>Một control message trên PDCCH có thể chỉ định resource và transmission parameters ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 31</span><div><h3>SIB1 nằm ở đâu?</h3><p>UE đi từ PDCCH tới PDSCH để tìm SIB1 như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 32</span><div><h3>SIB1</h3><p>Cell broadcast những cấu hình chung nào cần cho bước truy nhập tiếp theo?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 33</span><div><h3>Cell selection và camping</h3><p>Khi nào UE xem một cell là phù hợp để camp?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 29</span><div><h3>CORESET#0 và SearchSpace#0</h3><p>Từ thông tin trong MIB, UE tìm vùng control ban đầu như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 30</span><div><h3>PDCCH là gì?</h3><p>gNB chỉ cho UE biết data hoặc grant nằm ở đâu bằng cách nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 31</span><div><h3>DCI cơ bản</h3><p>Một control message trên PDCCH có thể chỉ định resource và transmission parameters ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 32</span><div><h3>SIB1 nằm ở đâu?</h3><p>UE đi từ PDCCH tới PDSCH để tìm SIB1 như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 33</span><div><h3>SIB1</h3><p>Cell broadcast những cấu hình chung nào cần cho bước truy nhập tiếp theo?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 34</span><div><h3>Cell selection và camping</h3><p>Khi nào UE xem một cell là phù hợp để camp?</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 
@@ -282,14 +286,14 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN V · UE BẮT ĐẦU TRUY NHẬP MẠNG</p>
       <h2>Downlink đã nghe được. Bây giờ UE cần tạo một uplink mà gNB có thể phát hiện và align.</h2>
       <ol class="course-list">
-        <li><span class="course-no">Bài 34</span><div><h3>Random Access tổng quan</h3><p>Từ PRACH tới khi UE có thể gửi uplink có scheduling.</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 35</span><div><h3>PRACH là gì?</h3><p>Vì sao initial uplink cần một physical channel và waveform riêng?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 36</span><div><h3>PRACH preamble</h3><p>Sequence detection cho phép gNB phát hiện UE như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 37</span><div><h3>SSB ↔ PRACH occasion</h3><p>UE nối beam/SSB đã thấy với cơ hội phát PRACH như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 38</span><div><h3>Random Access Response</h3><p>gNB trả lời Msg1 và cấp tài nguyên cho bước tiếp theo ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 39</span><div><h3>Timing Advance</h3><p>gNB làm cho uplink từ các UE ở khoảng cách khác nhau tới đúng timing như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 40</span><div><h3>Msg3 và Msg4</h3><p>Random access hoàn tất và contention được giải quyết như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 41</span><div><h3>RRC Setup</h3><p>Từ initial access tới một UE có connection context.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 35</span><div><h3>Random Access tổng quan</h3><p>Từ PRACH tới khi UE có thể gửi uplink có scheduling.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 36</span><div><h3>PRACH là gì?</h3><p>Vì sao initial uplink cần một physical channel và waveform riêng?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 37</span><div><h3>PRACH preamble</h3><p>Sequence detection cho phép gNB phát hiện UE như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 38</span><div><h3>SSB ↔ PRACH occasion</h3><p>UE nối beam/SSB đã thấy với cơ hội phát PRACH như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 39</span><div><h3>Random Access Response</h3><p>gNB trả lời Msg1 và cấp tài nguyên cho bước tiếp theo ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 40</span><div><h3>Timing Advance</h3><p>gNB làm cho uplink từ các UE ở khoảng cách khác nhau tới đúng timing như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 41</span><div><h3>Msg3 và Msg4</h3><p>Random access hoàn tất và contention được giải quyết như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 42</span><div><h3>RRC Setup</h3><p>Từ initial access tới một UE có connection context.</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 
@@ -297,16 +301,16 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN VI · TRUYỀN DỮ LIỆU SAU KHI KẾT NỐI</p>
       <h2>Khi UE đã vào mạng, các physical channels bắt đầu phối hợp để truyền control và data.</h2>
       <ol class="course-list">
-        <li><span class="course-no">Bài 42</span><div><h3>Bức tranh PHY khi UE đã connected</h3><p>PDCCH, PDSCH, PUSCH và PUCCH nằm ở đâu trong một scheduling cycle?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 43</span><div><h3>PDSCH</h3><p>Downlink user data và các transport blocks được mang thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 44</span><div><h3>PUSCH</h3><p>UE truyền uplink data theo grant như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 45</span><div><h3>PUCCH</h3><p>ACK/NACK, Scheduling Request và CSI được gửi ở đâu?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 46</span><div><h3>DMRS</h3><p>Receiver lấy reference nào để estimate channel cho một transmission?</p></div><span class="course-status">Sắp tới</span></li>
-        <li class="available"><span class="course-no">Bài 47</span><div><h3>Channel estimation</h3><p>Từ DM-RS tới <MathExpr tex={String.raw`\widehat H[k,\ell]`} />, interpolation và channel grid cho equalizer.</p></div><a href="/hoc/channel-estimation/">Đọc bài →</a></li>
-        <li><span class="course-no">Bài 48</span><div><h3>Equalization</h3><p>Từ <MathExpr tex="Y[k]" /> và <MathExpr tex="H[k]" /> quay về estimate của transmitted symbols như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 49</span><div><h3>HARQ</h3><p>Khi decoding thất bại, retransmission và combining hoạt động ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 50</span><div><h3>MCS và link adaptation</h3><p>Network cân bằng throughput và reliability bằng modulation/coding như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 51</span><div><h3>MIMO và beamforming</h3><p>Nhiều antenna mở thêm những khả năng gì cho link?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 43</span><div><h3>Bức tranh PHY khi UE đã connected</h3><p>PDCCH, PDSCH, PUSCH và PUCCH nằm ở đâu trong một scheduling cycle?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 44</span><div><h3>PDSCH</h3><p>Downlink user data và các transport blocks được mang thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 45</span><div><h3>PUSCH</h3><p>UE truyền uplink data theo grant như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 46</span><div><h3>PUCCH</h3><p>ACK/NACK, Scheduling Request và CSI được gửi ở đâu?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 47</span><div><h3>DMRS</h3><p>Receiver lấy reference nào để estimate channel cho một transmission?</p></div><span class="course-status">Sắp tới</span></li>
+        <li class="available"><span class="course-no">Bài 48</span><div><h3>Channel estimation</h3><p>Từ DM-RS tới <MathExpr tex={String.raw`\widehat H[k,\ell]`} />, interpolation và channel grid cho equalizer.</p></div><a href="/hoc/channel-estimation/">Đọc bài →</a></li>
+        <li><span class="course-no">Bài 49</span><div><h3>Equalization</h3><p>Từ <MathExpr tex="Y[k]" /> và <MathExpr tex="H[k]" /> quay về estimate của transmitted symbols như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 50</span><div><h3>HARQ</h3><p>Khi decoding thất bại, retransmission và combining hoạt động ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 51</span><div><h3>MCS và link adaptation</h3><p>Network cân bằng throughput và reliability bằng modulation/coding như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 52</span><div><h3>MIMO và beamforming</h3><p>Nhiều antenna mở thêm những khả năng gì cho link?</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 
@@ -314,12 +318,12 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN VII · RECEIVER TRONG THỰC TẾ</p>
       <h2>Receiver ngoài đời không nhận một signal hoàn hảo đúng sample và đúng carrier.</h2>
       <ol class="course-list">
-        <li><span class="course-no">Bài 52</span><div><h3>Timing offset</h3><p>FFT window đặt sai vị trí ảnh hưởng OFDM như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 53</span><div><h3>Carrier Frequency Offset</h3><p>Oscillator mismatch và Doppler tạo CFO ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 54</span><div><h3>CFO estimation và correction</h3><p>Receiver có thể ước lượng và bù rotation do frequency offset như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 55</span><div><h3>Sampling Frequency Offset</h3><p>Clock ADC lệch tạo ra sai số tích lũy theo thời gian như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 56</span><div><h3>Phase noise</h3><p>Phase không ổn định làm constellation và OFDM bị biến dạng ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 57</span><div><h3>EVM</h3><p>Khoảng cách giữa symbol lý tưởng và symbol đo được nói gì về chất lượng tín hiệu?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 53</span><div><h3>Timing offset</h3><p>FFT window đặt sai vị trí ảnh hưởng OFDM như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 54</span><div><h3>Carrier Frequency Offset</h3><p>Oscillator mismatch và Doppler tạo CFO ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 55</span><div><h3>CFO estimation và correction</h3><p>Receiver có thể ước lượng và bù rotation do frequency offset như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 56</span><div><h3>Sampling Frequency Offset</h3><p>Clock ADC lệch tạo ra sai số tích lũy theo thời gian như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 57</span><div><h3>Phase noise</h3><p>Phase không ổn định làm constellation và OFDM bị biến dạng ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 58</span><div><h3>EVM</h3><p>Khoảng cách giữa symbol lý tưởng và symbol đo được nói gì về chất lượng tín hiệu?</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 
@@ -327,15 +331,15 @@ import MathExpr from '../../components/Math.astro';
       <p class="concept-kicker">PHẦN VIII · 5G NR QUA VỆ TINH (NTN)</p>
       <h2>Khi cùng NR PHY đi qua satellite, delay và Doppler làm nhiều giả định quen thuộc thay đổi.</h2>
       <ol class="course-list">
-        <li><span class="course-no">Bài 58</span><div><h3>Từ terrestrial NR tới NTN</h3><p>Bài tổng quan về những vấn đề mới khi đường truyền đi qua satellite.</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 59</span><div><h3>Propagation delay</h3><p>Khoảng cách lớn tác động tới timing, scheduling và protocol timers như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 60</span><div><h3>Doppler trong NTN</h3><p>Chuyển động satellite tạo frequency shift và variation lớn ra sao?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 61</span><div><h3>NTN synchronization</h3><p>UE duy trì timing và frequency alignment trong một geometry thay đổi như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 62</span><div><h3>NTN Timing Advance</h3><p>Uplink timing phải bù propagation delay lớn và biến thiên như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 63</span><div><h3>SIB19</h3><p>UE nhận NTN-specific assistance information từ system information như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 64</span><div><h3>Ephemeris và satellite position</h3><p>Biết satellite ở đâu giúp tính delay và Doppler như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 65</span><div><h3>NTN Random Access</h3><p>PRACH và uplink acquisition thay đổi ra sao khi delay/Doppler lớn?</p></div><span class="course-status">Sắp tới</span></li>
-        <li><span class="course-no">Bài 66</span><div><h3>Moving satellite, beam và handover</h3><p>Khi satellite hoặc beam di chuyển, UE duy trì service continuity như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 59</span><div><h3>Từ terrestrial NR tới NTN</h3><p>Bài tổng quan về những vấn đề mới khi đường truyền đi qua satellite.</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 60</span><div><h3>Propagation delay</h3><p>Khoảng cách lớn tác động tới timing, scheduling và protocol timers như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 61</span><div><h3>Doppler trong NTN</h3><p>Chuyển động satellite tạo frequency shift và variation lớn ra sao?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 62</span><div><h3>NTN synchronization</h3><p>UE duy trì timing và frequency alignment trong một geometry thay đổi như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 63</span><div><h3>NTN Timing Advance</h3><p>Uplink timing phải bù propagation delay lớn và biến thiên như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 64</span><div><h3>SIB19</h3><p>UE nhận NTN-specific assistance information từ system information như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 65</span><div><h3>Ephemeris và satellite position</h3><p>Biết satellite ở đâu giúp tính delay và Doppler như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 66</span><div><h3>NTN Random Access</h3><p>PRACH và uplink acquisition thay đổi ra sao khi delay/Doppler lớn?</p></div><span class="course-status">Sắp tới</span></li>
+        <li><span class="course-no">Bài 67</span><div><h3>Moving satellite, beam và handover</h3><p>Khi satellite hoặc beam di chuyển, UE duy trì service continuity như thế nào?</p></div><span class="course-status">Sắp tới</span></li>
       </ol>
     </section>
 

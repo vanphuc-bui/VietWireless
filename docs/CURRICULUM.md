@@ -9,7 +9,7 @@
 - Không mở một chủ đề 5G NR bằng định nghĩa rời rạc nếu người đọc chưa biết khái niệm đó xuất hiện ở bước nào trong hành trình của UE.
 - Các bài foundation có thể chạm qua nhiều khái niệm để tạo bản đồ. Bài sau phải zoom sâu, không viết lại cùng nội dung.
 - Internal links phải đi theo learning graph này.
-- Từ Bài 19 trở đi phải tuân thủ docs/LESSON_CONTRACT.md.
+- Từ Bài 20 trở đi phải tuân thủ docs/LESSON_CONTRACT.md.
 - Tên part trên homepage, /hoc/ và file này phải khớp src/data/curriculum.js.
 
 ## Trục kể chuyện chính
@@ -29,6 +29,7 @@ Information
 → OFDM
 → resource grid
 → 5G numerology
+→ tổng quan 5G NR radio + core protocol
 → UE power on
 → synchronization
 → SSB
@@ -73,17 +74,20 @@ Bài 14 là overview của OFDM. Các bài 15–18 tách từng cơ chế quan t
 
 ## Phần III: UE bật lên và tìm cell 5G
 
-19. UE bật nguồn thì chuyện gì xảy ra?
-20. Synchronization là gì?
-21. SSB là gì?
-22. PSS
-23. SSS và Physical Cell ID
-24. Fine timing và frequency synchronization
-25. PBCH DM-RS
-26. PBCH
-27. MIB
+19. Toàn cảnh quy trình kết nối 5G NR
+20. UE bật nguồn thì chuyện gì xảy ra?
+21. Synchronization là gì?
+22. SSB là gì?
+23. PSS
+24. SSS và Physical Cell ID
+25. Fine timing và frequency synchronization
+26. PBCH DM-RS
+27. PBCH
+28. MIB
 
-Bài 19 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE đọc được MIB, chưa đi sâu sequence, bit field hay mapping chi tiết.
+Bài 19 đặt khung 5G SA end-to-end: SSB/MIB → SIB1 → PRACH/RRC → NAS Registration → PDU Session, với 44 bước minh họa được chia thành tám giai đoạn. Số bước không mang tính chuẩn tắc; phân biệt PHY/MAC, RRC và NAS.
+
+Bài 20 phải là overview. Nó kể toàn bộ flow từ power on tới khi UE đọc được MIB, chưa đi sâu sequence, bit field hay mapping chi tiết.
 
 Mỗi bài deep-dive ở Part III phải trả lời:
 - UE đang biết gì trước bước này?
@@ -94,71 +98,71 @@ Mỗi bài deep-dive ở Part III phải trả lời:
 
 ## Phần IV: Từ MIB tới thông tin hệ thống
 
-28. CORESET#0 và SearchSpace#0
-29. PDCCH là gì?
-30. DCI cơ bản
-31. SIB1 nằm ở đâu?
-32. SIB1
-33. Cell selection và camping
+29. CORESET#0 và SearchSpace#0
+30. PDCCH là gì?
+31. DCI cơ bản
+32. SIB1 nằm ở đâu?
+33. SIB1
+34. Cell selection và camping
 
-Bài 28 phải mở bằng system transition MIB → CORESET#0/SearchSpace#0 → PDCCH → PDSCH → SIB1 trước khi đi sâu cấu trúc CORESET.
+Bài 29 phải mở bằng system transition MIB → CORESET#0/SearchSpace#0 → PDCCH → PDSCH → SIB1 trước khi đi sâu cấu trúc CORESET.
 
 ## Phần V: UE bắt đầu truy nhập mạng
 
-34. Random Access tổng quan
-35. PRACH là gì?
-36. PRACH preamble
-37. SSB ↔ PRACH occasion
-38. Random Access Response
-39. Timing Advance
-40. Msg3 và Msg4
-41. RRC Setup
+35. Random Access tổng quan
+36. PRACH là gì?
+37. PRACH preamble
+38. SSB ↔ PRACH occasion
+39. Random Access Response
+40. Timing Advance
+41. Msg3 và Msg4
+42. RRC Setup
 
 Phải phân biệt rõ:
 - downlink synchronization: UE align receiver của mình với downlink của gNB;
 - uplink timing alignment: gNB đo uplink timing và dùng Timing Advance để điều chỉnh thời điểm UE phát.
 
-Bài 34 là overview của random access.
+Bài 35 là overview của random access.
 
 ## Phần VI: Truyền dữ liệu sau khi kết nối
 
-42. Bức tranh PHY khi UE đã connected
-43. PDSCH
-44. PUSCH
-45. PUCCH
-46. DMRS
-47. Channel estimation
-48. Equalization
-49. HARQ
-50. MCS và link adaptation
-51. MIMO và beamforming
+43. Bức tranh PHY khi UE đã connected
+44. PDSCH
+45. PUSCH
+46. PUCCH
+47. DMRS
+48. Channel estimation
+49. Equalization
+50. HARQ
+51. MCS và link adaptation
+52. MIMO và beamforming
 
-Bài 42 là overview. Nó phải cho thấy scheduling/control/data/reference-signal loop trước khi tách từng channel.
+Bài 43 là overview. Nó phải cho thấy scheduling/control/data/reference-signal loop trước khi tách từng channel.
 
 ## Phần VII: Receiver trong thực tế
 
-52. Timing offset
-53. Carrier Frequency Offset
-54. CFO estimation và correction
-55. Sampling Frequency Offset
-56. Phase noise
-57. EVM
+53. Timing offset
+54. Carrier Frequency Offset
+55. CFO estimation và correction
+56. Sampling Frequency Offset
+57. Phase noise
+58. EVM
 
-Bài 52 phải mở bằng một receiver không lý tưởng: timing, carrier, sampling clock và phase đều có thể lệch. Không trình bày từng impairment như các hiện tượng độc lập hoàn toàn.
+Bài 53 phải mở bằng một receiver không lý tưởng: timing, carrier, sampling clock và phase đều có thể lệch. Không trình bày từng impairment như các hiện tượng độc lập hoàn toàn.
 
 ## Phần VIII: 5G NR qua vệ tinh (NTN)
 
-58. Từ terrestrial NR tới NTN
-59. Propagation delay
-60. Doppler trong NTN
-61. NTN synchronization
-62. NTN Timing Advance
-63. SIB19
-64. Ephemeris và satellite position
-65. NTN Random Access
-66. Moving satellite, beam và handover
+59. Từ terrestrial NR tới NTN
+60. Propagation delay
+61. Doppler trong NTN
+62. NTN synchronization
+63. NTN Timing Advance
+64. SIB19
+65. Ephemeris và satellite position
+66. NTN Random Access
+67. Moving satellite, beam và handover
 
-Bài 58 là overview. Phải chỉ rõ giả định nào của terrestrial NR bị stress khi link đi qua satellite: propagation delay, Doppler, moving geometry, timing và mobility.
+Bài 59 là overview. Phải chỉ rõ giả định nào của terrestrial NR bị stress khi link đi qua satellite: propagation delay, Doppler, moving geometry, timing và mobility.
 
 Với NTN, source discipline theo docs/SOURCE_POLICY.md là bắt buộc; phải kiểm tra Release 17/18 phù hợp trước khi publish.
 
@@ -176,17 +180,18 @@ Khi bắt đầu một part:
 
 ## Ưu tiên triển khai tiếp
 
-Foundation 1–18 đã có page. Ưu tiên tiếp theo:
+Foundation 1–18 đã có page. Tiếp theo, bài tổng quan mới đặt trước các bài phân tích PHY:
 
-1. Bài 19 · UE bật nguồn thì chuyện gì xảy ra?
-2. Bài 20 · Synchronization là gì?
-3. Bài 21 · SSB là gì?
-4. Bài 22 · PSS
-5. Bài 23 · SSS và Physical Cell ID
-6. Bài 24 · Fine timing và frequency synchronization
-7. Bài 25 · PBCH DM-RS
-8. Bài 26 · PBCH
-9. Bài 27 · MIB
-10. Sau đó mới đi tiếp MIB → SIB1 → Random Access.
+1. Bài 19 · Toàn cảnh quy trình kết nối 5G NR
+2. Bài 20 · UE bật nguồn thì chuyện gì xảy ra?
+3. Bài 21 · Synchronization là gì?
+4. Bài 22 · SSB là gì?
+5. Bài 23 · PSS
+6. Bài 24 · SSS và Physical Cell ID
+7. Bài 25 · Fine timing và frequency synchronization
+8. Bài 26 · PBCH DM-RS
+9. Bài 27 · PBCH
+10. Bài 28 · MIB
+11. Sau đó mới đi tiếp MIB → SIB1 → Random Access.
 
 Không viết batch dài mà giảm dần độ sâu. Sau mỗi 2–3 bài, so lại depth, terminology, source quality và visual consistency trước khi tiếp tục.

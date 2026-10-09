@@ -4,7 +4,7 @@ import MathExpr from '../../components/Math.astro';
 import SSBBlockExplorer from '../../components/SSBBlockExplorer.jsx';
 
 const lessonMeta = {
-  number: 21,
+  number: 22,
   part: 3,
   slug: 'ssb',
   kind: 'deep-dive',
@@ -19,10 +19,10 @@ const lessonMeta = {
   <article class="lesson shell">
     <header class="lesson-hero">
       <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
-      <p class="eyebrow">GHI CHÉP 21 · INITIAL ACCESS</p>
+      <p class="eyebrow">GHI CHÉP 22 · INITIAL ACCESS</p>
       <h1>SSB là gì?</h1>
       <p class="lesson-deck">
-        Sau Bài 20, UE đã biết nó cần một structure đã biết để bám timing, frequency và cell context.{" "}
+        Sau Bài 21, UE đã biết nó cần một structure đã biết để bám timing, frequency và cell context.{" "}
         <strong>Trong NR, SS/PBCH block là block time-frequency gom PSS, SSS, PBCH và PBCH DM-RS vào cùng một cấu trúc để UE có thể tìm cell, nhận dạng cell và tiến tới decode broadcast information đầu tiên.</strong>
       </p>
     </header>
@@ -70,7 +70,7 @@ const lessonMeta = {
 
     <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
       <p class="concept-kicker">SSB NẰM Ở ĐÂU TRONG INITIAL ACCESS?</p>
-      <h2>Bài 20 nói receiver cần synchronization. Bài 21 xác định chính xác block mà receiver đang cố tìm và xử lý.</h2>
+      <h2>Bài 21 nói receiver cần synchronization. Bài 22 xác định chính xác block mà receiver đang cố tìm và xử lý.</h2>
 
       <div class="system-position technical-card concept-flow-card" data-lesson-visual>
         <span>INITIAL-ACCESS FLOW</span>
@@ -474,7 +474,7 @@ const lessonMeta = {
             <span class="card-label">PSS</span>
             <h3>Detect synchronization candidate</h3>
             <p>Correlation với known PSS hypotheses tạo timing/cell-group hypothesis ban đầu.</p>
-            <small>NEXT · Bài 22</small>
+            <small>NEXT · Bài 23</small>
           </div>
         </article>
 
@@ -486,7 +486,7 @@ const lessonMeta = {
             <span class="card-label">SSS</span>
             <h3>Hoàn thiện physical cell identity</h3>
             <p>SSS processing bổ sung phần identity còn thiếu và refinement context.</p>
-            <small>NEXT · Bài 23</small>
+            <small>NEXT · Bài 24</small>
           </div>
         </article>
 
@@ -498,7 +498,7 @@ const lessonMeta = {
             <span class="card-label">PBCH DM-RS</span>
             <h3>Estimate channel cho PBCH</h3>
             <p>Sau khi biết cell identity, receiver biết DM-RS comb offset và có known reference để estimate channel.</p>
-            <small>NEXT · Bài 25</small>
+            <small>NEXT · Bài 26</small>
           </div>
         </article>
 
@@ -510,7 +510,7 @@ const lessonMeta = {
             <span class="card-label">PBCH</span>
             <h3>Demodulate và decode broadcast channel</h3>
             <p>Receiver dùng channel estimate để equalize PBCH resources rồi tiếp tục channel decoding và MIB-related processing.</p>
-            <small>NEXT · Bài 26 và 27</small>
+            <small>NEXT · Bài 27 và 27</small>
           </div>
         </article>
       </div>
@@ -538,7 +538,7 @@ const lessonMeta = {
         </article>
         <article class="technical-card">
           <span class="card-label">PBCH ≠ “CHỈ MIB”</span>
-          <p>PBCH processing còn có additional physical-layer payload/context; Bài 26 và 27 sẽ tách PBCH khỏi MIB.</p>
+          <p>PBCH processing còn có additional physical-layer payload/context; Bài 27 và 27 sẽ tách PBCH khỏi MIB.</p>
         </article>
         <article class="technical-card">
           <span class="card-label">SSB INDEX ≠ CELL ID</span>

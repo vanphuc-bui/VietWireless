@@ -4,7 +4,7 @@ import MathExpr from '../../components/Math.astro';
 import PBCHDMRSExplorer from '../../components/PBCHDMRSExplorer.jsx';
 
 const lessonMeta = {
-  number: 25,
+  number: 26,
   part: 3,
   slug: 'pbch-dmrs',
   kind: 'deep-dive',
@@ -14,15 +14,15 @@ const lessonMeta = {
 
 <BaseLayout
   title="PBCH DM-RS: từ reference symbols tới channel estimation | VietWireless"
-  description="Bài 25 về PBCH DM-RS trong 5G NR: 144 pilot RE, comb theo PCI, Gold-sequence QPSK theo SSB index, LS estimate và nội suy channel để giải điều chế PBCH."
+  description="Bài 26 về PBCH DM-RS trong 5G NR: 144 pilot RE, comb theo PCI, Gold-sequence QPSK theo SSB index, LS estimate và nội suy channel để giải điều chế PBCH."
 >
   <article class="lesson shell">
     <header class="lesson-hero">
       <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
-      <p class="eyebrow">GHI CHÉP 25 · INITIAL ACCESS</p>
+      <p class="eyebrow">GHI CHÉP 26 · INITIAL ACCESS</p>
       <h1>PBCH DM-RS</h1>
       <p class="lesson-deck">
-        Bài 24 đã đưa FFT window và residual CFO về trạng thái đủ tốt để quan sát SSB grid. Nhưng PBCH data trên grid vẫn chịu channel gain và phase rotation chưa biết.{" "}
+        Bài 25 đã đưa FFT window và residual CFO về trạng thái đủ tốt để quan sát SSB grid. Nhưng PBCH data trên grid vẫn chịu channel gain và phase rotation chưa biết.{" "}
         <strong>PBCH DM-RS là các known reference symbols để UE đo channel trên những resource gần PBCH, rồi dùng channel estimate đó cho bước demodulation tiếp theo.</strong>
       </p>
     </header>
@@ -64,7 +64,7 @@ const lessonMeta = {
         <p>
           UE đã có candidate timing/frequency và full PCI, nhưng có thể còn phải thử nhiều SSB-index/half-frame hypotheses.
           PBCH DM-RS vừa hỗ trợ channel estimation vừa mang sequence context hữu ích cho quá trình xác nhận SSB hypothesis.
-          Sau đó receiver mới thực hiện PBCH equalization/demodulation và decoding (Bài 26).
+          Sau đó receiver mới thực hiện PBCH equalization/demodulation và decoding (Bài 27).
         </p>
       </div>
     </section>
@@ -312,7 +312,7 @@ const lessonMeta = {
       </p>
       <p>
         Không nên đồng nhất việc detect DM-RS với việc đã biết toàn bộ SSB index hay frame number cho mọi frequency range và configuration.
-        Bài 26–27 sẽ giải thích phần broadcast bits và thông tin timing còn nằm trong PBCH payload/context.
+        Bài 27–27 sẽ giải thích phần broadcast bits và thông tin timing còn nằm trong PBCH payload/context.
       </p>
     </section>
 
@@ -366,7 +366,7 @@ const lessonMeta = {
             <span class="card-label">NEXT STAGE</span>
             <h3>PBCH equalization và demodulation</h3>
             <p>Đưa channel estimate cùng received PBCH RE sang detector, chuẩn bị soft bits cho PBCH decoding.</p>
-            <small>NEXT · Bài 26</small>
+            <small>NEXT · Bài 27</small>
           </div>
         </article>
       </div>

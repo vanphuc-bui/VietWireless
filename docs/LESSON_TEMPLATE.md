@@ -7,7 +7,7 @@ Frontmatter tối thiểu:
     const lessonMeta = {
       number: 19,
       part: 3,
-      slug: 'ue-bat-nguon',
+      slug: 'quy-trinh-ket-noi-5g-nr',
       kind: 'overview',
       specRequired: true,
     };
