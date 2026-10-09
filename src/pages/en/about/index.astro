@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="en"
+  alternateHref="/about/"
+  title="About Me | Van-Phuc Bui · VietWireless"
+  description="Van-Phuc Bui: developing satellite 5G NR at Gatehouse Satcom, a background in wireless research, and why I write the VietWireless notebook."
+>
+  <article class="about-page shell" lang="en">
+    <header class="about-hero">
+      <div class="about-hero-main">
+        <p class="chapter-label">ABOUT ME · VAN-PHUC BUI</p>
+        <h1>I work on satellite 5G. <em>And I still return to the fundamentals.</em></h1>
+        <p class="about-lead">
+          I'm Van-Phuc Bui, a wireless communications engineer based in Aalborg, Denmark.
+          I currently develop software for satellite-based 5G NR. Before that, I spent several
+          years researching wireless systems, satellite networks and directions for future 6G.
+        </p>
+        <p>
+          Even after years of studying and working in this field, I sometimes ask:
+          do I really understand FFT, I/Q, OFDM and channel estimation from first principles,
+          or have I just become comfortable using them? That question is why I started VietWireless.
+        </p>
+      </div>
+      <aside class="about-profile" aria-label="At a glance">
+        <div class="about-monogram" aria-hidden="true">VP</div>
+        <strong>Van-Phuc Bui</strong>
+        <span>Wireless communications · Software engineering</span>
+        <div class="about-profile-item"><small>CURRENTLY</small><p>Gatehouse Satcom · 5G NTN New Radio</p></div>
+        <div class="about-profile-item"><small>ACADEMIC BACKGROUND</small><p>PhD · Aalborg University</p></div>
+        <div class="about-profile-item"><small>INTERESTS</small><p>5G NR PHY, NTN, DSP, digital twins and 6G</p></div>
+        <a href="https://vanphucbui.com/" target="_blank" rel="noopener noreferrer">Personal website ↗</a>
+      </aside>
+    </header>
+
+    <section class="about-section" id="current-work">
+      <span class="about-num">01</span>
+      <div class="about-section-content">
+        <p class="section-kicker">CURRENT WORK</p>
+        <h2>From 5G standards to real signals and working code.</h2>
+        <p>
+          Since 2025, I've worked with the <strong>5G NTN New Radio team at Gatehouse Satcom</strong>,
+          developing and testing software for satellite-connected 5G systems.
+          Much of my work involves the physical layer (PHY): transmit and receive processing,
+          timing and frequency synchronization, channel estimation, demodulation
+          and challenges specific to satellite links.
+        </p>
+        <p>
+          What makes this work interesting is connecting different perspectives on the very same signal:
+          a 3GPP requirement, a mathematical equation, I/Q samples in memory,
+          the processing chain in code, and results from test equipment.
+          A concept may look simple on paper yet raise difficult questions in a real implementation.
+        </p>
+        <div class="about-keywords" aria-label="Technical interests">
+          <span>5G NR · PHY</span><span>5G NTN / satellite</span><span>Synchronization</span>
+          <span>Channel estimation</span><span>DSP &amp; receiver</span><span>Integration &amp; testing</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="journey">
+      <span class="about-num">02</span>
+      <div class="about-section-content">
+        <p class="section-kicker">EXPERIENCE AND EDUCATION</p>
+        <h2>From classrooms and research labs to engineering products.</h2>
+        <p>
+          I started with electronics and telecommunications in Vietnam, studied further in South Korea,
+          carried out research in Luxembourg and pursued my PhD in Denmark.
+          I also gained industry experience involving SES and an internship at Bosch in Germany.
+        </p>
+        <div class="about-timeline">
+          <article><time>2013–2018</time><div><h3>Ho Chi Minh City University of Technology · Vietnam</h3><p>BSc in Electronics and Telecommunications. My foundations in signals, systems and communications.</p></div></article>
+          <article><time>2018–2020</time><div><h3>Soongsil University · South Korea</h3><p>MSc in Telecommunications, exploring research and analytical approaches to wireless systems.</p></div></article>
+          <article><time>2021 and later</time><div><h3>Luxembourg · SnT and SES</h3><p>Research at SnT, University of Luxembourg, and additional experience related to satellite communications and optimization, including work with SES.</p></div></article>
+          <article><time>Along the way</time><div><h3>Bosch · Germany</h3><p>An industry internship that broadened my view of engineering beyond academic papers and controlled experiments.</p></div></article>
+          <article><time>2022–2026</time><div><h3>Aalborg University · Denmark</h3><p>PhD research on goal-oriented communications, digital twins and 6G systems. I defended my dissertation, <em>“Goal-Oriented Communication in Digital Twins for 6G Wireless Systems”</em>, in 2026.</p></div></article>
+        </div>
+        <p>
+          Each stage has given me another perspective. It has also made me realize that
+          <strong>knowing how to use a technique</strong> and <strong>understanding why it works</strong>
+          are not necessarily the same.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-section" id="questions">
+      <span class="about-num">03</span>
+      <div class="about-section-content">
+        <p class="section-kicker">QUESTIONS I KEEP COMING BACK TO</p>
+        <h2>I learned many equations. But where was the bigger picture?</h2>
+        <p>
+          As a student, I sometimes learned equations to solve assignments without clearly seeing
+          what they represented. Later, as a researcher and software developer,
+          those basic questions returned. I wanted to answer them through intuition,
+          mathematics and experiments instead of memorized definitions.
+        </p>
+        <div class="about-questions">
+          <p><span>01</span> What does an FFT actually do, and why do we move between time and frequency domains?</p>
+          <p><span>02</span> How do I/Q, phase, subcarriers and resource grids relate to the RF waveform transmitted by an antenna?</p>
+          <p><span>03</span> How do synchronization, channel estimation and demodulation work with multipath, noise and satellite delay?</p>
+          <p><span>04</span> How can I understand the whole transmitter–channel–receiver chain rather than isolated blocks?</p>
+        </div>
+        <blockquote class="about-quote">
+          <p>I want to understand a concept well enough to explain it, implement it and verify it—not simply call the right library function.</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="about-section" id="notebook">
+      <span class="about-num">04</span>
+      <div class="about-section-content">
+        <p class="section-kicker">WHY VIETWIRELESS EXISTS</p>
+        <h2>First of all, it's a notebook for organizing my own understanding.</h2>
+        <p>
+          One day I might be reading 3GPP; another day I'm debugging a receiver;
+          later I open an old textbook to revisit a fundamental idea.
+          When I only solve the immediate problem, knowledge remains scattered
+          across notes, code and documents. I wanted a place to connect those pieces
+          into a coherent learning path I could return to.
+        </p>
+        <p>
+          My approach is to begin with the technical question, build intuition through visual examples,
+          introduce the mathematics and its assumptions, test with a numerical example or simulation,
+          and connect the result back to code and standards.
+          Trying to explain something clearly is often how I discover what I still don't fully understand.
+        </p>
+        <div class="about-methods">
+          <div><strong>Intuition</strong><p>What problem are we solving? Why do we need this idea?</p></div>
+          <div><strong>Mathematics</strong><p>What do the variables, transformations and assumptions mean?</p></div>
+          <div><strong>Visualization</strong><p>Check our understanding with diagrams, examples and interactive labs.</p></div>
+          <div><strong>Implementation</strong><p>Relate each concept to code, signals and real systems.</p></div>
+        </div>
+        <p class="about-disclaimer">
+          These are personal notes, not official materials from any of my past or present employers,
+          and not a replacement for textbooks or 3GPP specifications. I'll continue revising them
+          whenever I find a clearer way to understand or explain a topic.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-ending">
+      <p class="chapter-label">KEEP EXPLORING</p>
+      <h2>If you've asked some of the same questions, I hope VietWireless helps.</h2>
+      <div class="about-actions">
+        <a class="about-cta" href="/en/learn/">Explore the learning map →</a>
+        <a href="/en/">Home ↗</a>
+        <a href="https://www.linkedin.com/in/van-phuc-bui-a1209bb8/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
