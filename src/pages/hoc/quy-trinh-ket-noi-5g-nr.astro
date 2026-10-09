@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
 
 const lessonMeta = {
   number: 19,
@@ -249,10 +250,11 @@ const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
         <div class="down"><span>UE</span><strong>Msg4 · RRCSetup</strong><b>←</b><span>gNB</span><p>gNB gửi kết quả contention resolution cùng phản hồi RRC trong kịch bản này.</p></div>
       </div>
       <p>
-        Ví dụ số độc lập: nếu UE ở cách gNB khoảng 1,5 km thì độ trễ truyền một chiều trong không gian gần bằng{" "}
-        <strong>5 µs</strong> (lấy tốc độ truyền xấp xỉ 300.000 km/s).
-        Chính vì tín hiệu uplink không đến ngay lập tức, gNB phải ước lượng thời điểm đến và hướng dẫn UE hiệu chỉnh bằng Timing Advance.
-        Giá trị TA được mã hóa và lượng tử hóa theo quy tắc 3GPP, không đơn giản luôn bằng 5 µs.
+        Ví dụ số độc lập: nếu UE cách gNB <MathExpr tex={String.raw`d=1{,}5\,\mathrm{km}`} /> thì độ trễ truyền một chiều xấp xỉ
+        <MathExpr tex={String.raw`\tau=d/c\approx 5\,\mu\mathrm{s}`} />,
+        với tốc độ truyền trong không gian gần <MathExpr tex={String.raw`c\approx3\cdot10^8\,\mathrm{m/s}`} />.
+        Vì tín hiệu uplink không đến ngay lập tức, gNB phải ước lượng thời điểm đến và hướng dẫn UE hiệu chỉnh bằng Timing Advance.
+        Giá trị TA thực tế được mã hóa và lượng tử hóa theo 3GPP, không thể suy ra chỉ bằng cách sao chép độ trễ một chiều.
       </p>
       <p>
         Khi Msg4 đã tới UE, hệ thống vẫn cần RRCSetupComplete, NAS Registration,
