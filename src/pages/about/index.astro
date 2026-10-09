@@ -1,0 +1,151 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  alternateHref="/en/about/"
+  title="About Me | Van-Phuc Bui · VietWireless"
+  description="Van-Phuc Bui: công việc phát triển 5G NTN tại Gatehouse Satcom, hành trình học tập, nghiên cứu và lý do viết notebook VietWireless."
+>
+  <article class="about-page shell">
+    <header class="about-hero">
+      <div class="about-hero-main">
+        <p class="chapter-label">ABOUT ME · VAN-PHUC BUI</p>
+        <h1>Tôi làm việc với 5G qua vệ tinh. <em>Và vẫn học lại những điều căn bản.</em></h1>
+        <p class="about-lead">
+          Tôi là Van-Phuc Bui, một kỹ sư viễn thông đang sống và làm việc tại Aalborg, Đan Mạch.
+          Công việc hiện tại của tôi là phát triển phần mềm cho 5G NR qua vệ tinh.
+          Trước đó, tôi dành nhiều năm nghiên cứu truyền thông vô tuyến, mạng vệ tinh và các hướng đi của 6G.
+        </p>
+        <p>
+          Dù đã học và làm việc trong ngành khá lâu, tôi vẫn nhiều lần tự hỏi:
+          mình có thực sự hiểu FFT, I/Q, OFDM hay channel estimation đến tận gốc,
+          hay mới chỉ quen sử dụng chúng? Câu hỏi ấy là lý do VietWireless ra đời.
+        </p>
+      </div>
+      <aside class="about-profile" aria-label="Giới thiệu ngắn">
+        <div class="about-monogram" aria-hidden="true">VP</div>
+        <strong>Van-Phuc Bui</strong>
+        <span>Wireless communications · Software engineering</span>
+        <div class="about-profile-item"><small>HIỆN TẠI</small><p>Gatehouse Satcom · 5G NTN New Radio</p></div>
+        <div class="about-profile-item"><small>HỌC THUẬT</small><p>Tiến sĩ · Aalborg University</p></div>
+        <div class="about-profile-item"><small>QUAN TÂM</small><p>5G NR PHY, NTN, DSP, digital twins và 6G</p></div>
+        <a href="https://vanphucbui.com/" target="_blank" rel="noopener noreferrer">Trang cá nhân ↗</a>
+      </aside>
+    </header>
+
+    <section class="about-section" id="cong-viec">
+      <span class="about-num">01</span>
+      <div class="about-section-content">
+        <p class="section-kicker">CÔNG VIỆC HIỆN TẠI</p>
+        <h2>Từ tiêu chuẩn 5G đến tín hiệu thật và code chạy được.</h2>
+        <p>
+          Từ năm 2025, tôi làm việc trong nhóm <strong>5G NTN New Radio tại Gatehouse Satcom</strong>,
+          phát triển và thử nghiệm phần mềm cho hệ thống 5G kết nối qua vệ tinh.
+          Tôi làm việc nhiều với tầng vật lý (PHY): xử lý tín hiệu ở phía thu và phát,
+          đồng bộ thời gian/tần số, ước lượng kênh, giải điều chế và các vấn đề riêng của đường truyền vệ tinh.
+        </p>
+        <p>
+          Điều khiến công việc này thú vị là phải nối các góc nhìn rất khác nhau về cùng một tín hiệu:
+          mô tả trong tiêu chuẩn 3GPP, phương trình toán học, các mẫu I/Q trong bộ nhớ,
+          luồng xử lý trong code và kết quả từ thiết bị đo kiểm.
+          Một khái niệm có thể trông đơn giản trên giấy, nhưng lại đặt ra nhiều câu hỏi khi chạy ngoài thực tế.
+        </p>
+        <div class="about-keywords" aria-label="Chuyên môn thường gặp">
+          <span>5G NR · PHY</span><span>5G NTN / satellite</span><span>Synchronization</span>
+          <span>Channel estimation</span><span>DSP &amp; receiver</span><span>Integration &amp; testing</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="hanh-trinh">
+      <span class="about-num">02</span>
+      <div class="about-section-content">
+        <p class="section-kicker">KINH NGHIỆM VÀ HỌC TẬP</p>
+        <h2>Từ giảng đường, phòng nghiên cứu đến môi trường công nghiệp.</h2>
+        <p>
+          Tôi bắt đầu với ngành Điện tử - Viễn thông ở Việt Nam, tiếp tục học tại Hàn Quốc,
+          làm nghiên cứu tại Luxembourg và theo đuổi tiến sĩ tại Đan Mạch.
+          Ngoài môi trường đại học, tôi cũng có trải nghiệm thực tế liên quan đến SES
+          và một giai đoạn thực tập tại Bosch ở Đức.
+        </p>
+        <div class="about-timeline">
+          <article><time>2013–2018</time><div><h3>Đại học Bách khoa TP.HCM</h3><p>Cử nhân Điện tử - Viễn thông. Những kiến thức đầu tiên về tín hiệu, hệ thống và truyền thông.</p></div></article>
+          <article><time>2018–2020</time><div><h3>Soongsil University · Hàn Quốc</h3><p>Thạc sĩ Viễn thông. Bắt đầu đi sâu hơn vào nghiên cứu và các bài toán mạng vô tuyến.</p></div></article>
+          <article><time>2021 và sau đó</time><div><h3>Luxembourg · SnT và SES</h3><p>Làm nghiên cứu tại SnT, University of Luxembourg; tích lũy thêm kinh nghiệm về hệ thống vệ tinh và tối ưu hóa truyền thông, bao gồm trải nghiệm tại SES.</p></div></article>
+          <article><time>Trong hành trình nghề nghiệp</time><div><h3>Bosch · Đức</h3><p>Thực tập trong môi trường công nghiệp, học cách tiếp cận bài toán kỹ thuật ngoài phạm vi một bài báo hay thí nghiệm.</p></div></article>
+          <article><time>2022–2026</time><div><h3>Aalborg University · Đan Mạch</h3><p>Nghiên cứu tiến sĩ về truyền thông hướng mục tiêu, digital twins và hệ thống 6G. Tôi bảo vệ luận án <em>“Goal-Oriented Communication in Digital Twins for 6G Wireless Systems”</em> năm 2026.</p></div></article>
+        </div>
+        <p>
+          Mỗi chặng đường cho tôi thêm một góc nhìn. Nhưng tôi cũng nhận ra:
+          <strong>biết dùng một kỹ thuật</strong> và <strong>hiểu thật rõ tại sao nó hoạt động</strong>
+          không phải lúc nào cũng giống nhau.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-section" id="tran-tro">
+      <span class="about-num">03</span>
+      <div class="about-section-content">
+        <p class="section-kicker">ĐIỀU TÔI VẪN TRĂN TRỞ</p>
+        <h2>Tôi đã học rất nhiều công thức. Nhưng bức tranh tổng thể đâu rồi?</h2>
+        <p>
+          Khi còn là sinh viên, đôi lúc tôi học công thức để làm bài tập mà chưa hình dung được
+          nó đang mô tả điều gì. Sau này, khi nghiên cứu và viết phần mềm, những thắc mắc rất cơ bản
+          ấy quay trở lại. Tôi muốn trả lời chúng bằng trực giác, toán học và kiểm chứng thực tế,
+          thay vì chỉ ghi nhớ một định nghĩa.
+        </p>
+        <div class="about-questions">
+          <p><span>01</span> FFT thực sự làm gì? Vì sao chúng ta liên tục chuyển qua lại giữa miền thời gian và miền tần số?</p>
+          <p><span>02</span> I/Q, pha, subcarrier và resource grid liên quan thế nào đến sóng RF được phát ra anten?</p>
+          <p><span>03</span> Các thuật toán đồng bộ, ước lượng kênh và giải điều chế thực sự hoạt động ra sao khi có multipath, nhiễu và độ trễ vệ tinh?</p>
+          <p><span>04</span> Làm thế nào để hiểu cả chuỗi phát – kênh truyền – thu, thay vì chỉ hiểu từng khối rời rạc?</p>
+        </div>
+        <blockquote class="about-quote">
+          <p>Tôi muốn hiểu một vấn đề đủ chắc để tự giải thích, tự triển khai và tự kiểm chứng — chứ không chỉ biết gọi đúng một hàm trong thư viện.</p>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="about-section" id="notebook">
+      <span class="about-num">04</span>
+      <div class="about-section-content">
+        <p class="section-kicker">VÌ SAO TÔI VIẾT VIETWIRELESS</p>
+        <h2>Trước hết, đây là notebook để tôi tự hệ thống lại kiến thức.</h2>
+        <p>
+          Có ngày tôi đọc 3GPP, có ngày debug một receiver, có ngày lại phải mở giáo trình
+          để tìm về một khái niệm căn bản. Nếu chỉ giải quyết từng vấn đề rồi đi tiếp,
+          những gì học được rất dễ nằm rải rác ở các ghi chú, đoạn code và tài liệu khác nhau.
+          Tôi muốn có một nơi nối tất cả chúng thành một mạch kiến thức có thể quay lại.
+        </p>
+        <p>
+          Cách tôi muốn viết là bắt đầu bằng câu hỏi kỹ thuật, xây dựng trực giác bằng hình ảnh,
+          đi vào phương trình với giả định rõ ràng, thử một ví dụ hoặc mô phỏng,
+          rồi mới liên hệ đến implementation và tiêu chuẩn. Khi cố giải thích một điều cho người khác,
+          tôi thường phát hiện ra chính mình còn chưa hiểu sâu ở đâu.
+        </p>
+        <div class="about-methods">
+          <div><strong>Trực giác</strong><p>Vì sao cần ý tưởng này? Nó giải quyết vấn đề gì?</p></div>
+          <div><strong>Toán học</strong><p>Biến số, phép biến đổi và giả định thực sự có ý nghĩa gì?</p></div>
+          <div><strong>Minh họa</strong><p>Dùng hình, ví dụ số và interactive lab để kiểm chứng.</p></div>
+          <div><strong>Thực hành</strong><p>Nối khái niệm với code, tín hiệu và hệ thống thật.</p></div>
+        </div>
+        <p class="about-disclaimer">
+          Đây là ghi chép cá nhân, không đại diện cho công ty hay tổ chức tôi từng làm việc,
+          và không thay thế sách chuyên ngành hoặc tài liệu 3GPP. Nội dung sẽ được sửa và bổ sung
+          khi tôi tìm được một cách hiểu hoặc cách giải thích tốt hơn.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-ending">
+      <p class="chapter-label">MỜI BẠN KHÁM PHÁ</p>
+      <h2>Nếu bạn từng có những câu hỏi giống tôi, hy vọng VietWireless sẽ hữu ích.</h2>
+      <div class="about-actions">
+        <a class="about-cta" href="/hoc/">Xem bản đồ học →</a>
+        <a href="/">Trang chủ ↗</a>
+        <a href="https://www.linkedin.com/in/van-phuc-bui-a1209bb8/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
