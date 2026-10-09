@@ -22867,3 +22867,209 @@ body {
     overflow-x: auto;
   }
 }
+
+
+/* --- Lesson 25 · PBCH demodulation reference signals --- */
+.pbchdmrs-accounting, .pbchdmrs-sample {
+  display: grid;
+  gap: 10px;
+  align-items: stretch;
+  margin: 24px 0;
+}
+.pbchdmrs-accounting {
+  grid-template-columns: minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr);
+}
+.pbchdmrs-accounting > div, .pbchdmrs-sample > div {
+  min-width: 0;
+  padding: var(--lesson-technical-card-padding);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.pbchdmrs-accounting > b, .pbchdmrs-sample > b {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+  font-family: var(--font-ui);
+  font-size: var(--lesson-box-content-size);
+  font-weight: 500;
+}
+.pbchdmrs-accounting > div > small, .pbchdmrs-sample > div > small {
+  display: block;
+  color: var(--accent);
+  font: 700 var(--lesson-meta-size) var(--font-ui);
+}
+.pbchdmrs-accounting > div > strong, .pbchdmrs-sample > div > strong {
+  display: block;
+  margin: 7px 0;
+  font-size: var(--lesson-box-content-size);
+}
+.pbchdmrs-accounting > div > span, .pbchdmrs-sample > div > span {
+  display: block;
+  color: var(--ink-soft);
+  font-size: var(--lesson-box-content-size);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.pbchdmrs-symbols {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  margin: 22px 0;
+  gap: 10px;
+}
+.pbchdmrs-symbols > div {
+  min-width: 0;
+  padding: 16px 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: var(--lesson-box-content-size);
+  text-align: center;
+}
+.pbchdmrs-lab {
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.pbchdmrs-controls {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 16px;
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+.pbchdmrs-controls label { min-width: 0; }
+.pbchdmrs-controls label > span {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font: 500 var(--lesson-meta-size) var(--font-ui);
+}
+.pbchdmrs-controls label > input, .pbchdmrs-controls label > select {width:100%;}
+.pbchdmrs-controls label > small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font: 400 var(--lesson-meta-size) var(--font-ui);
+}
+.pbchdmrs-metrics.metric-card-grid {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+}
+.pbchdmrs-metrics .metric-card {min-width: 0;min-height:0;}
+.pbchdmrs-metrics .metric-card-value, .pbchdmrs-metrics .metric-card-formula {
+  font-size: var(--lesson-box-content-size);
+  overflow-wrap: anywhere;
+}
+.pbchdmrs-grid-figure {
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.pbchdmrs-strip-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 90px minmax(0,1fr) 96px;
+  gap: 12px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+  color: var(--ink-soft);
+  text-align: left;
+  font: 500 var(--lesson-meta-size) var(--font-ui);
+}
+.pbchdmrs-strip-row.selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.pbchdmrs-strip-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.pbchdmrs-strip {
+  display: grid;
+  grid-template-columns: repeat(240,minmax(0,1fr));
+  min-width: 0;
+  height: 58px;
+  overflow: hidden;
+}
+.pbchdmrs-strip > i {display: block;min-width:0;}
+.pbchdmrs-strip > i.dmrs, .pbchdmrs-legend i.dmrs {background:#4f6c89;}
+.pbchdmrs-strip > i.pbch, .pbchdmrs-legend i.pbch {background:#d7bbad;}
+.pbchdmrs-strip > i.sss, .pbchdmrs-legend i.sss {background:#8270a2;}
+.pbchdmrs-strip > i.zero, .pbchdmrs-legend i.zero {background:#e7e2db;}
+.pbchdmrs-legend {
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px 18px;
+  margin-top:14px;
+  color:var(--ink-soft);
+  font: 400 var(--lesson-meta-size) var(--font-ui);
+}
+.pbchdmrs-legend > span { display:flex;align-items:center;gap:8px; }
+.pbchdmrs-legend i {display:inline-block;width:20px;height:9px;}
+.pbchdmrs-grid-figure .pbchdmrs-legend i {border:1px solid rgba(0,0,0,.06);}
+.pbchdmrs-sample {
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
+  margin:0;
+  padding:16px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+}
+.pbchdmrs-sample > div {background:white;}
+.pbchdmrs-sample > b {padding-inline:4px;text-align:center;}
+.pbchdmrs-response {
+  padding:18px;
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;
+}
+.pbchdmrs-response svg {
+  display:block;
+  width:100%;
+  min-width:560px;
+  min-height:255px;
+  margin-top:14px;
+}
+.pbchdmrs-response > p {
+  margin:16px 0 0;
+  font-size:var(--lesson-box-content-size);
+  line-height:1.55;
+}
+.pbchdmrs-guide {stroke:#e9e3dd;stroke-width:1;}
+.pbchdmrs-tick {fill:#7e786f;font:12px var(--font-ui);}
+.pbchdmrs-true-line, .pbchdmrs-est-line {
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-width:2.6;
+}
+.pbchdmrs-true-line {stroke:#315f78;}
+.pbchdmrs-est-line {stroke:#a15c3d;stroke-dasharray:5 4;}
+.pbchdmrs-pilot-dot {fill:#a15c3d;stroke:white;stroke-width:.7;}
+.pbchdmrs-legend i.true {height:3px;background:#315f78;}
+.pbchdmrs-legend i.estimated {height:3px;background:#a15c3d;}
+.pbchdmrs-legend i.pilot {width:10px;height:10px;border-radius:100%;background:#a15c3d;}
+.pbchdmrs-footnote {
+  margin:0;
+  padding:16px 18px;
+  color:var(--ink-soft);
+  font-size:var(--lesson-box-content-size);
+  line-height:1.55;
+}
+@media (max-width:1080px) {
+  .pbchdmrs-accounting {grid-template-columns: minmax(0,1fr) 22px minmax(0,1fr);}
+  .pbchdmrs-accounting > b:nth-of-type(2) {grid-column:1 / -1;min-height:20px;transform:rotate(90deg);}
+  .pbchdmrs-controls {grid-template-columns: repeat(2,minmax(0,1fr));}
+  .pbchdmrs-metrics.metric-card-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:760px) {
+  .pbchdmrs-accounting, .pbchdmrs-sample, .pbchdmrs-symbols,
+  .pbchdmrs-controls, .pbchdmrs-metrics.metric-card-grid {grid-template-columns:1fr;}
+  .pbchdmrs-accounting > b, .pbchdmrs-sample > b {min-height:22px;transform:rotate(90deg);}
+  .pbchdmrs-accounting > b:nth-of-type(2) {grid-column:auto;}
+  .pbchdmrs-strip-row {grid-template-columns:1fr;gap:8px;}
+  .pbchdmrs-strip {height:42px;}
+  .pbchdmrs-response svg {min-width:540px;}
+}
