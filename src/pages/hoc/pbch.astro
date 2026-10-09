@@ -306,10 +306,10 @@ const lessonMeta = {
       <p class="concept-kicker">12 · PHÁT LẶP SSB KHÔNG CÓ NGHĨA BCH PAYLOAD THAY ĐỔI Ở MỖI LẦN PHÁT</p>
       <h2>BCH information được tổ chức trên một khoảng thời gian dài hơn khoảng cách giữa các SS/PBCH transmissions.</h2>
       <p>
-        TS 38.212 mô tả BCH coding unit nhận tối đa một transport block mỗi 80 ms. SS/PBCH blocks có thể xuất hiện nhiều lần trong thời gian đó; receiver vẫn cần phân biệt thông tin ổn định, timing/SSB-dependent bits và các scrambling contexts.
+        TS 38.212 mô tả BCH coding unit nhận tối đa một transport block mỗi <MathExpr tex={String.raw`80\,\mathrm{ms}`} />. SS/PBCH blocks có thể xuất hiện nhiều lần trong thời gian đó; receiver vẫn cần phân biệt thông tin ổn định, timing/SSB-dependent bits và các scrambling contexts.
       </p>
       <p>
-        Trong điều kiện khó, một receiver có thể cân nhắc combining observations hợp lệ qua các cơ hội thu khác nhau, nhưng không được cộng bừa các soft bits chưa align đúng time, beam, payload và scrambling hypotheses. Lịch phát cụ thể phụ thuộc SSB configuration, không thể suy từ mốc 80 ms ra rằng gNB chỉ phát một SSB mỗi 80 ms.
+        Trong điều kiện khó, một receiver có thể cân nhắc combining observations hợp lệ qua các cơ hội thu khác nhau, nhưng không được cộng bừa các soft bits chưa align đúng time, beam, payload và scrambling hypotheses. Lịch phát cụ thể phụ thuộc SSB configuration, không thể suy từ mốc <MathExpr tex={String.raw`80\,\mathrm{ms}`} /> ra rằng gNB chỉ phát một SSB mỗi <MathExpr tex={String.raw`80\,\mathrm{ms}`} />.
       </p>
     </section>
 
@@ -366,7 +366,7 @@ const lessonMeta = {
         <article class="technical-card"><span class="card-label">PBCH CÓ HAI SCRAMBLING STAGES</span><p>Selective payload scrambling của 38.212 không phải physical PBCH scrambling của 38.211.</p></article>
         <article class="technical-card"><span class="card-label">CRC ≠ ERROR CORRECTION</span><p>CRC kiểm tra candidate; Polar coding/decoding mới cung cấp error-correction capability.</p></article>
         <article class="technical-card"><span class="card-label">CHANNEL ESTIMATE ≠ PERFECT</span><p>Estimate sai làm constellation, soft metrics và CRC success probability thay đổi.</p></article>
-        <article class="technical-card"><span class="card-label">80 ms ≠ SSB PERIODICITY</span><p>Khoảng BCH transport block update không định nghĩa chu kỳ SS/PBCH transmissions.</p></article>
+        <article class="technical-card"><span class="card-label"><MathExpr tex={String.raw`80\,\mathrm{ms}`} /> ≠ SSB PERIODICITY</span><p>Khoảng BCH transport block update không định nghĩa chu kỳ SS/PBCH transmissions.</p></article>
       </div>
     </section>
 
