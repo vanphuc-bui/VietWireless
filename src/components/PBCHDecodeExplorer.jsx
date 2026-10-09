@@ -36,8 +36,8 @@ function Scatter({title,description,values,selected}){
         <circle key={a+':'+b} cx={cx(a/ROOT_TWO)} cy={cy(b/ROOT_TWO)} r="7" className="pbch-ideal-dot"/>))}
       {values.map((point,i)=><circle key={i} cx={cx(point.re)} cy={cy(point.im)}
         r={i===selected?6.5:3.2} className={'pbch-point '+(i===selected?'selected':'')}/>)}
-      <text x="207" y="108" className="pbch-plot-axis-label">I</text>
-      <text x="120" y="18" className="pbch-plot-axis-label">Q</text>
+      <text x="171" y="108" className="pbch-plot-axis-label">In-phase</text>
+      <text x="120" y="18" className="pbch-plot-axis-label">Quadrature</text>
     </svg>
   </div>;
 }
