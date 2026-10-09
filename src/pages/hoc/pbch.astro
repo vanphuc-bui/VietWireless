@@ -1,0 +1,425 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import PBCHDecodeExplorer from '../../components/PBCHDecodeExplorer.jsx';
+
+const lessonMeta = {
+  number: 26,
+  part: 3,
+  slug: 'pbch',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="PBCH trong 5G NR: từ QPSK symbols tới Polar decoding | VietWireless"
+  description="Bài 26 giải thích PBCH receiver từ 432 data RE tới soft bits, physical descrambling, rate recovery, Polar decoding, CRC-24C và 32-bit BCH payload; phân biệt PBCH, BCH và MIB."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-3">← Phần III · UE bật lên và tìm cell 5G</a>
+      <p class="eyebrow">GHI CHÉP 26 · INITIAL ACCESS</p>
+      <h1>PBCH: từ tín hiệu thu đến broadcast bits</h1>
+      <p class="lesson-deck">
+        Bài 25 đã tạo <MathExpr tex={String.raw`\widehat H[k,\ell]`} /> từ PBCH DM-RS.
+        Giờ receiver có 432 received PBCH QPSK symbols và channel estimates tương ứng, nhưng chưa đọc được message.{" "}
+        <strong>PBCH receiver phải equalize các symbols, sinh soft bits, xử lý scrambling, rate matching và Polar code, rồi kiểm CRC trước khi chuyển broadcast payload sang bước đọc MIB.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">VẤN ĐỀ CẦN GIẢI</p>
+      <h2>Có channel estimate không có nghĩa UE đã có thông tin hệ thống. Làm sao biến các complex samples sau FFT thành một payload có thể tin cậy?</h2>
+      <p>
+        Sau synchronization và channel estimation, receiver đã biết đủ thông tin để thử khôi phục những QPSK symbols của PBCH. Nhưng những symbols này không phải 24 bits MIB được gửi trực tiếp. Trước khi lên sóng, thông tin đã trải qua nhiều lớp mã hóa chống lỗi, scrambling và modulation.
+      </p>
+      <p>
+        Nếu receiver chỉ chọn góc phần tư cho từng QPSK point và ghép các hard bits lại, nó chưa làm ngược toàn bộ những biến đổi đó. PBCH decoding là cầu nối từ <em>physical resource elements</em> tới <em>broadcast transport block</em>.
+      </p>
+      <aside class="mental-model">
+        <strong>PBCH không phải một “message đọc thẳng từ constellation”.</strong>
+        <p>
+          PBCH là physical channel dùng để mang BCH transport channel. Phần BCH payload chứa MIB-related information, nhưng được bảo vệ bằng CRC, Polar coding và các bước physical-layer processing.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">SAU BÀI 25, UE ĐANG CÓ GÌ?</p>
+      <h2>Đầu vào của Bài 26 là các PBCH data RE và channel estimate. Đầu ra là một BCH payload vượt qua kiểm tra CRC.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>PBCH RX CHAIN</span>
+        <div class="system-position-flow">
+          <span>432 PBCH RE</span><b>+</b>
+          <span>channel estimate</span><b>→</b>
+          <strong>equalization + soft bits</strong><b>→</b>
+          <span>descrambling / rate recovery</span><b>→</b>
+          <strong>Polar decode + CRC</strong><b>→</b>
+          <span>BCH payload</span>
+        </div>
+        <p>
+          UE còn sử dụng cell identity và SSB-index hypotheses ở những bước descrambling liên quan. CRC là phép kiểm tra cuối để quyết định candidate decoding có đáng tin cậy không.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="three-layers">
+      <p class="concept-kicker">01 · PBCH, BCH VÀ MIB CÓ PHẢI MỘT?</p>
+      <h2>Ba tên chỉ ba tầng khác nhau của cùng hành trình broadcast information.</h2>
+      <div class="pbch-layer-stack" data-lesson-visual>
+        <div><small>RRC MESSAGE / THÔNG TIN</small><strong>MIB</strong><span>Cấu trúc thông tin do higher layer tạo ra; Bài 27 sẽ đọc từng field.</span></div>
+        <b>↓</b>
+        <div><small>TRANSPORT CHANNEL</small><strong>BCH</strong><span>Transport block mang MIB-related information được đưa vào channel coding.</span></div>
+        <b>↓</b>
+        <div><small>PHYSICAL CHANNEL</small><strong>PBCH</strong><span>Coded bits sau scrambling và QPSK modulation được map lên PBCH RE trong SSB.</span></div>
+      </div>
+      <p>
+        Khi nói “decode PBCH”, mục tiêu kỹ thuật là recover BCH payload. Khi nói “parse MIB”, receiver diễn giải các bit thành system-information fields. Hai bước có liên hệ nhưng không đồng nghĩa.
+      </p>
+    </section>
+
+    <section class="concept-block" id="resource-count">
+      <p class="concept-kicker">02 · VÌ SAO CÓ 432 QPSK SYMBOLS?</p>
+      <h2>PBCH chiếm những RE còn lại sau PSS, SSS, DM-RS và zero regions trong SSB đầy đủ.</h2>
+      <p>
+        Ta đã có SSB gồm 960 RE positions và 144 DM-RS RE từ Bài 21/25. Với mapping SSB đầy đủ, PBCH data RE được đếm như sau:
+      </p>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>Relative OFDM symbol</th><th>PBCH RE</th><th>Cách đếm</th></tr></thead>
+          <tbody>
+            <tr><td><MathExpr tex={String.raw`\ell=1`} /></td><td>180</td><td>240 RE trừ 60 DM-RS</td></tr>
+            <tr><td><MathExpr tex={String.raw`\ell=2`} /></td><td>72</td><td>96 outer-region RE trừ 24 DM-RS</td></tr>
+            <tr><td><MathExpr tex={String.raw`\ell=3`} /></td><td>180</td><td>240 RE trừ 60 DM-RS</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <MathExpr tex={String.raw`180+72+180=432\ \mathrm{RE}`} display />
+      <MathExpr tex={String.raw`432\ \mathrm{QPSK\ symbols}\times2=864\ \mathrm{bits}`} display />
+      <p>
+        Mỗi PBCH data RE mang một QPSK symbol, tức hai coded bits trước modulation. Con số 864 ở đây là <strong>bit stream sau rate matching/scrambling</strong>, không phải 864 bits thông tin gốc.
+      </p>
+      <aside class="precision-note">
+        <strong>Đây là full SS/PBCH block mapping.</strong>
+        <p>
+          Trường hợp SSB bị puncture cho một số cell-search configurations không được suy diễn trực tiếp từ bảng trên. Bài này dùng full mapping để nối rõ với Bài 25.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="forward-chain">
+      <p class="concept-kicker">03 · NHÌN TỪ PHÍA TRANSMITTER TRƯỚC KHI VIẾT RECEIVER</p>
+      <h2>Chuỗi mã hóa cho thấy vì sao rất ít thông tin gốc lại tạo ra hàng trăm modulation symbols.</h2>
+
+      <div class="pbch-size-story" data-lesson-visual>
+        <div><small>HIGHER LAYER</small><strong>24 bits</strong><span>MIB/BCH transport block</span></div>
+        <b>+</b>
+        <div><small>PHY THÊM</small><strong>8 bits</strong><span>thông tin timing/SSB context</span></div>
+        <b>→</b>
+        <div><small>PBCH PAYLOAD</small><strong>32 bits</strong><span>interleaving / selective scrambling</span></div>
+        <b>→</b>
+        <div><small>CRC-24C</small><strong>56 bits</strong><span>32 payload + 24 CRC</span></div>
+      </div>
+
+      <p>
+        TS 38.212 quy định Polar coding sau CRC, tiếp theo rate matching thành 864 bits. Với cấu hình PBCH, Polar mother-code length là 512; rate matching tạo 864 bits, bao gồm cơ chế lặp coded bits chứ không phải sinh thêm payload độc lập.
+      </p>
+      <div class="pbch-size-story pbch-size-story-compact" data-lesson-visual>
+        <div><small>POLAR CODE</small><strong>512 bits</strong><span>mother code</span></div>
+        <b>→</b>
+        <div><small>RATE MATCHING</small><strong>864 bits</strong><span>coded stream trên PBCH</span></div>
+        <b>→</b>
+        <div><small>QPSK MAPPING</small><strong>432 symbols</strong><span>432 PBCH data RE</span></div>
+      </div>
+      <aside class="mental-model">
+        <strong>Nhiều coded bits không có nghĩa có nhiều thông tin hệ thống.</strong>
+        <p>
+          Phần redundancy làm decoder có khả năng sửa lỗi trong điều kiện vô tuyến khó. Thông tin hữu ích vẫn chỉ là payload nhỏ ở đầu chuỗi.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="two-scramblers">
+      <p class="concept-kicker">04 · PBCH CÓ HAI LỚP SCRAMBLING KHÁC NHAU</p>
+      <h2>Một bước thuộc BCH payload processing; một bước thuộc PBCH physical modulation path.</h2>
+      <p>
+        Dễ nhầm ở đây là 3GPP TS 38.212 clause 7.1.2 mô tả selective payload scrambling <strong>trước CRC</strong>, còn TS 38.211 clause 7.3.3.1 mô tả physical PBCH scrambling <strong>sau rate matching, trước QPSK</strong>.
+        Cả hai đều dùng pseudo-random sequences, nhưng khác bit positions, index/context và vị trí trong pipeline.
+      </p>
+      <div class="pbch-two-scramblers" data-lesson-visual>
+        <article class="technical-card">
+          <span class="card-label">38.212 · PAYLOAD</span>
+          <h3>Selective payload scrambling</h3>
+          <p>32-bit PBCH payload được interleave; một số timing-related bits được giữ không scramble theo specification. Các bit còn lại chịu scrambling phụ thuộc cell/time context.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">38.211 · PHYSICAL PBCH</span>
+          <h3>Coded-bit scrambling</h3>
+          <p>864 rate-matched bits được XOR với pseudo-random sequence phụ thuộc PCI và candidate SSB index context, trước khi map thành QPSK symbols.</p>
+        </article>
+      </div>
+      <p>
+        Trong receiver, thứ tự đảo ngược: physical descrambling trên soft bits xảy ra <strong>trước Polar decoder</strong>; payload descrambling/interleaving được đảo ngược <strong>sau khi CRC/Polar processing hợp lệ</strong>.
+        Trộn hai lớp này hoặc dùng sai scrambling hypothesis có thể làm PBCH decoding thất bại dù constellation trông đẹp.
+      </p>
+    </section>
+
+    <section class="concept-block" id="equalization">
+      <p class="concept-kicker">05 · EQUALIZATION DÙNG CHANNEL ESTIMATE TỪ DM-RS</p>
+      <h2>Ta phải loại rotation và attenuation của channel trước khi so QPSK points với bit hypotheses.</h2>
+      <MathExpr tex={String.raw`Y[k,\ell]=H[k,\ell]X[k,\ell]+W[k,\ell]`} display />
+      <p>
+        Với one-layer model và một channel estimate khác zero, một zero-forcing equalizer có thể dùng:
+      </p>
+      <MathExpr tex={String.raw`\widehat X[k,\ell]=\frac{Y[k,\ell]}{\widehat H[k,\ell]}`} display />
+      <p>
+        Trong thực tế receiver thường chọn scaling/equalization dựa trên channel strength, noise estimate và số receive antennas. Equalization bằng phép chia đơn giản giúp hiểu trước, nhưng có thể khuếch đại noise khi channel magnitude rất nhỏ.
+      </p>
+      <MathExpr
+        tex={String.raw`\widehat X_{\mathrm{reg}}
+        =\frac{\widehat H^*Y}{|\widehat H|^2+\sigma_W^2}`}
+        display
+      />
+      <p>
+        Biểu thức trên là một regularized one-tap illustration khi symbol power được chuẩn hóa. Nó thể hiện việc dùng noise variance để tránh quá tin vào một channel gain rất nhỏ; không phải mô tả đầy đủ mọi PBCH multi-antenna receiver.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="equalization-example">
+      <p class="concept-kicker">06 · VÍ DỤ SỐ: KHÔNG EQUALIZE SẼ QUYẾT ĐỊNH SAI</p>
+      <h2>Một QPSK symbol ban đầu ở góc phần tư thứ nhất có thể tới receiver ở góc phần tư thứ hai.</h2>
+      <MathExpr tex={String.raw`X=(1+j)/\sqrt2`} display />
+      <MathExpr tex={String.raw`H=0.6e^{j60^\circ}`} display />
+      <p>Nếu tạm bỏ noise:</p>
+      <MathExpr tex={String.raw`Y=HX=0.6e^{j105^\circ}\approx-0.155+j0.580`} display />
+      <p>
+        Nhìn trực tiếp dấu của phần thực và phần ảo trên <MathExpr tex="Y" />, hard QPSK demapper sẽ suy ra bit-pair khác với transmitted symbol.
+        Sau equalization với channel estimate chính xác:
+      </p>
+      <MathExpr tex={String.raw`\widehat X=Y/H=(1+j)/\sqrt2`} display />
+      <p>
+        Điểm trở lại vị trí gốc và demapper mới có cơ sở đưa ra soft bits đúng. Nếu channel estimate bị lệch pha, point sau equalization vẫn bị xoay và confidence bị ảnh hưởng.
+      </p>
+    </section>
+
+    <section class="concept-block" id="soft-bits">
+      <p class="concept-kicker">07 · VÌ SAO RECEIVER KHÔNG CHỈ CẦN HARD BITS?</p>
+      <h2>Polar decoder hưởng lợi từ việc biết bit nào chắc chắn và bit nào đang ở gần decision boundary.</h2>
+      <p>
+        Với QPSK mapping chuẩn, dấu phần thực của equalized symbol gợi ý bit thứ nhất, còn dấu phần ảo gợi ý bit thứ hai. Nhưng độ lớn và noise uncertainty cũng quan trọng.
+        Soft demapper thường tạo log-likelihood ratios (LLR):
+      </p>
+      <MathExpr tex={String.raw`L(b)=\log\frac{P(b=0\mid Y,\widehat H)}{P(b=1\mid Y,\widehat H)}`} display />
+      <p>
+        Trong model AWGN đơn giản với channel đã equalize và noise variance biết trước, magnitude và dấu của <MathExpr tex="L(b)" /> phản ánh confidence.
+        LLR dương nghiêng về bit 0, âm nghiêng về bit 1, gần zero nghĩa là chưa chắc.
+      </p>
+      <div class="pbch-llr-story" data-lesson-visual>
+        <div><small>RẤT GẦN BIÊN</small><strong>Soft ≈ 0</strong><span>ít thông tin để quyết định</span></div>
+        <div><small>Ở XA BIÊN</small><strong>Soft dương lớn</strong><span>nghiêng mạnh về bit 0</span></div>
+        <div><small>Ở XA BIÊN</small><strong>Soft âm lớn</strong><span>nghiêng mạnh về bit 1</span></div>
+      </div>
+      <p>
+        Physical descrambling trên soft metrics có thể được thực hiện bằng cách đổi dấu metric ở những bit positions mà scrambling sequence bằng 1. Đây là cách giữ lại reliability information cho Polar decoder thay vì hard-decision quá sớm.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="pbch-lab">
+      <p class="concept-kicker">08 · INTERACTIVE LAB</p>
+      <h2>Quan sát cùng một nhóm QPSK symbols trước channel, sau channel và sau equalization.</h2>
+      <p>
+        Kéo channel phase, noise và channel-estimation phase error để thấy constellation thay đổi.
+        Sau đó đổi scrambling hypothesis để nhìn một điều ít trực quan: constellation có thể equalize rất đẹp nhưng bit stream sau descrambling vẫn sai.
+      </p>
+      <div data-lesson-visual>
+        <PBCHDecodeExplorer client:load />
+      </div>
+      <p>
+        Lab chỉ minh họa front-end receiver trên 16 QPSK symbols để giữ mọi bước có thể quan sát. Chuỗi 864 bits, Polar decoding và CRC phía dưới là phần giải thích theo specification, không phải các phép tính đã được giả lập trong lab.
+      </p>
+    </section>
+
+    <section class="concept-block" id="polar">
+      <p class="concept-kicker">09 · TỪ 864 SOFT BITS QUAY TRỞ LẠI 56 BITS CÓ CRC</p>
+      <h2>Rate recovery và Polar decoding là hai công việc khác nhau.</h2>
+      <p>
+        Sau QPSK soft demapping và physical descrambling, receiver có 864 soft values.
+        Rate-recovery stage xử lý inverse rate matching (gồm repetition) để tạo soft input phù hợp cho Polar mother code.
+        Với những coded bits được lặp, receiver có thể combine reliability information thay vì chỉ giữ lần xuất hiện cuối.
+      </p>
+      <div class="pbch-recovery-flow" data-lesson-visual>
+        <div><small>PBCH DEMAPPER</small><strong>864 soft bits</strong><span>sau physical descrambling</span></div>
+        <b>→</b>
+        <div><small>RATE RECOVERY</small><strong>512 soft positions</strong><span>mother-code input</span></div>
+        <b>→</b>
+        <div><small>POLAR DECODER</small><strong>56 recovered bits</strong><span>32 payload + 24 CRC</span></div>
+      </div>
+      <p>
+        Polar decoder khai thác cấu trúc mã và các soft reliabilities để chọn một hoặc nhiều candidate information sequences. Cách receiver implement decoding (successive cancellation, list decoding, CRC-aided selection...) là lựa chọn thiết kế; không nên biến một thuật toán cụ thể thành yêu cầu cố định của 3GPP.
+      </p>
+      <aside class="precision-note">
+        <strong>512 ở đây không phải 512 information bits.</strong>
+        <p>
+          Đó là chiều dài mother Polar code trong cấu hình PBCH. Bộ mã chỉ bảo vệ 56 bits tại đầu vào coder (gồm CRC); phần còn lại là redundancy do cấu trúc mã sinh ra.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="crc">
+      <p class="concept-kicker">10 · CRC-24C DÙNG ĐỂ XÁC NHẬN CANDIDATE DECODE</p>
+      <h2>Polar decoder có thể tạo ra một lời giải trông hợp lý; CRC giúp kiểm tra tính nhất quán của lời giải đó.</h2>
+      <p>
+        Với BCH, TS 38.212 clause 7.1.3 gắn <strong>CRC-24C</strong> lên payload 32 bits, thành 56 bits trước Polar coding.
+        Receiver tính lại CRC từ recovered payload và so với 24 CRC bits đi kèm.
+      </p>
+      <div class="pbch-crc-result" data-lesson-visual>
+        <div><small>TRƯỜNG HỢP A</small><strong>CRC pass</strong><span>candidate payload có tính nhất quán đủ để tiếp tục xử lý</span></div>
+        <div><small>TRƯỜNG HỢP B</small><strong>CRC fail</strong><span>không nên dùng candidate đó như broadcast information đã xác nhận</span></div>
+      </div>
+      <p>
+        CRC không tự sửa lỗi, không thay thế Polar decoder và không chứng minh bằng toán học rằng payload hoàn toàn không thể sai.
+        Nó là error-detection layer giúp receiver loại phần lớn candidate decode không hợp lệ.
+      </p>
+    </section>
+
+    <section class="concept-block" id="payload">
+      <p class="concept-kicker">11 · 32 BITS SAU CRC PASS CHỨA NHỮNG GÌ?</p>
+      <h2>Payload gồm phần MIB do higher layer cung cấp và tám bits bổ sung do physical-layer BCH processing tạo ra.</h2>
+      <MathExpr tex={String.raw`A_{\mathrm{PBCH}}=24+8=32\ \mathrm{bits}`} display />
+      <p>
+        Theo TS 38.212 clause 7.1.1, tám bits bổ sung mang bốn least-significant bits của system frame number, một half-frame bit và ba positions khác có ý nghĩa tùy SSB configuration (ví dụ thông tin SSB index hoặc subcarrier offset).
+      </p>
+      <p>
+        Những bit này còn đi qua interleaving và selective scrambling. Sau successful decoding, receiver phải khôi phục đúng ordering và scrambling state trước khi higher layers có thể dùng thông tin.
+        Bài 27 sẽ tập trung vào cách MIB được tổ chức và những field nào giúp UE tìm control resources ban đầu.
+      </p>
+      <aside class="mental-model">
+        <strong>Đừng đồng nhất 32-bit PBCH payload với 24-bit MIB message.</strong>
+        <p>
+          Một phần của PBCH payload là thông tin timing/SSB context được bổ sung trong lớp vật lý. MIB chỉ là phần message higher-layer trong tổng thể đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="repetition">
+      <p class="concept-kicker">12 · PHÁT LẶP SSB KHÔNG CÓ NGHĨA BCH PAYLOAD THAY ĐỔI Ở MỖI LẦN PHÁT</p>
+      <h2>BCH information được tổ chức trên một khoảng thời gian dài hơn khoảng cách giữa các SS/PBCH transmissions.</h2>
+      <p>
+        TS 38.212 mô tả BCH coding unit nhận tối đa một transport block mỗi 80 ms. SS/PBCH blocks có thể xuất hiện nhiều lần trong thời gian đó; receiver vẫn cần phân biệt thông tin ổn định, timing/SSB-dependent bits và các scrambling contexts.
+      </p>
+      <p>
+        Trong điều kiện khó, một receiver có thể cân nhắc combining observations hợp lệ qua các cơ hội thu khác nhau, nhưng không được cộng bừa các soft bits chưa align đúng time, beam, payload và scrambling hypotheses. Lịch phát cụ thể phụ thuộc SSB configuration, không thể suy từ mốc 80 ms ra rằng gNB chỉ phát một SSB mỗi 80 ms.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">13 · NẾU NHÌN TỪ RECEIVER CODE</p>
+      <h2>Mỗi stage nên có input, output và failure signal rõ ràng để dễ debug PBCH.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article>
+          <div class="implementation-step-no">01</div><div class="implementation-step-body">
+            <span class="card-label">PBCH EXTRACT</span><h3>Lấy đúng 432 PBCH data RE</h3>
+            <p>Không trộn PBCH DM-RS, SSS hoặc zero positions vào QPSK data buffer.</p>
+            <small>OUTPUT · received complex symbols</small></div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">02</div><div class="implementation-step-body">
+            <span class="card-label">EQUALIZER / DEMAPPER</span><h3>Equalize rồi tính 864 soft values</h3>
+            <p>Channel estimate và noise/confidence scaling ảnh hưởng trực tiếp tới soft metrics.</p>
+            <small>OUTPUT · soft coded bits</small></div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">03</div><div class="implementation-step-body">
+            <span class="card-label">PHYSICAL DESCRAMBLING</span><h3>Áp đúng PCI và SSB-index hypothesis</h3>
+            <p>Thử và quản lý những candidates còn chưa chắc chắn từ initial access.</p>
+            <small>OUTPUT · descrambled soft bits</small></div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article>
+          <div class="implementation-step-no">04</div><div class="implementation-step-body">
+            <span class="card-label">RATE RECOVERY / POLAR</span><h3>Recover 56 candidate bits</h3>
+            <p>Gộp các repeated coded-bit observations, thực hiện Polar decoding và candidate ranking.</p>
+            <small>OUTPUT · payload + CRC candidates</small></div>
+        </article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish">
+          <div class="implementation-step-no">05</div><div class="implementation-step-body">
+            <span class="card-label">CRC / PAYLOAD RECOVERY</span><h3>CRC check rồi khôi phục 32-bit payload</h3>
+            <p>Undo BCH payload scrambling/interleaving, xuất phần message và timing context cho bước đọc MIB.</p>
+            <small>NEXT · Bài 27</small></div>
+        </article>
+      </div>
+      <p>
+        Nếu CRC fail, bước debug nên lần ngược từ mapping/sequence hypotheses, channel estimate, LLR scaling và rate recovery trước khi quy lỗi cho Polar decoder. CRC fail là symptom, không tự chỉ ra block nào sai.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">14 · NHỮNG CHỖ DỄ LẪN</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">PBCH ≠ MIB</span><p>PBCH là physical channel; MIB là higher-layer information được vận chuyển qua BCH/PBCH.</p></article>
+        <article class="technical-card"><span class="card-label">864 ≠ PAYLOAD BITS</span><p>864 là rate-matched coded bits được map thành 432 QPSK symbols, không phải 864 information bits.</p></article>
+        <article class="technical-card"><span class="card-label">DEMAPPING ≠ DECODING</span><p>QPSK soft bits chưa được sửa lỗi; còn cần descrambling, rate recovery, Polar decoder và CRC.</p></article>
+        <article class="technical-card"><span class="card-label">PBCH CÓ HAI SCRAMBLING STAGES</span><p>Selective payload scrambling của 38.212 không phải physical PBCH scrambling của 38.211.</p></article>
+        <article class="technical-card"><span class="card-label">CRC ≠ ERROR CORRECTION</span><p>CRC kiểm tra candidate; Polar coding/decoding mới cung cấp error-correction capability.</p></article>
+        <article class="technical-card"><span class="card-label">CHANNEL ESTIMATE ≠ PERFECT</span><p>Estimate sai làm constellation, soft metrics và CRC success probability thay đổi.</p></article>
+        <article class="technical-card"><span class="card-label">80 ms ≠ SSB PERIODICITY</span><p>Khoảng BCH transport block update không định nghĩa chu kỳ SS/PBCH transmissions.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">15 · SPECIFICATION VÀ IMPLEMENTATION</p>
+      <h2>3GPP cố định encoding/mapping; cách receiver tính soft metrics và thực hiện Polar decoding vẫn có không gian thiết kế.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>TS 38.212: payload 24 + 8, BCH payload processing, CRC-24C, Polar coding và 864-bit rate matching. TS 38.211: PBCH bit scrambling, QPSK modulation, RE mapping.</p>
+        </article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>432 RE ↔ 864 coded bits, constellation trước/sau equalization, soft-confidence intuition và receiver stage debugging.</p>
+        </article>
+        <article class="technical-card"><span class="card-label">RECEIVER IMPLEMENTATION</span>
+          <p>MMSE/ZF combining, LLR calculation, candidate search strategy, rate-recovery memory, Polar decoder architecture và repetition combining.</p>
+        </article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">
+          3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 7.3.3 và 7.4.3.1: physical PBCH scrambling, QPSK modulation và PBCH RE mapping ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+        <p class="spec-source">
+          3GPP TS 38.212 Release 18, ETSI TS 138 212 V18.8.0, clause 7.1.1–7.1.5: BCH/PBCH payload processing, CRC-24C, Polar coding và rate matching ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">16 · KẾT NỐI LẠI TOÀN BỘ FLOW</p>
+      <ol class="recap-list">
+        <li><strong>Đầu vào:</strong> 432 PBCH RE trong SSB đầy đủ và channel estimates từ Bài 25.</li>
+        <li><strong>Equalization:</strong> giải tác động của channel để QPSK points trở lại gần constellation gốc.</li>
+        <li><strong>Soft demapping:</strong> mỗi QPSK symbol cho hai bit metrics, tổng cộng 864 soft bits.</li>
+        <li><strong>Physical descrambling:</strong> dùng đúng PCI và SSB-index hypothesis để chuẩn bị soft coded stream.</li>
+        <li><strong>Rate recovery:</strong> ánh xạ 864 soft observations về mother Polar-code representation.</li>
+        <li><strong>Polar decoder:</strong> recover 56 bits gồm 32 payload bits và 24 CRC bits.</li>
+        <li><strong>CRC-24C:</strong> kiểm tra candidate, rồi undo payload scrambling/interleaving.</li>
+        <li><strong>BCH payload:</strong> 24 bits higher-layer message cùng 8 bits bổ sung liên quan timing/SSB.</li>
+        <li><strong>Bước tiếp theo:</strong> Bài 27 sẽ giải thích MIB chứa những field gì và vì sao chúng đưa UE tới bước tìm CORESET#0/SIB1.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/pbch-dmrs/">
+        <span>← BÀI TRƯỚC</span><strong>PBCH DM-RS</strong>
+        <small>Known pilots và channel estimate cho PBCH data RE.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-3">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>MIB</strong>
+        <small>Từ decoded BCH payload tới system-information fields.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
