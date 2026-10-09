@@ -141,8 +141,8 @@ const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
       <p class="eyebrow">GHI CHÉP 19 · BỨC TRANH TOÀN HỆ THỐNG</p>
       <h1>UE kết nối mạng 5G NR như thế nào?</h1>
       <p class="lesson-deck">
-        Trước khi tách riêng PSS, SSS, PBCH hay PRACH, tôi muốn thử nhìn một lần toàn bộ câu chuyện:
-        <strong>từ một thiết bị chưa biết cell đang phát ở đâu, tới khi mạng nhận diện UE và thiết lập được phiên dữ liệu.</strong>
+        Trước khi tách riêng PSS, SSS, PBCH hay PRACH, tôi muốn thử nhìn một lần toàn bộ câu chuyện:{" "}
+        <strong>từ một thiết bị chưa biết cell đang phát ở đâu, tới khi mạng nhận diện UE và thiết lập được phiên dữ liệu.</strong>{" "}
         Bài này là bản đồ các giao thức và tín hiệu, không phải phân tích từng bit.
       </p>
     </header>
@@ -212,8 +212,8 @@ const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
         <div><strong>NAS</strong><p>“Thuê bao được đăng ký và xác thực chưa? Phiên dữ liệu được chấp nhận chưa?” Các thông điệp thuộc 5G Core.</p></div>
       </div>
       <p>
-        Cùng một lần thu PDSCH có thể đưa UE tới một bản tin RRC hoặc NAS.
-        <strong>Tên kênh mang dữ liệu và tên thông điệp được mang là hai lớp khác nhau.</strong>
+        Cùng một lần thu PDSCH có thể đưa UE tới một bản tin RRC hoặc NAS.{" "}
+        <strong>Tên kênh mang dữ liệu và tên thông điệp được mang là hai lớp khác nhau.</strong>{" "}
         Đây là lý do một bảng protocol thường có các hàng PDCCH, PDSCH và tên NAS xen kẽ.
       </p>
     </section>
@@ -249,14 +249,14 @@ const totalSteps = phases.reduce((sum, p) => sum + p.steps.length, 0);
         <div class="down"><span>UE</span><strong>Msg4 · RRCSetup</strong><b>←</b><span>gNB</span><p>gNB gửi kết quả contention resolution cùng phản hồi RRC trong kịch bản này.</p></div>
       </div>
       <p>
-        Ví dụ số độc lập: nếu UE ở cách gNB khoảng 1,5 km thì độ trễ truyền một chiều trong không gian gần bằng
+        Ví dụ số độc lập: nếu UE ở cách gNB khoảng 1,5 km thì độ trễ truyền một chiều trong không gian gần bằng{" "}
         <strong>5 µs</strong> (lấy tốc độ truyền xấp xỉ 300.000 km/s).
         Chính vì tín hiệu uplink không đến ngay lập tức, gNB phải ước lượng thời điểm đến và hướng dẫn UE hiệu chỉnh bằng Timing Advance.
         Giá trị TA được mã hóa và lượng tử hóa theo quy tắc 3GPP, không đơn giản luôn bằng 5 µs.
       </p>
       <p>
         Khi Msg4 đã tới UE, hệ thống vẫn cần RRCSetupComplete, NAS Registration,
-        xác thực và những bước khác trước khi có dịch vụ dữ liệu. Đó là điểm khác nhau giữa
+        xác thực và những bước khác trước khi có dịch vụ dữ liệu. Đó là điểm khác nhau giữa{" "}
         <strong>truy nhập radio thành công</strong> và <strong>dịch vụ end-to-end sẵn sàng</strong>.
       </p>
     </section>
