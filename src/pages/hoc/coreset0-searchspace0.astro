@@ -1,0 +1,418 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import CORESETZeroExplorer from '../../components/CORESETZeroExplorer.jsx';
+
+const lessonMeta = {
+  number: 29,
+  part: 4,
+  slug: 'coreset0-searchspace0',
+  kind: 'system-transition',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="CORESET#0 và SearchSpace#0: từ MIB tới PDCCH monitoring | VietWireless"
+  description="Tìm CORESET#0 và SearchSpace#0 trong 5G NR từ pdcch-ConfigSIB1, Table 13-1/13-11 TS 38.213, RB/symbol offset, n0 timing và SSB index với interactive lab."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-4">← Phần IV · Từ MIB tới thông tin hệ thống</a>
+      <p class="eyebrow">GHI CHÉP 29 · INITIAL SYSTEM INFORMATION</p>
+      <h1>CORESET#0 và SearchSpace#0</h1>
+      <p class="lesson-deck">
+        Bài 28 kết thúc với hai trường <code>controlResourceSetZero</code> và <code>searchSpaceZero</code> trong MIB.
+        Chúng mới là những table indexes, chưa phải địa chỉ một PDCCH.{" "}
+        <strong>Bài này nối hai index đó với specification để UE biết vùng frequency-time nào có thể mang PDCCH, và chính xác khi nào nên thử decode PDCCH scheduling SIB1.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">VẤN ĐỀ THỰC SỰ CỦA UE</p>
+      <h2>Không thể scan mọi RB, mọi OFDM symbol, mọi slot để tìm DCI.</h2>
+      <p>
+        Sau khi decode PBCH/MIB, UE chưa có một cấu hình RRC đầy đủ.
+        Nhưng gNB vẫn phải có một cách để báo cho UE nơi PDSCH mang SIB1 được schedule.
+        Thông tin scheduling đó đến qua PDCCH.
+      </p>
+      <p>
+        PDCCH có nhiều khả năng về location, duration và CCE aggregation.
+        Nếu tìm mù trên toàn bộ time-frequency resource grid, search space sẽ quá lớn.
+        Vì vậy MIB cung cấp một điểm khởi đầu <strong>ngắn nhưng xác định được bằng các bảng 3GPP</strong>.
+      </p>
+      <div class="c29-two-questions" data-lesson-visual>
+        <article><small>CORESET#0</small><strong>Search ở vùng nào?</strong>
+          <p>Định nghĩa frequency span và OFDM-symbol duration của control resources ban đầu.</p></article>
+        <article><small>SearchSpace#0</small><strong>Search khi nào và với những candidates nào?</strong>
+          <p>Liên kết SSB candidate với các PDCCH monitoring occasions; rules tiếp theo xác định blind-decoding candidates.</p></article>
+      </div>
+      <aside class="mental-model">
+        <strong>CORESET là khu vực có thể chứa PDCCH; Search Space là quy tắc UE phải đến kiểm tra.</strong>
+        <p>
+          Biết tọa độ một phòng không có nghĩa phòng luôn có người. Tương tự, CORESET tồn tại không có nghĩa PDCCH được phát ở mọi OFDM symbol trong đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">KẾT NỐI BÀI 28 VỚI BÀI 30</p>
+      <h2>Input là MIB + SSB context; output là vùng và thời điểm UE có thể bắt đầu blind-decode PDCCH.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>UE INITIAL DOWNLINK CONTROL SEARCH</span>
+        <div class="system-position-flow">
+          <span>PBCH / MIB</span><b>→</b>
+          <span>CORESET index + SearchSpace index</span><b>+</b>
+          <span>SSB SCS, PDCCH SCS, band, SSB index</span><b>→</b>
+          <strong>38.213 table lookup</strong><b>→</b>
+          <span>RB span + monitoring occasions</span><b>→</b>
+          <strong>PDCCH / DCI</strong>
+        </div>
+        <p>
+          CORESET#0/SearchSpace#0 tạo <em>khuôn tìm kiếm</em> cho DCI; Bài 30 mới đi vào cấu trúc PDCCH, REG/CCE và cơ chế blind decoding.
+          Bài 31 giải thích DCI và Bài 32 nối DCI tới PDSCH/SIB1.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="mib-bits">
+      <p class="concept-kicker">01 · ĐỌC LẠI 8 BIT TRONG MIB</p>
+      <h2>Một byte gồm hai nhóm 4 bit; mỗi nhóm trỏ vào một họ bảng khác nhau.</h2>
+      <MathExpr tex={String.raw`\mathrm{pdcchConfigSIB1}
+      =16\,\mathrm{controlResourceSetZero}+\mathrm{searchSpaceZero}`} display />
+      <div class="c29-byte-example" data-lesson-visual>
+        <div><small>4 BIT CAO</small><strong>0011</strong><span>controlResourceSetZero = 3</span></div>
+        <b>|</b>
+        <div><small>4 BIT THẤP</small><strong>0101</strong><span>searchSpaceZero = 5</span></div>
+        <b>→</b>
+        <div><small>BYTE TRONG MIB</small><strong>0x35</strong><span>hai index độc lập</span></div>
+      </div>
+      <p>
+        Byte <code>0x35</code> là ví dụ tiếp nối Bài 28. Tuy nhiên, cùng một index vẫn có thể cho thông số khác khi receiver phải dùng bảng khác.
+        UE cần xác định <strong>đúng radio context và bảng</strong> trước khi giải nghĩa số 3 và số 5.
+      </p>
+    </section>
+
+    <section class="concept-block" id="case-selection">
+      <p class="concept-kicker">02 · CHỌN ĐÚNG 3GPP TABLE LÀ BƯỚC BẮT BUỘC</p>
+      <h2>CORESET index 3 không có một width/offset cố định cho mọi numerology và frequency range.</h2>
+      <p>
+        Trong TS 38.213 clause 13, các bảng CORESET khác nhau được chọn theo cặp
+        <MathExpr tex={String.raw`\{\Delta f_{\mathrm{SSB}},\Delta f_{\mathrm{PDCCH}}\}`} />,
+        frequency band, minimum channel bandwidth, shared-spectrum operation và multiplexing pattern.
+        Với SearchSpace, FR1 pattern 1 dùng Table 13-11; các case khác dùng những bảng khác trong cùng clause.
+      </p>
+      <div class="c29-table-cases">
+        <article class="technical-card">
+          <span class="card-label">FR1 · 15/15 KHZ</span>
+          <strong>Table 13-1 + Table 13-11</strong>
+          <p>Case dùng xuyên suốt bài: band có minimum channel bandwidth phù hợp Table 13-1, non-shared spectrum, pattern 1.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FR1 · 30/30 KHZ</span>
+          <strong>Table 13-4 hoặc 13-6 + Table 13-11</strong>
+          <p>Table 13-4 và 13-6 không tương đương; phụ thuộc minimum bandwidth và band-specific conditions.</p>
+        </article>
+        <article class="technical-card">
+          <span class="card-label">FR2 / OTHER PATTERNS</span>
+          <strong>Table 13-7 tới 13-10A, 13-12 tới 13-15A</strong>
+          <p>Một số multiplexing patterns có công thức monitoring occasions khác, thậm chí khác số slot.</p>
+        </article>
+      </div>
+      <aside class="precision-note">
+        <strong>Có case <MathExpr tex={String.raw`3\,\mathrm{MHz}`} /> dùng Table 13-0 thay vì Table 13-1.</strong>
+        <p>
+          Vì vậy lab chỉ mô phỏng một điều kiện áp dụng được xác nhận. Không được copy trực tiếp các numbers bên dưới vào bất kỳ cell FR1/FR2 nào.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="coreset-table">
+      <p class="concept-kicker">03 · TRA TABLE 13-1 ĐỂ DỰNG CORESET#0</p>
+      <h2>Một index CORESET trả về frequency width, OFDM-symbol duration và RB offset tính từ SSB reference.</h2>
+      <p>
+        Chọn ví dụ đơn giản để nhìn đúng nguyên lý: FR1 non-shared spectrum,
+        SSB SCS <MathExpr tex={String.raw`15\,\mathrm{kHz}`} />,
+        PDCCH SCS <MathExpr tex={String.raw`15\,\mathrm{kHz}`} />,
+        multiplexing pattern 1, và band/minimum bandwidth thuộc phạm vi Table 13-1.
+      </p>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>CORESET index</th><th>Số RB</th><th>Số symbols</th><th>Offset (RB)</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>24</td><td>2</td><td>0</td></tr>
+            <tr><td>1</td><td>24</td><td>2</td><td>2</td></tr>
+            <tr><td>3</td><td>24</td><td>3</td><td>0</td></tr>
+            <tr><td>6</td><td>48</td><td>1</td><td>12</td></tr>
+            <tr><td>9</td><td>48</td><td>2</td><td>16</td></tr>
+            <tr><td>12</td><td>96</td><td>1</td><td>38</td></tr>
+            <tr><td>15</td><td>Reserved</td><td>Reserved</td><td>Reserved</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Đây là các hàng tiêu biểu, không phải toàn bộ Table 13-1.
+        Lab có đủ 16 index (bao gồm reserved). Với index 3, receiver tìm được:
+      </p>
+      <MathExpr tex={String.raw`N_{\mathrm{RB}}^{\mathrm{CORESET}}=24,\qquad
+      N_{\mathrm{symb}}^{\mathrm{CORESET}}=3,\qquad
+      O_{\mathrm{RB}}=0`} display />
+      <p>
+        Đây là một <strong>rectangle tài nguyên</strong> theo frequency và time trên mỗi dịp giám sát PDCCH.
+        RB offset phải hiểu từ lowest RB của CORESET tới common RB overlapping với first RB của SSB theo 38.213.
+        Vị trí absolute vẫn cần common RB grid alignment và <MathExpr tex={String.raw`k_{\mathrm{SSB}}`} />.
+      </p>
+    </section>
+
+    <section class="concept-block" id="control-reg-cce">
+      <p class="concept-kicker">04 · RECTANGLE KHÔNG ĐỒNG NGHĨA MỘT PDCCH</p>
+      <h2>CORESET là container. Bên trong container còn có REG, CCE và PDCCH candidates.</h2>
+      <p>
+        Một resource-element group (REG) chiếm 1 RB trong 1 OFDM symbol; một CCE gồm 6 REG.
+        Với ví dụ index 3, CORESET có:
+      </p>
+      <MathExpr tex={String.raw`24\times3=72\ \mathrm{REG}`} display />
+      <MathExpr tex={String.raw`N_{\mathrm{CCE}}=\frac{72}{6}=12`} display />
+      <p>
+        Đây là tổng capacity danh nghĩa theo số CCE trong CORESET, <strong>không phải 12 PDCCH đều đang được phát</strong>,
+        cũng không đồng nghĩa UE phải thử mọi CCE với mọi aggregation level.
+        CCE-to-REG mapping, aggregation levels và candidate generation sẽ được học ở Bài 30.
+      </p>
+      <div class="c29-cce-count" data-lesson-visual>
+        <div><small>24 RB × 3 SYMBOLS</small><strong>72 REG</strong><span>1 REG = 1 RB × 1 symbol</span></div>
+        <b>÷ 6</b>
+        <div><small>MỘT CCE</small><strong>6 REG</strong><span>logical control resource grouping</span></div>
+        <b>→</b>
+        <div><small>CORESET CAPACITY</small><strong>12 CCE</strong><span>candidate mapping theo SearchSpace rules</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="search-table">
+      <p class="concept-kicker">05 · SEARCHSPACE#0 TRẢ LỜI VẤN ĐỀ THỜI GIAN</p>
+      <h2>Table 13-11 trả về các tham số scheduling occasions, không trả về một PDCCH address.</h2>
+      <p>
+        Với FR1 pattern 1, trường <code>searchSpaceZero</code> tra Table 13-11.
+        Mỗi hàng có offset <MathExpr tex="O" />, factor <MathExpr tex="M" />,
+        số search-space sets per slot và first OFDM symbol index.
+      </p>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>Index</th><th><MathExpr tex="O" /></th><th><MathExpr tex="M" /></th><th>Search sets/slot</th><th>First symbol index</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1/2</td><td>2</td><td>0 nếu SSB index chẵn, CORESET length nếu lẻ</td></tr>
+            <tr><td>4</td><td>5</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>5</td><td>5</td><td>1/2</td><td>2</td><td>0 nếu chẵn, CORESET length nếu lẻ</td></tr>
+            <tr><td>8</td><td>0</td><td>2</td><td>1</td><td>0</td></tr>
+            <tr><td>10</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Với index 5 của ví dụ:
+      </p>
+      <MathExpr tex={String.raw`O=5,\qquad M=\frac12,\qquad
+      N_{\mathrm{SS-sets/slot}}=2`} display />
+      <p>
+        Ở những hàng như index 5, first OFDM symbol phụ thuộc parity của SSB candidate index.
+        Nó cũng phụ thuộc CORESET symbol length nếu index lẻ. Vì vậy SearchSpace#0 <strong>không thể suy ra hoàn toàn khi chưa biết CORESET#0 và SSB candidate</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block" id="slot-formula">
+      <p class="concept-kicker">06 · CÔNG THỨC TÍNH MONITORING SLOT TRONG PATTERN 1</p>
+      <h2>SSB candidate index đi vào công thức cùng hai tham số từ Table 13-11.</h2>
+      <MathExpr tex={String.raw`A=O\,2^{\mu}+\lfloor\hat i M\rfloor`} display />
+      <MathExpr tex={String.raw`n_0=A\bmod N_{\mathrm{slot}}^{\mathrm{frame},\mu}`} display />
+      <p>
+        Trong đó <MathExpr tex={String.raw`\hat i`} /> là candidate SS/PBCH block index,
+        <MathExpr tex={String.raw`\mu`} /> là numerology của PDCCH SCS và
+        <MathExpr tex={String.raw`N_{\mathrm{slot}}^{\mathrm{frame},\mu}`} /> là số slots mỗi frame.
+        Slot đầu tiên nằm trong frame có SFN parity:
+      </p>
+      <MathExpr tex={String.raw`\mathrm{SFN}_{c}\bmod2=
+      \left\lfloor\frac{A}{N_{\mathrm{slot}}^{\mathrm{frame},\mu}}\right\rfloor\bmod2`} display />
+      <p>
+        Với FR1 pattern 1 và PDCCH numerology thuộc trường hợp này, UE xác định hai slots chứa monitoring occasions:
+        <MathExpr tex={String.raw`n_0`} /> và <MathExpr tex={String.raw`n_0+1`} />.
+        SFN parity đảm bảo UE không nhìn nhầm vào một frame có cùng slot index nhưng sai phase của monitoring occasion.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="worked-example">
+      <p class="concept-kicker">07 · VÍ DỤ HOÀN CHỈNH: MIB 0X35 VÀ SSB INDEX 2</p>
+      <h2>Từ hai index 3/5 suy ra 24 RB × 3 symbols, monitoring slots 6 và 7 trong một frame chẵn.</h2>
+      <p>
+        Giả định riêng cho bài này: FR1 non-shared spectrum, cặp SCS SSB/PDCCH là
+        <MathExpr tex={String.raw`\{15,15\}\,\mathrm{kHz}`} />, Table 13-1 và Table 13-11 hợp lệ,
+        SS/PBCH candidate index là <MathExpr tex={String.raw`\hat i=2`} />.
+        Đây là <strong>một radio context mới dùng để minh họa phép tra bảng</strong>, không mặc định giữ mọi field từ ví dụ Bài 28.
+      </p>
+      <p>
+        <strong>Bước 1. CORESET index 3:</strong> 24 RB, 3 symbols, offset 0 RB.
+        <strong>Bước 2. Search index 5:</strong>
+        <MathExpr tex={String.raw`O=5,\ M=1/2`} />, 2 search-space sets/slot.
+      </p>
+      <p>
+        <strong>Bước 3. PDCCH SCS 15 kHz:</strong>
+        <MathExpr tex={String.raw`\mu=0,\quad N_{\mathrm{slot}}^{\mathrm{frame},0}=10`} />.
+      </p>
+      <MathExpr tex={String.raw`A=5\times1+\lfloor2\times0.5\rfloor=6`} display />
+      <MathExpr tex={String.raw`n_0=6\bmod10=6`} display />
+      <MathExpr tex={String.raw`\left\lfloor6/10\right\rfloor\bmod2=0\quad\Rightarrow\quad
+      \mathrm{SFN}_{c}\text{ chẵn}`} display />
+      <p>
+        Vì candidate SSB index 2 là số chẵn nên first CORESET symbol index là 0.
+        Vậy UE giám sát theo những dịp đã xác định trong slots 6 và 7 thuộc frame có SFN chẵn.
+        Nếu current SFN ở thời điểm ví dụ là 683 (lẻ), frame chẵn tiếp theo là 684.
+      </p>
+      <aside class="precision-note">
+        <strong>Slot 6/7 không phải lời khẳng định PDCCH chắc chắn được phát.</strong>
+        <p>
+          Đó là monitoring occasions UE cần kiểm tra. gNB có thể không schedule một DCI ở tất cả các occasions đó.
+          Receiver còn cần CCE candidate generation, PDCCH demodulation và CRC check trong Bài 30.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">08 · INTERACTIVE SPECIFICATION LOOKUP</p>
+      <h2>Thay hai MIB indexes để xem CORESET đổi kích thước và vị trí, còn monitoring occasions đổi slot/SFN.</h2>
+      <p>
+        Lab có đủ 16 CORESET table indices của Table 13-1 và 16 SearchSpace indices của Table 13-11.
+        Thử index 3, SearchSpace index 5, SSB index 2; sau đó thay lần lượt từng trường để thấy cái gì thay đổi và cái gì giữ nguyên.
+      </p>
+      <div data-lesson-visual>
+        <CORESETZeroExplorer client:load />
+      </div>
+      <p>
+        Hãy thử CORESET index 15 để thấy một <em>reserved entry</em> không thể giải nghĩa thành cấu hình hợp lệ.
+        Đổi SSB index từ 2 sang 3 trong cùng SearchSpace index 5 để thấy first symbol cũng đổi do parity.
+        Các bảng luôn được cố định theo case đã ghi trong lab, tránh suy diễn sai sang case khác.
+      </p>
+    </section>
+
+    <section class="concept-block" id="frequency-vs-time">
+      <p class="concept-kicker">09 · HAI PHẦN CÓ THỂ ĐỔI ĐỘC LẬP</p>
+      <h2>Thay CORESET index chủ yếu đổi frequency-time rectangle; thay SearchSpace index đổi lịch giám sát.</h2>
+      <div class="c29-change-examples" data-lesson-visual>
+        <div>
+          <small>GIỮ SEARCHSPACE INDEX 5</small>
+          <strong>CORESET index 3 → 9</strong>
+          <p>Độ rộng đổi từ 24 lên 48 RB; duration từ 3 xuống 2 symbols; offset cũng đổi từ 0 sang 16 RB.</p>
+        </div>
+        <div>
+          <small>GIỮ CORESET INDEX 3</small>
+          <strong>SEARCH INDEX 5 → 4</strong>
+          <p>Cùng <MathExpr tex={String.raw`O=5`} /> nhưng <MathExpr tex="M" /> từ 1/2 thành 1, số search-space sets/slot từ 2 thành 1; monitoring mapping đổi.</p>
+        </div>
+      </div>
+      <p>
+        Đổi cả hai index cùng lúc dễ tạo cảm giác “mọi thứ thay đổi”. Đổi một lần một index trong lab sẽ giúp tách rõ hai vai trò kỹ thuật.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sib1-availability">
+      <p class="concept-kicker">10 · TRƯỚC KHI TRA BẢNG PHẢI BIẾT SIB1 CÓ ĐƯỢC PHÁT TẠI ĐÂY KHÔNG</p>
+      <h2>Không phải SS/PBCH block nào cũng cho một CORESET#0 để đọc SIB1 ngay tại cell đó.</h2>
+      <p>
+        TS 38.213 và TS 38.331 có nhánh xử lý khi <MathExpr tex={String.raw`k_{\mathrm{SSB}}`} /> và các bits MIB/PBCH báo không có SIB1-associated CORESET ở cell vừa detect.
+        Khi ấy các bits vốn là <code>pdcch-ConfigSIB1</code> có thể dùng như indication để UE tìm SSB khác ở frequency position thích hợp.
+      </p>
+      <p>
+        Bài này cố định assumption là <strong>SIB1-associated Type0-PDCCH CSS set tồn tại</strong> và chọn case Table 13-1 hợp lệ.
+        Đây là điều kiện phải kiểm tra trong receiver trước khi gọi table lookup thông thường, không phải một logic chạy cho mọi SSB.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">11 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>Bài toán nên được chia thành hai lookup stages và một bước monitor state machine.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">INPUT VALIDATION</span><h3>Xác nhận MIB hợp lệ và SIB1 availability branch</h3>
+          <p>Kiểm tra SSB context, common SCS, <MathExpr tex={String.raw`k_{\mathrm{SSB}}`} />, band/channel bandwidth và shared-spectrum condition.</p>
+          <small>OUTPUT · đúng table family</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">CORESET LOOKUP</span><h3>Đọc RB span, symbol duration và offset</h3>
+          <p>Trừ/đổi offset theo definition của standard để đặt CORESET trên common frequency grid.</p>
+          <small>OUTPUT · frequency RB mask + duration</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">SEARCHSPACE LOOKUP</span><h3>Đọc <MathExpr tex="O" />, <MathExpr tex="M" /> và first-symbol rule</h3>
+          <p>Kết hợp SSB candidate index và PDCCH numerology để tính slot và SFN parity.</p>
+          <small>OUTPUT · monitoring occasions</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">MONITORING</span><h3>Lấy PDCCH candidates tại đúng occasions</h3>
+          <p>Giới hạn FFT/REG/CCE extraction và blind-decoding attempts theo rules của search space.</p>
+          <small>OUTPUT · candidate DCI bits</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">NEXT STAGE</span><h3>Giải mã PDCCH và DCI</h3>
+          <p>Thông tin DCI hợp lệ sẽ chỉ resource và transport parameters để UE đọc SIB1 từ PDSCH.</p>
+          <small>NEXT · Bài 30, 31 và 32</small></div></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">12 · NHỮNG CHỖ DỄ NHẦM</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">CORESET ≠ PDCCH MESSAGE</span><p>CORESET là vùng tài nguyên chứa các PDCCH candidates, không phải DCI hay PDSCH payload.</p></article>
+        <article class="technical-card"><span class="card-label">SEARCHSPACE ≠ FREQUENCY RANGE</span><p>SearchSpace gắn với candidate/monitoring rules; frequency rectangle được giới hạn bởi CORESET.</p></article>
+        <article class="technical-card"><span class="card-label">INDEX ≠ ABSOLUTE COORDINATES</span><p>Cần table-selection context, SSB/common RB alignment và slot/SFN parameters.</p></article>
+        <article class="technical-card"><span class="card-label">OFFSET ≠ LUÔN TÍNH TỪ SSB CENTER</span><p>38.213 định nghĩa RB offset có reference rõ ràng tại first SSB RB/common RB overlap.</p></article>
+        <article class="technical-card"><span class="card-label">MONITOR ≠ PDCCH LUÔN ĐƯỢC PHÁT</span><p>UE phải thử tìm DCI tại occasion; không phải mỗi occasion đều được scheduling.</p></article>
+        <article class="technical-card"><span class="card-label">CCE CAPACITY ≠ SỐ DCI</span><p>Tổng 12 CCE trong ví dụ không có nghĩa gNB đang phát 12 DCI cùng lúc.</p></article>
+        <article class="technical-card"><span class="card-label">FR1 15/15 ≠ MỌI NR CASE</span><p>FR2, shared spectrum và min-channel-bandwidth khác có bảng/monitoring formula riêng.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">13 · RANH GIỚI GIỮA SPEC VÀ VÍ DỤ</p>
+      <h2>3GPP quy định chính xác tables, timing formula và mapping context. Receiver chịu trách nhiệm thực thi việc tra bảng và search.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>TS 38.331 định nghĩa 4+4 index fields. TS 38.213 clause 13 và Tables 13-0 tới 13-15A định nghĩa CORESET dimensions, offsets và monitoring occasions theo case.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS MINH HỌA</span>
+          <p>Đặt first SSB RB tại tọa độ 0, tái dựng byte 0x35, tính 24 RB × 3 symbols và slot 6/7 theo FR1 15/15 pattern 1.</p></article>
+        <article class="technical-card"><span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Bảng lookup trong code, buffering, symbol extraction, candidate pruning, RF timing margin, multi-antenna combining và blind decoding loop.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.213 Release 18 (ETSI TS 138 213 V18.8.0), clause 13, Table 13-1 (FR1 CORESET 15/15) và Table 13-11 (FR1 pattern 1 monitoring occasions) ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.331 Release 18 (ETSI TS 138 331 V18.8.0), PDCCH-ConfigSIB1 ASN.1 field definitions trong MIB ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.211 Release 18 (ETSI TS 138 211 V18.8.0), clause 7.3.2.2, PDCCH mapping vào REG/CCE ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">14 · NHÌN LẠI CẢ HỆ THỐNG</p>
+      <ol class="recap-list">
+        <li><strong>MIB:</strong> tách 8-bit <code>pdcch-ConfigSIB1</code> thành CORESET index và SearchSpace index.</li>
+        <li><strong>Context:</strong> chọn đúng bảng theo SSB/PDCCH numerology, band, bandwidth và multiplexing pattern.</li>
+        <li><strong>CORESET#0:</strong> bảng cho RB width, symbol duration và offset từ SSB reference.</li>
+        <li><strong>SearchSpace#0:</strong> bảng cho monitoring time parameters, không tự tạo DCI.</li>
+        <li><strong>SSB index:</strong> đi vào phép tính monitoring slot và first symbol rule.</li>
+        <li><strong>Ví dụ 0x35:</strong> 24 RB × 3 symbols; ở SSB index 2, slots 6 và 7 của SFN chẵn.</li>
+        <li><strong>Output receiver:</strong> đã biết nên thử PDCCH ở đâu/khi nào, nhưng chưa decode PDCCH hay SIB1.</li>
+        <li><strong>Bước tiếp:</strong> Bài 30 đi sâu PDCCH, REG/CCE và cách UE tìm DCI hợp lệ trong SearchSpace.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/mib/">
+        <span>← BÀI TRƯỚC</span><strong>MIB</strong>
+        <small>Giải nghĩa các field và hai chỉ số pdcch-ConfigSIB1.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>PDCCH là gì?</strong>
+        <small>Từ control-region resources tới REG/CCE, blind decoding và DCI candidates.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
