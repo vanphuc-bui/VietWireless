@@ -81,12 +81,12 @@ export default function CORESETZeroExplorer() {
         <strong className="metric-card-value">{result.firstSlot}</strong>
         <span className="metric-card-formula">SFN parity: {result.targetParity===0?'chẵn':'lẻ'}</span></div>
       <div className="metric-card"><small className="metric-card-label">SYMBOL START</small>
-        <strong className="metric-card-value">{result.core ? result.firstSymbol : '—'}</strong>
+        <strong className="metric-card-value">{result.core ? result.firstSymbol : 'Không có'}</strong>
         <span className="metric-card-formula">{result.search.num} search-space set(s)/slot</span></div>
     </div>
 
     {!result.core && <p className="cs0-reserved">
-      <strong>CORESET table index 15 là reserved trong Table 13-1.</strong>
+      <strong>CORESET table index 15 là reserved trong Table 13-1.</strong>{' '}
       UE không được tự suy ra một cấu hình CORESET hợp lệ cho case đã chọn. Thử đưa index về 0–14.
     </p>}
 
@@ -125,7 +125,7 @@ export default function CORESETZeroExplorer() {
           const isPrimary=slot===result.firstSlot;
           const isSecond=slot===result.secondSlot && result.secondFrame===result.frame;
           return <div key={slot} className={'cs0-slot '+(isPrimary?'primary':isSecond?'secondary':'')}>
-            <small>slot {slot}</small><strong>{isPrimary?'n₀':isSecond?'n₀+1':'·'}</strong>
+            <small>slot {slot}</small><strong>{isPrimary?'n0':isSecond?'n0+1':'·'}</strong>
           </div>;
         })}
       </div>
