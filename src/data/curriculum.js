@@ -53,7 +53,7 @@ export const curriculum = [
     title: 'Từ MIB tới thông tin hệ thống',
     anchor: 'phan-4',
     lessons: [
-      { number: 29, title: 'CORESET#0 và SearchSpace#0', slug: 'coreset0-searchspace0', status: 'planned', kind: 'system-transition', specRequired: true },
+      { number: 29, title: 'CORESET#0 và SearchSpace#0', slug: 'coreset0-searchspace0', status: 'published', kind: 'system-transition', specRequired: true },
       { number: 30, title: 'PDCCH là gì?', slug: 'pdcch', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 31, title: 'DCI cơ bản', slug: 'dci-co-ban', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 32, title: 'SIB1 nằm ở đâu?', slug: 'sib1-nam-o-dau', status: 'planned', kind: 'system-transition', specRequired: true },
