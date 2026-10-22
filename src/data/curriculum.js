@@ -55,7 +55,7 @@ export const curriculum = [
     lessons: [
       { number: 29, title: 'CORESET#0 và SearchSpace#0', slug: 'coreset0-searchspace0', status: 'published', kind: 'system-transition', specRequired: true },
       { number: 30, title: 'PDCCH là gì?', slug: 'pdcch', status: 'published', kind: 'deep-dive', specRequired: true },
-      { number: 31, title: 'DCI cơ bản', slug: 'dci-co-ban', status: 'planned', kind: 'deep-dive', specRequired: true },
+      { number: 31, title: 'DCI cơ bản', slug: 'dci-co-ban', status: 'published', kind: 'deep-dive', specRequired: true },
       { number: 32, title: 'SIB1 nằm ở đâu?', slug: 'sib1-nam-o-dau', status: 'planned', kind: 'system-transition', specRequired: true },
       { number: 33, title: 'SIB1', slug: 'sib1', status: 'planned', kind: 'deep-dive', specRequired: true },
       { number: 34, title: 'Cell selection và camping', slug: 'cell-selection-camping', status: 'planned', kind: 'deep-dive', specRequired: true },
