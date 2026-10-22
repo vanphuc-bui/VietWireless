@@ -203,6 +203,6 @@ export default function DCIExplorer(){
       <strong>{si===0?'DCI chỉ đến PDSCH mang SIB1':'DCI chỉ đến một SI message, không phải SIB1'}</strong>
       <p>Receiver còn cần áp dụng MCS, RV, PDSCH DM-RS, channel estimation, transport block size và LDPC decoding để thực sự recover nội dung. Không thể xem DCI là SIB1 payload.</p>
     </div>
-    <p className="dci-explorer-note">Lab định nghĩa một radio context nhất quán: FR1, non-shared-spectrum, CORESET#0 width 24 RB, 15 kHz PDCCH/PDSCH SCS, Type0 CSS, multiplexing pattern 1, normal CP, dmrs-TypeA-Position=pos2, Default time allocation A. No VRB interleaving. Các tham số QPSK MCS và bit lengths dựa trên TS 38.212/38.214, không giả lập TBS, PDSCH physical coding hoặc HARQ procedure.</p>
+    <p className="dci-explorer-note">Lab định nghĩa một radio context nhất quán: FR1, non-shared-spectrum, CORESET#0 width 24 RB, <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> PDCCH/PDSCH SCS, Type0 CSS, multiplexing pattern 1, normal CP, dmrs-TypeA-Position=pos2, Default time allocation A. No VRB interleaving. Các tham số QPSK MCS và bit lengths dựa trên TS 38.212/38.214, không giả lập TBS, PDSCH physical coding hoặc HARQ procedure.</p>
   </div>;
 }
