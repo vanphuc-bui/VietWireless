@@ -1,0 +1,397 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import DCIExplorer from '../../components/DCIExplorer.jsx';
+
+const lessonMeta = {
+  number: 31,
+  part: 4,
+  slug: 'dci-co-ban',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="DCI cơ bản: từ PDCCH đến PDSCH scheduling | VietWireless"
+  description="Bài 31 giải thích DCI format 1_0 với SI-RNTI: bit fields, frequency RIV, time-domain assignment, MCS, RV, SI indicator và PDSCH resource grid để đọc SIB1."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-4">← Phần IV · Từ MIB tới thông tin hệ thống</a>
+      <p class="eyebrow">GHI CHÉP 31 · INITIAL SYSTEM INFORMATION</p>
+      <h1>DCI cơ bản: UE tìm PDSCH từ control message như thế nào?</h1>
+      <p class="lesson-deck">
+        Bài 30 kết thúc khi UE tìm được một PDCCH candidate, Polar decode thành công và CRC phù hợp SI-RNTI.
+        Receiver đã có các DCI information bits, nhưng chưa biết từ những bit đó PDSCH sẽ nằm ở đâu.{" "}
+        <strong>Bài này giải nghĩa DCI format 1_0 trong ngữ cảnh SIB1: frequency allocation, time allocation, MCS, redundancy version và system information indicator, rồi chuyển chúng thành một PDSCH receive plan.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>UE đã CRC-pass PDCCH với SI-RNTI. Vì sao vẫn chưa biết đọc SIB1 ở đâu?</h2>
+      <p>
+        PDCCH là nơi mang <em>control information</em>, không phải data transport block chứa SIB1.
+        Một DCI hợp lệ có thể chỉ rõ một nhóm resource blocks, một khoảng OFDM symbols, modulation/coding parameters và một số cờ thủ tục. Những trường này dùng để điều khiển PDSCH receiver ở bước tiếp theo.
+      </p>
+      <p>
+        Vì vậy UE phải parse DCI theo <strong>đúng format và đúng RNTI</strong>, sau đó tra các rules của TS 38.214 để diễn giải time-frequency resource assignment.
+        Nếu diễn giải một field như absolute RB hoặc absolute symbol index khi nó chỉ là table index, receiver có thể lấy nhầm hoàn toàn resource grid.
+      </p>
+      <aside class="mental-model">
+        <strong>DCI là “phiếu chỉ đường” cho receiver, không phải chính gói dữ liệu.</strong>
+        <p>
+          PDCCH đưa ra thông tin điều khiển để lấy PDSCH. Từ những bits trong DCI, UE xây một kế hoạch: đọc slot nào, RB nào, symbols nào và dùng các tham số demodulation nào.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">ĐOẠN CUỐI CỦA INITIAL SIB1 DISCOVERY</p>
+      <h2>SearchSpace giúp tìm PDCCH. DCI giúp tìm PDSCH. PDSCH mới mang broadcast transport block.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>DCI 1_0 (SI-RNTI) · RECEIVER STATE</span>
+        <div class="system-position-flow">
+          <span>Type0 CSS / PDCCH CRC pass</span><b>→</b>
+          <strong>DCI format 1_0 fields</strong><b>→</b>
+          <span>RIV + time index + MCS/RV</span><b>→</b>
+          <strong>Scheduled PDSCH resources</strong><b>→</b>
+          <span>TB decoding</span><b>→</b>
+          <span>SIB1 message</span>
+        </div>
+        <p>
+          Bài 31 giới hạn ở DCI parsing và việc dựng PDSCH scheduling context.
+          Bài 32 sẽ chuyển sang actual PDSCH resource mapping và Bài 33 phân tích SIB1 fields.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="dci-format">
+      <p class="concept-kicker">01 · DCI FORMAT KHÔNG PHẢI MỘT BITSTREAM CỐ ĐỊNH CHO MỌI TRƯỜNG HỢP</p>
+      <h2>Cùng tên DCI 1_0 nhưng bit fields khác nhau theo loại RNTI dùng để mask CRC.</h2>
+      <p>
+        TS 38.212 định nghĩa DCI format 1_0 là một downlink scheduling format. Nhưng bản 1_0 với SI-RNTI dùng cho system information khác bản dùng C-RNTI, RA-RNTI hoặc P-RNTI.
+        Trong luồng SIB1, UE đã tìm DCI ở Type0-PDCCH common search space với <strong>SI-RNTI</strong>, nên nó phải parse đúng biến thể tương ứng.
+      </p>
+      <div class="dci-format-grid" data-lesson-visual>
+        <article><small>TYPE0 CSS · TRỌNG TÂM BÀI</small><strong>DCI 1_0 / SI-RNTI</strong><span>Resource assignment và thông số PDSCH cho system information.</span></article>
+        <article><small>UE-SPECIFIC SAU NÀY</small><strong>DCI 1_0 / C-RNTI</strong><span>Các trường như NDI, HARQ process number và PUCCH-related control phụ thuộc loại DCI này.</span></article>
+        <article><small>UPLINK GRANT</small><strong>DCI 0_0</strong><span>Đặt PUSCH resources cho uplink, không phải format dùng để schedule SIB1.</span></article>
+      </div>
+      <p>
+        Một lỗi phổ biến trong triển khai receiver là parse mọi format 1_0 theo một C-RNTI layout.
+        Khi đó offset của bit fields bị sai ngay cả khi Polar decoding và CRC trước đó đúng.
+      </p>
+    </section>
+
+    <section class="concept-block" id="bit-layout">
+      <p class="concept-kicker">02 · NHỮNG FIELD CÓ TRONG DCI 1_0 VỚI SI-RNTI</p>
+      <h2>Với CORESET#0 rộng 24 RB, DCI information payload của case này dài 37 bit.</h2>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>Field theo TS 38.212</th><th>Bit length</th><th>Vai trò trong receiver</th></tr></thead>
+          <tbody>
+            <tr><td>Frequency domain resource assignment</td><td>9</td><td>Chỉ ra RB start và RB length qua RIV.</td></tr>
+            <tr><td>Time domain resource assignment</td><td>4</td><td>Index hàng trong bảng time allocation.</td></tr>
+            <tr><td>VRB-to-PRB mapping</td><td>1</td><td>Điều khiển cách chuyển virtual RBs thành physical RBs.</td></tr>
+            <tr><td>Modulation and coding scheme</td><td>5</td><td>Chỉ ra modulation order và target code rate qua MCS table.</td></tr>
+            <tr><td>Redundancy version</td><td>2</td><td>Điều khiển coded-bit redundancy/rate matching của PDSCH.</td></tr>
+            <tr><td>System information indicator</td><td>1</td><td>Phân biệt SIB1 với SI messages khác.</td></tr>
+            <tr><td>Reserved bits</td><td>15</td><td>Reserved trong FR1 non-shared-spectrum case của bài.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <MathExpr tex={String.raw`9+4+1+5+2+1+15=37\ \mathrm{bits}`} display />
+      <p>
+        Frequency field width không phải luôn 9. TS 38.212 gắn nó với CORESET#0 width, có dạng:
+      </p>
+      <MathExpr tex={String.raw`B_{\mathrm{FDRA}}=
+        \left\lceil
+        \log_2\left(\frac{N_{\mathrm{RB}}^{\mathrm{CORESET0}}
+        (N_{\mathrm{RB}}^{\mathrm{CORESET0}}+1)}{2}\right)
+        \right\rceil`} display />
+      <p>
+        Với <MathExpr tex={String.raw`N_{\mathrm{RB}}^{\mathrm{CORESET0}}=24`} /> có
+        <MathExpr tex={String.raw`24\times25/2=300`} /> khả năng cấp phát contiguous, nên cần
+        <MathExpr tex={String.raw`\lceil\log_2(300)\rceil=9`} /> bit để mã hóa.
+      </p>
+      <aside class="precision-note">
+        <strong>37 bit ở đây không bao gồm 24-bit DCI CRC.</strong>
+        <p>
+          DCI CRC và Polar coding được áp dụng để truyền PDCCH trong Bài 30.
+          Sau CRC pass, receiver parse 37 information bits theo đúng field boundaries.
+          Một số frequency-range/shared-spectrum configurations có reserved-bit count khác, nên không thể dùng số 37 ở mọi cell.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="frequency-riv">
+      <p class="concept-kicker">03 · FREQUENCY RESOURCE ASSIGNMENT: RIV LÀ GÌ?</p>
+      <h2>Thay vì gửi riêng start và length, DCI mã hóa một continuous RB allocation vào Resource Indication Value.</h2>
+      <p>
+        Với resource allocation type 1, TS 38.214 định nghĩa RIV từ starting virtual resource block và length.
+        Giả sử width vùng tham chiếu là <MathExpr tex="N" />, RB start là <MathExpr tex={String.raw`S_{\mathrm{RB}}`} /> và
+        số RB được cấp là <MathExpr tex={String.raw`L_{\mathrm{RB}}`} />:
+      </p>
+      <MathExpr tex={String.raw`\mathrm{RIV}=
+      \begin{cases}
+        N(L_{\mathrm{RB}}-1)+S_{\mathrm{RB}},
+          &L_{\mathrm{RB}}-1\le\lfloor N/2\rfloor\\
+        N(N-L_{\mathrm{RB}}+1)+(N-1-S_{\mathrm{RB}}),
+          &L_{\mathrm{RB}}-1>\lfloor N/2\rfloor
+      \end{cases}`} display />
+      <p>
+        Khi DCI 1_0 được nhận trong common search space, RB indexing bắt đầu từ lowest RB của CORESET liên quan.
+        Ở ví dụ, CORESET#0 có 24 RB; không được tự đổi reference thành SSB center hoặc một BWP bất kỳ.
+      </p>
+      <aside class="mental-model">
+        <strong>RIV là cách nén một cặp tọa độ hợp lệ.</strong>
+        <p>
+          Một allocation phải nằm gọn trong width <MathExpr tex="N" />.
+          Hai nhánh công thức mã hóa cả những allocation ngắn lẫn những allocation dài mà không cần gửi hai trường có chiều dài cố định riêng biệt.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="frequency-example">
+      <p class="concept-kicker">04 · VÍ DỤ FREQUENCY: 8 RB BẮT ĐẦU TỪ RB 4</p>
+      <h2>Chín bits đầu tiên của DCI được tính thành một RIV cụ thể.</h2>
+      <MathExpr tex={String.raw`N=24,\qquad S_{\mathrm{RB}}=4,\qquad L_{\mathrm{RB}}=8`} display />
+      <MathExpr tex={String.raw`L_{\mathrm{RB}}-1=7\le12=\lfloor24/2\rfloor`} display />
+      <MathExpr tex={String.raw`\mathrm{RIV}=24(8-1)+4=172`} display />
+      <MathExpr tex={String.raw`172=\underbrace{010101100}_{9\ \mathrm{bits}}\!{}_2`} display />
+      <p>
+        Receiver giải RIV 172 ra <strong>VRBs 4–11</strong>.
+        Trong ví dụ ta chọn VRB-to-PRB mapping field bằng 0 (non-interleaved), nên PDSCH resources cũng là PRBs 4–11 tương đối với lowest RB của CORESET#0.
+        Nếu field chọn interleaved mapping, bước chuyển VRB-to-PRB phải được thực hiện thêm, không thể tô cùng RB range như một physical allocation đã hoàn tất.
+      </p>
+    </section>
+
+    <section class="concept-block" id="time-allocation">
+      <p class="concept-kicker">05 · TIME RESOURCE ASSIGNMENT LÀ INDEX, KHÔNG PHẢI START SYMBOL</p>
+      <h2>Trường 4-bit trỏ tới hàng của time allocation table theo TS 38.214.</h2>
+      <p>
+        Trong DCI, time-domain field value <MathExpr tex="m" /> chọn hàng <MathExpr tex={String.raw`m+1`} />.
+        Hàng đó trả về những thông tin như slot offset <MathExpr tex={String.raw`K_0`} />,
+        PDSCH mapping type, start symbol <MathExpr tex="S" /> và length <MathExpr tex="L" />.
+        Bảng được chọn trước theo RNTI, SearchSpace và SSB/CORESET multiplexing pattern.
+      </p>
+      <p>
+        Vì luồng bài đang dùng <strong>SI-RNTI / Type0 CSS / multiplexing pattern 1</strong>, UE tra Default PDSCH time allocation A (normal CP).
+        Hai pattern còn lại có bảng B/C khác, không được dùng bảng A cho mọi SIB1.
+      </p>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>m trong DCI</th><th>Row</th><th>PDSCH type</th><th>Slot offset</th><th>Start symbol</th><th>Length</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>1</td><td>Type A</td><td>0</td><td>2</td><td>12</td></tr>
+            <tr><td>1</td><td>2</td><td>Type A</td><td>0</td><td>2</td><td>10</td></tr>
+            <tr><td>5</td><td>6</td><td>Type B</td><td>0</td><td>9</td><td>4</td></tr>
+            <tr><td>6</td><td>7</td><td>Type B</td><td>0</td><td>4</td><td>4</td></tr>
+            <tr><td>7</td><td>8</td><td>Type B</td><td>0</td><td>5</td><td>7</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Bảng trích các hàng tiêu biểu của Default A khi <code>dmrs-TypeA-Position=pos2</code>.
+        Interactive phía dưới triển khai đủ 16 hàng với case này; không sử dụng các giá trị khác của Type-A position để suy diễn.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="time-example">
+      <p class="concept-kicker">06 · VÍ DỤ TIME: GIỮ PDCCH Ở SLOT 6</p>
+      <h2>DCI time-index bằng 5 chọn PDSCH symbols 9–12 trong chính slot đó.</h2>
+      <MathExpr tex={String.raw`m=5\quad\Rightarrow\quad\text{row }6`} display />
+      <MathExpr tex={String.raw`K_0=0,\qquad S=9,\qquad L=4,\qquad\mathrm{Type\ B}`} display />
+      <p>
+        Với PDCCH slot 6 và cùng numerology cho PDCCH/PDSCH, <MathExpr tex={String.raw`K_0=0`} /> nghĩa là PDSCH được schedule trong chính slot 6.
+        Receiver chọn các OFDM symbols 9, 10, 11 và 12, đồng thời lấy các frequency RBs đã được RIV xác định.
+      </p>
+      <p>
+        PDCCH được monitor ở phần đầu slot theo ví dụ CORESET#0 3 symbols.
+        Do đó sơ đồ sẽ cho thấy rõ một vùng control đầu slot và một vùng data về cuối slot, thay vì ngộ nhận PDCCH mang trực tiếp SIB1.
+      </p>
+    </section>
+
+    <section class="concept-block" id="mcs-rv">
+      <p class="concept-kicker">07 · MCS VÀ RV: BIẾT ĐƯỢC GÌ VÀ CHƯA BIẾT ĐƯỢC GÌ?</p>
+      <h2>MCS chọn modulation/coding target; RV liên quan redundancy version của coded transport block.</h2>
+      <p>
+        Trường 5-bit MCS không phải một number chỉ “tốc độ”.
+        Nó chọn một hàng trong MCS table để biết modulation order và target code rate.
+        TS 38.214 nêu UE không được kỳ vọng decode PDSCH được schedule với SI-RNTI và modulation order lớn hơn hai, nên lab giới hạn vùng QPSK-eligible của Table 5.1.3.1-1.
+      </p>
+      <MathExpr tex={String.raw`I_{\mathrm{MCS}}=4
+        \quad\Rightarrow\quad
+        Q_m=2,\quad R=\frac{308}{1024}\approx0.3008`} display />
+      <p>
+        Với MCS index 4, receiver dự kiến QPSK và target code rate khoảng 0.301.
+        Đây chưa phải transport-block size: TBS cần số allocated RE khả dụng sau PDSCH DM-RS, overhead và quy tắc rounding/coding của TS 38.214.
+      </p>
+      <p>
+        Redundancy version field có hai bits, biểu diễn RV 0, 1, 2 hoặc 3.
+        RV nói tới selection/arrangement của coded bits trong rate matching; không phải modulation order hoặc số repetition của SSB.
+      </p>
+    </section>
+
+    <section class="concept-block" id="si-indicator">
+      <p class="concept-kicker">08 · SYSTEM INFORMATION INDICATOR: VÌ SAO PHẢI ĐỌC?</p>
+      <h2>Cùng SI-RNTI có thể schedule SIB1 hoặc những SI messages khác.</h2>
+      <div class="dci-si-pair" data-lesson-visual>
+        <article><small>INDICATOR = 0</small><strong>SIB1</strong><span>Scheduling của SIB1, bước tiếp theo trong chuỗi initial access.</span></article>
+        <article><small>INDICATOR = 1</small><strong>SI message</strong><span>Scheduling của một SI message khác với SIB1.</span></article>
+      </div>
+      <p>
+        Đây là định nghĩa của TS 38.212 Table 7.3.1.2.1-2.
+        Vì thế, nhận DCI hợp lệ với SI-RNTI chưa đủ để tuyên bố PDSCH tiếp theo chắc chắn là SIB1: receiver còn phải kiểm tra bit system information indicator.
+      </p>
+    </section>
+
+    <section class="concept-block" id="bit-walkthrough">
+      <p class="concept-kicker">09 · GHÉP CÁC FIELD LẠI THÀNH MỘT DCI HOÀN CHỈNH</p>
+      <h2>Từ các giá trị dễ đọc sang bit layout: 9 + 4 + 1 + 5 + 2 + 1 + 15.</h2>
+      <div class="dci-worked-bit-string" data-lesson-visual>
+        <div><small>FREQUENCY RIV</small><strong>010101100</strong><span>172 → VRBs 4–11</span></div>
+        <div><small>TIME INDEX</small><strong>0101</strong><span>m=5 → row 6</span></div>
+        <div><small>VRB MAPPING</small><strong>0</strong><span>non-interleaved</span></div>
+        <div><small>MCS</small><strong>00100</strong><span>index 4 / QPSK</span></div>
+        <div><small>RV</small><strong>00</strong><span>RV 0</span></div>
+        <div><small>SI INDICATOR</small><strong>0</strong><span>SIB1</span></div>
+        <div><small>RESERVED</small><strong>000000000000000</strong><span>15 bits</span></div>
+      </div>
+      <p>
+        Bit lengths ở trên là một <strong>case-specific field layout</strong> cho DCI 1_0 với SI-RNTI khi CORESET#0 có 24 RB, FR1 không dùng shared spectrum access.
+        CRC và Polar coded bits là các lớp riêng, không thuộc 37 information bits được liệt kê.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">10 · INTERACTIVE DCI DECODER</p>
+      <h2>Thay RB allocation, time index và MCS để nhìn DCI bits biến thành PDSCH resource grid.</h2>
+      <p>
+        Lab dựng đúng ví dụ xuyên suốt: CORESET#0 rộng 24 RB, PDCCH slot 6, RIV 172,
+        time index 5, MCS 4, RV 0 và SI indicator 0.
+        Kéo một trường tại một thời điểm để tách ảnh hưởng lên bit layout, RB allocation, symbols và kết quả scheduling.
+      </p>
+      <div data-lesson-visual>
+        <DCIExplorer client:load />
+      </div>
+      <p>
+        Dải frequency hiển thị 24 RB và biểu đồ thứ hai hiển thị 14 symbols.
+        Phần reserved resource/DM-RS không được giả lập thành một raw PDSCH waveform: interactive dừng ở **PDSCH allocation-level view**.
+      </p>
+    </section>
+
+    <section class="concept-block" id="physical-mapping">
+      <p class="concept-kicker">11 · ĐÃ BIẾT RESOURCE RECTANGLE, TẠI SAO VẪN CHƯA CÓ SIB1?</p>
+      <h2>PDSCH receiver còn phải xử lý DM-RS, channel, LDPC và transport block trước khi thấy message.</h2>
+      <p>
+        DCI cho UE biết VRB/PRB allocation, time-domain symbol selection và coding parameters.
+        Nhưng một scheduled PDSCH transport block không xuất hiện sẵn dưới dạng byte array ở những RE đó.
+      </p>
+      <div class="dci-to-sib1" data-lesson-visual>
+        <div><small>DCI</small><strong>Scheduling context</strong><span>PRB/symbol allocation, MCS, RV</span></div>
+        <b>→</b>
+        <div><small>PDSCH PHY</small><strong>DM-RS + equalization</strong><span>Received data symbols và soft bits</span></div>
+        <b>→</b>
+        <div><small>DL-SCH</small><strong>LDPC decode + TB CRC</strong><span>Khôi phục transport block</span></div>
+        <b>→</b>
+        <div><small>HIGHER LAYERS</small><strong>BCCH-DL-SCH / SIB1</strong><span>Parse ASN.1 fields của system information</span></div>
+      </div>
+      <p>
+        Bài 32 sẽ giải thích cụ thể SIB1 nằm ở đâu trên PDSCH và các bước receiver đọc DL-SCH.
+        Bài 33 mới đi sâu SIB1 fields; bài này chưa trộn DCI format với nội dung RRC system information.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">12 · TRIỂN KHAI TRONG RECEIVER CODE</p>
+      <h2>Mỗi field được giải nghĩa trong đúng context, thay vì hard-code trực tiếp một RB range và time window.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">INPUT VALIDATION</span><h3>Nhận DCI CRC-pass với đúng SI-RNTI và Format 1_0</h3>
+          <p>Giữ metadata: CORESET#0 width, SSB context, PDCCH slot, multiplexing pattern và common SCS.</p>
+          <small>OUTPUT · trusted DCI candidate</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">FIELD PARSER</span><h3>Tính đúng bit widths trước khi đọc bitstream</h3>
+          <p>Với SI-RNTI và 24-RB CORESET, parse 9/4/1/5/2/1/15 theo TS 38.212.</p>
+          <small>OUTPUT · numeric fields</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">FREQUENCY PLANNER</span><h3>Decode RIV và áp VRB-to-PRB mapping</h3>
+          <p>Ràng buộc RB start/length trong vùng reference và chuyển VRB indices thành physical RBs.</p>
+          <small>OUTPUT · PDSCH PRB mask</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">TIME / CODING PLANNER</span><h3>Tra time table, MCS table và RV</h3>
+          <p>Lấy PDSCH slot, start symbol, length, mapping type và decoding configuration.</p>
+          <small>OUTPUT · PDSCH receive configuration</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">NEXT STAGE</span><h3>Đọc PDSCH và khôi phục SIB1</h3>
+          <p>Channel estimate từ PDSCH DM-RS, soft-demodulation, LDPC và transport-block reconstruction.</p>
+          <small>NEXT · Bài 32</small></div></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">13 · NHỮNG CHỖ DỄ HIỂU SAI</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">DCI ≠ PDSCH PAYLOAD</span><p>DCI là scheduling instruction; PDSCH mới chứa transport block.</p></article>
+        <article class="technical-card"><span class="card-label">DCI 1_0 ≠ MỘT FIELD LAYOUT DUY NHẤT</span><p>SI-RNTI và C-RNTI có những trường khác nhau dù cùng DCI format name.</p></article>
+        <article class="technical-card"><span class="card-label">RIV ≠ ABSOLUTE RB</span><p>Cần CORESET/BWP reference và VRB-to-PRB mapping để ra physical resource.</p></article>
+        <article class="technical-card"><span class="card-label">TIME INDEX ≠ SYMBOL INDEX</span><p>Field chọn hàng trong bảng rồi mới suy ra slot offset, start symbol, length và mapping type.</p></article>
+        <article class="technical-card"><span class="card-label">MCS ≠ TBS</span><p>MCS không đủ để tính transport block size nếu chưa biết RE capacity và overhead.</p></article>
+        <article class="technical-card"><span class="card-label">RV ≠ SỐ HARQ RETRANSMISSIONS</span><p>RV chọn redundancy pattern của coded block, không đơn thuần đếm số lần phát.</p></article>
+        <article class="technical-card"><span class="card-label">SI-RNTI ≠ TẤT CẢ ĐỀU LÀ SIB1</span><p>System information indicator = 1 có thể chỉ một SI message khác SIB1.</p></article>
+        <article class="technical-card"><span class="card-label">37 BITS ≠ MỌI FR/CORESET</span><p>Bit width và reserved-bit count có thể thay đổi theo cấu hình và phạm vi standard.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">14 · SPECIFICATION LAYER</p>
+      <h2>38.212 quy định DCI bit fields; 38.214 quy định cách biến chúng thành PDSCH scheduling parameters.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP TS 38.212</span>
+          <p>Clause 7.3.1.2.1: DCI format 1_0 theo SI-RNTI, field sizes và Table 7.3.1.2.1-2 cho SI indicator.</p></article>
+        <article class="technical-card"><span class="card-label">3GPP TS 38.214</span>
+          <p>Clauses 5.1.2.1/5.1.2.1.1, 5.1.2.2.2 và 5.1.3.1: time allocation tables, frequency RIV và MCS mapping.</p></article>
+        <article class="technical-card"><span class="card-label">MINH HỌA / IMPLEMENTATION</span>
+          <p>RIV 172, slot 6 symbols 9–12, 24-RB grid, MCS 4 và bitstream 37 bits. Không giả lập toàn bộ PDSCH waveform, CRC/Polar hay LDPC.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.212 Release 18, ETSI TS 138 212 V18.8.0, clause 7.3.1.2.1, DCI 1_0 with CRC scrambled by SI-RNTI ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.214 Release 18, ETSI TS 138 214 V18.8.0, clauses 5.1.2.1–5.1.3.1 và Tables 5.1.2.1.1-2, 5.1.3.1-1 ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138214/18.08.00_60/ts_138214v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">15 · KẾT LUẬN</p>
+      <ol class="recap-list">
+        <li><strong>PDCCH:</strong> mang DCI; CRC pass với SI-RNTI cho receiver đúng ngữ cảnh system-information scheduling.</li>
+        <li><strong>DCI format 1_0:</strong> field layout phải chọn đúng cho SI-RNTI, không dùng layout của C-RNTI.</li>
+        <li><strong>Frequency allocation:</strong> RIV mã hóa RB start/length trong một vùng reference; mapping VRB-to-PRB là bước riêng.</li>
+        <li><strong>Time allocation:</strong> 4-bit index tra bảng, cho <MathExpr tex={String.raw`K_0`} />, start, length và mapping type.</li>
+        <li><strong>MCS và RV:</strong> cung cấp coding/modulation context, nhưng chưa xác định hoàn chỉnh TBS.</li>
+        <li><strong>SI indicator:</strong> 0 chỉ SIB1, 1 chỉ SI message khác.</li>
+        <li><strong>Ví dụ:</strong> RIV 172 → 8 RB bắt đầu tại RB 4; time index 5 → symbols 9–12, slot 6.</li>
+        <li><strong>Bước tiếp:</strong> PDSCH DM-RS, RE mapping, soft demodulation và LDPC để đọc transport block chứa SIB1.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/pdcch/">
+        <span>← BÀI TRƯỚC</span><strong>PDCCH là gì?</strong>
+        <small>REG, CCE, aggregation level và blind decoding để tìm DCI.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>SIB1 nằm ở đâu?</strong>
+        <small>Từ DCI resource assignment tới PDSCH transport block và system information.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
