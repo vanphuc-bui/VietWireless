@@ -111,7 +111,7 @@ export default function DCIExplorer(){
         </select></label>
       <label><span>PDCCH slot index <strong>{pdcchSlot}</strong></span>
         <input type="range" min="0" max="9" value={pdcchSlot} onChange={(e)=>setPdcchSlot(Number(e.target.value))}/>
-        <small>Cùng 15 kHz numerology cho PDCCH và PDSCH.</small></label>
+        <small>Cùng <MathExpr tex={String.raw`15\,\mathrm{kHz}`} /> numerology cho PDCCH và PDSCH.</small></label>
     </div>
 
     <div className="dci-metrics metric-card-grid">
