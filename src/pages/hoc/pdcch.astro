@@ -1,0 +1,437 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import PDCCHExplorer from '../../components/PDCCHExplorer.jsx';
+
+const lessonMeta = {
+  number: 30,
+  part: 4,
+  slug: 'pdcch',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="PDCCH là gì? REG, CCE, aggregation và blind decoding | VietWireless"
+  description="Bài 30 giải thích 5G NR PDCCH từ CORESET/SearchSpace tới REG, CCE, aggregation level, PDCCH DM-RS, Polar decoding, CRC masked by RNTI và DCI 1_0 scheduling SIB1."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-4">← Phần IV · Từ MIB tới thông tin hệ thống</a>
+      <p class="eyebrow">GHI CHÉP 30 · INITIAL SYSTEM INFORMATION</p>
+      <h1>PDCCH là gì? UE tìm DCI trên sóng như thế nào?</h1>
+      <p class="lesson-deck">
+        Bài 29 đã cho UE biết CORESET#0 nằm ở đâu và cần theo dõi SearchSpace#0 vào những thời điểm nào.
+        Nhưng một control region có thể chứa nhiều PDCCH candidates, còn UE chưa biết candidate nào thực sự có DCI.{" "}
+        <strong>Bài này nối physical resource grid với REG, CCE, aggregation, blind decoding và kiểm tra CRC theo RNTI, để giải thích cách UE khôi phục control message dùng để schedule SIB1.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI MỞ ĐẦU</p>
+      <h2>UE biết một vùng CORESET dài 24 RB và 3 symbols. Nhưng PDCCH thật sự nằm ở những RE nào?</h2>
+      <p>
+        Ở một monitoring occasion, CORESET là vùng time-frequency cho phép truyền PDCCH.
+        Nó không có nghĩa mọi resource element trong vùng này đều đang mang một DCI.
+        gNB có thể cấp một hay nhiều PDCCH với các mức aggregation khác nhau, hoặc không phát candidate nào liên quan đến UE ở lần giám sát đó.
+      </p>
+      <p>
+        UE cũng không nhận được một message báo trước chính xác candidate index hoặc CCE start của DCI.
+        Thay vào đó, receiver tạo ra một <strong>danh sách giả thiết đã được giới hạn bởi SearchSpace</strong>,
+        thử decode và dùng CRC masked theo RNTI để kiểm tra.
+      </p>
+      <aside class="mental-model">
+        <strong>CORESET giới hạn địa điểm, SearchSpace giới hạn những giả thiết. PDCCH là tín hiệu thực sự được mã hóa và phát tại một giả thiết cụ thể.</strong>
+        <p>
+          Đó là lý do khái niệm blind decoding quan trọng: UE không scan tùy tiện toàn bộ frequency band, nhưng cũng chưa được biết trước candidate chính xác nào chứa DCI.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">INPUT / OUTPUT Ở RECEIVER</p>
+      <h2>Từ resource region sang decoded DCI, nhưng chưa đến payload SIB1.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>DOWNLINK CONTROL DISCOVERY</span>
+        <div class="system-position-flow">
+          <span>CORESET#0 + SearchSpace#0</span><b>→</b>
+          <strong>REG / CCE candidates</strong><b>→</b>
+          <span>PDCCH DM-RS / equalization</span><b>→</b>
+          <span>QPSK soft bits / Polar decoder</span><b>→</b>
+          <strong>CRC + SI-RNTI</strong><b>→</b>
+          <span>DCI format 1_0</span>
+        </div>
+        <p>
+          Trong initial SIB1 acquisition, UE tìm DCI format 1_0 trong Type0-PDCCH common search space với CRC scrambled bằng SI-RNTI.
+          DCI chỉ cho biết cách lấy PDSCH transport block chứa SIB1; nội dung DCI cụ thể được phân tích ở Bài 31.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="three-levels">
+      <p class="concept-kicker">01 · ĐỪNG TRỘN CORESET, SEARCH SPACE VÀ PDCCH</p>
+      <h2>Cả ba đều liên quan control, nhưng là ba layer hoàn toàn khác nhau.</h2>
+      <div class="pdcch-three-concepts" data-lesson-visual>
+        <article><small>RESOURCE CONTAINER</small><strong>CORESET</strong><span>RBs và OFDM symbols có thể dùng cho control-channel transmission.</span></article>
+        <article><small>MONITORING RULE</small><strong>Search Space</strong><span>Giám sát khi nào, aggregation levels và bao nhiêu candidates thuộc phạm vi cần thử.</span></article>
+        <article><small>ON-AIR CHANNEL</small><strong>PDCCH</strong><span>Coded, scrambled, QPSK-modulated DCI được map vào các CCE của candidate.</span></article>
+      </div>
+      <p>
+        Với CORESET#0 trong bài trước, UE đã biết kích thước vùng và các monitoring occasions của SearchSpace#0.
+        Bây giờ receiver còn cần chia CORESET thành những logical units có thể phân bổ cho một PDCCH.
+      </p>
+    </section>
+
+    <section class="concept-block" id="reg">
+      <p class="concept-kicker">02 · REG LÀ ĐƠN VỊ NHỎ NHẤT TRONG CCE-TO-REG MAPPING</p>
+      <h2>Một REG là một resource block trong đúng một OFDM symbol.</h2>
+      <MathExpr tex={String.raw`1\ \mathrm{REG}=1\ \mathrm{RB}\times1\ \mathrm{OFDM\ symbol}`} display />
+      <p>
+        Vì một NR resource block có 12 subcarriers, mỗi REG chứa 12 RE.
+        Trong CORESET, REGs được đánh số time-first: frequency RB index tăng trước khi chuyển sang OFDM symbol tiếp theo.
+      </p>
+      <p>
+        Trong PDCCH, DM-RS dùng ba RE ở mỗi REG. Chín RE còn lại dùng cho coded QPSK symbols của PDCCH (nếu REG thuộc actual PDCCH resource).
+        Pattern DM-RS của PDCCH khác với PBCH DM-RS đã học ở Bài 25.
+      </p>
+      <div class="pdcch-reg-example" data-lesson-visual>
+        <div class="pdcch-reg-demo">
+          {Array.from({ length: 12 }, (_, i) => (
+            <div class={i % 4 === 1 ? 'dmrs' : 'data'}>
+              <span>{i}</span>
+              <strong>{i % 4 === 1 ? 'RS' : 'QPSK'}</strong>
+            </div>
+          ))}
+        </div>
+        <div class="pdcch-reg-caption">
+          <p><strong>3 DM-RS RE</strong> ở vị trí tương đối 1, 5, 9 của mỗi RB.</p>
+          <p><strong>9 data RE</strong> mang 9 QPSK symbols, tương ứng 18 coded bits cho một REG thuộc PDCCH.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-block" id="cce">
+      <p class="concept-kicker">03 · CCE GOM SÁU REG</p>
+      <h2>CCE là logical allocation unit để xây một PDCCH candidate.</h2>
+      <MathExpr tex={String.raw`1\ \mathrm{CCE}=6\ \mathrm{REG}`} display />
+      <MathExpr tex={String.raw`6\times9=54\ \mathrm{QPSK\ data\ RE/CCE}`} display />
+      <MathExpr tex={String.raw`54\times2=108\ \mathrm{coded\ bits/CCE}`} display />
+      <p>
+        Một điểm quan trọng: physical REGs của một CCE <strong>không bắt buộc nằm liền nhau trên frequency grid</strong>.
+        CCE-to-REG mapping có thể non-interleaved hoặc interleaved, thông qua REG bundles, theo cấu hình CORESET.
+        Vì vậy không được đoán physical RE mask chỉ bằng cách lấy sáu RB liên tiếp.
+      </p>
+      <p>
+        Với ví dụ CORESET#0 index 3 từ Bài 29, 24 RB và 3 OFDM symbols cho:
+      </p>
+      <MathExpr tex={String.raw`N_{\mathrm{REG}}^{\mathrm{CORESET}}=24\times3=72`} display />
+      <MathExpr tex={String.raw`N_{\mathrm{CCE}}^{\mathrm{CORESET}}=\frac{72}{6}=12`} display />
+      <aside class="precision-note">
+        <strong>Mười hai CCE là capacity, không phải 12 PDCCH đang phát.</strong>
+        <p>
+          Một PDCCH có thể chiếm nhiều CCE. Các logical CCEs còn phải được map thành REG bundles ở tài nguyên thật.
+          Nếu UE thử một candidate gồm bốn CCE, candidate đó sử dụng một phần capacity này chứ không phải một PDCCH tách riêng trên mỗi CCE.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="aggregation">
+      <p class="concept-kicker">04 · AGGREGATION LEVEL LÀ SỐ CCE TRÊN MỘT PDCCH</p>
+      <h2>Aggregation lớn làm PDCCH dùng nhiều resource hơn để mang thông tin điều khiển đáng tin cậy hơn.</h2>
+      <p>
+        3GPP hỗ trợ các aggregation levels 1, 2, 4, 8 và 16.
+        Một candidate có aggregation level <MathExpr tex="L" /> sử dụng đúng <MathExpr tex="L" /> CCE.
+      </p>
+      <MathExpr tex={String.raw`E_{\mathrm{PDCCH}}=108L\ \mathrm{coded\ bits}`} display />
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>AL</th><th>CCE</th><th>REG</th><th>QPSK symbols</th><th>Coded bits</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>1</td><td>6</td><td>54</td><td>108</td></tr>
+            <tr><td>2</td><td>2</td><td>12</td><td>108</td><td>216</td></tr>
+            <tr><td>4</td><td>4</td><td>24</td><td>216</td><td>432</td></tr>
+            <tr><td>8</td><td>8</td><td>48</td><td>432</td><td>864</td></tr>
+            <tr><td>16</td><td>16</td><td>96</td><td>864</td><td>1728</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Đây là coded-bit capacity theo fixed resource mapping và QPSK.
+        DCI payload size không tăng tuyến tính theo AL. Khi có nhiều coded bits để bảo vệ một message tương tự, Polar coding/rate matching có thêm redundancy và receiver có thể hoạt động tốt hơn ở điều kiện radio khó.
+      </p>
+      <p>
+        <strong>Riêng luồng Type0 common search space dùng tìm SIB1</strong>, Table 10.1-1 của TS 38.213 giới hạn AL cần giám sát về 4, 8 và 16 cùng maximum candidate counts tương ứng.
+        UE-specific search spaces về sau có thể sử dụng AL 1 và 2. Không nên lấy một bảng candidates chung cho mọi search-space type.
+      </p>
+    </section>
+
+    <section class="concept-block" id="mapping">
+      <p class="concept-kicker">05 · PHYSICAL REG BUNDLE MAPPING CÓ THỂ INTERLEAVED</p>
+      <h2>Đây là lý do logical CCE numbering không giống một hình chữ nhật liên tục trên frequency grid.</h2>
+      <p>
+        CORESET biết số REGs và số symbols. CCE numbering xuất phát từ tổng REG count.
+        Sau đó CCE-to-REG mapper dùng REG bundle size và interleaving rule để đặt từng logical CCE lên REG positions thật.
+      </p>
+      <div class="pdcch-map-boundary" data-lesson-visual>
+        <article><small>LOGICAL SPACE</small><strong>CCE 0, 1, 2, 3, ...</strong><span>Search-space formula chọn logical CCE start/index.</span></article>
+        <b>→</b>
+        <article><small>MAPPING</small><strong>REG bundles / interleaver</strong><span>Biến mỗi CCE thành sáu REG cụ thể trong CORESET.</span></article>
+        <b>→</b>
+        <article><small>PHYSICAL GRID</small><strong>REs trên frequency và time</strong><span>UE extract PDCCH DM-RS và QPSK symbols.</span></article>
+      </div>
+      <p>
+        Lab bên dưới vẽ physical footprint của CORESET và logical CCE candidate riêng thành hai lớp.
+        Đó là một chủ ý sư phạm: nếu tô bừa sáu REG liền nhau cho mọi CCE sẽ tạo ấn tượng sai về interleaved mapping.
+      </p>
+    </section>
+
+    <section class="concept-block" id="candidate-formula">
+      <p class="concept-kicker">06 · SEARCH SPACE SINH RA CÁC CCE CANDIDATES NHƯ THẾ NÀO?</p>
+      <h2>UE không thử ngẫu nhiên. Candidate positions đến từ công thức search-space của TS 38.213.</h2>
+      <p>
+        Với một mức aggregation và số candidates cần giám sát, một dạng biểu thức cho CCE start index là:
+      </p>
+      <MathExpr tex={String.raw`c_m=L\left(\left[
+       Y+\left\lfloor\frac{mN_{\mathrm{CCE}}}{LM}\right\rfloor+n_{\mathrm{CI}}
+       \right]\bmod\left\lfloor\frac{N_{\mathrm{CCE}}}{L}\right\rfloor\right)`} display />
+      <p>
+        Ở đây <MathExpr tex="m" /> là candidate index, <MathExpr tex="M" /> là số candidates tại aggregation level đó,
+        <MathExpr tex={String.raw`N_{\mathrm{CCE}}`} /> là số CCE của CORESET, còn <MathExpr tex="Y" /> và <MathExpr tex={String.raw`n_{\mathrm{CI}}`} /> tùy search-space/cross-carrier context.
+      </p>
+      <p>
+        Với initial Type0 common search space đang dùng cho SIB1, xét trường hợp <MathExpr tex="Y=0" /> và <MathExpr tex={String.raw`n_{\mathrm{CI}}=0`} />.
+        UE có thể tính các logical start positions trực tiếp từ CORESET capacity và các aggregation-level budgets.
+        Những candidate indices khác nhau có thể dẫn tới cùng start CCE trong một số cấu hình; receiver implementation có thể tránh những phép thử trùng lặp nếu việc đó hợp lệ.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="worked-example">
+      <p class="concept-kicker">07 · VÍ DỤ SỐ: CORESET#0 TỪ BÀI 29</p>
+      <h2>CORESET 24 RB × 3 symbols có 12 CCE. Ở AL 4, mỗi trial candidate chiếm bốn CCE.</h2>
+      <p>
+        Giữ ví dụ FR1 15/15, Type0 CSS của Bài 29:
+      </p>
+      <MathExpr tex={String.raw`N_{\mathrm{CCE}}=12,\qquad L=4,\qquad M=4`} display />
+      <p>
+        Với <MathExpr tex="Y=0" />, <MathExpr tex={String.raw`n_{\mathrm{CI}}=0`} />:
+      </p>
+      <MathExpr tex={String.raw`c_m=4\left\lfloor\frac{12m}{16}\right\rfloor,\qquad m=0,1,2,3`} display />
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>Candidate</th><th>Start CCE</th><th>Logical CCEs</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>0</td><td>0–3</td></tr>
+            <tr><td>1</td><td>0</td><td>0–3 (trùng candidate 0)</td></tr>
+            <tr><td>2</td><td>4</td><td>4–7</td></tr>
+            <tr><td>3</td><td>8</td><td>8–11</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Với AL 4, một candidate chiếm <strong>24 REG, 216 QPSK data symbols và 432 coded bits</strong>.
+        Nếu chọn AL 8, CORESET 12 CCE chỉ chứa được một nhóm tám CCE không chồng lấn trong phép thử minh họa.
+        Nếu chọn AL 16 thì 12 CCE không thể chứa candidate tương ứng.
+      </p>
+      <aside class="precision-note">
+        <strong>Maximum candidates là giới hạn search space, không phải số PDCCH đang phát.</strong>
+        <p>
+          Bốn candidate indices trong ví dụ còn có hai entries trùng vị trí CCE.
+          UE monitoring và physical gNB scheduling tuân theo rules của từng search-space configuration;
+          không thể xem tất cả entries trong bảng là bốn PDCCH độc lập.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">08 · INTERACTIVE LAB</p>
+      <h2>Thay CORESET capacity, aggregation level và candidate index để quan sát những RE và coded bits thực sự cần cho PDCCH.</h2>
+      <p>
+        Lab mặc định dùng CORESET index 3 của Table 13-1: 24 RB, 3 symbols.
+        Bạn có thể chuyển aggregation level từ 4 sang 8 hoặc 16, chọn logical CCE candidate và nhìn một REG thật gồm 3 PDCCH DM-RS RE + 9 data RE.
+        Hãy thử sai RNTI hoặc chọn monitoring occasion không có DCI để thấy vì sao biết đúng vị trí vẫn chưa đủ.
+      </p>
+      <div data-lesson-visual>
+        <PDCCHExplorer client:load />
+      </div>
+      <p>
+        Lab không chạy Polar decoder hay CRC toán học. Nó dùng candidate-index formula của standard để giải thích phạm vi tìm kiếm và RNTI hypothesis,
+        đồng thời ghi rõ giới hạn của mô phỏng. Đây là bước chuẩn bị để hiểu Bài 31 mà không trộn lẫn DCI payload với resource mapping.
+      </p>
+    </section>
+
+    <section class="concept-block" id="physical-chain">
+      <p class="concept-kicker">09 · MỘT DCI ĐƯỢC BIẾN THÀNH PDCCH NHƯ THẾ NÀO?</p>
+      <h2>PDCCH là physical channel có cả channel coding, scrambling, QPSK và DM-RS, không chỉ là một danh sách CCE.</h2>
+      <div class="pdcch-tx-chain" data-lesson-visual>
+        <div><small>CONTROL MESSAGE</small><strong>DCI bits</strong><span>Format/fields theo chức năng scheduling</span></div>
+        <b>→</b>
+        <div><small>ERROR PROTECTION</small><strong>CRC + Polar</strong><span>CRC được mask một phần bởi RNTI phù hợp</span></div>
+        <b>→</b>
+        <div><small>RATE MATCHING</small><strong><MathExpr tex={String.raw`E=108L`} /></strong><span>output coded bits phụ thuộc aggregation level</span></div>
+        <b>→</b>
+        <div><small>ON-AIR</small><strong>Scrambling + QPSK</strong><span>Map vào CCE/REG, kèm PDCCH DM-RS</span></div>
+      </div>
+      <p>
+        CRC của DCI dùng 24 check bits theo TS 38.212, và một phần CRC được scrambled bằng RNTI.
+        Mục đích là để UE vừa kiểm tra candidate decode vừa kiểm tra message có đúng ngữ cảnh đích/công dụng đang giám sát hay không.
+        RNTI ở CRC stage không được nhầm với ID dùng để tạo QPSK scrambling sequence của PDCCH physical channel.
+      </p>
+    </section>
+
+    <section class="concept-block" id="dmrs">
+      <p class="concept-kicker">10 · PDCCH DM-RS LÀM GÌ?</p>
+      <h2>Receiver cần estimate channel để tạo soft bits, tương tự PBCH nhưng resource mapping và sequence khác.</h2>
+      <p>
+        PDCCH DM-RS được chuẩn hóa trong TS 38.211 clause 7.4.1.3.
+        Trong mỗi REG thuộc PDCCH, pilot nằm ở relative subcarriers 1, 5 và 9.
+        UE tái tạo reference từ sequence initialization phù hợp với timing/cell configuration, ước lượng channel rồi equalize PDCCH QPSK data RE.
+      </p>
+      <p>
+        Kết quả là soft coded bits để đưa vào DCI Polar decoder.
+        Pilot không mang scheduling fields; nó giúp receiver đọc được scheduling message qua channel.
+        Đây là một điểm tương đồng với PBCH DM-RS, nhưng <strong>không được dùng chung sequence/mapping với PBCH DM-RS</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block" id="blind-decoding">
+      <p class="concept-kicker">11 · BLIND DECODING: VÌ SAO UE CẦN THỬ NHIỀU CANDIDATES?</p>
+      <h2>UE biết search rules nhưng chưa biết aggregation level, candidate position hoặc có DCI hay không ở lần giám sát này.</h2>
+      <p>
+        Mỗi candidate hợp lệ tạo một giả thiết về logical CCEs, mapped REGs, QPSK observations và số coded bits.
+        Receiver có thể thử demapping/descrambling, rate recovery, Polar decoding và CRC check theo RNTI/DCI format cần monitor.
+      </p>
+      <div class="pdcch-blind-flow" data-lesson-visual>
+        <div><small>01 · SEARCHSPACE</small><strong>Lấy candidate list</strong><span>AL + CCE start + timing occasion</span></div>
+        <b>→</b>
+        <div><small>02 · PHY</small><strong>Extract REGs / estimate H</strong><span>DM-RS, QPSK equalization và LLR</span></div>
+        <b>→</b>
+        <div><small>03 · DECODER</small><strong>Polar + CRC check</strong><span>RNTI hypothesis và DCI format</span></div>
+        <b>→</b>
+        <div><small>04 · RESULT</small><strong>Valid DCI candidate</strong><span>Nếu CRC/format/context hợp lệ</span></div>
+      </div>
+      <p>
+        Không phải “blind” theo nghĩa receiver không có bất cứ thông tin nào.
+        Search spaces, RNTIs cần giám sát, aggregation constraints và configured DCI formats làm cho số hypotheses hữu hạn.
+        3GPP còn quy định UE monitoring limits; một receiver thật phải tuân theo limits đó.
+      </p>
+    </section>
+
+    <section class="concept-block" id="rnti">
+      <p class="concept-kicker">12 · RNTI GIÚP UE NHẬN ĐÚNG LOẠI DCI</p>
+      <h2>Với SIB1, UE dùng SI-RNTI; những thủ tục khác dùng RNTIs khác.</h2>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table">
+          <thead><tr><th>Ngữ cảnh</th><th>RNTI thường dùng để kiểm DCI</th><th>Ý nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td>SIB1 / system information</td><td>SI-RNTI</td><td>DCI format 1_0 trong Type0 common search space</td></tr>
+            <tr><td>Paging</td><td>P-RNTI</td><td>Control liên quan paging / short messages</td></tr>
+            <tr><td>Random Access</td><td>RA-RNTI</td><td>Scheduling liên quan random access response</td></tr>
+            <tr><td>UE-specific traffic</td><td>C-RNTI</td><td>UE-specific DCI sau khi được cấp identity thích hợp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        SI-RNTI có fixed value <MathExpr tex={String.raw`\mathrm{0xFFFF}`} />.
+        Ở initial SIB1 acquisition, receiver không cần một C-RNTI đã được cấp để tìm DCI 1_0.
+        Vì vậy không nên áp dụng nguyên pipeline UE-specific DCI search cho bước tìm SIB1.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">13 · NẾU NHÌN TỪ CODE RECEIVER</p>
+      <h2>Hãy tách PDCCH reception thành nhiều stages có output và lỗi riêng.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">MONITORING STATE</span><h3>Kiểm đúng slot/symbol SearchSpace#0</h3>
+          <p>Dựa vào MIB, SSB index, SFN parity và TS 38.213 để biết lúc nào cần extract CORESET.</p>
+          <small>OUTPUT · CORESET resource context</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">CANDIDATE GENERATION</span><h3>Enumerate aggregation và logical CCE candidates</h3>
+          <p>Đảm bảo đúng Type0 CSS AL budgets, không vượt CORESET capacity.</p>
+          <small>OUTPUT · candidate list</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">RESOURCE MAPPING</span><h3>Map CCE tới REG rồi extract PDCCH REs</h3>
+          <p>Áp đúng bundle/interleaving, PDCCH DM-RS positions và QPSK data positions.</p>
+          <small>OUTPUT · pilot/data buffers</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">SOFT RECEIVE CHAIN</span><h3>Channel estimation → QPSK LLR → Polar decoding</h3>
+          <p>Áp đúng physical scrambling/decoding, code-bit length, rate recovery và candidate-specific context.</p>
+          <small>OUTPUT · decoded DCI + CRC candidate</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">VALIDATION</span><h3>CRC với SI-RNTI và parse DCI 1_0</h3>
+          <p>Nếu hợp lệ, chuyển scheduling information sang PDSCH receiver để tìm SIB1.</p>
+          <small>NEXT · Bài 31</small></div></article>
+      </div>
+      <p>
+        Khi không tìm thấy DCI, cần phân biệt lỗi monitoring occasion, sai CCE-to-REG mapping, sai DM-RS estimate, sai RNTI/format hypothesis và genuine no-transmission.
+        Một CRC failure một mình không xác định được root cause.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">14 · NHỮNG ĐIỂM DỄ HIỂU NHẦM</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">CORESET ≠ PDCCH MESSAGE</span><p>CORESET là container; PDCCH là physical coded transmission.</p></article>
+        <article class="technical-card"><span class="card-label">REG ≠ CCE</span><p>Một REG là 1 RB × 1 symbol; một CCE là 6 REG logical.</p></article>
+        <article class="technical-card"><span class="card-label">CCE INDEX ≠ PHYSICAL RB</span><p>Interleaved mapping có thể phân tán REG bundles theo time-frequency resources.</p></article>
+        <article class="technical-card"><span class="card-label">AL ≠ DCI BIT LENGTH</span><p>AL quyết định resources/redundancy; DCI format và các field rules quyết định information payload.</p></article>
+        <article class="technical-card"><span class="card-label">SEARCH SPACE ≠ DCI GUARANTEE</span><p>Monitoring occasion cho phép thử; gNB không buộc phải phát DCI cho UE ở mọi occasion.</p></article>
+        <article class="technical-card"><span class="card-label">PDCCH DM-RS ≠ PBCH DM-RS</span><p>Cùng vai trò reference, nhưng khác sequence, time-frequency mapping và transmission context.</p></article>
+        <article class="technical-card"><span class="card-label">SI-RNTI ≠ C-RNTI</span><p>SIB1 được tìm bằng SI-RNTI trong Type0 CSS; chưa cần identity của connected UE.</p></article>
+        <article class="technical-card"><span class="card-label">DCI ≠ SIB1 PAYLOAD</span><p>DCI scheduling PDSCH; actual SIB1 transport block nằm trên PDSCH.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">15 · SPECIFICATION LAYER</p>
+      <h2>3GPP định nghĩa resources, coding và search-space formula; cách receiver triển khai decoder pipeline vẫn do thiết kế lựa chọn.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP QUY ĐỊNH</span>
+          <p>TS 38.211: REG, CCE, aggregation, CCE-to-REG mapping, PDCCH modulation và PDCCH DM-RS. TS 38.212: DCI CRC/Polar/rate matching. TS 38.213: SearchSpace candidates và RNTI/DCI monitoring rules.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS DIỄN GIẢI</span>
+          <p>Ví dụ 24 RB × 3 symbols → 12 CCE, mảng logical candidates, một REG có 3 RS/9 data RE và bảng coded-bit capacity.</p></article>
+        <article class="technical-card"><span class="card-label">IMPLEMENTATION-DEPENDENT</span>
+          <p>Candidate processing order, early-rejection metrics, memory layout, multi-antenna combining, LLR scaling, Polar decoder architecture và debug instrumentation.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clauses 7.3.2.1–7.3.2.5 và 7.4.1.3: PDCCH aggregation, CORESET, REG/CCE mapping, QPSK và PDCCH DM-RS ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.212 Release 18, ETSI TS 138 212 V18.8.0, clause 7.3: DCI CRC attachment, channel coding và rate matching ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.213 Release 18, ETSI TS 138 213 V18.8.0, clause 10.1 và Table 10.1-1: UE PDCCH candidate monitoring, Type0 common search space, DCI format 1_0 với SI-RNTI ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138213/18.08.00_60/ts_138213v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">16 · NỐI LẠI TOÀN BỘ FLOW</p>
+      <ol class="recap-list">
+        <li><strong>CORESET:</strong> giới hạn resources có thể mang PDCCH ở monitoring occasion.</li>
+        <li><strong>REG:</strong> 1 RB × 1 OFDM symbol, chứa 3 PDCCH DM-RS RE và 9 data RE.</li>
+        <li><strong>CCE:</strong> 6 REG, tương ứng 108 coded bits cho PDCCH QPSK data.</li>
+        <li><strong>AL:</strong> số CCE cấp cho một PDCCH; ảnh hưởng coded-bit capacity và coverage.</li>
+        <li><strong>Logical mapping:</strong> CCE indices được SearchSpace formula sinh ra, sau đó mapper chuyển thành physical REG positions.</li>
+        <li><strong>Type0 CSS:</strong> trong bài toán SIB1, receiver tập trung DCI format 1_0 với SI-RNTI.</li>
+        <li><strong>Blind decoding:</strong> thử các candidates theo cấu hình, estimate channel, decode và check CRC.</li>
+        <li><strong>DCI:</strong> khi có candidate hợp lệ, UE có scheduling instructions cho PDSCH nhưng chưa có actual SIB1 payload.</li>
+        <li><strong>Bài tiếp:</strong> giải nghĩa DCI fields cơ bản và nối scheduling tới PDSCH.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/coreset0-searchspace0/">
+        <span>← BÀI TRƯỚC</span><strong>CORESET#0 và SearchSpace#0</strong>
+        <small>Từ MIB indices tới CORESET resources và monitoring occasions.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>DCI cơ bản</strong>
+        <small>DCI 1_0 mang những field nào để UE tìm được PDSCH/SIB1?</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
