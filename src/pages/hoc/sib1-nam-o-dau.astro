@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import SIB1PDSCHExplorer from '../../components/SIB1PDSCHExplorer.jsx';
+
+const lessonMeta = {
+  number: 32,
+  part: 4,
+  slug: 'sib1-nam-o-dau',
+  kind: 'system-transition',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="SIB1 nằm ở đâu? Từ DCI tới PDSCH, DM-RS và LDPC | VietWireless"
+  description="Bài 32 giải thích cách UE nhận SIB1 qua PDSCH: Type-B scheduling, PDSCH DM-RS, CDM group overhead, tính TBS theo TS 38.214, CRC-16/LDPC theo 38.212 và BCCH-DL-SCH mapping với interactive resource grid."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-4">← Phần IV · Từ MIB tới thông tin hệ thống</a>
+      <p class="eyebrow">GHI CHÉP 32 · INITIAL SYSTEM INFORMATION</p>
+      <h1>SIB1 nằm ở đâu?</h1>
+      <p class="lesson-deck">
+        Bài 31 đã giải DCI format 1_0 thành một vùng PDSCH theo thời gian và tần số.
+        Tuy nhiên, biết slot, RB và OFDM symbols mới là bước đầu: trong vùng đó còn có pilot, reserved RE,
+        coded QPSK data và một transport block chưa giải mã.{" "}
+        <strong>Bài này đưa UE từ PDSCH allocation tới channel estimation, resource-element counting, transport block size, LDPC decoding và cuối cùng là BCCH-DL-SCH message chứa SIB1.</strong>
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">CÂU HỎI TIẾP NỐI</p>
+      <h2>DCI báo “8 RB, symbols 9–12”. Vậy UE đọc thẳng 384 RE thành SIB1 được không?</h2>
+      <p>
+        Không. Một PDSCH allocation là vùng có khả năng chứa coded data và reference symbols, chứ không phải một tập hợp
+        các RE mà mỗi RE đều chứa bit của SIB1. UE phải biết những RE nào là reference, những RE nào không được dùng cho data,
+        rồi mới thực hiện equalization và giải mã channel code.
+      </p>
+      <p>
+        Một ví dụ rất dễ lẫn xuất hiện ngay trong case của Bài 31: DM-RS nằm trên sáu subcarriers của một RB,
+        nhưng điều đó <strong>không tự động có nghĩa sáu RE còn lại trong cùng symbol đều được dùng cho data</strong>.
+        Với DCI format 1_0 và allocation dài bốn symbols, standard dành cả hai DM-RS CDM groups ngoài data.
+      </p>
+      <aside class="mental-model">
+        <strong>DCI chỉ nói “đọc ở đâu”; PDSCH reception trả lời “đọc thế nào”.</strong>
+        <p>
+          Để nhận SIB1, UE phải đi qua reference extraction, channel estimate, data RE extraction, soft-demodulation,
+          rate recovery, LDPC decoding và transport-block CRC. Khi thành công, kết quả mới được chuyển lên các protocol layers phía trên.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">SIB1 TRÊN ĐƯỜNG ĐI TỪ gNB SANG UE</p>
+      <h2>SIB1 là một RRC message, được chuyển qua BCCH, DL-SCH và cuối cùng là PDSCH.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>END-TO-END BROADCAST INFORMATION</span>
+        <div class="system-position-flow">
+          <strong>RRC · SIB1</strong><b>→</b>
+          <span>BCCH logical channel</span><b>→</b>
+          <span>DL-SCH transport channel</span><b>→</b>
+          <strong>PDSCH physical channel</strong><b>→</b>
+          <span>UE DL-SCH decode</span><b>→</b>
+          <strong>RRC parses SIB1</strong>
+        </div>
+        <p>
+          MIB dùng BCH/PBCH; SIB1 dùng BCCH-DL-SCH/PDSCH.
+          PDCCH và DCI không mang SIB1 message, chúng giúp UE xác định PDSCH có chứa transport block liên quan.
+          Bài 33 sẽ đi vào chính những field bên trong SIB1 sau khi higher layer đã nhận được message.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="time-frequency">
+      <p class="concept-kicker">01 · NHẮC LẠI RECEIVER STATE TỪ BÀI 31</p>
+      <h2>Đây là vị trí PDSCH đã biết trước khi UE nhìn vào từng resource element.</h2>
+      <div class="sib1rx-context-grid" data-lesson-visual>
+        <div><small>RADIO CONTEXT</small><strong>FR1 · 15 kHz SCS</strong><span>Normal CP, Type0 common search space, PDCCH slot 6</span></div>
+        <div><small>FREQUENCY ALLOCATION</small><strong>RB 4–11</strong><span>8 contiguous RB, RIV 172, non-interleaved mapping</span></div>
+        <div><small>TIME ALLOCATION</small><strong>Symbols 9–12</strong><span>Default A row 6, Type B, slot offset K0 bằng 0</span></div>
+        <div><small>CODING CONTEXT</small><strong>MCS index 4 · RV 0</strong><span>QPSK, target coding rate 308/1024, one layer in worked example</span></div>
+      </div>
+      <p>
+        Với normal CP, một slot có 14 OFDM symbols. Vùng PDSCH nằm về cuối slot,
+        tách khỏi CORESET#0 ở symbols đầu theo case hiện tại.
+        Việc không có overlap ở đây chỉ là tính chất của ví dụ, không phải định luật rằng PDCCH và PDSCH không bao giờ có thể cùng OFDM symbol.
+      </p>
+      <MathExpr tex={String.raw`N_{\mathrm{RE,allocated}}=
+        N_{\mathrm{PRB}}\times N_{\mathrm{symb}}\times12
+        =8\times4\times12=384`} display />
+      <p>
+        Đây là <strong>tổng RE của resource rectangle</strong>. Số RE được đưa vào QPSK data demapper sẽ nhỏ hơn.
+      </p>
+    </section>
+
+    <section class="concept-block" id="type-a-b">
+      <p class="concept-kicker">02 · TYPE A VÀ TYPE B KHÁC NHAU Ở DM-RS REFERENCE TIME</p>
+      <h2>Với mapping Type B, first PDSCH DM-RS nằm tại đầu scheduled PDSCH allocation.</h2>
+      <div class="sib1rx-type-comparison" data-lesson-visual>
+        <article><small>PDSCH MAPPING TYPE A</small><strong>Slot-relative DM-RS timing</strong>
+          <p>First DM-RS đặt tương đối với đầu slot, theo <code>dmrs-TypeA-Position</code> (thường symbol 2 hoặc 3).</p></article>
+        <article><small>PDSCH MAPPING TYPE B</small><strong>Allocation-relative DM-RS timing</strong>
+          <p>First DM-RS đặt tương đối với điểm bắt đầu PDSCH. Trong ví dụ này, PDSCH bắt đầu symbol 9 nên first DM-RS cũng ở symbol 9.</p></article>
+      </div>
+      <p>
+        TS 38.211 clause 7.4.1.1.2 đặt vị trí DM-RS theo time reference của mapping type.
+        Với Type B và duration bốn symbols, Table 7.4.1.1.2-3 cho một front-loaded DM-RS symbol
+        ở <MathExpr tex={String.raw`\ell=9`} /> trong case này.
+      </p>
+      <aside class="precision-note">
+        <strong><code>dmrs-TypeA-Position=pos2</code> không đặt DM-RS vào symbol 2 khi PDSCH dùng Type B.</strong>
+        <p>
+          Cần đọc cả PDSCH mapping type và bảng DM-RS. Nếu cứng nhắc áp symbol 2 từ MIB cho mọi PDSCH,
+          receiver sẽ lấy nhầm RE và channel estimation sẽ sai ngay từ đầu.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="dmrs-frequency">
+      <p class="concept-kicker">03 · DM-RS ĐƯỢC RẢI TRÊN NHỮNG SUBCARRIERS NÀO?</p>
+      <h2>Trong cấu hình type 1, port 1000 dùng comb-2: sáu DM-RS RE trong mỗi PRB của DM-RS symbol.</h2>
+      <MathExpr tex={String.raw`k_{\mathrm{DMRS}}\in\{0,2,4,6,8,10\}
+        \quad\text{(relative to one PRB)}`} display />
+      <p>
+        UE biết reference sequence qua PDSCH DM-RS generation rules, nên nó có thể hình thành LS channel estimates trên những pilot RE:
+      </p>
+      <MathExpr tex={String.raw`\widehat H_{\mathrm{LS}}[k,\ell]
+        =\frac{Y_{\mathrm{DMRS}}[k,\ell]}
+        {X_{\mathrm{DMRS}}[k,\ell]}`} display />
+      <p>
+        Sau đó receiver dùng interpolation/filtering hoặc phương pháp khác để tạo channel estimate trên những RE mang PDSCH data.
+        Đây vẫn là channel estimation, chưa phải PDSCH decoding. Noise, residual CFO và frequency selectivity tiếp tục ảnh hưởng.
+      </p>
+      <p>
+        Vì PDSCH có thể truyền qua nhiều antenna ports/layers, receiver thực tế còn cần đúng port, precoding và combining context.
+        Bài này cố định một DM-RS port và một PDSCH layer để có thể kiểm tra từng phép đếm và công thức.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cdm-no-data">
+      <p class="concept-kicker">04 · CHI TIẾT DỄ BỎ QUA: DM-RS CDM GROUPS WITHOUT DATA</p>
+      <h2>Sáu pilot RE không có nghĩa sáu RE còn lại trong symbol 9 có data.</h2>
+      <p>
+        TS 38.214 clause 5.1.6.2 quy định với PDSCH được schedule bằng DCI format 1_0 và duration
+        lớn hơn hai OFDM symbols, UE giả định <strong>hai DM-RS CDM groups without data</strong>.
+        Với configuration type 1, hai groups bao phủ cả comb chẵn và comb lẻ trên 12 subcarriers của một PRB.
+      </p>
+      <div class="sib1rx-re-accounting" data-lesson-visual>
+        <div><small>SYMBOL 9</small><strong>6 pilot RE</strong><span>port 1000 · subcarriers chẵn</span></div>
+        <b>+</b>
+        <div><small>CÙNG SYMBOL 9</small><strong>6 reserved RE</strong><span>CDM group còn lại không mang data</span></div>
+        <b>+</b>
+        <div><small>SYMBOLS 10, 11, 12</small><strong>36 data RE</strong><span>12 RE/symbol × 3 symbols</span></div>
+        <b>=</b>
+        <div><small>MỘT PRB / 4 SYMBOLS</small><strong>48 RE</strong><span>chỉ 36 RE được dùng cho data</span></div>
+      </div>
+      <p>
+        Với case đang xét, không có PDSCH data RE trong DM-RS symbol 9, mặc dù chỉ có sáu pilot của port 1000 thật sự được phát trên comb chẵn.
+        Đây là một trong những lý do quy tắc PDSCH resource mapping phải được áp dụng trước khi tính soft bits và TBS.
+      </p>
+      <MathExpr tex={String.raw`N'_{\mathrm{RE}}=12\times4-12=36
+        \quad \mathrm{RE/PRB}`} display />
+      <aside class="precision-note">
+        <strong>Điều kiện áp dụng quan trọng.</strong>
+        <p>
+          Với allocation Type B dài hai symbols, DCI 1_0 có quy tắc CDM group khác và có thể cho phép
+          PDSCH data cùng OFDM symbol với DM-RS. Các DCI formats/DM-RS configurations khác cũng có quy tắc riêng.
+          Không được coi “DM-RS symbol luôn cấm data” là nguyên tắc chung cho mọi PDSCH.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="re-count-example">
+      <p class="concept-kicker">05 · VÍ DỤ SỐ: 8 PRB THÌ DATA RE CÒN BAO NHIÊU?</p>
+      <h2>Từ 384 RE allocated, sau khi trừ DM-RS/no-data regions chỉ còn 288 RE phục vụ PDSCH data.</h2>
+      <MathExpr tex={String.raw`N_{\mathrm{RE}}=\min(156,36)\times8=288`} display />
+      <MathExpr tex={String.raw`N_{\mathrm{pilot}}=6\times8=48`} display />
+      <MathExpr tex={String.raw`N_{\mathrm{reserved}}=6\times8=48`} display />
+      <MathExpr tex={String.raw`384=48_{\mathrm{pilot}}
+        +48_{\mathrm{reserved}}+288_{\mathrm{data}}`} display />
+      <p>
+        Dùng QPSK một layer, mỗi data RE mang một QPSK symbol chứa hai coded bits:
+      </p>
+      <MathExpr tex={String.raw`E=N_{\mathrm{RE}}\times Q_m\times\nu
+        =288\times2\times1=576\ \mathrm{coded\ bits}`} display />
+      <p>
+        Đây là <strong>số coded bits rate-matched</strong> được điều chế và map lên PDSCH,
+        chưa phải transport block size của DL-SCH. Cách tính TBS cần thêm MCS target rate và bước lượng tử hóa theo bảng 3GPP.
+      </p>
+    </section>
+
+    <section class="concept-block" id="tbs">
+      <p class="concept-kicker">06 · TBS KHÔNG BẰNG SỐ CODED BITS TRÊN PDSCH</p>
+      <h2>TS 38.214 lấy số available RE, modulation order, target rate và number of layers để tính transport block size.</h2>
+      <MathExpr tex={String.raw`N_{\mathrm{info}}=
+        N_{\mathrm{RE}}\times R\times Q_m\times\nu`} display />
+      <p>
+        Với MCS index 4 ở Table 5.1.3.1-1, QPSK có <MathExpr tex={String.raw`Q_m=2`} />
+        và target code rate <MathExpr tex={String.raw`R=308/1024`} />.
+        Ta giả định một PDSCH layer, không có additional PDSCH overhead. Với SI-RNTI, standard đặt
+        <MathExpr tex={String.raw`N_{\mathrm{oh}}^{\mathrm{PRB}}=0`} /> trong bước TBS.
+      </p>
+      <MathExpr tex={String.raw`N_{\mathrm{info}}
+        =288\times\frac{308}{1024}\times2\times1
+        =173.25`} display />
+      <p>
+        Vì giá trị dưới 3824, TS 38.214 clause 5.1.3.2 yêu cầu lượng tử hóa trước khi tra TBS table:
+      </p>
+      <MathExpr tex={String.raw`n=\max\left(3,
+        \left\lfloor\log_2N_{\mathrm{info}}\right\rfloor-6
+        \right)=3`} display />
+      <MathExpr tex={String.raw`N'_{\mathrm{info}}
+        =\max\left(24,2^n
+        \left\lfloor N_{\mathrm{info}}/2^n\right\rfloor
+        \right)=168`} display />
+      <MathExpr tex={String.raw`\boxed{\mathrm{TBS}=168\ \mathrm{bits}}`} display />
+      <p>
+        Table 5.1.3.2-1 chứa giá trị 168, nên output là 168 bits.
+        Không làm tròn trực tiếp 173.25 thành 173 bits; và không lấy 576 coded bits làm thông tin gốc.
+      </p>
+      <aside class="mental-model">
+        <strong>Ví dụ này cố tình nhỏ để kiểm tra từng bước.</strong>
+        <p>
+          168 bits tương đương 21 bytes trước transport-block CRC, rất nhỏ so với nhiều SIB1 messages triển khai thực tế.
+          Một scheduler thật phải chọn allocation/MCS phù hợp để chứa transport block cần phát.
+          Ví dụ này minh họa receiver arithmetic, không khẳng định một SIB1 thông thường sẽ vừa vào allocation 8 RB × 4 symbols đó.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="dl-sch">
+      <p class="concept-kicker">07 · TỪ TBS SANG DL-SCH CHANNEL CODING</p>
+      <h2>Transport block được bảo vệ bằng CRC rồi LDPC, không dùng Polar coding như PBCH/PDCCH.</h2>
+      <p>
+        Với 168-bit transport block, TS 38.212 clause 7.2.1 gắn CRC-16 vì transport block size không vượt 3824 bits:
+      </p>
+      <MathExpr tex={String.raw`A_{\mathrm{TB}}=168,\qquad
+        L_{\mathrm{CRC}}=16,\qquad B=184`} display />
+      <p>
+        LDPC base graph được chọn theo kích thước payload và target code rate.
+        Vì <MathExpr tex={String.raw`A_{\mathrm{TB}}\le292`} />, ví dụ này dùng base graph 2.
+        Sau LDPC encoding, rate matching chọn bit stream có độ dài phù hợp với số coded bits thực sự có chỗ trên PDSCH.
+      </p>
+      <MathExpr tex={String.raw`E=576\ \mathrm{bits}`} display />
+      <div class="sib1rx-code-chain" data-lesson-visual>
+        <div><small>RRC / MAC OUTPUT</small><strong>168-bit TB</strong><span>input của DL-SCH coding</span></div>
+        <b>→</b>
+        <div><small>TB CRC</small><strong>+16 bits</strong><span>184 bits sau CRC</span></div>
+        <b>→</b>
+        <div><small>LDPC BG2</small><strong>Error correction</strong><span>code block construction</span></div>
+        <b>→</b>
+        <div><small>RATE MATCHING</small><strong>576 bits</strong><span>RV và soft coding context</span></div>
+        <b>→</b>
+        <div><small>QPSK</small><strong>288 symbols</strong><span>288 PDSCH data RE</span></div>
+      </div>
+      <p>
+        576 coded bits gồm redundancy được tạo/chọn qua coding/rate matching, không phải 576 information bits.
+        Receiver đảo thứ tự: QPSK soft demapping → descrambling → LDPC rate recovery → LDPC decoding → TB CRC.
+        Nếu TB CRC fail thì dữ liệu không được dùng như một bản SIB1 hợp lệ.
+      </p>
+    </section>
+
+    <section class="concept-block" id="equalization">
+      <p class="concept-kicker">08 · PDSCH DM-RS → CHANNEL ESTIMATE → SOFT BITS</p>
+      <h2>UE phải loại tác động channel trước khi LDPC decoder có được reliability information.</h2>
+      <MathExpr tex={String.raw`Y[k,\ell]=H[k,\ell]X[k,\ell]+W[k,\ell]`} display />
+      <p>
+        Tại DM-RS RE, transmitted reference được biết trước nên UE có thể estimate channel.
+        Với channel estimate trên data RE, một baseline one-tap equalizer là:
+      </p>
+      <MathExpr tex={String.raw`\widehat X[k,\ell]
+        =\frac{Y[k,\ell]}{\widehat H[k,\ell]}`} display />
+      <p>
+        Receiver thực tế có thể dùng MMSE, combining từ nhiều receive antennas và noise-aware LLR scaling
+        để hạn chế noise enhancement và biểu diễn bit confidence chính xác hơn.
+        Soft metrics mới là đầu vào phù hợp cho LDPC decoder, thay vì hard bits quyết định sớm.
+      </p>
+      <div class="sib1rx-soft-explanation" data-lesson-visual>
+        <div><small>DM-RS RE</small><strong>Known pilots</strong><span>Ước lượng channel và noise</span></div>
+        <b>→</b>
+        <div><small>PDSCH DATA RE</small><strong>Equalized QPSK</strong><span>Khôi phục symbols gần constellation points</span></div>
+        <b>→</b>
+        <div><small>SOFT DEMAPPER</small><strong>Bit LLRs</strong><span>Bit hypotheses kèm confidence</span></div>
+        <b>→</b>
+        <div><small>LDPC DECODER</small><strong>Candidate TB</strong><span>Kiểm CRC trước khi đưa lên higher layer</span></div>
+      </div>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">09 · INTERACTIVE PDSCH RECEIVER LAB</p>
+      <h2>Nhìn resource grid ba cấp độ: slot-wide allocation, một PRB phóng to và các coded bits được đưa vào LDPC.</h2>
+      <p>
+        Lab mặc định có 8 RB bắt đầu từ RB 4, symbols 9–12, MCS index 4.
+        Kéo số RB hoặc MCS để quan sát TBS thay đổi; chọn chế độ chỉ nhấn mạnh pilot, reserved hay data để hiểu lý do phải loại các RE trước khi demap.
+        Noise và channel-estimate phase error cho thấy reliability của QPSK front-end cũng ảnh hưởng tới khả năng decode sau này.
+      </p>
+      <div data-lesson-visual>
+        <SIB1PDSCHExplorer client:load />
+      </div>
+      <p>
+        Resource mapping, TBS và coding-length arithmetic trong lab tuân theo case specification đã ghi.
+        Constellation dùng noise mẫu để giải thích one-tap equalization và hard-bit mismatch, <strong>không giả lập LDPC decoding hay CRC thật</strong>.
+      </p>
+    </section>
+
+    <section class="concept-block" id="transport-vs-message">
+      <p class="concept-kicker">10 · TRANSPORT BLOCK PASS CRC CHƯA PHẢI MỘT MIB MỚI</p>
+      <h2>UE khôi phục BCCH-DL-SCH data và chuyển nó tới higher layers để parse SIB1.</h2>
+      <p>
+        Ở tầng vật lý, thành công có nghĩa là UE khôi phục được DL-SCH transport block vượt qua CRC.
+        Sau đó MAC/RRC tiếp tục xử lý logical-channel information và ASN.1 message encoding.
+        SIB1 là SystemInformationBlockType1 thuộc RRC, chứ không phải một thành phần riêng bên trong DCI bits.
+      </p>
+      <div class="sib1rx-layer-bridge" data-lesson-visual>
+        <div><small>PHY</small><strong>PDSCH soft data</strong><span>channel estimation + LDPC + TB CRC</span></div>
+        <b>→</b>
+        <div><small>TRANSPORT</small><strong>DL-SCH TB</strong><span>CRC-valid transport block</span></div>
+        <b>→</b>
+        <div><small>LOGICAL</small><strong>BCCH</strong><span>Broadcast Control Channel</span></div>
+        <b>→</b>
+        <div><small>RRC</small><strong>SIB1</strong><span>Cell access và common cell configuration</span></div>
+      </div>
+      <p>
+        Bài 33 sẽ giải nghĩa cụ thể SIB1 fields: cell access, PLMN information, serving cell common configuration
+        và những phần UE cần để tiếp tục cell selection và random access.
+      </p>
+    </section>
+
+    <section class="concept-block" id="real-world-check">
+      <p class="concept-kicker">11 · KIỂM TRA HIỆN THỰC: ĐÂU LÀ RỦI RO KHI SIB1 KHÔNG DECODE ĐƯỢC?</p>
+      <h2>Một DCI hợp lệ chưa bảo đảm UE giải được PDSCH transport block.</h2>
+      <div class="sib1rx-issue-grid">
+        <article class="technical-card"><span class="card-label">SAI RESOURCE MAPPING</span>
+          <p>Dùng nhầm RB reference, VRB-to-PRB mapping, slot offset, start symbol hoặc length sẽ lấy dữ liệu từ RE sai.</p></article>
+        <article class="technical-card"><span class="card-label">SAI DM-RS / RE MASK</span>
+          <p>Lẫn giữa pilot RE và CDM group without data làm số available data RE bị đếm sai, kéo theo TBS hoặc rate recovery sai.</p></article>
+        <article class="technical-card"><span class="card-label">SAI CHANNEL / SOFT METRIC</span>
+          <p>Residual CFO, timing, multipath, noise và channel-estimate errors làm LLR reliability giảm.</p></article>
+        <article class="technical-card"><span class="card-label">SAI DL-SCH CONTEXT</span>
+          <p>Sai MCS table, RV, TBS, LDPC BG hoặc bit descrambling có thể khiến transport-block CRC fail.</p></article>
+      </div>
+      <p>
+        Khi debug, nên kiểm tra theo stage: DCI fields → PDSCH RE mask → DM-RS correlation/channel estimate → LLRs →
+        rate recovery → LDPC → CRC. Một CRC fail không tự cho biết lỗi ở stage nào.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">12 · TRIỂN KHAI TRONG CODE RECEIVER</p>
+      <h2>Chia PDSCH reception thành những output buffers dễ kiểm tra, tránh dồn tất cả vào một hàm decode.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">SCHEDULING INPUT</span><h3>Nhận DCI và validate radio context</h3>
+          <p>RIV, VRB/PRB, time row, MCS, RV, SI indicator, CORESET reference, PCI và receive slot.</p>
+          <small>OUTPUT · PDSCH allocation descriptors</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">RE MASK / PILOTS</span><h3>Tạo PDSCH data/DM-RS masks</h3>
+          <p>Dựng correct DM-RS symbol(s), comb positions và CDM groups without data trước khi đếm RE.</p>
+          <small>OUTPUT · pilot/data RE index buffers</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">CHANNEL ESTIMATION</span><h3>Tái tạo DM-RS sequence, estimate và equalize</h3>
+          <p>Phát hiện channel/noise, tính equalized QPSK và LLRs trên đúng data RE.</p>
+          <small>OUTPUT · soft-coded bits</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">DL-SCH DECODER</span><h3>Descrambling, LDPC rate recovery và decoding</h3>
+          <p>Tính TBS từ RE/MCS, chọn BG, rate recovery với đúng RV, khôi phục candidate TB và kiểm CRC.</p>
+          <small>OUTPUT · CRC-valid transport block</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">HIGHER-LAYER MESSAGE</span><h3>MAC → BCCH-DL-SCH → RRC SIB1</h3>
+          <p>Đưa decoded transport block qua đúng protocol boundaries rồi parse các SIB1 information elements.</p>
+          <small>NEXT · Bài 33</small></div></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">13 · NHỮNG RANH GIỚI KHÔNG NÊN LẪN</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">DCI ≠ SIB1 DATA</span><p>DCI được truyền trên PDCCH và chỉ mang scheduling instructions; data thật nằm trên PDSCH.</p></article>
+        <article class="technical-card"><span class="card-label">PDSCH RE ≠ TẤT CẢ ĐỀU LÀ DATA</span><p>Reference, CDM no-data regions và overhead làm giảm số RE có thể dùng để điều chế DL-SCH bits.</p></article>
+        <article class="technical-card"><span class="card-label">PILOT RE ≠ TOTAL DM-RS OVERHEAD</span><p>Trong case minh họa, sáu pilot cộng sáu reserved RE làm cả DM-RS symbol không mang data.</p></article>
+        <article class="technical-card"><span class="card-label">TYPE-A POSITION ≠ TYPE-B FIRST DM-RS</span><p>Type-B DM-RS timing tương đối với PDSCH start, không đơn giản lấy symbol 2/3 trong MIB.</p></article>
+        <article class="technical-card"><span class="card-label">CODED BITS ≠ TBS</span><p>576 coded bits có redundancy; TBS chỉ là 168 payload bits trong ví dụ.</p></article>
+        <article class="technical-card"><span class="card-label">LDPC ≠ POLAR</span><p>PDSCH/DL-SCH dùng LDPC, trong khi PBCH và DCI/PDCCH trước đó sử dụng Polar coding.</p></article>
+        <article class="technical-card"><span class="card-label">TB CRC ≠ PDCCH CRC</span><p>PDCCH CRC được masked với RNTI để chọn DCI; DL-SCH TB CRC kiểm tra decoded transport block.</p></article>
+        <article class="technical-card"><span class="card-label">CRC PASS ≠ ĐÃ PARSE SIB1</span><p>RRC/MAC còn phải diễn giải message theo logical/transport mapping và ASN.1.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">14 · SPECIFICATION VÀ IMPLEMENTATION LAYER</p>
+      <h2>Mapping, DM-RS group rule, TBS và LDPC đều có phần normative riêng, không nên gộp làm một thuật toán tùy chọn.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">3GPP TS 38.211 · PHY</span>
+          <p>Clauses 7.3.1 và 7.4.1.1: PDSCH physical mapping, DM-RS sequence, RE comb và Type A/Type B symbol positions.</p></article>
+        <article class="technical-card"><span class="card-label">3GPP TS 38.214 · PROCEDURES</span>
+          <p>Clauses 5.1.2, 5.1.3.1–5.1.3.2 và 5.1.6.2: scheduling, MCS, number of available REs, TBS và CDM groups without data.</p></article>
+        <article class="technical-card"><span class="card-label">3GPP TS 38.212 · CODING</span>
+          <p>Clauses 7.2.1–7.2.5: DL-SCH TB CRC attachment, LDPC base graph, segmentation/rate matching và code block concatenation.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS · RECEIVER LAB</span>
+          <p>Fixed 8 RB × 4 symbols, single port/layer, six pilots plus six no-data RE per DM-RS symbol/PRB, TBS 168 và một QPSK equalization demo. Không mô phỏng LDPC hoặc ASN.1 parser.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">ETSI TS 138 211 V18.8.0 (3GPP TS 38.211 Release 18), PDSCH RE mapping và DM-RS clauses 7.3.1 / 7.4.1.1 ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">ETSI TS 138 214 V18.8.0 (3GPP TS 38.214 Release 18), clauses 5.1.2, 5.1.3.2 và 5.1.6.2 ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138214/18.08.00_60/ts_138214v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">ETSI TS 138 212 V18.8.0 (3GPP TS 38.212 Release 18), clause 7.2 về DL-SCH channel coding ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138212/18.08.00_60/ts_138212v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">ETSI TS 138 331 V18.8.0 (3GPP TS 38.331 Release 18), SIB1/BCCH-DL-SCH message definitions ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">15 · NỐI LẠI CẢ CHUỖI INITIAL ACCESS</p>
+      <ol class="recap-list">
+        <li><strong>Định vị:</strong> DCI 1_0 trong Type0 CSS với SI-RNTI chỉ đến PDSCH allocation.</li>
+        <li><strong>Time-frequency:</strong> RIV 172 và time index 5 cho 8 RB, symbols 9–12 trong slot 6 ở ví dụ.</li>
+        <li><strong>DM-RS:</strong> Type-B first DM-RS ở symbol 9, port 1000 dùng comb-2 trên sáu subcarriers mỗi PRB.</li>
+        <li><strong>Reserved RE:</strong> hai CDM groups không mang data, làm 12 RE trên DM-RS symbol không thuộc PDSCH data.</li>
+        <li><strong>Data count:</strong> 288 RE phục vụ QPSK, cho 576 rate-matched coded bits trong ví dụ một layer.</li>
+        <li><strong>TBS:</strong> từ MCS và RE count, lượng tử hóa <MathExpr tex={String.raw`N_{\mathrm{info}}=173.25`}/> thành TBS 168 bits.</li>
+        <li><strong>Channel decoding:</strong> transport block nhỏ gắn CRC-16 rồi LDPC base graph 2, không dùng Polar.</li>
+        <li><strong>Higher layer:</strong> CRC-valid DL-SCH TB đi qua BCCH tới RRC, nơi message SIB1 được parse.</li>
+        <li><strong>Bước tiếp:</strong> Bài 33 đi sâu nội dung từng trường SIB1 và ý nghĩa đối với cell selection/access.</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/dci-co-ban/">
+        <span>← BÀI TRƯỚC</span><strong>DCI cơ bản</strong>
+        <small>Từ DCI 1_0 và RIV tới PDSCH resource allocation.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>SIB1</strong>
+        <small>Phân tích nội dung SystemInformationBlockType1 sau khi UE đã khôi phục message.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
