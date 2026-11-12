@@ -409,7 +409,7 @@ const lessonMeta = {
       <div class="boundary-grid">
         <article class="technical-card"><span class="card-label">SIB1 ≠ MIB</span><p>MIB được truyền qua BCH/PBCH; SIB1 là RRC message vận chuyển qua BCCH-DL-SCH/PDSCH.</p></article>
         <article class="technical-card"><span class="card-label">PCI ≠ NR CELL IDENTITY</span><p>PCI phục vụ PHY synchronization; NCI và PLMN/TAC thuộc cell identity ở tầng hệ thống.</p></article>
-        <article class="technical-card"><span class="card-label">q-RxLevMin ≠ TRỰC TIẾP dBm</span><p>Raw value có scaling 2 dBm/step; q-QualMin có đơn vị khác.</p></article>
+        <article class="technical-card"><span class="card-label">q-RxLevMin ≠ TRỰC TIẾP dBm</span><p>Raw value có scaling <MathExpr tex={String.raw`2\,\mathrm{dBm}/\mathrm{step}`}/>; q-QualMin có đơn vị khác.</p></article>
         <article class="technical-card"><span class="card-label">S CRITERION ≠ SUITABLE CELL</span><p>Đạt radio thresholds chưa đủ, còn cần các điều kiện PLMN, barring, forbidden tracking area và UE context.</p></article>
         <article class="technical-card"><span class="card-label">cellBarred ≠ UAC BARRED</span><p>MIB barring, per-PLMN reservation và Unified Access Control là các cơ chế khác nhau.</p></article>
         <article class="technical-card"><span class="card-label">SIB1 ≠ CÓ TẤT CẢ SIB2/SIB3</span><p>SIB1 chỉ chứa metadata scheduling và common configurations; các SI messages khác được truyền riêng.</p></article>
