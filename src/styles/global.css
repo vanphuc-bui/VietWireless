@@ -24058,3 +24058,190 @@ body {
     grid-template-columns:1fr;
   }
 }
+
+
+/* Lesson 33: SIB1 protocol field explorer and cell selection precheck */
+.sib1-layer-flow,.sib1-rach-tree,
+.sib1-si-figure,.sib1-common-config,.sib1-barring-compare,
+.sib1-identity-cards,.sib1-scaling-pair {
+  display:grid;gap:11px;align-items:stretch;margin:26px 0;
+}
+.sib1-layer-flow,.sib1-rach-tree{grid-template-columns:1fr;}
+.sib1-layer-flow > div,.sib1-rach-tree > div,
+.sib1-si-figure > div,.sib1-common-config > div,
+.sib1-barring-compare > div,.sib1-identity-cards > div,
+.sib1-scaling-pair > div {
+  min-width:0;padding:var(--lesson-technical-card-padding);
+  border:1px solid var(--line);background:var(--paper);
+}
+.sib1-identity-cards,.sib1-common-config{grid-template-columns:repeat(2,minmax(0,1fr));}
+.sib1-barring-compare{grid-template-columns:repeat(3,minmax(0,1fr));}
+.sib1-scaling-pair{grid-template-columns:repeat(2,minmax(0,1fr));}
+.sib1-si-figure{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);}
+.sib1-layer-flow > b,.sib1-rach-tree > b,.sib1-si-figure > b{
+  min-height:15px;display:grid;place-items:center;color:var(--violet);
+  font:600 var(--lesson-box-content-size) var(--font-ui);
+}
+.sib1-layer-flow > div > small,.sib1-rach-tree > div > small,
+.sib1-si-figure > div > small,.sib1-common-config > div > small,
+.sib1-barring-compare > div > small,.sib1-identity-cards > div > small,
+.sib1-scaling-pair > div > small{
+  display:block;color:var(--accent);
+  font:700 var(--lesson-meta-size) var(--font-ui);
+}
+.sib1-layer-flow > div > strong,.sib1-rach-tree > div > strong,
+.sib1-si-figure > div > strong,.sib1-common-config > div > strong,
+.sib1-barring-compare > div > strong,.sib1-identity-cards > div > strong,
+.sib1-scaling-pair > div > strong{
+  display:block;margin:8px 0;font-size:var(--lesson-box-content-size);
+  overflow-wrap:anywhere;
+}
+.sib1-layer-flow > div > span,.sib1-rach-tree > div > span,
+.sib1-si-figure > div > span,.sib1-common-config > div > span,
+.sib1-barring-compare > div > span,.sib1-identity-cards > div > span,
+.sib1-scaling-pair > div > span{
+  display:block;font-size:var(--lesson-box-content-size);
+  line-height:1.55;color:var(--ink-soft);
+}
+.sib1-structure-table{min-width:760px;}
+.sib1lab{background:#fff;border:1px solid var(--line);margin:27px 0;}
+.sib1lab-explorer-top,.sib1lab-controls,.sib1lab-gates,
+.sib1lab-signalling,.sib1lab-rach{
+  padding:19px;border-bottom:1px solid var(--line);
+}
+.sib1lab-section-options{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 12px;
+}
+.sib1lab-section{
+  min-width:0;text-align:left;cursor:pointer;background:var(--paper);
+  border:1px solid var(--line);padding:14px;color:var(--ink);
+}
+.sib1lab-section.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);}
+.sib1lab-section:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.sib1lab-section > small{display:block;color:var(--accent);font:700 var(--lesson-meta-size) var(--font-ui);}
+.sib1lab-section > strong{
+  display:block;margin:9px 0 0;overflow-wrap:anywhere;
+  font-size:var(--lesson-box-content-size);font-weight:600;
+}
+.sib1lab-field-explain{padding:16px;background:var(--paper-2);border:1px solid var(--line);}
+.sib1lab-field-explain > small{
+  display:block;color:var(--accent);font:700 var(--lesson-meta-size) var(--font-ui);
+}
+.sib1lab-field-explain > p{
+  margin:7px 0 0;color:var(--ink-soft);font-size:var(--lesson-box-content-size);line-height:1.55;
+}
+.sib1lab-sliders{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;margin:19px 0;
+}
+.sib1lab-sliders label{min-width:0;}
+.sib1lab-sliders label > span{
+  display:flex;gap:8px;justify-content:space-between;align-items:center;
+  margin-bottom:9px;font:500 var(--lesson-meta-size) var(--font-ui);
+  color:var(--ink-soft);
+}
+.sib1lab-sliders label > input{width:100%;}
+.sib1lab-controls-secondary{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;margin:15px 0;
+}
+.sib1lab-controls-secondary label{min-width:0;}
+.sib1lab-controls-secondary label > span{
+  display:block;color:var(--ink-soft);
+  font:500 var(--lesson-meta-size) var(--font-ui);margin-bottom:8px;
+}
+.sib1lab-controls-secondary label > select{width:100%;max-width:100%;}
+.sib1lab-hypotheses{
+  padding:13px 14px;margin:16px 0 0;background:var(--paper);
+  border:1px solid var(--line);font-size:var(--lesson-box-content-size);line-height:1.65;
+}
+.sib1lab-hypotheses code{white-space:normal;}
+.sib1lab-metrics.metric-card-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.sib1lab-metrics .metric-card{min-width:0;min-height:0;}
+.sib1lab-metrics .metric-card-value,.sib1lab-metrics .metric-card-formula{
+  font-size:var(--lesson-box-content-size);overflow-wrap:anywhere;
+}
+.sib1lab-gates-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;margin:17px 0;
+}
+.sib1lab-gate{
+  min-width:0;padding:var(--lesson-technical-card-padding);
+  background:var(--paper);border:1px solid var(--line);
+  border-top:3px solid var(--line-strong);
+}
+.sib1lab-gate.pass{border-top-color:#478477;}
+.sib1lab-gate.fail{border-top-color:#aa6558;}
+.sib1lab-gate > small{
+  display:block;font:700 var(--lesson-meta-size) var(--font-ui);color:var(--muted);
+}
+.sib1lab-gate > strong{display:block;margin:8px 0;font-size:var(--lesson-box-content-size);}
+.sib1lab-gate > span{
+  display:block;color:var(--ink-soft);font-size:var(--lesson-box-content-size);line-height:1.55;
+}
+.sib1lab-gate-result{
+  margin:14px 0 0;font-size:var(--lesson-box-content-size);line-height:1.65;
+}
+.sib1lab-si-controls{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;margin:16px 0;
+}
+.sib1lab-si-controls label{min-width:0;}
+.sib1lab-si-controls label > span{
+  display:block;color:var(--ink-soft);
+  font:500 var(--lesson-meta-size) var(--font-ui);margin-bottom:8px;
+}
+.sib1lab-si-controls label > select{width:100%;max-width:100%;}
+.sib1lab-si-schedule{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;margin:14px 0;
+}
+.sib1lab-si-schedule > div,.sib1lab-rach-details > div{
+  min-width:0;padding:var(--lesson-technical-card-padding);
+  background:var(--paper);border:1px solid var(--line);
+}
+.sib1lab-si-schedule > div > small,.sib1lab-rach-details > div > small{
+  display:block;font:700 var(--lesson-meta-size) var(--font-ui);color:var(--accent);
+}
+.sib1lab-si-schedule > div > strong,.sib1lab-rach-details > div > strong{
+  display:block;margin:8px 0;font-size:var(--lesson-box-content-size);overflow-wrap:anywhere;
+}
+.sib1lab-si-schedule > div > span,.sib1lab-rach-details > div > span{
+  display:block;color:var(--ink-soft);font-size:var(--lesson-box-content-size);line-height:1.55;
+}
+.sib1lab-signalling > p,.sib1lab-rach > p{
+  margin:12px 0 0;font-size:var(--lesson-box-content-size);line-height:1.6;
+}
+.sib1lab-rach-controls{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;margin:18px 0;
+}
+.sib1lab-rach-controls label{min-width:0;}
+.sib1lab-rach-controls label > span{
+  display:block;margin-bottom:8px;font:500 var(--lesson-meta-size) var(--font-ui);
+}
+.sib1lab-rach-controls label > input,.sib1lab-rach-controls label > select{width:100%;}
+.sib1lab-rach-controls label > strong{
+  display:block;font-size:var(--lesson-box-content-size);margin-top:7px;
+}
+.sib1lab-rach-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.sib1lab-note{
+  margin:0;padding:17px 19px;
+  color:var(--ink-soft);font-size:var(--lesson-box-content-size);line-height:1.65;
+}
+@media(max-width:1050px){
+  .sib1-si-figure{grid-template-columns:1fr;}
+  .sib1-si-figure > b{min-height:20px;transform:rotate(90deg);}
+  .sib1lab-section-options,.sib1lab-sliders{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .sib1lab-controls-secondary,.sib1lab-si-controls{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .sib1lab-gates-grid{grid-template-columns:1fr;}
+}
+@media(max-width:760px){
+  .sib1-identity-cards,.sib1-common-config,.sib1-barring-compare,
+  .sib1-scaling-pair,.sib1lab-section-options,.sib1lab-sliders,
+  .sib1lab-controls-secondary,.sib1lab-si-controls,
+  .sib1lab-si-schedule,.sib1lab-rach-controls,.sib1lab-rach-details,
+  .sib1lab-metrics.metric-card-grid{grid-template-columns:1fr;}
+}
