@@ -3,7 +3,7 @@ import MathExpr from './MathExpr.jsx';
 
 /*
  * Educational SIB1 field explorer.
- * The measurement gate illustrates TS 38.304 §5.2.3.2 with q-QualMin
+ * The measurement gate illustrates TS 38.304 `5.2.3.2 with q-QualMin
  * explicitly present and independently configured compensation/offsets.
  * It is NOT a full NAS/AS cell suitability, camping or UAC simulator.
  */
@@ -100,7 +100,7 @@ export default function SIB1Explorer() {
           onChange={e=>setOperatorReserved(e.target.value==='yes')}>
           <option value="no">notReserved</option><option value="yes">reserved</option></select></label>
       </div>
-      <p className="sib1lab-hypotheses">Giả thiết phục vụ phép tính: <MathExpr tex={String.raw§Q_{\mathrm{rxlevminoffset}}=Q_{\mathrm{qualminoffset}}=0§}/>, SUL không sử dụng,
+      <p className="sib1lab-hypotheses">Giả thiết phục vụ phép tính: <MathExpr tex={String.raw`Q_{\mathrm{rxlevminoffset}}=Q_{\mathrm{qualminoffset}}=0`}/>, SUL không sử dụng,
         <code>q-QualMin</code> có mặt. PLMN trong lab là mã minh họa, không mô phỏng NAS registration hoặc tất cả exceptions về barring.</p>
     </div>
 
