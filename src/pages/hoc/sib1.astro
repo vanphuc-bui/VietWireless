@@ -1,0 +1,470 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MathExpr from '../../components/Math.astro';
+import SIB1Explorer from '../../components/SIB1Explorer.jsx';
+
+const lessonMeta = {
+  number: 33,
+  part: 4,
+  slug: 'sib1',
+  kind: 'deep-dive',
+  specRequired: true,
+};
+---
+
+<BaseLayout
+  title="SIB1 trong 5G NR: PLMN, cell selection, RACH và common radio config | VietWireless"
+  description="Bài 33 phân tích SIB1 TS 38.331 Release 18: cellSelectionInfo, PLMN/cell access, ServingCellConfigCommonSIB, RACH-ConfigCommon, SI scheduling, access barring và quy trình UE ra quyết định trước random access."
+>
+  <article class="lesson shell">
+    <header class="lesson-hero">
+      <a class="back-link" data-lesson-nav="map" href="/hoc/#phan-4">← Phần IV · Từ MIB tới thông tin hệ thống</a>
+      <p class="eyebrow">GHI CHÉP 33 · INITIAL SYSTEM INFORMATION</p>
+      <h1>SIB1: UE biết gì về một cell trước khi truy nhập?</h1>
+      <p class="lesson-deck">
+        Ở Bài 32, UE đã nhận PDSCH, LDPC decode và kiểm tra transport-block CRC.{" "}
+        <strong>Nhưng một transport block hợp lệ chưa có nghĩa cell đó phù hợp với UE, hay UE đã có cấu hình để phát PRACH.</strong>
+        Bây giờ ta đọc <code>SystemInformationBlockType1</code> ở tầng RRC: cell thuộc mạng nào, ngưỡng chất lượng bao nhiêu, có những common radio parameters gì và những điều kiện nào cần xử lý trước cell selection/random access.
+      </p>
+    </header>
+
+    <section class="concept-block" data-lesson-role="problem" id="problem">
+      <p class="concept-kicker">VẤN ĐỀ TIẾP THEO CỦA UE</p>
+      <h2>Giải mã được SIB1 không có nghĩa UE được phép truy nhập cell.</h2>
+      <p>
+        Giả sử gNB phát SSB đủ mạnh và UE đã tìm ra PDCCH/PDSCH chứa SIB1.
+        Tuy nhiên, cell có thể thuộc PLMN khác với PLMN mà NAS chọn,
+        mức RSRP/RSRQ đo được có thể chưa đạt threshold, hoặc cell đang dành riêng cho một nhóm thuê bao hay mục đích khác.
+        Ngay cả khi các kiểm tra này đạt, UE vẫn phải biết cấu hình common uplink để chuẩn bị random access.
+      </p>
+      <p>
+        Chính vì vậy, SIB1 không phải một danh sách ngẫu nhiên các parameters.
+        Nó là <strong>điểm nối giữa việc đọc broadcast information và việc quyết định có nên dùng cell đó hay không</strong>,
+        đồng thời cung cấp phần radio configuration cần để đi tiếp.
+      </p>
+      <aside class="mental-model">
+        <strong>Hãy xem MIB là bản chỉ dẫn đến SIB1, còn SIB1 là hồ sơ ban đầu của cell.</strong>
+        <p>
+          SIB1 cho biết danh tính mạng, giới hạn truy nhập, điều kiện lựa chọn cell, cấu hình vô tuyến chung và cách lấy thêm system information.
+          Nó không thay thế NAS registration, dedicated RRC configuration hoặc các bước random access thực tế.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block lesson-map-block" data-lesson-role="system-context" id="system-context">
+      <p class="concept-kicker">TỪ PHY DECODER TỚI QUYẾT ĐỊNH CẤP HỆ THỐNG</p>
+      <h2>Tại đúng thời điểm này, UE chuyển từ bài toán nhận bit sang bài toán diễn giải và áp dụng cấu hình.</h2>
+      <div class="system-position technical-card concept-flow-card" data-lesson-visual>
+        <span>UE · SIB1 ACQUISITION AND USAGE</span>
+        <div class="system-position-flow">
+          <span>DCI 1_0 / SI-RNTI</span><b>→</b>
+          <span>PDSCH / DL-SCH TB CRC pass</span><b>→</b>
+          <strong>BCCH-DL-SCH / RRC SIB1</strong><b>→</b>
+          <span>PLMN + suitability checks</span><b>+</b>
+          <span>Common DL/UL configuration</span><b>→</b>
+          <strong>Cell selection / PRACH preparation</strong>
+        </div>
+        <p>
+          Đầu vào là BCCH-DL-SCH message đã được khôi phục và decoded ASN.1 SIB1 fields.
+          Đầu ra không phải một bit ACK gửi ngay cho gNB, mà là receiver/NAS state:
+          cell access context, thông số phục vụ selection/camping và cấu hình common cần cho các bước tiếp theo.
+        </p>
+      </div>
+    </section>
+
+    <section class="concept-block" id="where-sib1">
+      <p class="concept-kicker">01 · SIB1 THUỘC TẦNG NÀO?</p>
+      <h2>SIB1 là RRC system information được phát trên BCCH-DL-SCH/PDSCH, không phải trường của PBCH.</h2>
+      <div class="sib1-layer-flow" data-lesson-visual>
+        <div><small>RRC MESSAGE</small><strong>SIB1</strong><span>ASN.1 information elements</span></div>
+        <b>↓</b>
+        <div><small>LOGICAL CHANNEL</small><strong>BCCH</strong><span>Broadcast Control Channel</span></div>
+        <b>↓</b>
+        <div><small>TRANSPORT CHANNEL</small><strong>DL-SCH</strong><span>Transport block, LDPC, CRC</span></div>
+        <b>↓</b>
+        <div><small>PHYSICAL CHANNEL</small><strong>PDSCH</strong><span>Resources được schedule bằng PDCCH/DCI</span></div>
+      </div>
+      <p>
+        MIB chỉ chứa các thông tin bootstrap cần thiết để UE tìm control region đầu tiên. SIB1 lớn và linh hoạt hơn;
+        nó được mã hóa theo ASN.1 unaligned PER ở lớp RRC trước khi đi xuống các lớp thấp hơn.
+        MAC và PHY tham gia vận chuyển và giải mã, nhưng không biến SIB1 thành một tập field thuộc DCI.
+      </p>
+    </section>
+
+    <section class="concept-block" id="sib1-top">
+      <p class="concept-kicker">02 · CẤU TRÚC SIB1 TRONG TS 38.331</p>
+      <h2>Nhìn từ ASN.1, SIB1 có những nhóm field chính và nhiều extension tùy điều kiện áp dụng.</h2>
+      <div class="math-data-table-wrap">
+        <table class="math-data-table sib1-structure-table">
+          <thead><tr><th>SIB1 root field</th><th>Vai trò</th><th>Điều kiện</th></tr></thead>
+          <tbody>
+            <tr><td><code>cellSelectionInfo</code></td><td>Minimum RSRP/RSRQ thresholds để kiểm tra selection criteria.</td><td>Optional, condition Standalone</td></tr>
+            <tr><td><code>cellAccessRelatedInfo</code></td><td>PLMN list, tracking area, NR cell identity và reservation.</td><td>Mandatory</td></tr>
+            <tr><td><code>servingCellConfigCommon</code></td><td>Common DL/UL radio configuration, BWPs, SSB và TDD parameters.</td><td>Optional, Need R</td></tr>
+            <tr><td><code>si-SchedulingInfo</code></td><td>Lịch và phương thức thu những SI messages khác SIB1.</td><td>Optional, Need R</td></tr>
+            <tr><td><code>uac-BarringInfo</code></td><td>Unified Access Control restrictions.</td><td>Optional, Need R</td></tr>
+            <tr><td><code>connEstFailureControl</code></td><td>Cấu hình liên quan connection-establishment failures.</td><td>Optional, Need R</td></tr>
+            <tr><td><code>ue-TimersAndConstants</code></td><td>Một số common RRC timers/constants.</td><td>Optional, Need R</td></tr>
+            <tr><td><code>ims-EmergencySupport</code>, <code>eCallOverIMS-Support</code></td><td>Support indications theo service/context.</td><td>Optional</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Ngoài các trường trên còn có <code>useFullResumeID</code>, extension containers và các extension cho Release 16–18.
+        Bảng chỉ thể hiện những root fields thiết yếu để xây mental model, không thay thế ASN.1 specification nguyên bản.
+        <strong>Optional không có nghĩa trường đó tùy ý bỏ qua trong mọi deployment</strong>; điều kiện hiện diện được 3GPP định nghĩa riêng.
+      </p>
+    </section>
+
+    <section class="concept-block" id="access">
+      <p class="concept-kicker">03 · CELLACCESSRELATEDINFO: CELL NÀY THUỘC MẠNG NÀO?</p>
+      <h2>UE nhận ra PLMN, tracking area và NR cell identity từ SIB1, không chỉ dựa trên PCI.</h2>
+      <p>
+        <code>cellAccessRelatedInfo</code> có <code>plmn-IdentityInfoList</code>.
+        Trong mỗi <code>PLMN-IdentityInfo</code>, 3GPP cho phép chứa một hoặc nhiều PLMN identities,
+        <code>trackingAreaCode</code> khi hiện diện, <code>cellIdentity</code> và <code>cellReservedForOperatorUse</code>.
+        Vì thế một physical cell có thể quảng bá thông tin cho nhiều PLMN identities.
+      </p>
+      <div class="sib1-identity-cards" data-lesson-visual>
+        <div><small>PLMN ID</small><strong>MCC + MNC</strong><span>Chỉ danh mạng di động, không phải Physical Cell ID</span></div>
+        <div><small>TRACKING AREA</small><strong>TAC</strong><span>Ngữ cảnh registration area, NAS sử dụng</span></div>
+        <div><small>CELL IDENTITY</small><strong>NR Cell Identity</strong><span>Identity 36 bit ở RRC, khác PCI từ PSS/SSS</span></div>
+        <div><small>ACCESS RESERVATION</small><strong>cellReservedForOperatorUse</strong><span>Áp dụng theo PLMN/context, không đồng nghĩa một MIB barring bit</span></div>
+      </div>
+      <p>
+        PCI là physical-layer identifier (từ PSS/SSS), đủ cho các reference sequences và cell synchronization.
+        <code>cellIdentity</code> là identity ở tầng hệ thống, không thể khôi phục chỉ bằng PCI.
+        TAC và PLMN được chuyển cho những thủ tục NAS khi cần đánh giá mạng và registration area.
+      </p>
+      <aside class="precision-note">
+        <strong>Quảng bá PLMN chưa bảo đảm SIM/UE được truy nhập.</strong>
+        <p>
+          Cell còn phải không bị barring/reservation theo UE context, thuộc PLMN được phép sử dụng,
+          không thuộc một tracking area bị cấm cho roaming (khi áp dụng), và đạt điều kiện chọn cell.
+          Những kiểm tra này thuộc TS 38.304/NAS procedures, không thể suy từ một trường MCC/MNC riêng lẻ.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="selection-info">
+      <p class="concept-kicker">04 · CELLSELECTIONINFO: NGƯỠNG THU TỐI THIỂU</p>
+      <h2>Hai nhóm threshold trả lời câu hỏi cell đủ mạnh và đủ chất lượng chưa, chứ chưa nói cell có phù hợp về PLMN.</h2>
+      <p>
+        SIB1 có thể báo <code>q-RxLevMin</code>, <code>q-RxLevMinOffset</code>, <code>q-QualMin</code> và
+        <code>q-QualMinOffset</code> trong <code>cellSelectionInfo</code>, theo điều kiện của ASN.1.
+        Có một điểm khó nhận ra khi đọc log: hai raw fields không cùng scaling.
+      </p>
+      <div class="sib1-scaling-pair" data-lesson-visual>
+        <div><small>q-RxLevMin · RAW = −60</small>
+          <strong>−120 dBm</strong>
+          <span>Actual minimum RSRP = raw value × 2</span></div>
+        <div><small>q-QualMin · RAW = −18</small>
+          <strong>−18 dB</strong>
+          <span>Actual minimum RSRQ = raw value × 1</span></div>
+      </div>
+      <MathExpr tex={String.raw`Q_{\mathrm{rxlevmin}}=2q_{\mathrm{RxLevMin}}`} display />
+      <MathExpr tex={String.raw`Q_{\mathrm{qualmin}}=q_{\mathrm{QualMin}}`} display />
+      <p>
+        <code>q-RxLevMinOffset</code> là một optional IE với đơn vị 2 dB cho offset trong trường hợp áp dụng;
+        <code>q-QualMinOffset</code> dùng đơn vị 1 dB.
+        Vì vậy một parser/debugger nên phân biệt <em>ASN.1 raw values</em> với các đại lượng đã được convert sang dBm/dB,
+        tránh dùng trực tiếp raw integer trong công thức 38.304.
+      </p>
+    </section>
+
+    <section class="concept-block" id="cell-selection-criterion">
+      <p class="concept-kicker">05 · S-CRITERION TỪ 38.304</p>
+      <h2>Các phép so sánh đều nghiêm ngặt: mức thu và chất lượng phải lớn hơn zero sau khi trừ threshold/offset.</h2>
+      <MathExpr tex={String.raw`S_{\mathrm{rxlev}}=
+        Q_{\mathrm{rxlevmeas}}
+        -(Q_{\mathrm{rxlevmin}}+Q_{\mathrm{rxlevminoffset}})
+        -P_{\mathrm{compensation}}-Q_{\mathrm{offsettemp}}`} display />
+      <MathExpr tex={String.raw`S_{\mathrm{qual}}=
+        Q_{\mathrm{qualmeas}}
+        -(Q_{\mathrm{qualmin}}+Q_{\mathrm{qualminoffset}})
+        -Q_{\mathrm{offsettemp}}`} display />
+      <MathExpr tex={String.raw`\mathrm{S\ criterion}:
+        \quad S_{\mathrm{rxlev}}>0 \ \land\ S_{\mathrm{qual}}>0`} display />
+      <p>
+        <MathExpr tex={String.raw`Q_{\mathrm{rxlevmeas}}`} /> và <MathExpr tex={String.raw`Q_{\mathrm{qualmeas}}`} />
+        được suy từ cell-level measurements; <MathExpr tex={String.raw`P_{\mathrm{compensation}}`} />
+        phản ánh các điều kiện về UE maximum allowed uplink power, còn temporary offset có thể xuất hiện trong các procedure nhất định.
+      </p>
+      <p>
+        Đây mới là <strong>radio selection criterion</strong>.
+        Cell suitability còn yêu cầu selected/equivalent PLMN, barring/reservation, forbidden tracking area và những điều kiện khác theo UE/service.
+        Bài 34 sẽ phân tích toàn bộ cell selection/camping procedure.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="example" id="example">
+      <p class="concept-kicker">06 · VÍ DỤ SỐ: ĐỌC SIB1 TỪ CELL GIẢ ĐỊNH</p>
+      <h2>Một UE đang tìm test PLMN, nhận được SIB1 và tự tạo bộ dữ liệu đầu vào cho cell selection.</h2>
+      <p>
+        Ví dụ sử dụng <strong>PLMN 001-01 hoàn toàn giả định</strong>, TAC <code>0x012345</code>,
+        NR Cell Identity <code>0x123456789</code> (36 bit). MIB báo <code>cellBarred=notBarred</code> và
+        SIB1 cho <code>cellReservedForOperatorUse=notReserved</code>.
+      </p>
+      <p>
+        SIB1 chứa <code>q-RxLevMin=-60</code>, <code>q-QualMin=-18</code>.
+        UE đo SS-RSRP <MathExpr tex={String.raw`-105\,\mathrm{dBm}`} /> và
+        SS-RSRQ <MathExpr tex={String.raw`-14\,\mathrm{dB}`} />.
+        Để tính bằng tay, giả sử các optional offsets và power compensation đều bằng zero, và không dùng SUL.
+      </p>
+      <MathExpr tex={String.raw`S_{\mathrm{rxlev}}=-105-(-120)=15\,\mathrm{dB}>0`} display />
+      <MathExpr tex={String.raw`S_{\mathrm{qual}}=-14-(-18)=4\,\mathrm{dB}>0`} display />
+      <p>
+        Vậy radio selection criterion đạt trong phạm vi giả thiết trên.
+        Nếu NAS đã chọn PLMN 001-01 thì PLMN cũng khớp.
+        Tuy nhiên, <strong>đây vẫn chưa phải kết luận rằng UE đã camp thành công hoặc đã đăng ký được vào mạng</strong>.
+        UE phải tiếp tục áp dụng những suitability checks còn lại và protocol procedures.
+      </p>
+      <aside class="mental-model">
+        <strong>Đổi một phép đo, giữ nguyên cấu hình mạng.</strong>
+        <p>
+          Nếu cùng SIB1 này nhưng RSRP chỉ còn <MathExpr tex={String.raw`-125\,\mathrm{dBm}`} />,
+          thì <MathExpr tex={String.raw`S_{\mathrm{rxlev}}=-5\,\mathrm{dB}`} /> và S criterion thất bại.
+          Việc nhận được SIB1 không biến một cell có signal quá yếu thành suitable cell.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="radio-config">
+      <p class="concept-kicker">07 · SERVINGCELLCONFIGCOMMONSIB: CELL DÙNG RADIO CONFIG GÌ?</p>
+      <h2>Đây là nhánh cấu hình chung cho downlink, uplink, SSB và cấu trúc DL/UL time khi áp dụng.</h2>
+      <p>
+        <code>servingCellConfigCommon</code> sử dụng type <code>ServingCellConfigCommonSIB</code>.
+        Trong đó có <code>downlinkConfigCommon</code>, <code>uplinkConfigCommon</code>,
+        <code>supplementaryUplink</code> khi áp dụng, SSB burst positions, SSB periodicity,
+        <code>ss-PBCH-BlockPower</code> và TDD common pattern khi cell là TDD.
+      </p>
+      <div class="sib1-common-config" data-lesson-visual>
+        <div><small>DOWNLINK</small><strong>downlinkConfigCommon</strong>
+          <span>FrequencyInfoDL-SIB, initialDownlinkBWP và những common PDCCH/PDSCH configurations</span></div>
+        <div><small>UPLINK</small><strong>uplinkConfigCommon</strong>
+          <span>FrequencyInfoUL-SIB, initialUplinkBWP, timeAlignmentTimerCommon</span></div>
+        <div><small>SSB / TIMING</small><strong>ssb-PositionsInBurst</strong>
+          <span>SSB bitmap, periodicity; n-TimingAdvanceOffset theo điều kiện cấu hình</span></div>
+        <div><small>TDD ONLY</small><strong>tdd-UL-DL-ConfigurationCommon</strong>
+          <span>Common downlink/uplink symbol/slot pattern để UE không phát UL sai thời điểm</span></div>
+      </div>
+      <p>
+        Những trường này không chỉ là metadata để hiển thị trên giao diện.
+        Chúng xác định những tài nguyên receiver và transmitter thực sự có thể sử dụng.
+        UE cũng phải phân biệt <em>common configurations</em> từ SIB1 với dedicated BWP/physical configuration được báo sau khi thiết lập RRC.
+      </p>
+    </section>
+
+    <section class="concept-block" id="rach">
+      <p class="concept-kicker">08 · RACH-CONFIGCOMMON NẰM Ở ĐÂU TRONG SIB1?</p>
+      <h2>UE đi từ SIB1 đến initial UL BWP rồi mới thấy cấu hình PRACH.</h2>
+      <div class="sib1-rach-tree" data-lesson-visual>
+        <div><strong>SIB1</strong><span>servingCellConfigCommon</span></div>
+        <b>↓</b>
+        <div><strong>uplinkConfigCommon</strong><span>UplinkConfigCommonSIB</span></div>
+        <b>↓</b>
+        <div><strong>initialUplinkBWP</strong><span>BWP-UplinkCommon</span></div>
+        <b>↓</b>
+        <div><strong>rach-ConfigCommon</strong><span>RACH-ConfigCommon, rach-ConfigGeneric</span></div>
+      </div>
+      <p>
+        Ví dụ <code>rach-ConfigGeneric</code> có những tham số như
+        <code>prach-ConfigurationIndex</code>, <code>msg1-FDM</code>,
+        <code>msg1-FrequencyStart</code>, <code>zeroCorrelationZoneConfig</code>,
+        <code>preambleReceivedTargetPower</code>, <code>preambleTransMax</code>,
+        <code>powerRampingStep</code> và <code>ra-ResponseWindow</code>.
+        Ngoài ra, <code>RACH-ConfigCommon</code> có các tham số liên kết SSB với RACH occasions và preamble resources.
+      </p>
+      <p>
+        <code>prach-ConfigurationIndex</code> là index của bảng PRACH configuration trong TS 38.211,
+        <strong>không phải số slot PRACH hoặc preamble root sequence index</strong>.
+        Từ những trường này, UE mới dựng được RACH occasions và quy tắc chọn preamble,
+        rồi thực hiện random access ở các bài của Phần V.
+      </p>
+      <aside class="precision-note">
+        <strong>Được cấu hình PRACH không có nghĩa UE có thể phát Msg1 ngay.</strong>
+        <p>
+          UE còn phải đạt điều kiện selection/access, thực hiện thủ tục khởi tạo random access,
+          chọn đúng RACH occasion/beam/SSB association và áp dụng timing/power rules.
+          Không nên bỏ qua các bước đó khi implement PRACH scheduler.
+        </p>
+      </aside>
+    </section>
+
+    <section class="concept-block" id="si-scheduling">
+      <p class="concept-kicker">09 · SI-SCHEDULINGINFO: NGOÀI SIB1 CÒN CÁC SIB KHÁC</p>
+      <h2>SIB1 mô tả khi nào có thể lấy những SI messages khác, nhưng không chứa toàn bộ SIB2/SIB3 payload.</h2>
+      <p>
+        Trong <code>si-SchedulingInfo</code>, <code>schedulingInfoList</code> gồm những
+        <code>SchedulingInfo</code> entries với <code>si-BroadcastStatus</code>,
+        <code>si-Periodicity</code> và <code>sib-MappingInfo</code>.
+        <code>si-WindowLength</code> là độ dài window (theo slots) để UE tìm thông tin hệ thống theo procedures tương ứng.
+      </p>
+      <div class="sib1-si-figure" data-lesson-visual>
+        <div><small>SIB1</small><strong>SI scheduling metadata</strong><span>Broadcast status + periodicity + SIB mapping</span></div>
+        <b>→</b>
+        <div><small>SI MESSAGE · EXAMPLE</small><strong>SIB2 + SIB3</strong><span>Nhóm SIBs có thể cùng một SI message</span></div>
+        <b>→</b>
+        <div><small>UE PROCEDURE</small><strong>Monitor hoặc request SI</strong><span>Phụ thuộc broadcasting status và SI-request support</span></div>
+      </div>
+      <p>
+        Một entry có trạng thái <code>broadcasting</code> khác với <code>notBroadcasting</code>.
+        Trường hợp on-demand SI đòi hỏi hỗ trợ và configuration phù hợp; UE không tự nghĩ ra Msg1 hay bất kỳ SI-request resource nào chỉ từ một giá trị <code>notBroadcasting</code>.
+      </p>
+    </section>
+
+    <section class="concept-block" id="access-barring">
+      <p class="concept-kicker">10 · CELL BARRED, RESERVATION VÀ UAC KHÔNG PHẢI MỘT</p>
+      <h2>MIB, SIB1 PLMN info và UAC xử lý các loại hạn chế truy nhập khác nhau.</h2>
+      <div class="sib1-barring-compare" data-lesson-visual>
+        <div><small>MIB</small><strong>cellBarred</strong>
+          <span>Chỉ thị barring ban đầu cho cell; áp dụng theo 38.304 và những điều kiện UE context.</span></div>
+        <div><small>SIB1 · PLMN</small><strong>cellReservedForOperatorUse</strong>
+          <span>Reservation cho operator use theo PLMN.</span></div>
+        <div><small>SIB1 · UAC</small><strong>uac-BarringInfo</strong>
+          <span>Access restrictions theo access category/identity khi hiện diện.</span></div>
+      </div>
+      <p>
+        Một MIB báo <code>notBarred</code> vẫn có thể dẫn đến việc UE không được truy nhập:
+        có thể do selected PLMN không phù hợp, cell reservation, cell selection criterion, hoặc access barring cho loại attempt cụ thể.
+        Ngược lại, mọi loại barring cũng không thể quy về một boolean chung cho tất cả UEs/services.
+      </p>
+      <p>
+        Release 17/18 bổ sung thêm những chỉ thị chuyên biệt cho RedCap, NTN, VSAT và các UE classes khác qua SIB1 extensions.
+        Những nhánh đó chỉ có ý nghĩa khi đúng UE capability và deployment context; lab bên dưới tập trung vào một NR terrestrial UE cơ bản.
+      </p>
+    </section>
+
+    <section class="concept-block lab-section" id="interactive">
+      <p class="concept-kicker">11 · INTERACTIVE LAB: SIB1 FIELD EXPLORER</p>
+      <h2>Đổi chất lượng sóng, PLMN và các access flags để thấy vì sao “đọc được SIB1” khác “chọn được cell”.</h2>
+      <p>
+        Lab bắt đầu bằng raw <code>q-RxLevMin=-60</code>,
+        <code>q-QualMin=-18</code>, measured SS-RSRP <MathExpr tex={String.raw`-105\,\mathrm{dBm}`} />,
+        SS-RSRQ <MathExpr tex={String.raw`-14\,\mathrm{dB}`} /> và PLMN 001-01 minh họa.
+        Thử giảm RSRP xuống thấp hơn threshold, đổi PLMN hoặc bật cell barring để thấy từng gate bị chặn.
+      </p>
+      <div data-lesson-visual>
+        <SIB1Explorer client:load />
+      </div>
+      <p>
+        Sau đó hãy chọn <code>si-SchedulingInfo</code> và <code>rach-ConfigCommon</code> trong lab.
+        Các controls này minh họa index/configuration semantics, không tạo ra ASN.1 bitstream hoặc PRACH occasions thực tế.
+        Những phép kiểm tra PLMN và S criterion chỉ là <strong>precheck để hiểu nguyên lý</strong>, không tự quyết định cell suitable/camping.
+      </p>
+    </section>
+
+    <section class="concept-block" id="ntn">
+      <p class="concept-kicker">12 · VỚI NTN, SIB1 CÓ KHÁC GÌ?</p>
+      <h2>SIB1 có các nhánh access/cell barring cho NTN, nhưng không phải nơi đặt toàn bộ satellite ephemeris.</h2>
+      <p>
+        TS 38.331 Release 18 cho phép SIB1 mang các extensions như <code>cellBarredNTN-r17</code>
+        và một số chỉ thị chuyên biệt cho VSAT/NTN-capable UEs.
+        Chúng ảnh hưởng cách UE diễn giải suitability/access trong các trường hợp áp dụng.
+      </p>
+      <p>
+        Những thông tin chuyên sâu về satellite assistance như ephemeris và một số NTN-specific timing parameters được định nghĩa trong những system information elements khác, ví dụ SIB19.
+        Vì vậy không nên suy rằng chỉ cần đọc SIB1 là NTN UE có toàn bộ dữ liệu để bù timing/Doppler và phát random access.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="implementation" id="implementation">
+      <p class="concept-kicker">13 · NẾU TRIỂN KHAI TRONG UE STACK</p>
+      <h2>Mỗi nhóm SIB1 nên cập nhật một phần state khác nhau để dễ debug và áp dụng đúng protocol boundaries.</h2>
+      <div class="implementation-pipeline" data-lesson-visual>
+        <article><div class="implementation-step-no">01</div><div class="implementation-step-body">
+          <span class="card-label">RRC ASN.1 DECODER</span><h3>Decode BCCH-DL-SCH message thành SIB1 structure</h3>
+          <p>Giữ nguyên optional-presence flags, extension versions và các fields theo 38.331; không giả định root layout là fixed-length.</p>
+          <small>OUTPUT · decoded SIB1 IE tree</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">02</div><div class="implementation-step-body">
+          <span class="card-label">CELL IDENTITY / ACCESS</span><h3>Đọc PLMN list, TAC, NCI, reservation và barring context</h3>
+          <p>Kết hợp MIB và selected PLMN/NAS restrictions; không dùng PCI thay NR Cell Identity.</p>
+          <small>OUTPUT · access-related cell state</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">03</div><div class="implementation-step-body">
+          <span class="card-label">MEASUREMENT EVALUATION</span><h3>Convert thresholds và đánh giá S criterion</h3>
+          <p>Raw q-RxLevMin nhân hai, q-QualMin theo đơn vị một dB, rồi áp compensation/offset đúng điều kiện.</p>
+          <small>OUTPUT · cell-selection metric state</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article><div class="implementation-step-no">04</div><div class="implementation-step-body">
+          <span class="card-label">COMMON RADIO STATE</span><h3>Parse DL/UL BWPs, RACH, SSB/TDD và SI scheduling</h3>
+          <p>Giữ field presence context và liên kết với các bảng PHY/PHY procedure khi tính actual occasions.</p>
+          <small>OUTPUT · common configuration objects</small></div></article>
+        <div class="implementation-connector">↓</div>
+        <article class="finish"><div class="implementation-step-no">05</div><div class="implementation-step-body">
+          <span class="card-label">NEXT PROCEDURE</span><h3>Cell selection/camping hoặc random access preparation</h3>
+          <p>Thực thi theo UE state, NAS restrictions, 38.304 selection rules và 38.321 random access procedures.</p>
+          <small>NEXT · Bài 34–35</small></div></article>
+      </div>
+      <p>
+        Khi UE decode SIB1 nhưng không camp được, nên log rõ: ASN.1 decode status, selected PLMN,
+        measurement thresholds đã scale, S criterion values, barred/reserved flags và NAS restriction.
+        Một log “SIB1 OK” không đủ để chứng minh cell selection cũng OK.
+      </p>
+    </section>
+
+    <section class="concept-block" data-lesson-role="boundary" id="boundary">
+      <p class="concept-kicker">14 · NHỮNG CHỖ DỄ HIỂU SAI</p>
+      <div class="boundary-grid">
+        <article class="technical-card"><span class="card-label">SIB1 ≠ MIB</span><p>MIB được truyền qua BCH/PBCH; SIB1 là RRC message vận chuyển qua BCCH-DL-SCH/PDSCH.</p></article>
+        <article class="technical-card"><span class="card-label">PCI ≠ NR CELL IDENTITY</span><p>PCI phục vụ PHY synchronization; NCI và PLMN/TAC thuộc cell identity ở tầng hệ thống.</p></article>
+        <article class="technical-card"><span class="card-label">q-RxLevMin ≠ TRỰC TIẾP dBm</span><p>Raw value có scaling 2 dBm/step; q-QualMin có đơn vị khác.</p></article>
+        <article class="technical-card"><span class="card-label">S CRITERION ≠ SUITABLE CELL</span><p>Đạt radio thresholds chưa đủ, còn cần các điều kiện PLMN, barring, forbidden tracking area và UE context.</p></article>
+        <article class="technical-card"><span class="card-label">cellBarred ≠ UAC BARRED</span><p>MIB barring, per-PLMN reservation và Unified Access Control là các cơ chế khác nhau.</p></article>
+        <article class="technical-card"><span class="card-label">SIB1 ≠ CÓ TẤT CẢ SIB2/SIB3</span><p>SIB1 chỉ chứa metadata scheduling và common configurations; các SI messages khác được truyền riêng.</p></article>
+        <article class="technical-card"><span class="card-label">PRACH INDEX ≠ SLOT INDEX</span><p>prach-ConfigurationIndex cần tra bảng PHY, kèm UL BWP và SSB/RO association.</p></article>
+        <article class="technical-card"><span class="card-label">SIB1 CRC PASS ≠ ĐÃ ACCESS</span><p>UE còn phải chọn cell, thực hiện access control và các thủ tục random access/registration.</p></article>
+      </div>
+    </section>
+
+    <section class="concept-block" data-lesson-role="specification" id="specification">
+      <p class="concept-kicker">15 · SOURCE OF TRUTH VÀ PHẠM VI MÔ PHỎNG</p>
+      <h2>RRC định nghĩa SIB1; 38.304 định nghĩa cell-selection procedure; RACH tables và MAC định nghĩa bước truy nhập thực tế.</h2>
+      <div class="spec-separation">
+        <article class="technical-card"><span class="card-label">TS 38.331 · REL 18</span>
+          <p>ASN.1 SIB1, CellAccessRelatedInfo, PLMN-IdentityInfoList, ServingCellConfigCommonSIB, SI-SchedulingInfo và RACH-ConfigCommon field descriptions.</p></article>
+        <article class="technical-card"><span class="card-label">TS 38.304 · REL 18</span>
+          <p>Srxlev/Squal selection criterion, suitable cell vs acceptable cell, barring/reservation và selected PLMN constraints.</p></article>
+        <article class="technical-card"><span class="card-label">TS 38.211 / 38.321</span>
+          <p>PRACH configuration tables, mapping của RACH occasions và MAC random-access procedure.</p></article>
+        <article class="technical-card"><span class="card-label">VIETWIRELESS LAB</span>
+          <p>Giá trị PLMN/NCI/TAC giả định, thresholds raw và measurement sliders, SI schedule toggles. Không giả lập ASN.1 PER, NAS hay actual PRACH waveform.</p></article>
+      </div>
+      <div class="spec-source-list">
+        <p class="spec-source">3GPP TS 38.331 Release 18, ETSI TS 138 331 V18.8.0, clauses 6.2.2 / 6.3.2: SIB1 và các information elements ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138331/18.08.00_60/ts_138331v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.304 Release 18, ETSI TS 138 304 V18.6.0, clause 5.2.3.2: cell-selection S criterion và suitability procedure ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138300_138399/138304/18.06.00_60/ts_138304v180600p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+        <p class="spec-source">3GPP TS 38.211 Release 18, ETSI TS 138 211 V18.8.0, clause 6.3.3: PRACH configuration and resource mapping ·
+          <a href="https://www.etsi.org/deliver/etsi_ts/138200_138299/138211/18.08.00_60/ts_138211v180800p.pdf" target="_blank" rel="noreferrer">mở specification ↗</a></p>
+      </div>
+    </section>
+
+    <section class="concept-block recap" data-lesson-role="recap" id="recap">
+      <p class="concept-kicker">16 · KẾT NỐI LẠI TOÀN BỘ</p>
+      <ol class="recap-list">
+        <li><strong>SIB1 là RRC information:</strong> được truyền qua BCCH-DL-SCH trên PDSCH, khác MIB trên PBCH.</li>
+        <li><strong>Cell identity:</strong> PLMN, TAC và NR Cell Identity giúp UE/NAS biết cell thuộc mạng và tracking area nào.</li>
+        <li><strong>Cell selection thresholds:</strong> q-RxLevMin và q-QualMin được scale đúng trước khi áp S criterion.</li>
+        <li><strong>Suitable cell:</strong> đạt S criterion chưa đủ; UE cần xét barring/reservation và PLMN/NAS conditions.</li>
+        <li><strong>Common configuration:</strong> SIB1 chứa initial DL/UL BWP, SSB/TDD và các common radio parameters khi áp dụng.</li>
+        <li><strong>RACH:</strong> nested rach-ConfigCommon đặt những tham số ban đầu cho các lần phát PRACH sau này.</li>
+        <li><strong>Other SI:</strong> si-SchedulingInfo mô tả các SI messages khác và các điều kiện để thu/yêu cầu chúng.</li>
+        <li><strong>Access control:</strong> không đồng nhất MIB cellBarred, SIB1 reservation và UAC barring.</li>
+        <li><strong>Bài 34:</strong> từ những inputs đã decode, UE thực sự thực hiện cell selection và camping như thế nào?</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-navigation" aria-label="Điều hướng bài học">
+      <a class="lesson-nav-card previous" data-lesson-nav="previous" href="/hoc/sib1-nam-o-dau/">
+        <span>← BÀI TRƯỚC</span><strong>SIB1 nằm ở đâu?</strong>
+        <small>Từ DCI scheduling qua PDSCH/LDPC tới CRC-valid BCCH-DL-SCH message.</small>
+      </a>
+      <a class="lesson-nav-card next" data-lesson-nav="next" href="/hoc/#phan-4">
+        <span>BÀI TIẾP THEO · SẮP TỚI →</span><strong>Cell selection và camping</strong>
+        <small>Gắn radio thresholds, PLMN/access restrictions và UE procedures thành quyết định chọn cell.</small>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
