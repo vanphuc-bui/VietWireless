@@ -23,7 +23,7 @@ const lessonMeta = {
       <h1>SIB1: UE biết gì về một cell trước khi truy nhập?</h1>
       <p class="lesson-deck">
         Ở Bài 32, UE đã nhận PDSCH, LDPC decode và kiểm tra transport-block CRC.{" "}
-        <strong>Nhưng một transport block hợp lệ chưa có nghĩa cell đó phù hợp với UE, hay UE đã có cấu hình để phát PRACH.</strong>
+        <strong>Nhưng một transport block hợp lệ chưa có nghĩa cell đó phù hợp với UE, hay UE đã có cấu hình để phát PRACH.</strong>{' '}
         Bây giờ ta đọc <code>SystemInformationBlockType1</code> ở tầng RRC: cell thuộc mạng nào, ngưỡng chất lượng bao nhiêu, có những common radio parameters gì và những điều kiện nào cần xử lý trước cell selection/random access.
       </p>
     </header>
@@ -111,7 +111,7 @@ const lessonMeta = {
       </div>
       <p>
         Ngoài các trường trên còn có <code>useFullResumeID</code>, extension containers và các extension cho Release 16–18.
-        Bảng chỉ thể hiện những root fields thiết yếu để xây mental model, không thay thế ASN.1 specification nguyên bản.
+        Bảng chỉ thể hiện những root fields thiết yếu để xây mental model, không thay thế ASN.1 specification nguyên bản.{' '}
         <strong>Optional không có nghĩa trường đó tùy ý bỏ qua trong mọi deployment</strong>; điều kiện hiện diện được 3GPP định nghĩa riêng.
       </p>
     </section>
@@ -156,10 +156,10 @@ const lessonMeta = {
       </p>
       <div class="sib1-scaling-pair" data-lesson-visual>
         <div><small>q-RxLevMin · RAW = −60</small>
-          <strong>−120 dBm</strong>
+          <strong><MathExpr tex={String.raw`-120\,\mathrm{dBm}`}/></strong>
           <span>Actual minimum RSRP = raw value × 2</span></div>
         <div><small>q-QualMin · RAW = −18</small>
-          <strong>−18 dB</strong>
+          <strong><MathExpr tex={String.raw`-18\,\mathrm{dB}`}/></strong>
           <span>Actual minimum RSRQ = raw value × 1</span></div>
       </div>
       <MathExpr tex={String.raw`Q_{\mathrm{rxlevmin}}=2q_{\mathrm{RxLevMin}}`} display />
@@ -276,7 +276,7 @@ const lessonMeta = {
         Ngoài ra, <code>RACH-ConfigCommon</code> có các tham số liên kết SSB với RACH occasions và preamble resources.
       </p>
       <p>
-        <code>prach-ConfigurationIndex</code> là index của bảng PRACH configuration trong TS 38.211,
+        <code>prach-ConfigurationIndex</code> là index của bảng PRACH configuration trong TS 38.211,{' '}
         <strong>không phải số slot PRACH hoặc preamble root sequence index</strong>.
         Từ những trường này, UE mới dựng được RACH occasions và quy tắc chọn preamble,
         rồi thực hiện random access ở các bài của Phần V.
